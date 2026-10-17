@@ -4,9 +4,18 @@ import { GridSection, HatchGround, hatchStyle } from '@/components/grid'
 import { cn } from '@/utilities/ui'
 
 export const metadata: Metadata = {
-  title: 'About — Octree',
+  // The root layout template appends " | Octree"; keep the brand out of the page title.
+  title: 'About',
   description:
     'Octree is the AI-native home for technical writing, bringing your entire LaTeX workflow into one fast, intelligent editor.',
+  alternates: { canonical: '/about' },
+  openGraph: {
+    title: 'About | Octree',
+    description:
+      'Octree is the AI-native home for technical writing, bringing your entire LaTeX workflow into one fast, intelligent editor.',
+    url: '/about',
+    type: 'website',
+  },
 }
 
 // NOTE: stats below are placeholders — adjust the numbers/labels to real figures.
