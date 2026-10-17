@@ -107,6 +107,14 @@ const getPagesSitemap = unstable_cache(
         lastmod: dateFallback,
       },
       {
+        loc: `${SITE_URL}/learn/hyperlinks`,
+        lastmod: dateFallback,
+      },
+      {
+        loc: `${SITE_URL}/learn/comments`,
+        lastmod: dateFallback,
+      },
+      {
         loc: `${SITE_URL}/privacy`,
         lastmod: dateFallback,
       },
