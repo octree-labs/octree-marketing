@@ -1,4 +1,6 @@
 import type { Metadata } from 'next/types'
+
+import { mergeOpenGraph } from '@/utilities/mergeOpenGraph'
 import Link from 'next/link'
 import { buttonVariants } from '@/components/ui/button'
 import React from 'react'
@@ -592,12 +594,12 @@ export function generateMetadata(): Metadata {
     title: 'Page Size and Margins in LaTeX – Guide 2026',
     description: 'Learn how to set page size and margins in LaTeX using the geometry package. Complete guide covering A4, letter, custom sizes, margin settings, landscape mode, and layout options.',
     keywords: 'latex page size, latex margins, latex geometry package, latex a4 paper, latex letter size, latex page layout, latex margin settings, latex landscape, latex page dimensions, set margins in latex, latex paper size',
-    openGraph: {
+    openGraph: mergeOpenGraph({
       title: 'Page Size and Margins in LaTeX – Guide 2026',
       description: 'Complete guide to page size and margin settings in LaTeX with the geometry package.',
       type: 'article',
       url: '/learn/page-size-margins',
-    },
+    }),
     twitter: {
       card: 'summary_large_image',
       title: 'Page Size and Margins in LaTeX',

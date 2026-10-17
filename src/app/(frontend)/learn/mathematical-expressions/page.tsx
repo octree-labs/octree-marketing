@@ -1,4 +1,6 @@
 import type { Metadata } from 'next/types'
+
+import { mergeOpenGraph } from '@/utilities/mergeOpenGraph'
 import Link from 'next/link'
 import { buttonVariants } from '@/components/ui/button'
 import React from 'react'
@@ -685,12 +687,12 @@ export function generateMetadata(): Metadata {
     title: 'Mathematical Expressions in LaTeX – Complete Guide 2026',
     description: 'Learn how to write mathematical expressions in LaTeX. Guide covers fractions, roots, aligned equations, brackets, equation numbering, cases, spacing, and the amsmath package.',
     keywords: 'latex math, latex equation, latex fraction, latex square root, latex brackets, latex align, latex equation numbering, latex amsmath, latex math mode, latex inline math, latex display math, latex cases, latex piecewise function, how to write equations in latex',
-    openGraph: {
+    openGraph: mergeOpenGraph({
       title: 'Mathematical Expressions in LaTeX – Complete Guide 2026',
       description: 'Complete guide to writing mathematical expressions in LaTeX.',
       type: 'article',
       url: '/learn/mathematical-expressions',
-    },
+    }),
     twitter: {
       card: 'summary_large_image',
       title: 'Mathematical Expressions in LaTeX',

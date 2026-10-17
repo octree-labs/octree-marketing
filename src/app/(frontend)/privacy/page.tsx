@@ -1,12 +1,14 @@
 import type { Metadata } from 'next'
 
+import { mergeOpenGraph } from '@/utilities/mergeOpenGraph'
+
 export const metadata: Metadata = {
   title: 'Privacy Policy',
   description: 'Privacy Policy for Octree - Learn how we collect, use, and protect your data.',
-  openGraph: {
+  openGraph: mergeOpenGraph({
     title: 'Privacy Policy | Octree',
     description: 'Privacy Policy for Octree - Learn how we collect, use, and protect your data.',
-  },
+  }),
   twitter: {
     card: 'summary',
     title: 'Privacy Policy | Octree',

@@ -1,4 +1,6 @@
 import type { Metadata } from 'next/types'
+
+import { mergeOpenGraph } from '@/utilities/mergeOpenGraph'
 import Link from 'next/link'
 import { buttonVariants } from '@/components/ui/button'
 import React from 'react'
@@ -472,12 +474,12 @@ export function generateMetadata(): Metadata {
     title: 'Subscripts and Superscripts in LaTeX – Guide 2026',
     description: 'Learn how to write subscripts and superscripts in LaTeX. Complete guide covering math mode, text mode, combined notation, chemistry formulas, and advanced techniques with amsmath.',
     keywords: 'latex subscript, latex superscript, latex exponent, latex power, latex underscore, latex caret, subscript in latex, superscript in latex, latex math notation, latex chemistry formulas, textsuperscript latex, textsubscript latex',
-    openGraph: {
+    openGraph: mergeOpenGraph({
       title: 'Subscripts and Superscripts in LaTeX – Guide 2026',
       description: 'Complete guide to subscripts and superscripts in LaTeX with examples.',
       type: 'article',
       url: '/learn/subscripts-superscripts',
-    },
+    }),
     twitter: {
       card: 'summary_large_image',
       title: 'Subscripts and Superscripts in LaTeX',

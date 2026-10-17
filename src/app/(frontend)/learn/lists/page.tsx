@@ -1,4 +1,6 @@
 import type { Metadata } from 'next/types'
+
+import { mergeOpenGraph } from '@/utilities/mergeOpenGraph'
 import Link from 'next/link'
 import { buttonVariants } from '@/components/ui/button'
 import React from 'react'
@@ -493,12 +495,12 @@ export function generateMetadata(): Metadata {
     title: 'LaTeX Lists – Itemize, Enumerate & Description Guide 2026',
     description: 'Learn how to create lists in LaTeX: bulleted (itemize), numbered (enumerate), and description lists. Guide covers nesting, custom bullets, compact lists, and the enumitem package.',
     keywords: 'latex list, latex itemize, latex enumerate, latex description list, latex bullet points, latex numbered list, latex nested list, latex list styles, enumitem latex, latex custom bullets, latex list spacing, latex inline list',
-    openGraph: {
+    openGraph: mergeOpenGraph({
       title: 'LaTeX Lists – Itemize, Enumerate & Description Guide 2026',
       description: 'Complete guide to creating and customizing lists in LaTeX.',
       type: 'article',
       url: '/learn/lists',
-    },
+    }),
     twitter: {
       card: 'summary_large_image',
       title: 'LaTeX Lists – Complete Guide',

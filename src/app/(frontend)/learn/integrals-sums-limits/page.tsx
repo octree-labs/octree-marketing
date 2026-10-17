@@ -1,4 +1,6 @@
 import type { Metadata } from 'next/types'
+
+import { mergeOpenGraph } from '@/utilities/mergeOpenGraph'
 import Link from 'next/link'
 import { buttonVariants } from '@/components/ui/button'
 import React from 'react'
@@ -550,12 +552,12 @@ export function generateMetadata(): Metadata {
     title: 'Integrals, Sums and Limits in LaTeX – Guide 2026',
     description: 'Learn how to write integrals, summations, and limits in LaTeX. Guide covers definite integrals, multiple integrals, summation notation, products, limits, and big operator placement.',
     keywords: 'latex integral, latex sum, latex limit, latex summation, latex product, latex double integral, latex triple integral, latex contour integral, latex lim, latex infty, latex series, latex sigma notation, latex big operators',
-    openGraph: {
+    openGraph: mergeOpenGraph({
       title: 'Integrals, Sums and Limits in LaTeX – Guide 2026',
       description: 'Complete guide to integrals, summations, and limits in LaTeX.',
       type: 'article',
       url: '/learn/integrals-sums-limits',
-    },
+    }),
     twitter: {
       card: 'summary_large_image',
       title: 'Integrals, Sums and Limits in LaTeX',
