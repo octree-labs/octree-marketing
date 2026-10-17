@@ -101,6 +101,18 @@ const learnTopics = [
     description: 'Add footnotes in LaTeX with \\footnote, put footnotes in tables and captions, use symbols instead of numbers, and style them with footmisc.',
     color: 'from-lime-500/10 to-lime-600/5',
   },
+  {
+    slug: 'greek-alphabet',
+    title: 'The Greek Alphabet',
+    description: 'All 24 Greek letters in order with uppercase, lowercase, pronunciation, Unicode, math and science uses, and LaTeX commands.',
+    color: 'from-red-500/10 to-red-600/5',
+  },
+  {
+    slug: 'apa-title-page',
+    title: 'APA Title Page Format',
+    description: 'APA 7 student and professional title pages: exact elements, formatting rules, worked examples, and the apa7 LaTeX class.',
+    color: 'from-fuchsia-500/10 to-fuchsia-600/5',
+  },
 ]
 
 export default function LearnPage() {
