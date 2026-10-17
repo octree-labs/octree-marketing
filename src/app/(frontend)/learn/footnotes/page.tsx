@@ -82,11 +82,13 @@ for mathematical typesetting.
             page. Use <code>\footnotemark</code> where <code>\footnote</code> fails, then call{' '}
             <code>\footnotetext</code> as soon as you are back in normal paragraph text:
           </p>
-          <pre><code>{`\\section{Results\\footnotemark}
+          <pre><code>{`\\section[Results]{Results\\footnotemark}
 \\footnotetext{Preliminary data; see Section 4 for the full analysis.}`}</code></pre>
           <p>
-            Both commands share the same counter, so they stay in sync as long as you keep them
-            in order. If you need several marks before their texts, pass the number explicitly:{' '}
+            The short title in square brackets matters: without it the heading, including the
+            fragile <code>\footnotemark</code>, is written to the table of contents and breaks the
+            build. Both commands share the same counter, so they stay in sync as long as you keep
+            them in order. If you need several marks before their texts, pass the number explicitly:{' '}
             <code>\footnotemark[2]</code> and <code>{`\\footnotetext[2]{...}`}</code>.
           </p>
 
@@ -157,7 +159,8 @@ for mathematical typesetting.
 
           <h3>3. longtable and minipage</h3>
           <p>
-            The <code>longtable</code> environment supports <code>\footnote</code> natively, so
+            The <code>longtable</code> environment supports <code>\footnote</code> natively in the
+            table body (not in the <code>\endhead</code>/<code>\endfoot</code> rows), so
             multi-page tables need nothing special. For a short table you can also wrap the{' '}
             <code>tabular</code> in a <code>minipage</code>; footnotes then appear at the bottom
             of the minipage, lettered <em>a</em>, <em>b</em>, <em>c</em> by the{' '}
@@ -189,9 +192,13 @@ for mathematical typesetting.
 \\begin{figure}[htbp]
   \\centering
   \\includegraphics[width=0.6\\linewidth]{plot.pdf}
-  \\caption[Loss curves]{Loss curves\\footnotemark{} for all runs}
+  \\caption[Loss curves]{Loss curves\\footnotemark[1] for all runs}
 \\end{figure}
-\\footnotetext{Smoothed with a window of 50 steps.}`}</code></pre>
+\\footnotetext[1]{Smoothed with a window of 50 steps.}`}</code></pre>
+          <p>
+            Give the number explicitly here: a caption longer than one line is typeset twice, which
+            would otherwise step the counter twice.
+          </p>
           <p>
             The optional short title in square brackets keeps the footnote out of the table of
             contents, where it would otherwise print a stray number.
@@ -214,7 +221,7 @@ for mathematical typesetting.
             reset the counter with <code>{`\\setcounter{footnote}{0}`}</code> afterwards. The{' '}
             <code>footmisc</code> package offers the same thing as an option:{' '}
             <code>{`\\usepackage[symbol]{footmisc}`}</code>, and{' '}
-            <code>symbol*</code> warns when you run out of symbols.
+            <code>symbol*</code> falls back to numbers and warns when you run out of symbols.
           </p>
 
           {/* ── Unnumbered ── */}
@@ -234,17 +241,14 @@ for mathematical typesetting.
           <p>
             Because <code>\footnotetext</code> is used, no mark is printed in the text and the
             footnote counter is not advanced. The group keeps the redefinition of{' '}
-            <code>\thefootnote</code> from affecting later footnotes. In <code>book</code> and{' '}
-            <code>report</code> the counter still increments; add{' '}
-            <code>{`\\addtocounter{footnote}{-1}`}</code> inside the group if you notice a skipped
-            number.
+            <code>\thefootnote</code> from affecting later footnotes.
           </p>
 
           {/* ── Title / thanks ── */}
           <h2>Footnotes in the Title and Author Block</h2>
           <p>
             Inside <code>\title</code> and <code>\author</code>, use <code>\thanks</code> instead
-            of <code>\footnote</code>. It produces an unnumbered or symbol-marked footnote on the
+            of <code>\footnote</code>. It produces a symbol-marked footnote (*, †, ‡) on the
             title page and does not interfere with the body numbering:
           </p>
           <pre><code>{`\\title{Fast Footnotes\\thanks{Supported by the Example Foundation.}}
@@ -291,8 +295,8 @@ for mathematical typesetting.
           <p>
             To make every footnote slightly larger or smaller, redefine the size command:{' '}
             <code>{`\\renewcommand{\\footnotesize}{\\small}`}</code>. In Beamer, footnotes work in
-            frames as normal and can be placed per frame with{' '}
-            <code>{`\\footnote[frame]{...}`}</code>.
+            frames as normal; inside <code>columns</code> or a <code>minipage</code>, use{' '}
+            <code>{`\\footnote[frame]{...}`}</code> to put the note at the bottom of the frame.
           </p>
 
           {/* ── hyperref ── */}
