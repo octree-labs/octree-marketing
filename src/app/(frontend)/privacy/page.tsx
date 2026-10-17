@@ -5,6 +5,7 @@ import { mergeOpenGraph } from '@/utilities/mergeOpenGraph'
 export const metadata: Metadata = {
   title: 'Privacy Policy',
   description: 'Privacy Policy for Octree - Learn how we collect, use, and protect your data.',
+  alternates: { canonical: '/privacy' },
   openGraph: mergeOpenGraph({
     title: 'Privacy Policy | Octree',
     description: 'Privacy Policy for Octree - Learn how we collect, use, and protect your data.',
