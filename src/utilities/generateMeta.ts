@@ -28,7 +28,7 @@ export const getImageURL = (image?: Media | Config['db']['defaultIDType'] | null
  * CMS stored so the final title carries the brand exactly once.
  */
 const stripBrandSuffix = (title: string) =>
-  title.replace(/\s*[|–-]\s*Octree(\s*[|–-]\s*AI LaTeX Editor)?\s*$/i, '').trim()
+  title.replace(/(\s*[|–—-]\s*Octree(\s*[|–—-]\s*AI LaTeX Editor)?)+\s*$/i, '').trim()
 
 export const getDocPath = (doc: Partial<Page> | Partial<Blog> | null, basePath = '') => {
   const slug = Array.isArray(doc?.slug) ? doc?.slug.join('/') : doc?.slug
