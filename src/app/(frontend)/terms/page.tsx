@@ -5,6 +5,7 @@ import { mergeOpenGraph } from '@/utilities/mergeOpenGraph'
 export const metadata: Metadata = {
   title: 'Terms & Conditions',
   description: 'Terms and Conditions for using Octree LaTeX editing platform.',
+  alternates: { canonical: '/terms' },
   openGraph: mergeOpenGraph({
     title: 'Terms & Conditions | Octree',
     description: 'Terms and Conditions for using Octree LaTeX editing platform.',

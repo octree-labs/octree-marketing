@@ -95,6 +95,12 @@ const learnTopics = [
     description: 'Create professional tables in LaTeX with booktabs, multicolumn, multirow, longtable, and colored table formatting.',
     color: 'from-sky-500/10 to-sky-600/5',
   },
+  {
+    slug: 'footnotes',
+    title: 'LaTeX Footnotes',
+    description: 'Add footnotes in LaTeX with \\footnote, put footnotes in tables and captions, use symbols instead of numbers, and style them with footmisc.',
+    color: 'from-lime-500/10 to-lime-600/5',
+  },
 ]
 
 export default function LearnPage() {
