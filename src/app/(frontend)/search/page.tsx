@@ -83,6 +83,9 @@ export default async function Page({ searchParams: searchParamsPromise }: Args) 
 
 export function generateMetadata(): Metadata {
   return {
-    title: `Search`,
+    title: 'Search',
+    description: 'Search Octree blog posts and LaTeX guides.',
+    // Internal search results pages should not compete with the content they list.
+    robots: { index: false, follow: true },
   }
 }

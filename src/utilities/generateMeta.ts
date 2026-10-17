@@ -5,7 +5,10 @@ import type { Media, Page, Blog, Config } from '../payload-types'
 import { mergeOpenGraph } from './mergeOpenGraph'
 import { getServerSideURL } from './getURL'
 
-const getImageURL = (image?: Media | Config['db']['defaultIDType'] | null) => {
+export const DEFAULT_DESCRIPTION =
+  'The open-source LaTeX editor that makes academic writing feel natural and effortless. Write faster with AI assistance, real-time collaboration, and beautiful templates.'
+
+export const getImageURL = (image?: Media | Config['db']['defaultIDType'] | null) => {
   const serverUrl = getServerSideURL()
 
   let url = serverUrl + '/website-template-OG.webp'
@@ -19,24 +22,44 @@ const getImageURL = (image?: Media | Config['db']['defaultIDType'] | null) => {
   return url
 }
 
+/**
+ * The SEO plugin's generateTitle already appends " | Octree" to CMS titles, and
+ * the root layout applies a "%s | Octree" template. Strip any brand suffix the
+ * CMS stored so the final title carries the brand exactly once.
+ */
+const stripBrandSuffix = (title: string) =>
+  title.replace(/(\s*[|–—-]\s*Octree(\s*[|–—-]\s*AI LaTeX Editor)?)+\s*$/i, '').trim()
+
+export const getDocPath = (doc: Partial<Page> | Partial<Blog> | null, basePath = '') => {
+  const slug = Array.isArray(doc?.slug) ? doc?.slug.join('/') : doc?.slug
+  if (!slug || slug === 'home') return basePath || '/'
+  return `${basePath}/${slug}`
+}
+
 export const generateMeta = async (args: {
   doc: Partial<Page> | Partial<Blog> | null
+  /** URL prefix for the collection, e.g. '/blog' for posts. */
+  basePath?: string
 }): Promise<Metadata> => {
-  const { doc } = args
+  const { doc, basePath = '' } = args
 
   const ogImage = getImageURL(doc?.meta?.image)
+  const path = getDocPath(doc, basePath)
+  const isHome = path === '/'
 
-  const isHome = doc?.slug === 'home'
-  const title = doc?.meta?.title
-    ? isHome
-      ? doc?.meta?.title
-      : doc?.meta?.title + ' | Octree - AI LaTeX Editor'
-    : 'Octree - AI LaTeX Editor'
+  const rawTitle = doc?.meta?.title || doc?.title
+  const title = rawTitle && !isHome ? stripBrandSuffix(rawTitle) : 'Octree – AI LaTeX Editor'
+  const description = doc?.meta?.description || DEFAULT_DESCRIPTION
 
   return {
-    description: doc?.meta?.description,
+    // The root layout template adds " | Octree"; the home page keeps its own title.
+    title: isHome ? { absolute: title } : title,
+    description,
+    alternates: {
+      canonical: path,
+    },
     openGraph: mergeOpenGraph({
-      description: doc?.meta?.description || '',
+      description,
       images: ogImage
         ? [
             {
@@ -44,9 +67,8 @@ export const generateMeta = async (args: {
             },
           ]
         : undefined,
-      title,
-      url: Array.isArray(doc?.slug) ? doc?.slug.join('/') : '/',
+      title: isHome ? title : `${title} | Octree`,
+      url: path,
     }),
-    title,
   }
 }

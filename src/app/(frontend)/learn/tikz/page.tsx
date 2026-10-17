@@ -251,7 +251,7 @@ export default async function LearnTikzPage() {
 
 export function generateMetadata(): Metadata {
   return {
-    title: 'Learn TikZ – Create Diagrams in LaTeX Tutorial 2025 | Octree',
+    title: 'Learn TikZ – Create Diagrams in LaTeX Tutorial 2025',
     description: 'Master TikZ for creating diagrams, flowcharts, graphs, and illustrations in LaTeX. Free tutorial covering shapes, nodes, arrows, styling, trees, and advanced techniques.',
     keywords: 'tikz timeline, tikz block diagram, tikz neural network, tikz flowchart examples, tikz mindmap, tikz circuit diagrams, learn tikz, tikz tutorial, tikz examples, tikz diagrams, tikz graphs, tikz arrows, tikz nodes, latex diagrams, latex graphics',
     openGraph: {

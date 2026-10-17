@@ -9,9 +9,10 @@ export const dynamic = 'force-static'
 export const revalidate = 3600
 
 export const metadata: Metadata = {
-  title: 'Octree Compile API Documentation',
+  title: 'Compile API Documentation',
   description:
     'A high-performance LaTeX compilation service featuring intelligent caching and incremental compilation for fast PDF generation.',
+  alternates: { canonical: '/docs/compile-api' },
   openGraph: {
     title: 'Octree Compile API Documentation',
     description:

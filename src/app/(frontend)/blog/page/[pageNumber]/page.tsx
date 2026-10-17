@@ -65,7 +65,11 @@ export default async function Page({ params: paramsPromise }: Args) {
 export async function generateMetadata({ params: paramsPromise }: Args): Promise<Metadata> {
   const { pageNumber } = await paramsPromise
   return {
-    title: `Octree Blog Page ${pageNumber || ''}`,
+    title: `Blog – Page ${pageNumber || ''}`,
+    description:
+      'Tips, tutorials, and updates on LaTeX editing, academic writing, and the Octree platform.',
+    // Page 1 duplicates /blog, so point it there.
+    alternates: { canonical: pageNumber === '1' ? '/blog' : `/blog/page/${pageNumber}` },
   }
 }
 

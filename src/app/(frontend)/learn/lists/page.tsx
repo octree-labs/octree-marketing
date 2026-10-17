@@ -490,7 +490,7 @@ The requirements are:
 
 export function generateMetadata(): Metadata {
   return {
-    title: 'LaTeX Lists – Itemize, Enumerate & Description Guide 2026 | Octree',
+    title: 'LaTeX Lists – Itemize, Enumerate & Description Guide 2026',
     description: 'Learn how to create lists in LaTeX: bulleted (itemize), numbered (enumerate), and description lists. Guide covers nesting, custom bullets, compact lists, and the enumitem package.',
     keywords: 'latex list, latex itemize, latex enumerate, latex description list, latex bullet points, latex numbered list, latex nested list, latex list styles, enumitem latex, latex custom bullets, latex list spacing, latex inline list',
     openGraph: {

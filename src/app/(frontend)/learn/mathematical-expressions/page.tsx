@@ -682,7 +682,7 @@ As shown in Equation~\\ref{eq:einstein}, energy and mass are equivalent.`}</code
 
 export function generateMetadata(): Metadata {
   return {
-    title: 'Mathematical Expressions in LaTeX – Complete Guide 2026 | Octree',
+    title: 'Mathematical Expressions in LaTeX – Complete Guide 2026',
     description: 'Learn how to write mathematical expressions in LaTeX. Guide covers fractions, roots, aligned equations, brackets, equation numbering, cases, spacing, and the amsmath package.',
     keywords: 'latex math, latex equation, latex fraction, latex square root, latex brackets, latex align, latex equation numbering, latex amsmath, latex math mode, latex inline math, latex display math, latex cases, latex piecewise function, how to write equations in latex',
     openGraph: {

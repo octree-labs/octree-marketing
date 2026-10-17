@@ -31,11 +31,11 @@ const getPagesSitemap = unstable_cache(
 
     const defaultSitemap = [
       {
-        loc: `${SITE_URL}/search`,
+        loc: `${SITE_URL}/blog`,
         lastmod: dateFallback,
       },
       {
-        loc: `${SITE_URL}/blog`,
+        loc: `${SITE_URL}/docs/compile-api`,
         lastmod: dateFallback,
       },
       {

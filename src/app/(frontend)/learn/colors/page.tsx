@@ -645,7 +645,7 @@ Normal text, {\\color{green} green text here}, back to normal.
 
 export function generateMetadata(): Metadata {
   return {
-    title: 'Using Colors in LaTeX – xcolor Package Guide 2026 | Octree',
+    title: 'Using Colors in LaTeX – xcolor Package Guide 2026',
     description: 'Learn how to use colors in LaTeX with the xcolor package. Guide covers text color, background color, custom colors, color mixing, colored tables, and the dvipsnames palette.',
     keywords: 'latex color, latex text color, xcolor latex, latex textcolor, latex definecolor, latex color names, latex background color, latex colorbox, latex color mixing, latex dvipsnames, latex colored text, latex rgb color, latex highlight text',
     openGraph: {

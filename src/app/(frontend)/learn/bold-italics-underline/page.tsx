@@ -658,7 +658,7 @@ $ \\bm{\\alpha} $          % Also produces bold alpha`}</code></pre>
 
 export function generateMetadata(): Metadata {
   return {
-    title: 'Bold, Italics and Underlining in LaTeX – Guide 2026 | Octree',
+    title: 'Bold, Italics and Underlining in LaTeX – Guide 2026',
     description: 'Learn how to use bold, italic, and underline text in LaTeX. Complete guide covering \\textbf, \\textit, \\underline, \\emph, and advanced formatting with soul and ulem packages.',
     keywords: 'latex bold, latex italic, latex underline, textbf latex, textit latex, emph latex, latex text formatting, bold text in latex, italic text in latex, underline in latex, latex font styles, latex emphasis',
     openGraph: {
