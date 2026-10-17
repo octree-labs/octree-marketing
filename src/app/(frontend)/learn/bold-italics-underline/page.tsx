@@ -1,4 +1,6 @@
 import type { Metadata } from 'next/types'
+
+import { mergeOpenGraph } from '@/utilities/mergeOpenGraph'
 import Link from 'next/link'
 import { buttonVariants } from '@/components/ui/button'
 import React from 'react'
@@ -661,12 +663,12 @@ export function generateMetadata(): Metadata {
     title: 'Bold, Italics and Underlining in LaTeX – Guide 2026',
     description: 'Learn how to use bold, italic, and underline text in LaTeX. Complete guide covering \\textbf, \\textit, \\underline, \\emph, and advanced formatting with soul and ulem packages.',
     keywords: 'latex bold, latex italic, latex underline, textbf latex, textit latex, emph latex, latex text formatting, bold text in latex, italic text in latex, underline in latex, latex font styles, latex emphasis',
-    openGraph: {
+    openGraph: mergeOpenGraph({
       title: 'Bold, Italics and Underlining in LaTeX – Guide 2026',
       description: 'Complete guide to bold, italic, and underline text formatting in LaTeX with examples.',
       type: 'article',
       url: '/learn/bold-italics-underline',
-    },
+    }),
     twitter: {
       card: 'summary_large_image',
       title: 'Bold, Italics and Underlining in LaTeX',

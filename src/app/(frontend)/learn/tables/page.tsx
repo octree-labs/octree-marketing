@@ -1,4 +1,6 @@
 import type { Metadata } from 'next/types'
+
+import { mergeOpenGraph } from '@/utilities/mergeOpenGraph'
 import Link from 'next/link'
 import { buttonVariants } from '@/components/ui/button'
 import React from 'react'
@@ -901,12 +903,12 @@ export function generateMetadata(): Metadata {
     title: 'LaTeX Tables \u2013 Complete Guide 2026',
     description: 'Learn how to create tables in LaTeX. Guide covers tabular, booktabs, multicolumn, multirow, longtable, colored tables, and professional formatting techniques.',
     keywords: 'latex table, latex tabular, latex booktabs, latex multicolumn, latex multirow, latex table generator, latex longtable, latex table of contents, latex hline, latex table width, create table in latex, latex table example, latex table formatting, latex colored table',
-    openGraph: {
+    openGraph: mergeOpenGraph({
       title: 'LaTeX Tables \u2013 Complete Guide 2026',
       description: 'Complete guide to creating professional tables in LaTeX.',
       type: 'article',
       url: '/learn/tables',
-    },
+    }),
     twitter: {
       card: 'summary_large_image',
       title: 'LaTeX Tables \u2013 Complete Guide',

@@ -1,4 +1,6 @@
 import type { Metadata } from 'next/types'
+
+import { mergeOpenGraph } from '@/utilities/mergeOpenGraph'
 import Link from 'next/link'
 import { buttonVariants } from '@/components/ui/button'
 import React from 'react'
@@ -617,12 +619,12 @@ export function generateMetadata(): Metadata {
     title: 'Greek Letters and Math Symbols in LaTeX – Complete Reference 2026',
     description: 'Complete reference for Greek letters and math symbols in LaTeX. Find every symbol: alpha, beta, gamma, delta, infinity, arrows, operators, relations, and more with copy-paste LaTeX commands.',
     keywords: 'latex greek letters, latex alpha, latex beta, latex gamma, latex delta, latex symbols, latex math symbols, latex infinity, latex arrow, latex operators, latex relations, latex degree symbol, latex pi, latex theta, latex sigma, latex omega, latex lambda, latex epsilon, latex phi, latex psi, latex mu, latex nabla, latex partial, latex forall, latex exists',
-    openGraph: {
+    openGraph: mergeOpenGraph({
       title: 'Greek Letters and Math Symbols in LaTeX – Complete Reference 2026',
       description: 'Find every Greek letter and math symbol in LaTeX with copy-paste commands.',
       type: 'article',
       url: '/learn/greek-letters-math-symbols',
-    },
+    }),
     twitter: {
       card: 'summary_large_image',
       title: 'Greek Letters and Math Symbols in LaTeX',

@@ -1,4 +1,6 @@
 import type { Metadata } from 'next/types'
+
+import { mergeOpenGraph } from '@/utilities/mergeOpenGraph'
 import Link from 'next/link'
 import { buttonVariants } from '@/components/ui/button'
 import React from 'react'
@@ -830,12 +832,12 @@ export function generateMetadata(): Metadata {
     title: 'Matrices in LaTeX – Complete Guide 2026',
     description: 'Learn how to create matrices in LaTeX using amsmath. Guide covers pmatrix, bmatrix, vmatrix, augmented matrices, determinants, identity matrices, and matrix operations.',
     keywords: 'latex matrix, latex pmatrix, latex bmatrix, latex vmatrix, latex determinant, latex augmented matrix, latex identity matrix, latex matrix multiplication, latex amsmath matrix, latex array, how to write matrix in latex, latex matrix examples',
-    openGraph: {
+    openGraph: mergeOpenGraph({
       title: 'Matrices in LaTeX – Complete Guide 2026',
       description: 'Complete guide to creating matrices in LaTeX with amsmath.',
       type: 'article',
       url: '/learn/matrices',
-    },
+    }),
     twitter: {
       card: 'summary_large_image',
       title: 'Matrices in LaTeX',
