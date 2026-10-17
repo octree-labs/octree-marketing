@@ -108,13 +108,12 @@ export default async function GreekAlphabetPage() {
             <em>aleph, bet, gimel, dalet</em> became <em>alpha, beta, gamma, delta</em>. The
             word &quot;alphabet&quot; itself is just the first two letters joined together. The
             Greeks dropped Phoenician consonants they did not need and reused them as vowels,
-            which is why Greek was the first alphabet to write vowels explicitly. The five
-            letters at the very end (upsilon, phi, chi, psi, omega) were Greek additions with
-            no Phoenician ancestor, which is why they sit after tau.
+            which is why Greek was the first alphabet to write vowels explicitly. Phi, chi and
+            psi were Greek inventions; upsilon was a second derivation of Phoenician waw and
+            omega a modified omicron, which is why those five sit after tau.
           </p>
           <p>
-            The easiest way to memorise the order is to chant it in six groups of four, the
-            way Greek schoolchildren do:
+            The easiest way to memorise the order is to chant it in six groups of four:
           </p>
           <pre><code>{`alpha   beta    gamma   delta
 epsilon zeta    eta     theta
@@ -217,22 +216,22 @@ phi     chi     psi     omega`}</code></pre>
           <p>
             Every other letter follows the same pattern: the <em>n</em>th uppercase letter is
             U+0390 + <em>n</em> and the <em>n</em>th lowercase letter is U+03B0 + <em>n</em>
-            (counting the unassigned slot after rho). You can also write a numeric entity such
+            (counting the extra slot after rho: unassigned in uppercase, final sigma in lowercase). You can also write a numeric entity such
             as <code>&amp;#945;</code> for &alpha;.
           </p>
 
           <h3>Mac</h3>
           <ul>
             <li>Press <strong>Ctrl + Cmd + Space</strong> to open the Character Viewer, search &quot;greek&quot;, and double-click a letter.</li>
-            <li>For regular use add the Greek keyboard: <em>System Settings → Keyboard → Input Sources → + → Greek</em>, then switch layouts with <strong>Ctrl + Space</strong>. Keys map phonetically (A = &alpha;, B = &beta;, G = &gamma;, D = &delta;, F = &phi;, Q = &theta;).</li>
+            <li>For regular use add the Greek keyboard: <em>System Settings → Keyboard → Input Sources → + → Greek</em>, then switch layouts with <strong>Ctrl + Space</strong>. Keys map phonetically (A = &alpha;, B = &beta;, G = &gamma;, D = &delta;, F = &phi;, U = &theta;).</li>
             <li>A few letters are available on the US layout with the Option key: <strong>Option + P</strong> gives &pi;, <strong>Option + M</strong> gives &micro;, <strong>Option + Z</strong> gives &Omega;.</li>
           </ul>
           <h3>Windows</h3>
           <ul>
-            <li>Press <strong>Win + .</strong> (period) to open the emoji panel, choose the <em>Symbols</em> tab, and scroll to the Greek section.</li>
+            <li>On Windows 11, press <strong>Win + .</strong> (period) to open the emoji panel, choose the <em>Symbols</em> tab, and scroll to the Greek section.</li>
             <li>In Microsoft Word, type the hex code and press <strong>Alt + X</strong>: <code>03B1</code> then Alt + X becomes &alpha;.</li>
             <li>Add the Greek keyboard under <em>Settings → Time &amp; Language → Language &amp; region → Add a language → Greek</em> and switch with <strong>Win + Space</strong>.</li>
-            <li>Legacy Alt codes cover only a handful of letters (for example <strong>Alt + 224</strong> = &alpha;, <strong>Alt + 227</strong> = &pi;, <strong>Alt + 228</strong> = &Sigma;, <strong>Alt + 234</strong> = &Omega;).</li>
+            <li>Legacy Alt codes cover only a handful of letters (for example <strong>Alt + 224</strong> = &alpha;, <strong>Alt + 227</strong> = &pi;, <strong>Alt + 228</strong> = &Sigma;, <strong>Alt + 234</strong> = &Omega;) and only on US-English systems using code page 437; elsewhere they produce accented Latin letters, so prefer Alt + X or the Greek layout.</li>
           </ul>
           <h3>iPhone and Android</h3>
           <ul>
@@ -278,10 +277,13 @@ $\\Upgamma, \\Updelta, \\Upomega$              % upright uppercase`}</code></pre
           </p>
           <pre><code>{`\\usepackage[greek,english]{babel}
 
-The Greek word \\textgreek{l'ogos} means \`\`word''.
-
-% Alternative: the textgreek package gives per-letter text commands
-\\usepackage{textgreek}
+The Greek word \\textgreek{l'ogos} means \`\`word''.`}</code></pre>
+          <p>
+            Alternatively, the <code>textgreek</code> package gives per-letter text commands
+            (load it in the preamble):
+          </p>
+          <pre><code>{`\\usepackage{textgreek}
+...
 A \\textbeta{}-strand and the \\textmu{}m scale.`}</code></pre>
           <p>
             With XeLaTeX or LuaLaTeX and a font that contains Greek glyphs, you can type
@@ -345,7 +347,7 @@ $\\mathit{\\Gamma}$  or  $\\varGamma, \\varDelta, \\varOmega$   % amsmath
             No. Greek has no J, and no direct equivalents of the Latin letters C, F, Q, V, or
             W either (the archaic digamma once covered the <em>w</em> sound). Names with those
             letters are transliterated using the closest sounds, so &quot;John&quot; becomes
-            &Iota;&omega;&alpha;&nu;&nu;&eta;&sigmaf;.
+            &Iota;&omega;&#940;&nu;&nu;&eta;&sigmaf;.
           </p>
           <h3>Why do math and physics use Greek letters?</h3>
           <p>

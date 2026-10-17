@@ -184,7 +184,7 @@ Ann Arbor, MI 48109, United States. Email: jrivera@umich.edu`}</code></pre>
             the title page, so you never place elements by hand. The <code>stu</code> option
             produces a student title page and <code>man</code> produces a professional
             (manuscript) one. The class defaults to Computer Modern, which APA accepts; add{' '}
-            <code>\usepackage&#123;times&#125;</code> if your instructor insists on Times New Roman.
+            <code>\usepackage&#123;mathptmx&#125;</code> if your instructor insists on Times New Roman.
           </p>
 
           <h3>Student Version</h3>
@@ -200,8 +200,8 @@ Ann Arbor, MI 48109, United States. Email: jrivera@umich.edu`}</code></pre>
 \\addbibresource{references.bib}
 
 \\title{Effects of Sleep Deprivation on Working Memory in Undergraduates}
-\\author{Jordan A. Rivera}
-\\affiliation{Department of Psychology, University of Michigan}
+\\authorsnames{Jordan A. Rivera}
+\\authorsaffiliations{{Department of Psychology, University of Michigan}}
 \\course{PSY 240: Cognitive Psychology}
 \\professor{Dr. Maria Lopez}
 \\duedate{October 17, 2026}
