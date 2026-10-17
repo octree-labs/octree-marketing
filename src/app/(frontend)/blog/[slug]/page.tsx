@@ -10,6 +10,7 @@ import RichText from '@/components/RichText'
 
 import { PostHero } from '@/heros/PostHero'
 import { generateMeta } from '@/utilities/generateMeta'
+import { generateArticleSchema } from '@/utilities/generateArticleSchema'
 import { LivePreviewListener } from '@/components/LivePreviewListener'
 import {
   generateBreadcrumbSchema,
@@ -63,12 +64,17 @@ export default async function Post({ params: paramsPromise }: Args) {
     firstCategory?.slug || undefined
   )
   const breadcrumbSchema = generateBreadcrumbSchema(breadcrumbs)
+  const articleSchema = generateArticleSchema(post)
 
   return (
     <article className="pt-16 pb-16">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }}
       />
       {/* Allows redirects for valid pages too */}
       <PayloadRedirects disableNotFound url={url} />
@@ -96,7 +102,7 @@ export async function generateMetadata({ params: paramsPromise }: Args): Promise
   const { slug = '' } = await paramsPromise
   const post = await queryPostBySlug({ slug })
 
-  return generateMeta({ doc: post })
+  return generateMeta({ doc: post, basePath: '/blog' })
 }
 
 const queryPostBySlug = cache(async ({ slug }: { slug: string }) => {

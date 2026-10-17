@@ -157,7 +157,7 @@ export default function LearnPage() {
 
 export function generateMetadata(): Metadata {
   return {
-    title: 'Learn LaTeX, TikZ & PGFPlots – Free Tutorials | Octree',
+    title: 'Learn LaTeX, TikZ & PGFPlots – Free Tutorials',
     description: 'Master LaTeX and its powerful packages with comprehensive tutorials. Learn document typesetting, diagrams with TikZ, and data visualization with PGFPlots. Free beginner-friendly guides.',
     keywords: 'latex online editor, latex resume template, latex cv template, latex math symbols, latex equations, latex matrix, latex fractions, latex table generator, how to write latex, overleaf tutorial, latex beamer presentation, tikz flowchart examples, pgfplots histogram, learn latex, latex tutorial, latex bold, latex italic, latex underline, latex page margins, latex geometry, latex subscript, latex superscript, latex lists, latex itemize, latex enumerate, latex greek letters, latex colors, xcolor latex, latex math expressions, latex integrals, latex sums, latex limits, latex matrices, latex tables, latex booktabs',
     openGraph: {

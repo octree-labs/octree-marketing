@@ -589,7 +589,7 @@ Margins are back to the original 1-inch setting.
 
 export function generateMetadata(): Metadata {
   return {
-    title: 'Page Size and Margins in LaTeX – Guide 2026 | Octree',
+    title: 'Page Size and Margins in LaTeX – Guide 2026',
     description: 'Learn how to set page size and margins in LaTeX using the geometry package. Complete guide covering A4, letter, custom sizes, margin settings, landscape mode, and layout options.',
     keywords: 'latex page size, latex margins, latex geometry package, latex a4 paper, latex letter size, latex page layout, latex margin settings, latex landscape, latex page dimensions, set margins in latex, latex paper size',
     openGraph: {

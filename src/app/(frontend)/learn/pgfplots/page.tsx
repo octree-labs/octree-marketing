@@ -299,7 +299,7 @@ export default async function LearnPgfplotsPage() {
 
 export function generateMetadata(): Metadata {
   return {
-    title: 'Learn PGFPlots – Create Plots in LaTeX Tutorial 2025 | Octree',
+    title: 'Learn PGFPlots – Create Plots in LaTeX Tutorial 2025',
     description: 'Create publication-quality plots and charts in LaTeX with PGFPlots. Free tutorial covering line plots, bar charts, scatter plots, 3D surfaces, error bars, and CSV data import.',
     keywords: 'pgfplots histogram, pgfplots multiple plots, pgfplots legend, pgfplots from csv, pgfplots axis labels, learn pgfplots, pgfplots tutorial, pgfplots examples, latex plots, latex graphs, latex charts, pgfplots bar chart, pgfplots scatter plot, pgfplots 3d, latex data visualization',
     openGraph: {

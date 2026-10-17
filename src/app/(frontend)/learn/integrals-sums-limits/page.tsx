@@ -547,7 +547,7 @@ $\\left[\\frac{x^2}{2}\\right]_0^1$`}</code></pre>
 
 export function generateMetadata(): Metadata {
   return {
-    title: 'Integrals, Sums and Limits in LaTeX – Guide 2026 | Octree',
+    title: 'Integrals, Sums and Limits in LaTeX – Guide 2026',
     description: 'Learn how to write integrals, summations, and limits in LaTeX. Guide covers definite integrals, multiple integrals, summation notation, products, limits, and big operator placement.',
     keywords: 'latex integral, latex sum, latex limit, latex summation, latex product, latex double integral, latex triple integral, latex contour integral, latex lim, latex infty, latex series, latex sigma notation, latex big operators',
     openGraph: {

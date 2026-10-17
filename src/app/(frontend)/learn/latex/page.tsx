@@ -266,7 +266,7 @@ As shown by Einstein~\\cite{einstein1905}...
 
 export function generateMetadata(): Metadata {
   return {
-    title: 'Learn LaTeX – Complete Beginner Tutorial 2025 | Octree',
+    title: 'Learn LaTeX – Complete Beginner Tutorial 2025',
     description: 'Master LaTeX from scratch with this free comprehensive guide. Learn document structure, text formatting, mathematical equations, figures, tables, citations, and bibliography management.',
     keywords: 'latex matrix, latex table generator, latex fractions, latex summation, latex math symbols, latex integral, latex greek letters, latex equations, latex subfigures, how to write latex, latex bibliography, latex figure placement, latex align equations, overleaf tutorial, latex beamer presentation, latex book template, latex poster template, latex resume template, latex cv template, latex thesis template, latex report template, latex letter template, latex booktabs, latex multicolumn table, latex vs word, bibtex tutorial, latex apa citation, latex for thesis, latex for research papers',
     openGraph: {

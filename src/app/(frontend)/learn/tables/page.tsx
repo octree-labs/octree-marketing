@@ -898,7 +898,7 @@ on page~\\pageref{tab:summary}.`}</code></pre>
 
 export function generateMetadata(): Metadata {
   return {
-    title: 'LaTeX Tables \u2013 Complete Guide 2026 | Octree',
+    title: 'LaTeX Tables \u2013 Complete Guide 2026',
     description: 'Learn how to create tables in LaTeX. Guide covers tabular, booktabs, multicolumn, multirow, longtable, colored tables, and professional formatting techniques.',
     keywords: 'latex table, latex tabular, latex booktabs, latex multicolumn, latex multirow, latex table generator, latex longtable, latex table of contents, latex hline, latex table width, create table in latex, latex table example, latex table formatting, latex colored table',
     openGraph: {

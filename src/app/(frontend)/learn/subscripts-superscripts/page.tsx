@@ -469,7 +469,7 @@ ${"{x^a}"}^b$      % b is superscript of (x^a)`}</code></pre>
 
 export function generateMetadata(): Metadata {
   return {
-    title: 'Subscripts and Superscripts in LaTeX – Guide 2026 | Octree',
+    title: 'Subscripts and Superscripts in LaTeX – Guide 2026',
     description: 'Learn how to write subscripts and superscripts in LaTeX. Complete guide covering math mode, text mode, combined notation, chemistry formulas, and advanced techniques with amsmath.',
     keywords: 'latex subscript, latex superscript, latex exponent, latex power, latex underscore, latex caret, subscript in latex, superscript in latex, latex math notation, latex chemistry formulas, textsuperscript latex, textsubscript latex',
     openGraph: {

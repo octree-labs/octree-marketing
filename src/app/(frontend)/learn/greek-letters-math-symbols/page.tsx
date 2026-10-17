@@ -614,7 +614,7 @@ $\\nexists \\, x \\in \\mathbb{R} : x^2 < 0$`}</code></pre>
 
 export function generateMetadata(): Metadata {
   return {
-    title: 'Greek Letters and Math Symbols in LaTeX – Complete Reference 2026 | Octree',
+    title: 'Greek Letters and Math Symbols in LaTeX – Complete Reference 2026',
     description: 'Complete reference for Greek letters and math symbols in LaTeX. Find every symbol: alpha, beta, gamma, delta, infinity, arrows, operators, relations, and more with copy-paste LaTeX commands.',
     keywords: 'latex greek letters, latex alpha, latex beta, latex gamma, latex delta, latex symbols, latex math symbols, latex infinity, latex arrow, latex operators, latex relations, latex degree symbol, latex pi, latex theta, latex sigma, latex omega, latex lambda, latex epsilon, latex phi, latex psi, latex mu, latex nabla, latex partial, latex forall, latex exists',
     openGraph: {

@@ -827,7 +827,7 @@ A A^{-1} = A^{-1} A = I
 
 export function generateMetadata(): Metadata {
   return {
-    title: 'Matrices in LaTeX – Complete Guide 2026 | Octree',
+    title: 'Matrices in LaTeX – Complete Guide 2026',
     description: 'Learn how to create matrices in LaTeX using amsmath. Guide covers pmatrix, bmatrix, vmatrix, augmented matrices, determinants, identity matrices, and matrix operations.',
     keywords: 'latex matrix, latex pmatrix, latex bmatrix, latex vmatrix, latex determinant, latex augmented matrix, latex identity matrix, latex matrix multiplication, latex amsmath matrix, latex array, how to write matrix in latex, latex matrix examples',
     openGraph: {

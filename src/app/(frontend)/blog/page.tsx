@@ -58,8 +58,16 @@ export default async function Page() {
 
 export function generateMetadata(): Metadata {
   return {
-    title: `Octree Blog`,
+    title: 'Blog – LaTeX Tips, Tutorials & Guides',
     description:
       'Tips, tutorials, and updates on LaTeX editing, academic writing, and the Octree platform.',
+    alternates: { canonical: '/blog' },
+    openGraph: {
+      title: 'Octree Blog – LaTeX Tips, Tutorials & Guides',
+      description:
+        'Tips, tutorials, and updates on LaTeX editing, academic writing, and the Octree platform.',
+      url: '/blog',
+      type: 'website',
+    },
   }
 }
