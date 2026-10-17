@@ -99,6 +99,14 @@ const getPagesSitemap = unstable_cache(
         lastmod: dateFallback,
       },
       {
+        loc: `${SITE_URL}/learn/greek-alphabet`,
+        lastmod: dateFallback,
+      },
+      {
+        loc: `${SITE_URL}/learn/apa-title-page`,
+        lastmod: dateFallback,
+      },
+      {
         loc: `${SITE_URL}/privacy`,
         lastmod: dateFallback,
       },

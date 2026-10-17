@@ -575,6 +575,7 @@ $\\nexists \\, x \\in \\mathbb{R} : x^2 < 0$`}</code></pre>
           <h2>Next Steps</h2>
           <p>Now that you have a complete reference for Greek letters and math symbols, explore these related topics:</p>
           <ul>
+            <li><Link href="/learn/greek-alphabet">The Greek Alphabet</Link> – All 24 letters in order with pronunciation, Unicode code points, and what each one means in math and science</li>
             <li><Link href="/learn/mathematical-expressions">Mathematical Expressions in LaTeX</Link> – Learn how to write inline and display math, fractions, roots, and more</li>
             <li><Link href="/learn/subscripts-superscripts">Subscripts and Superscripts</Link> – Master sub/superscript positioning and nesting</li>
             <li><Link href="/learn/integrals-sums-limits">Integrals, Sums, and Limits</Link> – Typeset integral signs, summation notation, and limit expressions</li>
