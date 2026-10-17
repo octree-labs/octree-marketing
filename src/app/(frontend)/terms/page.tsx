@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Terms & Conditions | Octree',
+  title: 'Terms & Conditions',
   description: 'Terms and Conditions for using Octree LaTeX editing platform.',
   openGraph: {
     title: 'Terms & Conditions | Octree',

@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Privacy Policy | Octree',
+  title: 'Privacy Policy',
   description: 'Privacy Policy for Octree - Learn how we collect, use, and protect your data.',
   openGraph: {
     title: 'Privacy Policy | Octree',
