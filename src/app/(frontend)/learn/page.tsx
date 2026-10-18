@@ -41,7 +41,7 @@ const learnTopics = [
   {
     slug: 'bold-italics-underline',
     title: 'Bold, Italics & Underline',
-    description: 'Master text formatting in LaTeX with bold, italic, underline commands and advanced packages like soul and ulem.',
+    description: 'Bold, italic and underlined text in LaTeX with \\textbf, \\textit, \\emph and \\underline, plus small caps, monospace, font sizes and the soul and ulem packages.',
     color: 'from-rose-500/10 to-rose-600/5',
   },
   {
@@ -83,19 +83,19 @@ const learnTopics = [
   {
     slug: 'integrals-sums-limits',
     title: 'Integrals, Sums & Limits',
-    description: 'Typeset integrals, summations, products, and limits in LaTeX. From basic notation to advanced series and big operators.',
+    description: 'Typeset integrals, sums (\\sum), products and limits in LaTeX. From basic sigma notation to series, big operators and partial derivatives.',
     color: 'from-orange-500/10 to-orange-600/5',
   },
   {
     slug: 'matrices',
     title: 'Matrices in LaTeX',
-    description: 'Create matrices, determinants, and augmented matrices in LaTeX with amsmath. All matrix types with practical examples.',
+    description: 'Matrices in LaTeX with amsmath: pmatrix and bmatrix, 2x2, 3x3 and 4x4 examples, determinants, inverse and transpose, augmented and block matrices.',
     color: 'from-emerald-500/10 to-emerald-600/5',
   },
   {
     slug: 'tables',
     title: 'LaTeX Tables',
-    description: 'Create professional tables in LaTeX with booktabs, multicolumn, multirow, longtable, and colored table formatting.',
+    description: 'Create professional tables in LaTeX with booktabs, multicolumn, multirow, longtable, row and column spacing, colored tables and a table generator.',
     color: 'from-sky-500/10 to-sky-600/5',
   },
   {
@@ -173,7 +173,7 @@ const learnTopics = [
   {
     slug: 'brackets',
     title: 'Brackets & Parentheses',
-    description: 'Every delimiter from ( ) to \\langle \\rangle, automatic sizing with \\left \\right, manual \\big to \\Bigg, matrix brackets, cases, \\underbrace and mathtools \\abs and \\norm.',
+    description: 'Every delimiter from ( ) to \\langle \\rangle, curly braces (accolades) in text, automatic sizing with \\left \\right, manual \\big to \\Bigg, matrix brackets, cases and \\underbrace.',
     color: 'from-cyan-500/10 to-sky-600/5',
   },
   {

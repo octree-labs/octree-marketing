@@ -22,7 +22,7 @@ const page = {
   title: 'Integrals, Sums and Limits in LaTeX: \\int, \\sum, \\lim and \\partial',
   seoTitle: 'Integrals, Sums and Limits in LaTeX',
   description: 'Integrals, sums and limits in LaTeX: the sum symbol Σ with \\sum, \\int and multiple integrals, \\lim and \\limits, partial derivatives with \\partial and ∇.',
-  keywords: 'latex integral, latex sum, sum symbol, sigma notation latex, latex sigma, latex summation, latex limit, latex product, latex double integral, latex triple integral, latex contour integral, latex partial derivative, partial symbol, latex partial, latex nabla, latex gradient, latex lim, latex infty, latex series, latex big operators, latex limits nolimits, latex substack, latex mathop, latex dx upright',
+  keywords: 'latex integral, latex sum, sum symbol, sigma notation latex, latex sigma, latex summation, latex limit, latex product, latex double integral, latex triple integral, latex contour integral, latex partial derivative, partial symbol, latex partial, latex nabla, latex gradient, latex lim, latex infty, latex series, latex big operators, latex limits nolimits, latex substack, latex mathop, latex dx upright, sum latex, summation latex, latex sum symbol, latex sum notation, integral latex, latex integral symbol, latex definite integral, latex indefinite integral, limit latex, latex limsup liminf, integrals sums and limits latex, latex fundamental theorem of calculus, latex derivative d dx',
 }
 
 /** Last content update, used for dateModified in the article schema. */
@@ -122,7 +122,8 @@ export default async function IntegralsSumsLimitsPage() {
             The capital Greek letter sigma, Σ, stands for &ldquo;sum&rdquo;. In sigma notation
             the small expression under the symbol names an index variable and its starting
             value, the expression above gives the final value, and the expression to the right
-            is added up once for every value of the index. So{' '}
+            is added up once for every value of the index. Whether you call it the sum symbol,
+            a summation or sigma notation, the LaTeX is the same. So{' '}
             <code>{`\\sum_{i=1}^{5} i^2`}</code> means 1² + 2² + 3² + 4² + 5² = 55. In LaTeX the
             operator is <code>\sum</code>; the lower bound is a subscript and the upper bound a
             superscript:
@@ -279,7 +280,11 @@ $\\int_a^b f(x) \\, dx$
 % Definite integral with evaluated bounds
 \\[
   \\int_0^1 x^2 \\, dx = \\left[ \\frac{x^3}{3} \\right]_0^1 = \\frac{1}{3}
-\\]`}</code></pre>
+\\]
+
+% The thin space before dx, with and without
+$\\int f(x)\\,dx$   % correct
+$\\int f(x)dx$      % too tight: f(x) runs into dx`}</code></pre>
           <p>
             The thin space <code>\,</code> before <code>dx</code> is a standard convention that
             improves readability. Unlike <code>\sum</code>, an integral keeps its bounds beside
@@ -727,6 +732,17 @@ $\\displaystyle \\sum_{i=1}^{n} a_i$
           <p>
             Below are complete, real-world formulas that combine integrals, sums, and limits.
           </p>
+
+          <h3>Fundamental Theorem of Calculus</h3>
+          <pre><code>{`% Evaluation form
+\\[
+  \\int_a^b f'(x) \\, dx = f(b) - f(a)
+\\]
+
+% Derivative of an integral with a variable upper bound
+\\[
+  \\frac{d}{dx} \\int_a^x f(t) \\, dt = f(x)
+\\]`}</code></pre>
 
           <h3>Gaussian Integral</h3>
           <pre><code>{`\\[

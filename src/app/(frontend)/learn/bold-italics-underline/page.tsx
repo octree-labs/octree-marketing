@@ -21,11 +21,11 @@ const page = {
   slug: 'bold-italics-underline',
   title: 'Bold, Italics and Underlining in LaTeX – Guide 2026',
   description: 'Learn how to use bold, italic, and underline text in LaTeX. Complete guide covering \\textbf, \\textit, \\underline, \\emph, and advanced formatting with soul and ulem packages.',
-  keywords: 'latex bold, latex italic, latex underline, textbf latex, textit latex, emph latex, latex text formatting, bold text in latex, italic text in latex, underline in latex, latex font styles, latex emphasis',
+  keywords: 'latex bold, latex italic, latex underline, textbf latex, textit latex, emph latex, latex text formatting, bold text in latex, italic text in latex, underline in latex, latex font styles, latex emphasis, italic in latex, latex italics, italics in latex, how to italicize in latex, latex italic text, italic text in latex bold italics and underlining, latex bold italic, latex underline text, latex emph vs textit, latex small caps, latex textsc, latex texttt monospace, latex textsf, latex slanted text, latex font style commands, latex text formatting commands, latex mathbf boldsymbol',
 }
 
 /** Last content update, used for dateModified in the article schema. */
-const LAST_UPDATED = '2026-10-17'
+const LAST_UPDATED = '2026-10-18'
 
 export default async function BoldItalicsUnderlinePage() {
   return (
@@ -162,7 +162,7 @@ This is \\emph{emphasised text}.
   spanning multiple lines.
 \\end{quote}`}</code></pre>
 
-          <h3>Italic vs Emphasis</h3>
+          <h3>Difference Between \textit and \emph</h3>
           <p>
             While <code>\textit&#123;&#125;</code> and <code>\emph&#123;&#125;</code> often produce the same
             visual result, they serve different purposes:
@@ -171,6 +171,28 @@ This is \\emph{emphasised text}.
             <li><strong>\textit&#123;&#125;</strong> – Forces italic shape regardless of context. Use for foreign words, titles, and stylistic choices.</li>
             <li><strong>\emph&#123;&#125;</strong> – Applies semantic emphasis that adapts to context. Use when you want to stress the meaning of a word or phrase.</li>
           </ul>
+
+          <h3>Italics in Math Mode</h3>
+          <p>
+            Inside math mode every letter is already italic, because that is how variables are
+            set, so <code>\textit</code> has nothing to do there. The two commands you do need are{' '}
+            <code>\mathit</code>, which sets a multi-letter name in italic <em>without</em> the
+            spacing TeX puts between separate variables, and <code>\mathrm</code> or{' '}
+            <code>\text</code> (amsmath), which switch back to upright for words, units and
+            labels:
+          </p>
+
+          <pre><code>{`\\usepackage{amsmath}
+
+% Variables are italic by default
+$ y = mx + c $
+
+% A multi-letter italic name: \\mathit keeps the letters together
+$ \\mathit{diff}(x) $   % compare $diff(x)$, set as d, i, f, f
+
+% Upright text inside math
+$ x_{\\mathrm{max}} = 3\\,\\mathrm{m} $
+$ f(x) = 0 \\text{ for all } x > 1 $`}</code></pre>
 
           <h2>Underlining in LaTeX</h2>
           <p>
@@ -281,6 +303,121 @@ multiple lines without any problems}.
   \\bfseries\\itshape
   This centred text is bold and italic.
 \\end{center}`}</code></pre>
+
+          <h2>Other Text Styles: Small Caps, Monospace, Sans-Serif and Slanted</h2>
+          <p>
+            Bold and italic are two settings of three independent font attributes: the{' '}
+            <strong>family</strong> (roman, sans-serif, typewriter), the <strong>series</strong>{' '}
+            (medium, bold) and the <strong>shape</strong> (upright, italic, slanted, small caps).
+            Each attribute has a command form that takes an argument and a declaration form that
+            lasts until the end of the group, and settings from different attributes combine
+            freely.
+          </p>
+
+          <h3>Small Caps</h3>
+          <p>
+            <code>\textsc</code> sets lowercase letters as small capitals. It is the conventional
+            style for author names in bibliographies, for acronyms in running text, and for the
+            first words of a chapter:
+          </p>
+
+          <pre><code>{`\\textsc{Small Capitals} for names and acronyms: \\textsc{nasa}, \\textsc{unesco}
+
+{\\scshape A declaration form for a longer passage.}
+
+% Combine with italic (needs a font that has the face)
+\\textit{\\textsc{italic small caps}}`}</code></pre>
+
+          <p>
+            Computer Modern and Latin Modern, the default fonts, have no bold small-caps face, so{' '}
+            <code>\textbf&#123;\textsc&#123;...&#125;&#125;</code> prints plain bold and writes a
+            &ldquo;Font shape undefined&rdquo; warning to the log. Fonts such as TeX Gyre Pagella
+            (<code>\usepackage&#123;tgpagella&#125;</code>) or Libertinus provide it.
+          </p>
+
+          <h3>Typewriter / Monospace</h3>
+          <p>
+            <code>\texttt</code> switches to the typewriter family, the usual style for code, file
+            names, commands and URLs. Backslashes and braces are still special inside it, so
+            write <code>\textbackslash</code> for a backslash, or use <code>\verb</code>, which
+            prints its argument exactly as typed:
+          </p>
+
+          <pre><code>{`Run \\texttt{pdflatex main.tex} twice to resolve references.
+
+The \\texttt{\\textbackslash documentclass} command comes first.
+
+Or verbatim: \\verb|\\documentclass{article}| prints everything literally.
+
+{\\ttfamily A whole passage in typewriter type.}`}</code></pre>
+
+          <h3>Sans-Serif</h3>
+          <pre><code>{`\\textsf{Sans-serif text} for labels, UI strings and some headings.
+
+{\\sffamily Everything in this group is sans-serif.}
+
+% Bold sans-serif, by combining attributes
+\\textsf{\\textbf{Bold sans-serif}}`}</code></pre>
+
+          <h3>Slanted (Not the Same as Italic)</h3>
+          <p>
+            Slanted text is the upright design leaned to the right; italic is a separate design
+            with different letterforms (compare the <em>a</em> and <em>f</em>). <code>\textsl</code>{' '}
+            gives the slanted shape, <code>\textup</code> returns to upright from inside an italic
+            or slanted passage, and <code>\textnormal</code> resets family, series and shape at
+            once:
+          </p>
+
+          <pre><code>{`\\textsl{Slanted text} leans the upright letters.
+\\textit{Italic text} uses different letterforms.
+\\textit{Italic with an \\textup{upright} word inside.}
+{\\bfseries\\itshape Bold italic, then \\textnormal{back to normal}.}`}</code></pre>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Attribute</th>
+                <th>Command</th>
+                <th>Declaration</th>
+                <th>Result</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>Family</td><td><code>\textrm</code></td><td><code>\rmfamily</code></td><td>Roman (serif), the default</td></tr>
+              <tr><td>Family</td><td><code>\textsf</code></td><td><code>\sffamily</code></td><td>Sans-serif</td></tr>
+              <tr><td>Family</td><td><code>\texttt</code></td><td><code>\ttfamily</code></td><td>Typewriter (monospace)</td></tr>
+              <tr><td>Series</td><td><code>\textmd</code></td><td><code>\mdseries</code></td><td>Medium weight, the default</td></tr>
+              <tr><td>Series</td><td><code>\textbf</code></td><td><code>\bfseries</code></td><td>Bold</td></tr>
+              <tr><td>Shape</td><td><code>\textup</code></td><td><code>\upshape</code></td><td>Upright, the default</td></tr>
+              <tr><td>Shape</td><td><code>\textit</code></td><td><code>\itshape</code></td><td>Italic</td></tr>
+              <tr><td>Shape</td><td><code>\textsl</code></td><td><code>\slshape</code></td><td>Slanted</td></tr>
+              <tr><td>Shape</td><td><code>\textsc</code></td><td><code>\scshape</code></td><td>Small caps</td></tr>
+              <tr><td>All</td><td><code>\textnormal</code></td><td><code>\normalfont</code></td><td>Reset to the document font</td></tr>
+            </tbody>
+          </table>
+
+          <h2>Font Sizes with Bold and Italics</h2>
+          <p>
+            Size is a fourth, separate setting. The ten size declarations run from{' '}
+            <code>\tiny</code> through <code>\normalsize</code> to <code>\Huge</code>, and they
+            combine with the style commands in either order. Keep a size change and its styles
+            inside one group so neither leaks into the following paragraph:
+          </p>
+
+          <pre><code>{`{\\large\\bfseries A large bold heading}
+
+{\\Large\\itshape A larger italic subtitle}
+
+\\textbf{\\small bold and small} and \\textit{\\footnotesize italic and footnote-sized}
+
+% From smallest to largest
+{\\tiny tiny} {\\scriptsize scriptsize} {\\footnotesize footnotesize} {\\small small}
+{\\normalsize normalsize} {\\large large} {\\Large Large} {\\LARGE LARGE} {\\huge huge} {\\Huge Huge}`}</code></pre>
+
+          <p>
+            The <Link href="/learn/font-size">font size guide</Link> covers the class options,{' '}
+            <code>\fontsize</code> and why the sizes are relative.
+          </p>
 
           <h2>Formatting in Math Mode</h2>
           <p>
@@ -407,6 +544,51 @@ This is normal text with \\emph{emphasis}.
 % Make \\emph underline text
 \\usepackage{soul}
 \\renewcommand{\\emph}[1]{\\ul{#1}}`}</code></pre>
+
+          <h2>Common Formatting Patterns</h2>
+          <p>
+            Most documents need only a handful of conventions. Deciding them once, and defining
+            a command for each, keeps the formatting consistent and lets you change it in one
+            place later.
+          </p>
+
+          <h3>Book Titles (Italics)</h3>
+          <pre><code>{`Knuth's \\textit{The Art of Computer Programming} is the canonical reference.
+
+% A dedicated command keeps titles consistent and easy to restyle
+\\newcommand{\\booktitle}[1]{\\textit{#1}}
+See \\booktitle{The TeXbook}, chapter 5.`}</code></pre>
+          <p>
+            Use <code>\textit</code> rather than <code>\emph</code> for titles: a title inside an
+            already-italic sentence should stay italic, not flip to upright.
+          </p>
+
+          <h3>Technical Terms on First Use (Italics)</h3>
+          <pre><code>{`A \\emph{monad} is a monoid in the category of endofunctors.
+
+% Or a semantic command, so first uses can be indexed or restyled later
+\\newcommand{\\term}[1]{\\emph{#1}}
+The \\term{kernel} of a linear map is the set of vectors it sends to zero.`}</code></pre>
+
+          <h3>Strong Emphasis (Bold)</h3>
+          <pre><code>{`\\textbf{Warning:} this operation cannot be undone.
+
+Run-in headings: \\textbf{Proof.} Suppose, for contradiction, that \\ldots`}</code></pre>
+          <p>
+            Bold stands out far more than italic, so reserve it for warnings, run-in headings
+            and defined terms in a glossary. A paragraph with several bold phrases has no
+            emphasis at all.
+          </p>
+
+          <h3>Code and Commands (Monospace)</h3>
+          <pre><code>{`Save the file as \\texttt{main.tex} and run \\texttt{latexmk -pdf main}.
+
+% Inline code with special characters
+Use \\verb|\\section{Title}| to start a section.
+
+% Many commands in one document: define a shorthand
+\\newcommand{\\code}[1]{\\texttt{#1}}
+The \\code{tabular} environment takes a column specifier.`}</code></pre>
 
           <h2>Common Packages for Advanced Formatting</h2>
           <p>
@@ -542,6 +724,26 @@ $ \\bm{\\alpha} + \\bm{\\beta} = \\bm{\\gamma} $`}</code></pre>
                 <td><code>\sout&#123;text&#125;</code></td>
                 <td><s>Strikethrough</s></td>
                 <td>From ulem package</td>
+              </tr>
+              <tr>
+                <td><code>\textsc&#123;text&#125;</code></td>
+                <td>Small caps</td>
+                <td>Names, acronyms; no bold face in Computer Modern</td>
+              </tr>
+              <tr>
+                <td><code>\texttt&#123;text&#125;</code></td>
+                <td>Typewriter (monospace)</td>
+                <td>Code, file names, commands</td>
+              </tr>
+              <tr>
+                <td><code>\textsf&#123;text&#125;</code></td>
+                <td>Sans-serif</td>
+                <td>Labels, UI strings</td>
+              </tr>
+              <tr>
+                <td><code>\textsl&#123;text&#125;</code></td>
+                <td>Slanted</td>
+                <td>Leaned upright letters; distinct from italic</td>
               </tr>
               <tr>
                 <td><code>\mathbf&#123;x&#125;</code></td>

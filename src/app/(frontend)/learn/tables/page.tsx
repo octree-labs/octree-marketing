@@ -21,11 +21,11 @@ const page = {
   slug: 'tables',
   title: 'LaTeX Tables \u2013 Complete Guide 2026',
   description: 'How to make a table in LaTeX: the tabular environment and table float with caption and label, booktabs rules, multicolumn and multirow, column widths with p/m/b and tabularx, float placement, landscape and multi-page tables, colored rows, decimal alignment with siunitx, footnotes in tables, and fixes for common tabular errors.',
-  keywords: 'table in latex, tabular in latex, latex table, latex tabular, how to make a table in latex, latex booktabs, latex multicolumn, latex multirow, latex table generator, latex longtable, latex hline, latex table width, latex tabularx, create table in latex, latex table example, latex table formatting, latex colored table, latex landscape table, latex sidewaystable, latex table caption, latex table placement, latex siunitx table, misplaced noalign, extra alignment tab',
+  keywords: 'table in latex, tabular in latex, latex table, latex tabular, how to make a table in latex, latex booktabs, latex multicolumn, latex multirow, latex table generator, latex longtable, latex hline, latex table width, latex tabularx, create table in latex, latex table example, latex table formatting, latex colored table, latex landscape table, latex sidewaystable, latex table caption, latex table placement, latex siunitx table, misplaced noalign, extra alignment tab, latex table spacing, latex table row spacing, latex row height, latex table column spacing, latex arraystretch, latex tabcolsep, latex table padding, latex addlinespace, latex cell padding, latex table row column separation, latex table generator online, excel to latex table, latex table from excel, create latex tables easily',
 }
 
 /** Last content update, used for dateModified in the article schema. */
-const LAST_UPDATED = '2026-10-17'
+const LAST_UPDATED = '2026-10-18'
 
 export default async function TablesPage() {
   return (
@@ -429,6 +429,184 @@ Table~\\ref{tab:accuracy} summarises the results.
             and right, creating visual separation between column groups. You can use
             <code>(l)</code>, <code>(r)</code>, or <code>(lr)</code> as needed.
           </p>
+
+          {/* ── Spacing ── */}
+          <h2>Row and Column Spacing</h2>
+          <p>
+            Default tabular spacing is tight: rows sit at the normal line height and each column
+            gets 6pt of padding on either side. Four settings control it. <code>\arraystretch</code>{' '}
+            scales every row height, <code>\\[6pt]</code> adds space after one row,{' '}
+            <code>\tabcolsep</code> sets the padding on each side of every column, and{' '}
+            <code>@{'{}'}</code> in the column specifier replaces that padding for one gap.
+          </p>
+
+          <h3>Row height: \arraystretch and \\[6pt]</h3>
+          <p>
+            <code>\arraystretch</code> is a multiplier, so 1.5 makes every row half again as
+            tall. Set it with <code>\renewcommand</code> (it is a macro, not a length) and keep the
+            change inside the <code>table</code> environment or a group so it does not leak into
+            the rest of the document. For extra space after a single row, add an optional length
+            to its <code>\\</code>:
+          </p>
+          <pre><code>{`% Taller rows for the whole table
+\\begin{table}[htbp]
+  \\centering
+  \\renewcommand{\\arraystretch}{1.5}
+  \\begin{tabular}{|c|c|}
+    \\hline
+    Cell 1 & Cell 2 \\\\
+    \\hline
+    Cell 3 & Cell 4 \\\\
+    \\hline
+  \\end{tabular}
+\\end{table}
+% The table environment ends the group, so \\arraystretch is back to 1.0 here
+
+% Extra space after one row
+\\begin{tabular}{lr}
+  \\toprule
+  Item & Price \\\\[6pt]
+  \\midrule
+  Widget & 5.00 \\\\
+  Gadget & 3.50 \\\\[1ex]
+  Total & 8.50 \\\\
+  \\bottomrule
+\\end{tabular}`}</code></pre>
+          <p>
+            <code>\\[6pt]</code> adds space <em>below</em> the row; it cannot add space above.
+            For headroom above a row, or to pad cells symmetrically, use the methods under{' '}
+            <em>cell padding</em> below.
+          </p>
+
+          <h3>\addlinespace with booktabs</h3>
+          <p>
+            In a booktabs table, <code>\addlinespace</code> inserts a small vertical gap (0.5em by
+            default) between rows, a cleaner way to group rows than <code>\midrule</code> or an
+            empty row. It takes an optional length:
+          </p>
+          <pre><code>{`\\usepackage{booktabs}
+
+\\begin{tabular}{lcc}
+  \\toprule
+  Item & Qty & Price \\\\
+  \\midrule
+  Widget A & 10 & 5.00 \\\\
+  Widget B & 25 & 3.50 \\\\
+  \\addlinespace
+  Gadget C & 4 & 12.00 \\\\
+  \\addlinespace[1em]
+  \\textbf{Total} & 39 & 185.50 \\\\
+  \\bottomrule
+\\end{tabular}`}</code></pre>
+
+          <h3>Column separation: \tabcolsep, @{'{}'} and \hspace</h3>
+          <p>
+            <code>\tabcolsep</code> is the padding on <em>each side</em> of a column, so the gap
+            between two columns is twice its value (12pt by default). It is a length, so change it
+            with <code>\setlength</code>. The <code>@{'{...}'}</code> specifier replaces the padding
+            at one position with whatever you put inside the braces: empty braces remove it,
+            which is how a table is made flush with the text margin, and <code>\hspace</code>{' '}
+            widens one particular gap without touching the others.
+          </p>
+          <pre><code>{`% Wider gaps between all columns (default is 6pt)
+\\setlength{\\tabcolsep}{10pt}
+
+% Remove the padding at the left and right edges
+\\begin{tabular}{@{}lcc@{}}
+  \\toprule
+  Name & Value & Unit \\\\
+  \\midrule
+  Speed & 100 & km/h \\\\
+  Time & 2.5 & h \\\\
+  \\bottomrule
+\\end{tabular}
+
+% A 1cm gap between the first two columns only
+\\begin{tabular}{c@{\\hspace{1cm}}cc}
+  a & b & c \\\\
+  d & e & f
+\\end{tabular}
+
+% Put separator text in the gap: a colon between label and value
+\\begin{tabular}{r@{ : }l}
+  width & 10cm \\\\
+  height & 5cm
+\\end{tabular}`}</code></pre>
+          <p>
+            The <code>@{'{}'}</code> trick matters most in a <code>tabularx</code> or in a table
+            that should be exactly <code>\textwidth</code>: without it the rules of a booktabs
+            table overhang the text block by <code>\tabcolsep</code> on each side.
+          </p>
+
+          <h3>Cell padding: struts, cellspace and array</h3>
+          <p>
+            To add space above or below the content of a single cell, insert an invisible rule (a
+            &ldquo;strut&rdquo;): <code>{`\\rule{0pt}{3ex}`}</code> adds height above the baseline,{' '}
+            <code>{`\\rule[-1ex]{0pt}{0pt}`}</code> adds depth below it. The <code>cellspace</code>{' '}
+            package automates this for whole columns, and the <code>array</code> package&apos;s{' '}
+            <code>&gt;{'{...}'}</code> and <code>&lt;{'{...}'}</code> hooks insert code before and
+            after every cell in a column, which also works for horizontal padding:
+          </p>
+          <pre><code>{`% Struts in individual cells
+\\begin{tabular}{|c|c|}
+  \\hline
+  \\rule{0pt}{3ex}Tall header & Second header \\rule[-1.5ex]{0pt}{0pt} \\\\
+  \\hline
+  a & b \\\\
+  \\hline
+\\end{tabular}
+
+% cellspace: minimum vertical padding for every cell in an S-prefixed column
+\\usepackage{cellspace}
+\\setlength{\\cellspacetoplimit}{4pt}
+\\setlength{\\cellspacebottomlimit}{4pt}
+\\begin{tabular}{|Sc|Sc|}
+  \\hline
+  $\\frac{a}{b}$ & $\\frac{c}{d}$ \\\\   % fractions no longer touch the lines
+  \\hline
+\\end{tabular}
+
+% array: extra horizontal padding before and after a column's content
+\\usepackage{array}
+\\begin{tabular}{>{\\hspace{1em}}c<{\\hspace{1em}} l}
+  padded & plain
+\\end{tabular}`}</code></pre>
+
+          <h3>A fully spaced table</h3>
+          <pre><code>{`\\usepackage{booktabs}
+
+\\begin{table}[htbp]
+  \\centering
+  \\renewcommand{\\arraystretch}{1.3}
+  \\setlength{\\tabcolsep}{12pt}
+  \\begin{tabular}{@{}lcc@{}}
+    \\toprule
+    \\textbf{Item} & \\textbf{Qty} & \\textbf{Price} \\\\
+    \\midrule
+    Widget A & 10 & \\$5.00 \\\\
+    Widget B & 25 & \\$3.50 \\\\
+    \\addlinespace
+    \\textbf{Total} & 35 & \\$137.50 \\\\
+    \\bottomrule
+  \\end{tabular}
+  \\caption{Row and column spacing applied together}
+\\end{table}`}</code></pre>
+          <table>
+            <thead>
+              <tr>
+                <th>Problem</th>
+                <th>Fix</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>Table looks cramped</td><td><code>{`\\renewcommand{\\arraystretch}{1.3}`}</code> and a larger <code>\tabcolsep</code></td></tr>
+              <tr><td>Header touches the rule below it</td><td><code>\\[0.5ex]</code> after the header row, or <code>\addlinespace</code> with booktabs</td></tr>
+              <tr><td>Fractions or tall symbols touch <code>\hline</code></td><td>A strut <code>{`\\rule{0pt}{3ex}`}</code>, or the <code>cellspace</code> package</td></tr>
+              <tr><td>Rules stick out past the text margin</td><td><code>@{'{}'}</code> at both ends of the column specifier</td></tr>
+              <tr><td>Spacing changes leak into later tables</td><td>Set <code>\arraystretch</code> and <code>\tabcolsep</code> inside the <code>table</code> environment or a <code>{'{...}'}</code> group</td></tr>
+              <tr><td>Inconsistent gaps between rows</td><td>Use booktabs rules and <code>\addlinespace</code> instead of empty rows</td></tr>
+            </tbody>
+          </table>
 
           <h2>Multi-Column Cells</h2>
           <p>
@@ -988,6 +1166,24 @@ As shown in \\cref{tab:summary} ...         % table 1
 \\usepackage[table]{xcolor}
 \\usepackage{siunitx}
 \\usepackage{array}`}</code></pre>
+
+          {/* ── Generator ── */}
+          <h2>Generate Tables Automatically</h2>
+          <p>
+            Most of the work in a LaTeX table is mechanical: one <code>&amp;</code> per column, one{' '}
+            <code>\\</code> per row, and a column specifier that matches. A LaTeX table generator
+            does that part for you. You paste cells copied from Excel, Google Sheets, Numbers or a
+            CSV file and copy the resulting <code>tabular</code> code into your document, which
+            removes the most common source of <em>Extra alignment tab</em> and{' '}
+            <em>Misplaced \noalign</em> errors. The free Octree Table to LaTeX converter is one
+            such tool; the workflow is the same with any of them:
+          </p>
+          <ol>
+            <li>Select the cells in your spreadsheet, including the header row, and copy them.</li>
+            <li>Paste into the generator. Tabs become column separators and line breaks become rows.</li>
+            <li>Copy the generated code into your document, inside a <code>table</code> float if it needs a caption and label.</li>
+            <li>Finish by hand: apply the spacing commands above, switch numeric columns to <code>siunitx</code>, and merge cells with <code>\multicolumn</code> where needed.</li>
+          </ol>
 
           <div className="not-prose my-8 p-6 bg-primary/5 rounded-lg border border-primary/10">
             <h3 className="text-lg font-semibold mb-2">Generate tables automatically</h3>
