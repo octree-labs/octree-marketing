@@ -170,6 +170,24 @@ const learnTopics = [
     description: 'Set up amsthm and \\newtheorem, share counters between theorems and lemmas, write proofs, place the QED symbol with \\qedhere, and reference theorems.',
     color: 'from-emerald-500/10 to-teal-600/5',
   },
+  {
+    slug: 'glossaries-acronyms',
+    title: 'Glossaries, Acronyms & Abbreviations',
+    description: 'The glossaries package (\\newacronym, \\gls, \\printglossaries, makeglossaries and latexmk), the simpler acronym package, nomencl for symbol lists, sorting and common errors.',
+    color: 'from-violet-500/10 to-purple-600/5',
+  },
+  {
+    slug: 'math-functions',
+    title: 'Math Functions: log, exp, argmax, abs, norm',
+    description: '\\log, \\ln, \\exp and every predefined operator, argmax with \\DeclareMathOperator*, floor and ceiling, absolute value and norms with mathtools, roots, fractions and function notation.',
+    color: 'from-sky-500/10 to-cyan-600/5',
+  },
+  {
+    slug: 'molecular-orbital-diagrams',
+    title: 'Molecular Orbital Diagrams',
+    description: 'Read and fill MO diagrams for H2, O2, N2 and CO with bond orders, then draw them with the modiagram package, pure TikZ, chemfig Lewis structures and mhchem formulas.',
+    color: 'from-lime-500/10 to-green-600/5',
+  },
 ]
 
 export default function LearnPage() {

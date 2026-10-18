@@ -242,8 +242,8 @@ sub makeglossaries {
           </p>
           <pre><code>{`\\usepackage[acronym,automake]{glossaries}`}</code></pre>
           <p>
-            Where shell escape is not available, the glossary is simply left empty with a
-            warning. The second option needs no program at all: replace{' '}
+            Where shell escape is disabled, makeindex is never called and the glossary stays
+            empty. The second option needs no program at all: replace{' '}
             <code>\makeglossaries</code> with <code>\makenoidxglossaries</code> and{' '}
             <code>\printglossaries</code> with <code>\printnoidxglossaries</code>, and TeX sorts
             the entries itself after two runs. It is slower, has trouble with non-ASCII sort
