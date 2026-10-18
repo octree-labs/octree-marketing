@@ -155,6 +155,22 @@ const getPagesSitemap = unstable_cache(
         lastmod: dateFallback,
       },
       {
+        loc: `${SITE_URL}/learn/special-characters`,
+        lastmod: dateFallback,
+      },
+      {
+        loc: `${SITE_URL}/learn/brackets`,
+        lastmod: dateFallback,
+      },
+      {
+        loc: `${SITE_URL}/learn/multiline-equations`,
+        lastmod: dateFallback,
+      },
+      {
+        loc: `${SITE_URL}/learn/sections`,
+        lastmod: dateFallback,
+      },
+      {
         loc: `${SITE_URL}/privacy`,
         lastmod: dateFallback,
       },

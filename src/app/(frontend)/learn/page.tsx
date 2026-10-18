@@ -165,6 +165,30 @@ const learnTopics = [
     color: 'from-blue-500/10 to-indigo-600/5',
   },
   {
+    slug: 'special-characters',
+    title: 'Special Characters in LaTeX',
+    description: 'Print the reserved characters # $ % & _ { } ~ ^ \\, the pipe, < and >, underscores in URLs and file names, inverted ?/!, degree, copyright and currency signs, and fix the errors they cause.',
+    color: 'from-rose-500/10 to-pink-600/5',
+  },
+  {
+    slug: 'brackets',
+    title: 'Brackets & Parentheses',
+    description: 'Every delimiter from ( ) to \\langle \\rangle, automatic sizing with \\left \\right, manual \\big to \\Bigg, matrix brackets, cases, \\underbrace and mathtools \\abs and \\norm.',
+    color: 'from-cyan-500/10 to-sky-600/5',
+  },
+  {
+    slug: 'multiline-equations',
+    title: 'Multi-line Equations',
+    description: 'Break and align equations with align, split, multline and gather, nest aligned blocks, add text between lines, allow page breaks, and retire eqnarray.',
+    color: 'from-violet-500/10 to-purple-600/5',
+  },
+  {
+    slug: 'sections',
+    title: 'Sections & Table of Contents',
+    description: 'The heading hierarchy per class, unnumbered sections that still appear in the TOC, secnumdepth and tocdepth, custom numbering, titlesec formatting, \\appendix and hyperref links.',
+    color: 'from-lime-500/10 to-green-600/5',
+  },
+  {
     slug: 'theorems-proofs',
     title: 'Theorems, Lemmas & Proofs',
     description: 'Set up amsthm and \\newtheorem, share counters between theorems and lemmas, write proofs, place the QED symbol with \\qedhere, and reference theorems.',
