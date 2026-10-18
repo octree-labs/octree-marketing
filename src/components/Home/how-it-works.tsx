@@ -61,6 +61,7 @@ export function HowItWorks() {
             href="https://app.useoctree.com/auth/sign-up"
             target="_blank"
             rel="noopener noreferrer"
+            data-cta-location="how_it_works"
             className="rounded-xl px-4 py-2 md:px-5 md:py-2.5 shadow-sm flex items-center justify-center bg-white w-fit cursor-pointer text-sm md:text-base hover:shadow-md transition-shadow"
           >
             Create Account

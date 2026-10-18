@@ -5,12 +5,14 @@ import { DM_Sans, DM_Mono, Space_Grotesk } from 'next/font/google'
 import localFont from 'next/font/local'
 import React from 'react'
 import { Analytics } from '@vercel/analytics/next'
+import { SpeedInsights } from '@vercel/speed-insights/next'
 import Script from 'next/script'
 
 import { AdminBar } from '@/components/AdminBar'
 import { Footer } from '@/Footer/Component'
 import { Header } from '@/Header/Component'
 import { Providers } from '@/providers'
+import { PostHogProvider } from '@/components/providers/posthog'
 import { InitTheme } from '@/providers/Theme/InitTheme'
 import { mergeOpenGraph } from '@/utilities/mergeOpenGraph'
 import { draftMode } from 'next/headers'
@@ -125,17 +127,20 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       </head>
       <body>
         <Providers>
-          <AdminBar
-            adminBarProps={{
-              preview: isEnabled,
-            }}
-          />
+          <PostHogProvider>
+            <AdminBar
+              adminBarProps={{
+                preview: isEnabled,
+              }}
+            />
 
-          <Header />
-          {children}
-          <Footer />
+            <Header />
+            {children}
+            <Footer />
+          </PostHogProvider>
         </Providers>
         <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   )

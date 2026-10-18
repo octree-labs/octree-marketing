@@ -70,6 +70,7 @@ export const HeaderNav: React.FC<{ data: HeaderType; githubStars: number | null 
         target="_blank"
         rel="noopener noreferrer"
         className="hidden lg:block"
+        data-cta-location="header"
       >
         <Button variant="default" size="sm" className="h-8">
           Login
@@ -102,7 +103,12 @@ export const HeaderNav: React.FC<{ data: HeaderType; githubStars: number | null 
             {contactItems.map(({ link }, i) => {
               return <CMSLink key={i} {...link} appearance="link" className="text-lg" />
             })}
-            <Link href="https://app.useoctree.com" target="_blank" rel="noopener noreferrer">
+            <Link
+              href="https://app.useoctree.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              data-cta-location="header_mobile"
+            >
               <Button variant="default" className="w-full">
                 Login
               </Button>

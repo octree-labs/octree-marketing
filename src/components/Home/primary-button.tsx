@@ -7,13 +7,16 @@ export function PrimaryButton({
   children,
   className,
   href = 'https://app.useoctree.com/',
+  location,
 }: {
   children: React.ReactNode
   className?: string
   href?: string
+  /** Where on the site this CTA lives; recorded as the `location` of the cta_clicked event. */
+  location?: string
 }) {
   return (
-    <Link href={href}>
+    <Link href={href} data-cta-location={location}>
       <Button
         className={cn(
           'group w-fit',
