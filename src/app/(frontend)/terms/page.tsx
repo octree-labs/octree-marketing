@@ -56,7 +56,10 @@ export default function TermsAndConditions() {
 
         <h3>4.2 Paid Plans</h3>
         <ul>
-          <li>Subscription fees are billed in advance on a weekly or monthly basis</li>
+          <li>
+            Subscription fees are billed in advance on a monthly, annual or semester (every four
+            months) basis; AI edit credit packs are one-time purchases
+          </li>
           <li>All fees are non-refundable except as required by law</li>
           <li>We may change pricing with 30 days notice</li>
           <li>

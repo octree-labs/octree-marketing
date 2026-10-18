@@ -12,7 +12,7 @@ const APP_URL = 'https://app.useoctree.com'
 /** Keep in sync with data/constants.ts (PRO_PLANS, CREDIT_PACKS) in the app. */
 const PLANS = {
   monthly: { price: '9.99', per: '/ month', note: 'Billed monthly · cancel anytime' },
-  annual: { price: '79', per: '/ year', note: '$6.58/mo · 2 months free · cancel anytime' },
+  annual: { price: '79', per: '/ year', note: '$6.58/mo · save 34% · cancel anytime' },
 } as const
 
 export function Pricing() {
@@ -74,7 +74,7 @@ export function Pricing() {
             >
               Annual
               <span className="text-xs bg-primary/10 text-primary px-2 py-0.5 rounded-full font-medium">
-                2 months free
+                Save 34%
               </span>
             </button>
           </div>
