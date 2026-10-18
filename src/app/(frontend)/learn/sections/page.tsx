@@ -21,7 +21,7 @@ const page = {
   slug: 'sections',
   title: 'Sections and Subsections in LaTeX: Numbering, Unnumbered Sections, and the Table of Contents',
   seoTitle: 'LaTeX Sections, Subsections and Table of Contents',
-  description: 'The LaTeX heading hierarchy from \\part to \\subparagraph, unnumbered sections that still appear in the TOC, secnumdepth and tocdepth, \\tableofcontents, custom numbering, titlesec formatting, \\appendix and hyperref.',
+  description: 'LaTeX heading levels, unnumbered sections in the TOC, secnumdepth and tocdepth, \\tableofcontents, custom numbering, titlesec formatting and \\appendix.',
   keywords: 'latex subsection, latex section, latex subsubsection, latex unnumbered section, latex table of contents, latex section numbering, latex paragraph heading, latex chapter, latex section without number, latex tableofcontents, latex secnumdepth, latex tocdepth, latex addcontentsline, latex titlesec, latex appendix, latex section font size, latex heading levels, latex part, latex frontmatter mainmatter',
 }
 
