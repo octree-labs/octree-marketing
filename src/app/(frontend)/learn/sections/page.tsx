@@ -197,12 +197,15 @@ export default async function LaTeXSectionsPage() {
           <pre><code>{`\\setcounter{secnumdepth}{4}   % number down to \\paragraph
 \\setcounter{tocdepth}{2}      % list only down to \\subsection
 
-\\setcounter{secnumdepth}{0}   % numbers on chapters only (book) or nothing (article)
-\\setcounter{secnumdepth}{-1}  % no numbers anywhere, but headings stay in the TOC`}</code></pre>
+\\setcounter{secnumdepth}{0}   % parts and chapters only (book); parts only (article)
+\\setcounter{secnumdepth}{-2}  % no numbers anywhere, but headings stay in the TOC`}</code></pre>
           <p>
             Setting <code>secnumdepth</code> low is the clean way to get an entire document
             without section numbers while keeping the headings in the contents, which the
-            starred forms would not do. Both settings belong in the preamble. To change the
+            starred forms would not do. Remember that <code>\part</code> sits at level 0 in
+            article and &minus;1 in report and book, so <code>-1</code> still numbers the parts
+            of a book; <code>-2</code> switches every number off. Both settings belong in the
+            preamble. To change the
             contents depth part-way through, for example to list only chapters in an appendix,
             write the change into the <code>.toc</code> file:
           </p>
@@ -240,10 +243,11 @@ export default async function LaTeXSectionsPage() {
           <pre><code>{`\\section[Short title]{A very long section title that would clutter the
   table of contents and the running header}`}</code></pre>
           <p>
-            The same optional argument is the fix for commands that cannot survive the trip to
-            the <code>.toc</code> file: a footnote, a <code>\\</code> line break or complex math
-            in the title goes in the mandatory argument only, and a plain version in the
-            brackets. With hyperref, math or formatting in a title also needs{' '}
+            The same optional argument is the fix for things that should not travel to the{' '}
+            <code>.toc</code> file and the running header: a footnote (which is an error there),
+            a <code>\\</code> line break or complex math in the title goes in the mandatory
+            argument only, and a plain version in the brackets. With hyperref, math or
+            formatting in a title also needs{' '}
             <code>\texorpdfstring{'{tex}{pdf}'}</code> so the PDF bookmark gets plain text:
           </p>
           <pre><code>{`\\section{Results\\texorpdfstring{ for $x^2$}{ for x\\textasciicircum2}}
@@ -446,9 +450,9 @@ export default async function LaTeXSectionsPage() {
                 <td><code>\texorpdfstring{'{tex}{plain}'}</code></td>
               </tr>
               <tr>
-                <td><em>Argument of \@sect has an extra {'}'}</em> or a broken contents line</td>
-                <td>A fragile command (<code>\footnote</code>, <code>\verb</code>, <code>\\</code> without protection) in a heading</td>
-                <td>Move it to the mandatory argument and give a plain optional title, or prefix with <code>\protect</code></td>
+                <td><em>Use of \@xfootnote doesn&apos;t match its definition</em> (older kernels: <em>Argument of \@sect has an extra {'}'}</em>), or <em>\verb illegal in argument</em></td>
+                <td>A <code>\footnote</code> or <code>\verb</code> in a heading</td>
+                <td>Give a plain optional title so the footnote never reaches the <code>.toc</code> file, or prefix it with <code>\protect</code>; replace <code>\verb</code> with <code>\texttt</code></td>
               </tr>
               <tr>
                 <td>Starred chapter or section has no running header</td>

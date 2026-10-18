@@ -423,9 +423,14 @@ $M = \\begin{psmallmatrix} 1 & 2 \\\\ 3 & 4 \\end{psmallmatrix}$ inline.`}</code
           {/* ── Unicode ── */}
           <h2>Pasting Unicode Brackets</h2>
           <p>
-            Copying &#x27E8;, &#x27E9;, &lfloor; or &#x2016; from a web page into a pdfLaTeX
-            document stops with <em>Unicode character ⟨ (U+27E8) not set up for use with
-            LaTeX</em>. Replace them with the commands above. Under XeLaTeX or LuaLaTeX with the{' '}
+            Copying &#x27E8;, &#x27E9; or &#x2016; from a web page into a pdfLaTeX document does
+            not give you a delimiter. Current LaTeX maps those characters to the text symbols{' '}
+            <code>\textlangle</code>, <code>\textrangle</code> and <code>\textbardbl</code>, so in
+            math mode the document compiles with the warning <em>Command \textlangle invalid in
+            math mode</em> and prints a small text glyph that neither spaces nor scales like a
+            bracket. Characters with no text mapping, such as &lfloor; (U+230A), stop with{' '}
+            <em>Unicode character ⌊ (U+230A) not set up for use with LaTeX</em>. Replace all of
+            them with the commands above. Under XeLaTeX or LuaLaTeX with the{' '}
             <code>unicode-math</code> package the characters are accepted in math mode and map
             to the same delimiters, so <code>\left⟨ x \right⟩</code> works; without
             unicode-math they are printed, if at all, as text glyphs with no delimiter behaviour.
@@ -478,12 +483,12 @@ $M = \\begin{psmallmatrix} 1 & 2 \\\\ 3 & 4 \\end{psmallmatrix}$ inline.`}</code
                 <td>Wrap in <code>$...$</code> or use <code>\textlangle</code></td>
               </tr>
               <tr>
-                <td><em>Environment pmatrix undefined</em></td>
-                <td>amsmath not loaded</td>
+                <td><em>Environment bmatrix undefined</em>, or <em>Misplaced alignment tab character &amp;</em> inside <code>pmatrix</code></td>
+                <td>amsmath not loaded (LaTeX inherits plain TeX&apos;s <code>\pmatrix</code> command, so <code>pmatrix</code> fails differently from the others)</td>
                 <td><code>{`\\usepackage{amsmath}`}</code></td>
               </tr>
               <tr>
-                <td><em>Unicode character ⟨ (U+27E8) not set up for use with LaTeX</em></td>
+                <td><em>Command \textlangle invalid in math mode</em>, or <em>Unicode character ⌊ (U+230A) not set up for use with LaTeX</em></td>
                 <td>Pasted Unicode bracket under pdfLaTeX</td>
                 <td>Replace with <code>\langle</code>, or compile with XeLaTeX/LuaLaTeX and unicode-math</td>
               </tr>

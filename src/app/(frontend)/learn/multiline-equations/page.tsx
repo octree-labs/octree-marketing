@@ -128,8 +128,11 @@ export default async function LaTeXMultilineEquationsPage() {
             </tbody>
           </table>
           <p>
-            Each has a starred form (<code>align*</code>, <code>gather*</code>,{' '}
-            <code>multline*</code>, <code>equation*</code>) that prints no numbers at all.
+            The display environments have starred forms (<code>align*</code>,{' '}
+            <code>gather*</code>, <code>multline*</code>, <code>alignat*</code>,{' '}
+            <code>equation*</code>) that print no numbers at all; <code>split</code>,{' '}
+            <code>aligned</code> and <code>gathered</code> have none, because their numbering
+            comes from the environment around them.
           </p>
 
           {/* ── align ── */}
@@ -288,9 +291,12 @@ export default async function LaTeXMultilineEquationsPage() {
    3x &- 6y &{}={}& -1
 \\end{alignat*}`}</code></pre>
           <p>
-            The <code>{'{}={}'}</code> idiom keeps binary-operator spacing around a symbol that
-            sits directly after an <code>&amp;</code>; without the empty groups TeX would treat
-            the <code>=</code> as unary and drop the space on one side. <code>alignat{'{n}'}</code>{' '}
+            The <code>{'{}={}'}</code> idiom keeps the spacing around a symbol that sits in a
+            cell by itself. TeX only puts space beside a relation or operator when something
+            else is next to it in the same cell; an <code>=</code> written as{' '}
+            <code>&amp;=&amp;</code> has nothing after it in its cell, so the gap between the{' '}
+            <code>=</code> and the next column disappears. The empty groups act as invisible
+            neighbours on both sides. <code>alignat{'{n}'}</code>{' '}
             allows at most <code>2n &minus; 1</code> ampersands per line; one more gives{' '}
             <em>Extra &amp; on this line</em>.
           </p>
@@ -511,9 +517,9 @@ See \\eqref{eq:a}.`}</code></pre>
                 <td><code>\allowdisplaybreaks</code> in the preamble</td>
               </tr>
               <tr>
-                <td>Uneven spacing around <code>=</code> after an <code>&amp;</code></td>
-                <td>The symbol is read as unary because nothing precedes it in the cell</td>
-                <td>Write <code>{'&{}={}'}</code>, or put the <code>&amp;</code> before the symbol</td>
+                <td>Missing space on one side of a symbol written alone between two <code>&amp;</code>, as in <code>&amp;=&amp;</code></td>
+                <td>Nothing follows the symbol in its cell, so TeX inserts no space there (amsmath already handles the usual <code>&amp;=</code> case)</td>
+                <td>Write <code>{'&{}={}&'}</code></td>
               </tr>
             </tbody>
           </table>

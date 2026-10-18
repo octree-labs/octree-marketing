@@ -37,7 +37,7 @@ const faq: FaqItem[] = [
   {
     question: 'How do I write a tilde (~) in LaTeX?',
     answer:
-      'Use \\textasciitilde for a proper tilde character. A bare ~ is a non-breaking space, and \\~{} produces a small raised tilde accent, which is usually not what you want. In math mode, \\sim gives the "similar to" relation.',
+      'Use \\textasciitilde together with \\usepackage[T1]{fontenc}, or \\texttt{\\textasciitilde} for a typewriter tilde. A bare ~ is a non-breaking space, and \\~{} is a small raised tilde accent. With the default OT1 font encoding \\textasciitilde is defined as \\~{} and prints that same accent, which is why T1 matters. In math mode, \\sim gives the "similar to" relation.',
   },
   {
     question: 'How do I get a vertical bar or pipe in LaTeX?',
@@ -148,12 +148,12 @@ export default async function LaTeXSpecialCharactersPage() {
             These three cause the most confusion because there are several similar commands and
             only one is right for a given job:
           </p>
-          <pre><code>{`Tilde:     \\textasciitilde{}   % proper ~ character
+          <pre><code>{`Tilde:     \\textasciitilde{}   % proper ~ character (with T1, see below)
            \\~{}                % a small accent-sized tilde, raised
            $\\sim$              % math "similar to" relation
            Fig.~3              % bare ~ is a non-breaking space, nothing printed
 
-Caret:     \\textasciicircum{}  % proper ^ character
+Caret:     \\textasciicircum{}  % proper ^ character (with T1, see below)
            \\^{}                % a small circumflex accent
            $x^2$               % superscript in math
 
@@ -163,10 +163,15 @@ Backslash: \\textbackslash{}    % in text
           <p>
             Many older answers suggest <code>\~{'{}'}</code> and <code>\^{'{}'}</code> for the
             tilde and caret. They compile, but they produce the accent glyphs, which are smaller
-            and sit above the baseline. Use <code>\textasciitilde</code> and{' '}
-            <code>\textasciicircum</code> for the characters themselves; the output is also
-            correct when copied from the PDF. For a tilde in a URL or path, see the section on{' '}
-            <code>\url</code> below.
+            and sit above the baseline. <code>\textasciitilde</code> and{' '}
+            <code>\textasciicircum</code> give the characters themselves, with one catch: in the
+            default OT1 font encoding they are defined as <code>\~{'{}'}</code> and{' '}
+            <code>\^{'{}'}</code>, so they print the same raised accents. Load{' '}
+            <code>{`\\usepackage[T1]{fontenc}`}</code>, whose fonts have real ASCII tilde and
+            circumflex glyphs, and the output is also correct when copied from the PDF. In
+            typewriter text (<code>\texttt{'{\\textasciitilde}'}</code> or <code>\verb|~|</code>)
+            the tilde is a full character in either encoding. For a tilde in a URL or path, see
+            the section on <code>\url</code> below.
           </p>
 
           {/* ── Pipe ── */}
@@ -395,9 +400,9 @@ $\\lVert v \\rVert$          % amsmath norm with correct spacing`}</code></pre>
                 <td>Write <code>{`\\{`}</code> and <code>{`\\}`}</code></td>
               </tr>
               <tr>
-                <td>A dash where a pipe should be; &iexcl; or &iquest; instead of &lt; or &gt;</td>
+                <td>A dash where a pipe should be; &iexcl; or &iquest; instead of &lt; or &gt;; a raised accent from <code>\textasciitilde</code></td>
                 <td>OT1 font encoding in text mode</td>
-                <td><code>\textbar</code>, <code>\textless</code>, <code>\textgreater</code>, or <code>{`\\usepackage[T1]{fontenc}`}</code></td>
+                <td><code>\textbar</code>, <code>\textless</code>, <code>\textgreater</code>, or <code>{`\\usepackage[T1]{fontenc}`}</code> (the only fix for the tilde)</td>
               </tr>
               <tr>
                 <td>Words glued together after a command: <em>\textbackslash n</em> prints <em>\n</em></td>
@@ -405,7 +410,7 @@ $\\lVert v \\rVert$          % amsmath norm with correct spacing`}</code></pre>
                 <td>Add <code>{'{}'}</code> or <code>\ </code> after the command</td>
               </tr>
               <tr>
-                <td><em>\verb ended by end of line</em> or <em>\verb illegal in command argument</em></td>
+                <td><em>\verb ended by end of line</em> or <em>\verb illegal in argument</em> (older kernels: <em>\verb illegal in command argument</em>)</td>
                 <td><code>\verb</code> inside a footnote, caption, section title or macro argument</td>
                 <td>Escape by hand inside <code>\texttt</code>, or use the <code>cprotect</code> package</td>
               </tr>
@@ -490,9 +495,12 @@ Macro: \\texttt{\\textbackslash newcommand\\{\\textbackslash foo\\}[1]\\{\\#1\\}
           </p>
           <h3>How do I write a tilde (~) in LaTeX?</h3>
           <p>
-            Use <code>\textasciitilde</code> for a proper tilde character. A bare <code>~</code>{' '}
-            is a non-breaking space, and <code>\~{'{}'}</code> produces a small raised tilde
-            accent, which is usually not what you want. In math mode, <code>\sim</code> gives the
+            Use <code>\textasciitilde</code> together with{' '}
+            <code>{`\\usepackage[T1]{fontenc}`}</code>, or <code>\texttt{'{\\textasciitilde}'}</code>{' '}
+            for a typewriter tilde. A bare <code>~</code> is a non-breaking space, and{' '}
+            <code>\~{'{}'}</code> is a small raised tilde accent. With the default OT1 font
+            encoding <code>\textasciitilde</code> is defined as <code>\~{'{}'}</code> and prints
+            that same accent, which is why T1 matters. In math mode, <code>\sim</code> gives the
             &ldquo;similar to&rdquo; relation.
           </p>
           <h3>How do I get a vertical bar or pipe in LaTeX?</h3>
