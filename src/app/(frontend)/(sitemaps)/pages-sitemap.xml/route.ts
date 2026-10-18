@@ -171,6 +171,10 @@ const getPagesSitemap = unstable_cache(
         lastmod: dateFallback,
       },
       {
+        loc: `${SITE_URL}/learn/laplace-transform-table`,
+        lastmod: dateFallback,
+      },
+      {
         loc: `${SITE_URL}/privacy`,
         lastmod: dateFallback,
       },
