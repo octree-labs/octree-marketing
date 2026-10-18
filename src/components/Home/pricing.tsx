@@ -197,6 +197,7 @@ function PricingCard({
       <PrimaryButton
         className={isDark ? 'from-white to-white text-black' : undefined}
         href={buttonHref}
+        location="pricing"
       >
         {buttonText}
       </PrimaryButton>

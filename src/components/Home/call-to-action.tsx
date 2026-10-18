@@ -29,7 +29,7 @@ export function CallToAction() {
         <p className="text-3xl md:text-4xl lg:text-5xl font-medium max-w-[400px] md:max-w-[500px] text-center tracking-tighter leading-[1.125]">
           Start your writing journey from today
         </p>
-        <PrimaryButton>Get Started</PrimaryButton>
+        <PrimaryButton location="footer_cta">Get Started</PrimaryButton>
       </div>
     </div>
   )

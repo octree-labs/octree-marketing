@@ -102,7 +102,7 @@ export async function Footer() {
   const navItems = footerData?.navItems || []
 
   return (
-    <footer className="mt-auto overflow-hidden border-t border-neutral-200 bg-white text-neutral-900">
+    <footer data-cta-location="footer" className="mt-auto overflow-hidden border-t border-neutral-200 bg-white text-neutral-900">
       <div className="container pt-16">
         <div className="grid grid-cols-2 gap-x-8 gap-y-12 md:grid-cols-3 lg:grid-cols-[1.6fr_repeat(5,1fr)]">
           <div className="col-span-2 space-y-4 md:col-span-3 lg:col-span-1">

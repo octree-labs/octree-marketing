@@ -92,7 +92,10 @@ export function HeroSection() {
               }}
               className="mb-16 flex flex-col items-center gap-3"
             >
-              <PrimaryButton className="text-base md:text-lg px-4 py-2 md:px-5 md:py-2.5 h-auto">
+              <PrimaryButton
+                location="hero"
+                className="text-base md:text-lg px-4 py-2 md:px-5 md:py-2.5 h-auto"
+              >
                 Try now - it&apos;s free!
               </PrimaryButton>
             </AnimatedGroup>
