@@ -69,6 +69,66 @@ describe('wrapLatexDocument', () => {
     expect(out).toContain('\\begin{document}\n\\maketitle\n\nBody')
   })
 
+  it('puts each line of a multi-line math fragment in its own display', () => {
+    const out = wrapLatexDocument('\\sin^2\\theta + \\cos^2\\theta = 1\nf(n) = \\Theta(n \\log n)')
+    expect(out).toContain('\\[\n\\sin^2\\theta + \\cos^2\\theta = 1\n\\]\n\\[\nf(n) = \\Theta(n \\log n)\n\\]')
+  })
+
+  it('keeps a cases/matrix environment inside one display and still wraps the fragment', () => {
+    const out = wrapLatexDocument('\\delta_{ij} = \\begin{cases}\n1 & i = j \\\\\n0 & i \\neq j\n\\end{cases}\n\\nabla^2 \\phi = 0')
+    expect(out).toContain('\\[\n\\delta_{ij} = \\begin{cases}\n1 & i = j \\\\\n0 & i \\neq j\n\\end{cases}\n\\]\n\\[\n\\nabla^2 \\phi = 0\n\\]')
+  })
+
+  it('treats unescaped ^ and _ as math but never wraps text-mode commands', () => {
+    expect(wrapLatexDocument('x^2 + y_1')).toContain('\\[\nx^2 + y_1\n\\]')
+    expect(wrapLatexDocument('\\section{Intro}\n\\alpha is first')).not.toContain('\\[')
+    expect(wrapLatexDocument('\\begin{tabular}{ll}\na & \\alpha\n\\end{tabular}')).not.toContain('\\[')
+  })
+
+  it('loads packages the fragment visibly relies on', () => {
+    const out = wrapLatexDocument('\\mu = 1\n\\qty{4.7}{\\micro\\farad}')
+    expect(out.indexOf('\\usepackage{siunitx}')).toBeLessThan(out.indexOf('\\begin{document}'))
+    const tikz = wrapLatexDocument('\\begin{tikzpicture}\n\\draw (0,0) -- (1,1);\n\\end{tikzpicture}')
+    expect(tikz).toContain('\\usepackage{tikz}')
+    expect(tikz).not.toContain('\\[')
+    const table = wrapLatexDocument('\\begin{tabular}{ll}\\toprule a & b \\\\ \\bottomrule\\end{tabular}')
+    expect(table).toContain('\\usepackage{booktabs}')
+    expect(table.match(/\\usepackage\{booktabs\}/g)).toHaveLength(1)
+    // not added twice when the fragment loads it (with options)
+    const own = wrapLatexDocument('\\usepackage[table]{xcolor}\n\\rowcolor{gray!20} a')
+    expect(own.match(/xcolor/g)).toHaveLength(1)
+  })
+
+  it('gives a preamble-only fragment a body so the document has a page', () => {
+    const out = wrapLatexDocument('\\usepackage{tikz}\n\\usetikzlibrary{arrows.meta}')
+    expect(out).toContain('\\usetikzlibrary{arrows.meta}\n\n\\begin{document}\nStart writing here.')
+    expect(out).not.toContain('% Your content here')
+  })
+
+  it('handles a fragment with \\begin{document} but no \\documentclass', () => {
+    const out = wrapLatexDocument('\\usepackage{booktabs}\n\\begin{document}\nHello\n\\end{document}')
+    expect(out.match(/\\begin\{document\}/g)).toHaveLength(1)
+    expect(out.match(/\\documentclass/g)).toHaveLength(1)
+    expect(out).toContain('\\begin{document}\nHello\n\\end{document}')
+    expect(out.indexOf('\\usepackage{booktabs}')).toBeLessThan(out.indexOf('\\begin{document}'))
+  })
+
+  it('adds a \\title when a fragment or document calls \\maketitle without one', () => {
+    const frag = wrapLatexDocument('\\maketitle\n\\section{A}\nText', 'My Guide')
+    expect(frag.indexOf('\\title{My Guide}')).toBeLessThan(frag.indexOf('\\begin{document}'))
+    expect(frag.match(/\\maketitle/g)).toHaveLength(1)
+    const full = wrapLatexDocument('\\documentclass{article}\n\\begin{document}\n\\maketitle\nHi\n\\end{document}', 'My Guide')
+    expect(full).toContain('\\title{My Guide}\n\\author{}\n\n\\begin{document}')
+  })
+
+  it('completes a full document that stops after the preamble', () => {
+    const out = wrapLatexDocument('\\documentclass{article}\n\\usepackage{hyperref}')
+    expect(out).toContain('\\usepackage{hyperref}\n\n\\begin{document}\nStart writing here.')
+    expect(out.trim().endsWith('\\end{document}')).toBe(true)
+    const noEnd = wrapLatexDocument('\\documentclass{article}\n\\begin{document}\nHi')
+    expect(noEnd.trim().endsWith('Hi\n\\end{document}')).toBe(true)
+  })
+
   it('falls back to the default document for empty input', () => {
     expect(wrapLatexDocument('', 'My Post')).toBe(defaultLatexDocument('My Post'))
   })
