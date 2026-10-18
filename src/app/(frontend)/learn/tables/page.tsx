@@ -36,10 +36,55 @@ export default async function TablesPage() {
         <article className="prose prose-lg dark:prose-invert max-w-4xl mx-auto">
           <h1>LaTeX Tables</h1>
           <p className="lead">
-            Tables are essential for presenting structured data in academic papers, reports, and
-            presentations. LaTeX provides a powerful set of tools for creating everything from simple
-            data grids to complex, publication-quality tables with merged cells, colour, and
-            multi-page support. This guide covers every technique you need.
+            A table in LaTeX is a <code>tabular</code> environment: you declare the columns, separate
+            cells with <code>&amp;</code> and end rows with <code>\\</code>. Wrapping it in a{' '}
+            <code>table</code> float adds a caption and a number you can reference. From there,
+            packages handle everything else: <code>booktabs</code> for clean rules,{' '}
+            <code>multirow</code> and <code>\multicolumn</code> for merged cells,{' '}
+            <code>tabularx</code> for fixed widths, <code>longtable</code> for tables that run over
+            several pages, <code>xcolor</code> for shaded rows and <code>siunitx</code> for
+            decimal-aligned numbers. This guide starts with a complete table you can paste into any
+            document and then covers each of those techniques, the float placement rules, landscape
+            tables, footnotes inside tables, and the errors a <code>tabular</code> can throw.
+          </p>
+
+          {/* ── Quick start ── */}
+          <h2>Quick Start: A Complete Table</h2>
+          <p>
+            Most tables in papers and theses look like this one: a <code>table</code> float holding
+            a caption, a label and a <code>booktabs</code>-ruled <code>tabular</code>. Copy it, change
+            the column specifier and the rows, and you are done.
+          </p>
+          <pre><code>{`\\documentclass{article}
+\\usepackage{booktabs}
+\\begin{document}
+
+\\begin{table}[htbp]
+  \\centering
+  \\caption{Accuracy of three models on the test set.}
+  \\label{tab:accuracy}
+  \\begin{tabular}{lcc}
+    \\toprule
+    Model    & Accuracy (\\%) & Parameters (M) \\\\
+    \\midrule
+    Baseline & 91.2          & 12            \\\\
+    Large    & 94.7          & 48            \\\\
+    Ours     & 95.3          & 15            \\\\
+    \\bottomrule
+  \\end{tabular}
+\\end{table}
+
+Table~\\ref{tab:accuracy} summarises the results.
+
+\\end{document}`}</code></pre>
+          <p>
+            The pieces, from the outside in: <code>table</code> is the float that gets a number
+            and can move to a good position on the page; <code>[htbp]</code> lists the positions
+            you allow; <code>\centering</code> centres the content; <code>\caption</code> gives the
+            caption (above the table, by convention) and steps the table counter;{' '}
+            <code>\label</code> stores that number for <code>\ref</code>; and{' '}
+            <code>{`\\begin{tabular}{lcc}`}</code> declares three columns: left-aligned, centred,
+            centred. Everything below walks through these parts in detail.
           </p>
 
           <h2>Basic Table Structure</h2>
@@ -115,6 +160,45 @@ export default async function TablesPage() {
             </li>
           </ul>
 
+          <h3>\centering vs. the center environment</h3>
+          <p>
+            Inside a float, use the <code>\centering</code> declaration, not{' '}
+            <code>{`\\begin{center} ... \\end{center}`}</code>. Both centre the table, but the{' '}
+            <code>center</code> environment is a list internally and adds vertical space above and
+            below, which produces an uneven gap between the caption and the table. The{' '}
+            <code>center</code> environment is the right choice only for a <code>tabular</code>{' '}
+            placed directly in the text, outside any float, where that extra space is wanted.
+          </p>
+
+          <h3>Float placement: [htbp], [H] and \FloatBarrier</h3>
+          <p>
+            A <code>table</code> is a float: LaTeX puts it where the page layout works best, which
+            is not always where you wrote it. The placement argument lists the positions you
+            accept. <code>[htbp]</code> allows all four and is the usual choice; <code>[t]</code>{' '}
+            forces the top of a page; <code>[!htb]</code> relaxes LaTeX&apos;s internal limits on
+            how much of a page a float may take. If a table <em>must</em> appear exactly where it
+            is written, the <code>float</code> package provides <code>[H]</code>:
+          </p>
+          <pre><code>{`\\usepackage{float}
+
+\\begin{table}[H]   % exactly here, no floating
+  ...
+\\end{table}`}</code></pre>
+          <p>
+            <code>[H]</code> can leave large blank areas at page bottoms, so a gentler tool is
+            often better: <code>\FloatBarrier</code> from the <code>placeins</code> package stops
+            floats from drifting past a given point, typically the end of a section:
+          </p>
+          <pre><code>{`\\usepackage[section]{placeins}   % barrier at every \\section
+% or, manually, wherever needed:
+\\FloatBarrier`}</code></pre>
+          <p>
+            If many tables pile up at the end of a chapter, <code>\clearpage</code> flushes them
+            all onto a new page. The warning <em>Too many unprocessed floats</em> means more than
+            eighteen floats are waiting; a <code>\clearpage</code> or <code>\FloatBarrier</code>{' '}
+            fixes it.
+          </p>
+
           <h2>Column Alignment</h2>
           <p>
             The column specifier string controls alignment and structure. LaTeX provides several
@@ -174,6 +258,36 @@ export default async function TablesPage() {
   \\hline
 \\end{tabular}`}</code></pre>
 
+          <h3>Column widths with p, m and b</h3>
+          <p>
+            The <code>l</code>, <code>c</code> and <code>r</code> columns are as wide as their
+            widest cell and never wrap. For text that should wrap, give the column a width.{' '}
+            <code>{`p{width}`}</code> is built in and aligns cell contents to the top of the row;{' '}
+            <code>{`m{width}`}</code> (middle) and <code>{`b{width}`}</code> (bottom) come from the{' '}
+            <code>array</code> package. Width can be absolute (<code>3cm</code>) or relative to the
+            text width (<code>0.4\textwidth</code>):
+          </p>
+          <pre><code>{`\\usepackage{array}
+\\usepackage{booktabs}
+
+\\begin{tabular}{l m{4cm} b{3cm}}
+  \\toprule
+  Top-aligned (l) & Middle-aligned (m) & Bottom-aligned (b) \\\\
+  \\midrule
+  Short & This cell contains enough text to wrap onto a second and
+          third line, and the other cells align to its middle. & Last line \\\\
+  \\bottomrule
+\\end{tabular}`}</code></pre>
+          <p>
+            Text in a paragraph column is justified by default, which can look ragged in a narrow
+            cell. The <code>array</code> package&apos;s <code>&gt;{'{'}...{'}'}</code> prefix runs a
+            command at the start of every cell in that column, so{' '}
+            <code>{`>{\\raggedright\\arraybackslash}p{4cm}`}</code> gives left-aligned, unjustified
+            text. The <code>\arraybackslash</code> restores <code>\\</code> as the row terminator,
+            which <code>\raggedright</code> otherwise redefines. The same prefix sets fonts for a
+            whole column: <code>{`>{\\bfseries}l`}</code> for a bold first column, or{' '}
+            <code>{`>{\\small}c`}</code> for a smaller one.
+          </p>
           <p>
             You can also add vertical lines between columns by placing <code>|</code> in the column
             specifier, although modern typographic practice discourages heavy use of vertical rules:
@@ -480,6 +594,65 @@ export default async function TablesPage() {
             <li><code>\endfoot</code> &ndash; Marks the end of the footer for all pages except the last</li>
             <li><code>\endlastfoot</code> &ndash; Marks the end of the footer for the final page</li>
           </ul>
+          <p>
+            A <code>longtable</code> is not a float, so it takes no <code>[htbp]</code> argument and
+            no surrounding <code>table</code> environment; the caption goes inside, as shown, and
+            counts as a normal table in the list of tables. Because the column widths are computed
+            across all pages, LaTeX needs two or three compilation runs before the columns stop
+            shifting. A table that is only slightly too tall for one page can often be rescued with{' '}
+            <code>\small</code> or <code>\footnotesize</code> before the <code>tabular</code>;
+            anything longer belongs in a <code>longtable</code>.
+          </p>
+
+          <h2>Landscape Tables</h2>
+          <p>
+            A table with many columns may fit only when rotated. There are two approaches, and they
+            differ in whether the page or just the table rotates.
+          </p>
+          <p>
+            The <code>pdflscape</code> package rotates whole pages: everything inside the{' '}
+            <code>landscape</code> environment, including headers, footers and page numbers, is
+            typeset in landscape, and in a PDF viewer the page itself is displayed rotated. Floats
+            inside the environment stay on those pages:
+          </p>
+          <pre><code>{`\\usepackage{pdflscape}
+\\usepackage{booktabs}
+
+\\begin{landscape}
+  \\begin{table}
+    \\centering
+    \\caption{A wide table on a landscape page.}
+    \\begin{tabular}{lcccccccc}
+      \\toprule
+      Run & Jan & Feb & Mar & Apr & May & Jun & Jul & Aug \\\\
+      \\midrule
+      A   & 1   & 2   & 3   & 4   & 5   & 6   & 7   & 8   \\\\
+      B   & 2   & 3   & 4   & 5   & 6   & 7   & 8   & 9   \\\\
+      \\bottomrule
+    \\end{tabular}
+  \\end{table}
+\\end{landscape}`}</code></pre>
+          <p>
+            The <code>rotating</code> package instead rotates only the float. Its{' '}
+            <code>sidewaystable</code> environment is a drop-in replacement for{' '}
+            <code>table</code> that turns the table and its caption by 90 degrees, always on a page
+            of its own, while the page number and running headers stay upright. This is what most
+            journals and theses expect for printed output:
+          </p>
+          <pre><code>{`\\usepackage{rotating}
+
+\\begin{sidewaystable}
+  \\centering
+  \\caption{The same table, rotated as a float.}
+  \\begin{tabular}{lcccccccc}
+    ...
+  \\end{tabular}
+\\end{sidewaystable}`}</code></pre>
+          <p>
+            Use <code>pdflscape</code> for documents read on screen, where a rotated page is
+            convenient, and <code>sidewaystable</code> for print. Do not combine the two for the
+            same table.
+          </p>
 
           <h2>Colored Tables</h2>
           <p>
@@ -553,7 +726,7 @@ export default async function TablesPage() {
 \\usepackage{array}
 
 % Apply colour to an entire column using the > directive
-\\begin{tabular}{l >{\columncolor{lightblue}}c c}
+\\begin{tabular}{l >{\\columncolor{lightblue}}c c}
   \\toprule
   Name  & Highlighted & Normal \\\\
   \\midrule
@@ -609,6 +782,68 @@ export default async function TablesPage() {
             </li>
           </ul>
 
+          <h2>Decimal Alignment with siunitx</h2>
+          <p>
+            Numbers in a column should line up on the decimal point, not on their left or right
+            edge, so that 3.5 and 12.25 can be compared at a glance. The <code>siunitx</code>{' '}
+            package provides the <code>S</code> column type for exactly this. Each cell is parsed
+            as a number, aligned on the decimal marker, and the header is centred over the column
+            when wrapped in braces:
+          </p>
+          <pre><code>{`\\usepackage{siunitx}
+\\usepackage{booktabs}
+
+\\begin{tabular}{l S[table-format=2.2] S[table-format=1.3]}
+  \\toprule
+  Sample & {Mass (g)} & {Error} \\\\
+  \\midrule
+  A      & 3.5        & 0.012   \\\\
+  B      & 12.25      & 0.1     \\\\
+  C      & 7          & 0.005   \\\\
+  \\bottomrule
+\\end{tabular}`}</code></pre>
+          <p>
+            <code>table-format=2.2</code> reserves space for two digits before the decimal point and
+            two after; it sets the column width so all entries align. Any cell that is not a
+            number, such as the header or a dash, must be wrapped in <code>{'{'}...{'}'}</code>,
+            otherwise siunitx tries to parse it and reports <em>Invalid numerical input</em>.{' '}
+            <code>S</code> columns also handle units and uncertainties:{' '}
+            <code>{`3.5(2)`}</code> prints as 3.5(2), and <code>{`\\qty{3.5}{\\gram}`}</code> in a
+            normal column prints a number with its unit and correct spacing.
+          </p>
+
+          <h2>Footnotes in Tables</h2>
+          <p>
+            <code>\footnote</code> inside a <code>tabular</code> produces the mark but loses the
+            text, because a tabular is typeset as a box. The usual fix is the{' '}
+            <code>threeparttable</code> package, which puts notes directly under the table:
+          </p>
+          <pre><code>{`\\usepackage{booktabs, threeparttable}
+
+\\begin{table}[htbp]
+  \\centering
+  \\begin{threeparttable}
+    \\caption{Results with table notes.}
+    \\begin{tabular}{lr}
+      \\toprule
+      Method & Score \\\\
+      \\midrule
+      Ours\\tnote{a} & 94.7 \\\\
+      Baseline     & 91.2 \\\\
+      \\bottomrule
+    \\end{tabular}
+    \\begin{tablenotes}
+      \\footnotesize
+      \\item[a] Averaged over five runs.
+    \\end{tablenotes}
+  \\end{threeparttable}
+\\end{table}`}</code></pre>
+          <p>
+            Alternatives, including <code>\footnotemark</code> with <code>\footnotetext</code>{' '}
+            after the float and the <code>minipage</code> trick, are covered in{' '}
+            <Link href="/learn/footnotes">LaTeX Footnotes</Link>.
+          </p>
+
           <h2>Table Captions and Labels</h2>
           <p>
             Captions and labels are essential for numbered tables and cross-references. The
@@ -652,6 +887,25 @@ on page~\\pageref{tab:summary}.`}</code></pre>
           <p>
             Always place <code>\label</code> after <code>\caption</code>, not before. If you place
             it before the caption, the reference number may be incorrect.
+          </p>
+
+          <h3>Numbering style and cleveref</h3>
+          <p>
+            Tables are numbered 1, 2, 3 in <code>article</code> and per chapter (2.1, 2.2) in{' '}
+            <code>book</code> and <code>report</code>. To number per section in an article, or to
+            change the format, adjust the counter in the preamble; and with{' '}
+            <code>cleveref</code>, <code>\cref</code> writes the word &ldquo;Table&rdquo; for you:
+          </p>
+          <pre><code>{`\\counterwithin{table}{section}            % Table 1.1, 1.2, 2.1, ...
+\\renewcommand{\\thetable}{\\Roman{table}}   % Table I, II, III
+
+\\usepackage{cleveref}                      % after hyperref, if used
+As shown in \\cref{tab:summary} ...         % table 1
+\\Cref{tab:summary} shows ...               % Table 1`}</code></pre>
+          <p>
+            The caption text itself is styled with the <code>caption</code> package:{' '}
+            <code>{`\\usepackage[font=small, labelfont=bf]{caption}`}</code> gives a small caption
+            with a bold &ldquo;Table 1:&rdquo; label, which is what many journals ask for.
           </p>
 
           <h2>Useful Packages for Tables</h2>
@@ -717,6 +971,91 @@ on page~\\pageref{tab:summary}.`}</code></pre>
 \\usepackage[table]{xcolor}
 \\usepackage{siunitx}
 \\usepackage{array}`}</code></pre>
+
+          <div className="not-prose my-8 p-6 bg-primary/5 rounded-lg border border-primary/10">
+            <h3 className="text-lg font-semibold mb-2">Generate tables automatically</h3>
+            <p className="text-muted-foreground mb-4">
+              Typing <code>&amp;</code> and <code>\\</code> by hand is where most table errors come
+              from. Paste your data from Excel, Google Sheets or CSV into the free Table to LaTeX
+              converter and get a <code>booktabs</code> table with the right column specifier,
+              ready to drop into a <code>table</code> float.
+            </p>
+            <Link
+              href="https://tools.useoctree.com/tools/table-to-latex"
+              target="_blank"
+              rel="noopener noreferrer"
+              className={buttonVariants()}
+            >
+              Open the Table to LaTeX converter &rarr;
+            </Link>
+          </div>
+
+          <h2>Common Errors</h2>
+          <p>
+            Tables produce some of LaTeX&apos;s least helpful messages. These are the ones that
+            come up most, with what they actually mean:
+          </p>
+          <table>
+            <thead>
+              <tr>
+                <th>Message or symptom</th>
+                <th>Cause</th>
+                <th>Fix</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><em>Misplaced \noalign</em></td>
+                <td><code>\hline</code>, <code>\midrule</code> or <code>\cline</code> not at the start of a row, usually because the previous row is missing its <code>\\</code></td>
+                <td>Add <code>\\</code> to the end of the previous row</td>
+              </tr>
+              <tr>
+                <td><em>Extra alignment tab has been changed to \cr</em></td>
+                <td>A row has more <code>&amp;</code> than the column specifier allows</td>
+                <td>Count the columns; check for a missing <code>\\</code> that merged two rows, or an unescaped <code>&amp;</code> in text (write <code>\&amp;</code>)</td>
+              </tr>
+              <tr>
+                <td><em>Illegal character in array arg</em></td>
+                <td>Something in the column specifier is not a known column type: <code>X</code> without <code>tabularx</code>, <code>S</code> without <code>siunitx</code>, <code>m</code> without <code>array</code>, or a typo</td>
+                <td>Load the package that defines the column type, and check for typos in the specifier</td>
+              </tr>
+              <tr>
+                <td><em>Overfull \hbox</em> and the table runs into the margin</td>
+                <td>The natural width of the columns exceeds the text width</td>
+                <td>Use <code>{`p{}`}</code> or <code>tabularx</code> to wrap text, a smaller font (<code>\small</code> before the tabular), a landscape page, or as a last resort <code>{`\\resizebox{\\textwidth}{!}{...}`}</code> from <code>graphicx</code></td>
+              </tr>
+              <tr>
+                <td><em>Missing \endgroup inserted</em> or <em>Missing {'}'} inserted</em> at <code>{`\\end{tabular}`}</code></td>
+                <td>Unbalanced braces in a cell, often from a <code>\multicolumn</code> or <code>\multirow</code> with the wrong number of arguments</td>
+                <td>Check that every <code>\multicolumn</code> has three arguments and every <code>\multirow</code> has three</td>
+              </tr>
+              <tr>
+                <td>Footnote number appears, footnote text does not</td>
+                <td><code>\footnote</code> inside <code>tabular</code></td>
+                <td><code>threeparttable</code>, or <code>\footnotemark</code> + <code>\footnotetext</code> (see above)</td>
+              </tr>
+              <tr>
+                <td>Table appears pages away from its text</td>
+                <td>Float placement</td>
+                <td><code>[htbp]</code> or <code>[!htb]</code>; <code>\FloatBarrier</code> from <code>placeins</code>; <code>[H]</code> from <code>float</code></td>
+              </tr>
+              <tr>
+                <td><em>Invalid numerical input</em> in an <code>S</code> column</td>
+                <td>Text in a siunitx number column</td>
+                <td>Wrap non-numeric cells in braces: <code>{`{Header}`}</code></td>
+              </tr>
+              <tr>
+                <td>Wrong table number from <code>\ref</code></td>
+                <td><code>\label</code> placed before <code>\caption</code></td>
+                <td>Move <code>\label</code> after <code>\caption</code>, then compile twice</td>
+              </tr>
+              <tr>
+                <td><em>Package xcolor Error: Undefined color</em> or <code>\rowcolor</code> undefined</td>
+                <td><code>xcolor</code> loaded without the <code>table</code> option, or a color name not defined</td>
+                <td><code>{`\\usepackage[table]{xcolor}`}</code>; define custom colors with <code>\definecolor</code></td>
+              </tr>
+            </tbody>
+          </table>
 
           <h2>Quick Reference</h2>
           <p>
@@ -858,6 +1197,8 @@ on page~\\pageref{tab:summary}.`}</code></pre>
           <ul>
             <li><Link href="/learn/horizontal-lines">Horizontal Lines in LaTeX</Link> &ndash; \hline, \cline and booktabs rules explained, plus rules outside tables</li>
             <li><Link href="/learn/footnotes">LaTeX Footnotes</Link> &ndash; Add footnotes inside tables with threeparttable and footnotemark</li>
+            <li><Link href="/learn/font-size">LaTeX Font Size</Link> &ndash; Shrink a wide table with \small or \footnotesize and size its caption</li>
+            <li><Link href="/learn/colors">Using Colors in LaTeX</Link> &ndash; Define the xcolor names used by \rowcolor and \cellcolor</li>
             <li><Link href="/learn/lists">LaTeX Lists</Link> &ndash; Create ordered, unordered, and description lists</li>
             <li><Link href="/learn/page-size-margins">Page Size &amp; Margins</Link> &ndash; Control page layout with the geometry package</li>
             <li><Link href="/learn/latex">Learn LaTeX</Link> &ndash; Complete beginner tutorial covering all the basics</li>
@@ -903,8 +1244,8 @@ on page~\\pageref{tab:summary}.`}</code></pre>
 export function generateMetadata(): Metadata {
   return {
     title: 'LaTeX Tables \u2013 Complete Guide 2026',
-    description: 'Learn how to create tables in LaTeX. Guide covers tabular, booktabs, multicolumn, multirow, longtable, colored tables, and professional formatting techniques.',
-    keywords: 'latex table, latex tabular, latex booktabs, latex multicolumn, latex multirow, latex table generator, latex longtable, latex table of contents, latex hline, latex table width, create table in latex, latex table example, latex table formatting, latex colored table',
+    description: 'How to make a table in LaTeX: the tabular environment and table float with caption and label, booktabs rules, multicolumn and multirow, column widths with p/m/b and tabularx, float placement, landscape and multi-page tables, colored rows, decimal alignment with siunitx, footnotes in tables, and fixes for common tabular errors.',
+    keywords: 'table in latex, tabular in latex, latex table, latex tabular, how to make a table in latex, latex booktabs, latex multicolumn, latex multirow, latex table generator, latex longtable, latex hline, latex table width, latex tabularx, create table in latex, latex table example, latex table formatting, latex colored table, latex landscape table, latex sidewaystable, latex table caption, latex table placement, latex siunitx table, misplaced noalign, extra alignment tab',
     openGraph: mergeOpenGraph({
       title: 'LaTeX Tables \u2013 Complete Guide 2026',
       description: 'Complete guide to creating professional tables in LaTeX.',

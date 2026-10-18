@@ -647,6 +647,8 @@ As shown in Equation~\\ref{eq:einstein}, energy and mass are equivalent.`}</code
             <li><Link href="/learn/matrices">Matrices in LaTeX</Link> – all matrix environments, augmented matrices, and large matrices</li>
             <li><Link href="/learn/greek-letters-math-symbols">Greek Letters and Math Symbols</Link> – complete reference for Greek letters, arrows, set notation, and more</li>
             <li><Link href="/learn/subscripts-superscripts">Subscripts and Superscripts in LaTeX</Link> – nested scripts, multi-character scripts, and combining sub/superscripts</li>
+            <li><Link href="/learn/equation-numbering">Equation Numbering and Referencing</Link> – \label, \eqref, cleveref, custom tags, subequations and line breaks in long equations</li>
+            <li><Link href="/learn/theorems-proofs">Theorems, Lemmas and Proofs</Link> – amsthm, \newtheorem, the proof environment and the QED symbol</li>
           </ul>
 
           {/* ------------------------------------------------------------------ */}

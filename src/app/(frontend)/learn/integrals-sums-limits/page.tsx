@@ -513,6 +513,7 @@ $\\left[\\frac{x^2}{2}\\right]_0^1$`}</code></pre>
             <li><Link href="/learn/mathematical-expressions">Mathematical Expressions in LaTeX</Link> – Equations, fractions, and core math typesetting</li>
             <li><Link href="/learn/greek-letters-math-symbols">Greek Letters &amp; Math Symbols</Link> – Complete symbol reference for scientific writing</li>
             <li><Link href="/learn/matrices">Matrices in LaTeX</Link> – Typeset matrices, determinants, and systems of equations</li>
+            <li><Link href="/learn/equation-numbering">Equation Numbering &amp; Referencing</Link> – Number and reference the displays above with \label, \eqref and align</li>
             <li><Link href="/learn/latex">Learn LaTeX Basics</Link> – Review the fundamentals</li>
           </ul>
 
@@ -520,7 +521,7 @@ $\\left[\\frac{x^2}{2}\\right]_0^1$`}</code></pre>
           <h2>Free LaTeX Tools</h2>
           <ul>
             <li><Link href="https://tools.useoctree.com/tools/latex-preview" target="_blank" rel="noopener noreferrer">LaTeX Preview</Link> – Test your integrals, sums, and limits with live preview</li>
-            <li><Link href="https://tools.useoctree.com/tools/latex-equation-editor" target="_blank" rel="noopener noreferrer">LaTeX Equation Editor</Link> – Write and preview math equations visually</li>
+            <li><Link href="https://tools.useoctree.com/tools/math-to-latex" target="_blank" rel="noopener noreferrer">Math to LaTeX Converter</Link> – Turn handwritten or typed math into LaTeX</li>
             <li><Link href="https://tools.useoctree.com/tools/image-to-latex" target="_blank" rel="noopener noreferrer">Image to LaTeX</Link> – Convert handwritten or printed math to LaTeX code</li>
           </ul>
 

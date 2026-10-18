@@ -149,6 +149,24 @@ const learnTopics = [
     description: 'Strike through text with ulem \\sout and soul \\st, cancel terms in math with the cancel package, cross out in tables and Beamer, and track changes.',
     color: 'from-gray-500/10 to-gray-600/5',
   },
+  {
+    slug: 'font-size',
+    title: 'LaTeX Font Size',
+    description: 'Change font size in LaTeX: the ten size commands from \\tiny to \\Huge with exact point sizes, class options, extsizes, \\fontsize, and sizes for captions, footnotes and headings.',
+    color: 'from-orange-500/10 to-amber-600/5',
+  },
+  {
+    slug: 'equation-numbering',
+    title: 'Equation Numbering & Referencing',
+    description: 'Number, label and reference equations with \\label, \\eqref and cleveref, number per section, add custom tags, and break long equations with align, split and multline.',
+    color: 'from-blue-500/10 to-indigo-600/5',
+  },
+  {
+    slug: 'theorems-proofs',
+    title: 'Theorems, Lemmas & Proofs',
+    description: 'Set up amsthm and \\newtheorem, share counters between theorems and lemmas, write proofs, place the QED symbol with \\qedhere, and reference theorems.',
+    color: 'from-emerald-500/10 to-teal-600/5',
+  },
 ]
 
 export default function LearnPage() {
