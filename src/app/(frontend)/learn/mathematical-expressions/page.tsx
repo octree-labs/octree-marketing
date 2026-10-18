@@ -1,6 +1,6 @@
 import type { Metadata } from 'next/types'
 
-import { learnMetadata } from '@/utilities/learnMetadata'
+import { learnMetadata, type FaqItem } from '@/utilities/learnMetadata'
 import Link from 'next/link'
 import { buttonVariants } from '@/components/ui/button'
 import React from 'react'
@@ -19,14 +19,47 @@ const breadcrumbSchema = generateBreadcrumbSchema(breadcrumbs)
 
 const page = {
   slug: 'mathematical-expressions',
-  title: 'Mathematical Expressions in LaTeX – Complete Guide 2026',
-  seoTitle: 'Mathematical Expressions in LaTeX – Guide 2026',
-  description: 'Learn how to write mathematical expressions in LaTeX. Guide covers fractions, roots, aligned equations, brackets, equation numbering, cases, spacing, and the amsmath package.',
-  keywords: 'latex math, latex equation, latex fraction, latex square root, latex brackets, latex align, latex equation numbering, latex amsmath, latex math mode, latex inline math, latex display math, latex cases, latex piecewise function, how to write equations in latex',
+  title: 'Mathematical Expressions in LaTeX: Equations, Fractions, Roots and Cases',
+  seoTitle: 'Mathematical Expressions in LaTeX: Math Mode Guide',
+  description: 'Write math in LaTeX: inline vs display math, fractions, nth roots, piecewise functions with cases and dcases, brackets, align, numbering and errors.',
+  keywords: 'latex math, latex equation, latex math mode, latex inline math, latex display math, latex fraction, latex square root, latex nth root, latex brackets, latex align, latex equation numbering, latex amsmath, latex cases, piecewise function latex, latex dcases, latex rcases, latex mathstrut, latex displaystyle, how to write equations in latex, latex math errors',
 }
 
 /** Last content update, used for dateModified in the article schema. */
-const LAST_UPDATED = '2026-10-17'
+const LAST_UPDATED = '2026-10-18'
+
+const faq: FaqItem[] = [
+  {
+    question: 'How do I write a piecewise function in LaTeX?',
+    answer:
+      'Use the cases environment from amsmath inside display math: f(x) = \\begin{cases} x^2 & \\text{if } x \\geq 0 \\\\ -x^2 & \\text{if } x < 0 \\end{cases}. The & separates the value from its condition and \\\\ starts a new case. If the cases contain fractions, use dcases from mathtools so they are set at full size.',
+  },
+  {
+    question: 'What is the difference between $...$ and \\[...\\]?',
+    answer:
+      '$...$ is inline math: the formula sits inside the sentence at a compact size. \\[...\\] is display math: the formula is centred on its own line at full size. Use equation instead of \\[...\\] when the display needs a number.',
+  },
+  {
+    question: 'Should I use $$...$$ in LaTeX?',
+    answer:
+      'No. $$...$$ is plain TeX syntax. In LaTeX it ignores the fleqn class option, gives inconsistent vertical spacing, and is not understood by amsmath. Use \\[...\\] for an unnumbered display and equation for a numbered one.',
+  },
+  {
+    question: 'How do I write an nth root in LaTeX?',
+    answer:
+      'Give \\sqrt an optional argument: \\sqrt[3]{x} is the cube root and \\sqrt[n]{x} the nth root. If the index sits too far from the radical, amsmath lets you nudge it with \\sqrt[\\leftroot{-2}\\uproot{2}n]{x}.',
+  },
+  {
+    question: 'Why do my fractions look tiny inside a sentence?',
+    answer:
+      'Inline math uses text style, which shrinks fractions, sums and integrals to fit the line. Use \\dfrac{a}{b} or \\displaystyle for a full-size fraction inline, or write a/b, which is usually more readable in running text anyway.',
+  },
+  {
+    question: 'What does "Missing $ inserted" mean?',
+    answer:
+      'LaTeX met a math-only command or character (such as ^, _, \\frac or \\alpha) outside math mode, or an opening $ was never closed. Wrap the expression in $...$ or \\[...\\], and check that every $ has a partner.',
+  },
+]
 
 export default async function MathematicalExpressionsPage() {
   return (
@@ -40,6 +73,7 @@ export default async function MathematicalExpressionsPage() {
         title={page.title}
         description={page.description}
         dateModified={LAST_UPDATED}
+        faq={faq}
       />
       <div className="container">
         <div className="mb-8 max-w-4xl mx-auto">
@@ -52,12 +86,14 @@ export default async function MathematicalExpressionsPage() {
         </div>
 
         <article className="prose prose-lg dark:prose-invert max-w-4xl mx-auto">
-          <h1>Mathematical Expressions in LaTeX</h1>
+          <h1>Mathematical Expressions in LaTeX: Equations, Fractions, Roots and Cases</h1>
           <p className="lead">
             LaTeX is the gold standard for typesetting mathematical expressions. Whether you&apos;re
             writing a simple equation or a multi-page derivation, LaTeX gives you precise control
-            over how your math looks. This guide covers everything from basic inline formulas to
-            aligned multi-line equations, equation numbering, and the essential amsmath package.
+            over how your math looks. This guide covers everything from inline and display math,
+            fractions and nth roots, piecewise functions with <code>cases</code>, brackets,
+            aligned multi-line equations and equation numbering, to spacing, text inside math,
+            the essential amsmath package, and the errors you will meet along the way.
           </p>
 
           {/* ------------------------------------------------------------------ */}
@@ -69,7 +105,7 @@ export default async function MathematicalExpressionsPage() {
             of your text.
           </p>
 
-          <h3>Inline Math</h3>
+          <h3>Inline Math: $...$ and \(...\)</h3>
           <p>
             Inline math is placed directly within a line of text using dollar signs
             (<code>$...$</code>) or <code>\(...\)</code>. It keeps the formula compact so it
@@ -80,34 +116,98 @@ export default async function MathematicalExpressionsPage() {
 % Equivalent using \\(...\\)
 The Pythagorean theorem states that \\(a^2 + b^2 = c^2\\).`}</code></pre>
           <p>
-            Inline mode automatically reduces the size of large operators, fractions, and limits
-            so the formula fits within the line height. For instance, a fraction like
-            <code>$\frac&#123;1&#125;&#123;2&#125;$</code> will appear smaller than in display mode.
+            The two forms are equivalent. <code>\(...\)</code> has one practical advantage: a
+            missing closing <code>\)</code> is reported where it happens, whereas a missing{' '}
+            <code>$</code> makes LaTeX read the rest of the paragraph as math and report an error
+            somewhere else. Inline mode automatically reduces the size of large operators,
+            fractions, and limits so the formula fits within the line height. For instance, a
+            fraction like <code>$\frac&#123;1&#125;&#123;2&#125;$</code> will appear smaller than
+            in display mode.
           </p>
 
-          <h3>Display Math</h3>
+          <h3>Display Math: \[...\] and equation</h3>
           <p>
             Display math places the expression on its own line, centred and with generous
-            vertical spacing. Use <code>\[...\]</code> (or the <code>equation</code> environment
-            when you need numbering).
+            vertical spacing. Use <code>\[...\]</code> for an unnumbered display and the{' '}
+            <code>equation</code> environment when you need a number.
           </p>
           <pre><code>{`\\[
   E = mc^2
 \\]
 
-% Or equivalently (plain TeX syntax, less recommended):
-$$
-  E = mc^2
-$$`}</code></pre>
+\\begin{equation}
+  E = mc^2        % numbered (1)
+\\end{equation}
+
+\\begin{equation*}
+  E = mc^2        % unnumbered, same as \\[...\\] with amsmath
+\\end{equation*}`}</code></pre>
           <p>
             Display mode renders fractions, sums, and integrals at full size, making them
-            easier to read. Use it for any expression you want the reader to focus on.
+            easier to read. Use it for any expression you want the reader to focus on. Do not
+            leave a blank line between the text and the display: a display belongs to the
+            paragraph before it, and a blank line adds an unwanted paragraph break and extra
+            space.
           </p>
+
+          <h3>Why not $$...$$</h3>
+          <p>
+            You will see <code>$$...$$</code> in older documents and on the web. It is plain TeX
+            syntax, and in LaTeX it misbehaves in three ways: it ignores the <code>fleqn</code>{' '}
+            class option that left-aligns displays, it gets the vertical space above and below
+            the display wrong in some situations (double spacing after a display that ends a
+            paragraph), and amsmath does not know about it, so features such as{' '}
+            <code>\qedhere</code> and <code>\tag</code> fail inside it. Use{' '}
+            <code>\[...\]</code> instead; it costs the same number of keystrokes.
+          </p>
+          <pre><code>{`% Avoid
+$$ E = mc^2 $$
+
+% Prefer
+\\[ E = mc^2 \\]`}</code></pre>
+
+          <h3>\displaystyle, \textstyle and spacing differences</h3>
+          <p>
+            Inline math is set in <em>text style</em> and display math in <em>display style</em>.
+            The difference is more than size: in display style fractions use full-size numerators
+            and denominators, big operators grow and put their limits above and below, and the
+            spacing around relations is wider. You can switch styles by hand when the default
+            is wrong for the context:
+          </p>
+          <pre><code>{`% Full-size pieces inside a sentence
+The series $\\displaystyle\\sum_{n=1}^{\\infty} \\frac{1}{n^2}$ converges.
+
+% Inline-size pieces inside a display
+\\[
+  \\textstyle\\frac{1}{2} \\qquad \\textstyle\\sum_{i=1}^{n} \\qquad \\textstyle\\int_0^1
+\\]
+
+% \\dfrac and \\tfrac are shortcuts for a single fraction
+The ratio $\\dfrac{a}{b}$ is large; the exponent $2^{\\tfrac{n}{2}}$ is small.`}</code></pre>
+          <p>
+            Use <code>\displaystyle</code> inline with care: it makes the line taller and pushes
+            the lines around it apart. If an inline formula needs display style, it probably
+            wants to be a display.
+          </p>
+
+          <h3>Keeping heights consistent with \mathstrut</h3>
+          <p>
+            Radicals, fractions and brackets size themselves to their content, so{' '}
+            <code>\sqrt&#123;a&#125;</code> and <code>\sqrt&#123;y&#125;</code> come out with
+            roots of different heights. <code>\mathstrut</code> is an invisible box as tall as a
+            parenthesis; putting it inside each root makes them match:
+          </p>
+          <pre><code>{`\\[
+  \\sqrt{a} + \\sqrt{b} + \\sqrt{y}                          % uneven
+  \\qquad
+  \\sqrt{\\mathstrut a} + \\sqrt{\\mathstrut b} + \\sqrt{\\mathstrut y}   % even
+\\]`}</code></pre>
 
           <h3>When to Use Each</h3>
           <ul>
             <li><strong>Inline math</strong> – short expressions referenced in running text, e.g. &quot;where <code>$n$</code> is a positive integer.&quot;</li>
             <li><strong>Display math</strong> – important equations, long formulas, or anything you want the reader to study carefully.</li>
+            <li><strong>Numbered display</strong> (<code>equation</code>, <code>align</code>) – anything you will refer back to.</li>
           </ul>
 
           {/* ------------------------------------------------------------------ */}
@@ -156,7 +256,7 @@ The answer is $\\dfrac{n!}{k!(n-k)!}$.`}</code></pre>
 \\]`}</code></pre>
 
           {/* ------------------------------------------------------------------ */}
-          <h2>Square Roots and Nth Roots</h2>
+          <h2>Square Roots, Nth Roots and Radicals</h2>
           <p>
             The <code>\sqrt</code> command produces a square root symbol that automatically
             stretches to fit its argument.
@@ -164,33 +264,69 @@ The answer is $\\dfrac{n!}{k!(n-k)!}$.`}</code></pre>
 
           <h3>Basic Square Root</h3>
           <pre><code>{`\\[
-  \\sqrt{a^2 + b^2}
+  \\sqrt{a^2 + b^2} \\qquad \\sqrt{\\frac{a}{b}} \\qquad \\sqrt{2} \\approx 1.414
 \\]`}</code></pre>
 
           <h3>Nth Root</h3>
           <p>
-            Pass an optional argument in square brackets for an arbitrary root index.
+            Pass an optional argument in square brackets for an arbitrary root index. The
+            radical and its index are equivalent to a fractional power, which is often clearer
+            in running text.
           </p>
           <pre><code>{`\\[
   \\sqrt[3]{27} = 3
   \\qquad
+  \\sqrt[n]{x} = x^{1/n}
+  \\qquad
+  \\sqrt[4]{x^3}
+  \\qquad
+  \\sqrt[n]{a^n} = |a|
+\\]`}</code></pre>
+
+          <h3>Positioning the index: \leftroot and \uproot</h3>
+          <p>
+            A tall or wide index such as <code>n</code> or <code>\beta</code> can sit too low and
+            too far from the radical. amsmath provides <code>\leftroot</code> and{' '}
+            <code>\uproot</code> to nudge it; the arguments are in small units, negative{' '}
+            <code>\leftroot</code> moves the index right (closer to the radical) and positive{' '}
+            <code>\uproot</code> moves it up:
+          </p>
+          <pre><code>{`\\usepackage{amsmath}
+
+\\[
   \\sqrt[n]{x}
+  \\qquad
+  \\sqrt[\\leftroot{-2}\\uproot{2}n]{x}        % index tucked in and raised
+  \\qquad
+  \\sqrt[\\leftroot{-3}\\uproot{3}\\beta]{k}
+  \\qquad
+  \\sqrt[\\uproot{3}n]{x}                      % raise only
 \\]`}</code></pre>
 
           <h3>Nested Roots</h3>
           <p>
-            LaTeX handles nested roots gracefully. For deeply nested expressions you may want
-            to add a small space with <code>\,</code> for readability.
+            LaTeX handles nested roots gracefully; each inner root is drawn at the size of its
+            content. For deeply nested expressions you may want to add a small space with{' '}
+            <code>\,</code> for readability, and <code>\smash[b]</code> keeps a root with a
+            descender (such as <em>y</em>) from being taller than its neighbours.
           </p>
           <pre><code>{`\\[
   \\sqrt{1 + \\sqrt{1 + \\sqrt{1 + \\sqrt{1 + x}}}}
+  \\qquad
+  \\sqrt{2 + \\sqrt{3}}
+  \\qquad
+  \\sqrt{x}\\,\\sqrt{y}
+  \\qquad
+  \\sqrt{\\smash[b]{y}}
 \\]`}</code></pre>
 
           {/* ------------------------------------------------------------------ */}
           <h2>Parentheses and Brackets</h2>
           <p>
             Delimiters (parentheses, brackets, braces) are essential for grouping sub-expressions.
-            LaTeX can automatically scale them to fit or you can control sizing manually.
+            LaTeX can automatically scale them to fit or you can control sizing manually. The{' '}
+            <Link href="/learn/brackets">brackets guide</Link> covers every delimiter in
+            detail; here are the essentials.
           </p>
 
           <h3>Basic Delimiters</h3>
@@ -242,7 +378,9 @@ The answer is $\\dfrac{n!}{k!(n-k)!}$.`}</code></pre>
           <p>
             When you have multiple lines of equations that should line up at a particular
             point (usually the equals sign), use alignment environments from the
-            <code>amsmath</code> package.
+            <code>amsmath</code> package. The{' '}
+            <Link href="/learn/multiline-equations">multiline equations guide</Link> goes
+            through every case.
           </p>
 
           <h3>The <code>align</code> Environment</h3>
@@ -341,10 +479,12 @@ As shown in Equation~\\ref{eq:einstein}, energy and mass are equivalent.`}</code
 \\end{equation*}`}</code></pre>
 
           {/* ------------------------------------------------------------------ */}
-          <h2>Cases and Piecewise Functions</h2>
+          <h2>Piecewise Functions with cases</h2>
           <p>
             The <code>cases</code> environment (from <code>amsmath</code>) is the standard
-            way to write piecewise-defined functions.
+            way to write piecewise-defined functions. It draws a single left brace that grows
+            with the number of cases; inside it, <code>&amp;</code> separates each value from its
+            condition and <code>\\</code> starts the next case.
           </p>
           <pre><code>{`\\[
   f(x) =
@@ -353,12 +493,17 @@ As shown in Equation~\\ref{eq:einstein}, energy and mass are equivalent.`}</code
     -x^2      & \\text{if } x < 0
   \\end{cases}
 \\]`}</code></pre>
-          <p>You can have as many cases as you need:</p>
+          <p>
+            The condition is ordinary text, so wrap words in <code>\text</code> and keep the
+            trailing space inside the braces (<code>\text&#123;if &#125;</code>), otherwise
+            &ldquo;if&rdquo; runs into the variable. You can have as many cases as you need, and
+            commas or full stops after the values are fine:
+          </p>
           <pre><code>{`\\[
   |x| =
   \\begin{cases}
-    x   & \\text{if } x \\geq 0 \\\\
-    -x  & \\text{if } x < 0
+    x,  & \\text{for } x \\geq 0, \\\\
+    -x, & \\text{for } x < 0.
   \\end{cases}
 \\]
 
@@ -370,18 +515,103 @@ As shown in Equation~\\ref{eq:einstein}, energy and mass are equivalent.`}</code
     0   & \\text{if } x = 0 \\\\
     -1  & \\text{if } x < 0
   \\end{cases}
-\\]`}</code></pre>
+\\]
+
+% Text conditions with math inside them
+\\[
+  f(n) =
+  \\begin{cases}
+    n/2    & \\text{if $n$ is even} \\\\
+    3n + 1 & \\text{if $n$ is odd}
+  \\end{cases}
+  \\qquad
+  \\chi(x) =
+  \\begin{cases}
+    1, & x \\in \\mathbb{Q} \\\\
+    0, & \\text{otherwise}
+  \\end{cases}
+\\]
+
+% Extra space before the conditions with \\quad
+\\[
+  f(x) =
+  \\begin{cases}
+    x^2  & \\quad \\text{if } x \\geq 0 \\\\
+    -x^2 & \\quad \\text{if } x < 0
+  \\end{cases}
+\\]
+
+% A numbered piecewise definition
+\\begin{equation}
+  \\delta_{ij} =
+  \\begin{cases}
+    1 & i = j \\\\
+    0 & i \\neq j
+  \\end{cases}
+  \\label{eq:kronecker}
+\\end{equation}`}</code></pre>
+
+          <h3>Fractions in cases: dcases from mathtools</h3>
           <p>
-            For a right-side brace, use the <code>rcases</code> environment (also from
-            <code>amsmath</code>):
+            The contents of <code>cases</code> are set in text style, so a fraction inside it
+            comes out small. The <code>mathtools</code> package provides <code>dcases</code>,
+            which sets each case in display style, and <code>cases*</code> /{' '}
+            <code>dcases*</code>, whose second column is plain text so you can drop the{' '}
+            <code>\text</code>:
           </p>
-          <pre><code>{`\\[
+          <pre><code>{`\\usepackage{mathtools}
+
+\\[
+  f(x) =
+  \\begin{cases}
+    \\frac{1}{x} & x \\neq 0 \\\\
+    0           & x = 0
+  \\end{cases}
+  \\qquad
+  f(x) =
+  \\begin{dcases}
+    \\frac{1}{x} & x \\neq 0 \\\\
+    0           & x = 0
+  \\end{dcases}
+\\]
+
+% Second column is text mode: no \\text needed, math goes back in $...$
+\\[
+  g(x) =
+  \\begin{dcases*}
+    \\frac{1}{x} & if $x \\neq 0$ \\\\
+    0           & otherwise
+  \\end{dcases*}
+\\]
+
+% Without mathtools: \\dfrac and a little extra row space
+\\[
+  f(x) =
+  \\begin{cases}
+    \\dfrac{1}{x} & x \\neq 0 \\\\[4pt]
+    0            & x = 0
+  \\end{cases}
+\\]`}</code></pre>
+
+          <h3>Right brace: rcases</h3>
+          <p>
+            For a brace on the right-hand side, use <code>rcases</code> (and{' '}
+            <code>drcases</code>, <code>rcases*</code>), also from <code>mathtools</code>:
+          </p>
+          <pre><code>{`\\usepackage{mathtools}
+
+\\[
   \\begin{rcases}
     x > 0 \\\\
     y > 0
   \\end{rcases}
   \\Rightarrow x + y > 0
 \\]`}</code></pre>
+          <p>
+            If you cannot load mathtools, the old-fashioned way is an <code>array</code> with an
+            invisible right delimiter: <code>{`\\left\\{ \\begin{array}{ll} x^2 & x \\ge 0 \\\\ -x^2 & x < 0 \\end{array} \\right.`}</code>.
+            The <code>cases</code> environment is cleaner and spaces the columns properly.
+          </p>
 
           {/* ------------------------------------------------------------------ */}
           <h2>Matrices</h2>
@@ -558,6 +788,10 @@ As shown in Equation~\\ref{eq:einstein}, energy and mass are equivalent.`}</code
                 <td>Limit</td>
               </tr>
               <tr>
+                <td><code>\begin&#123;cases&#125;</code></td>
+                <td>Piecewise function</td>
+              </tr>
+              <tr>
                 <td><code>\infty</code></td>
                 <td>Infinity symbol</td>
               </tr>
@@ -646,23 +880,154 @@ As shown in Equation~\\ref{eq:einstein}, energy and mass are equivalent.`}</code
             <li><strong><code>\eqref&#123;&#125;</code></strong> – for referencing equations with automatic parentheses</li>
             <li><strong><code>\operatorname&#123;&#125;</code></strong> – for defining custom operator names (e.g. <code>\operatorname&#123;argmax&#125;</code>)</li>
             <li><strong><code>\tag&#123;&#125;</code></strong> – for custom equation labels</li>
+            <li><strong>Root positioning</strong> – <code>\leftroot</code> and <code>\uproot</code></li>
             <li><strong>Improved spacing</strong> – better default spacing around operators and relations</li>
           </ul>
           <p>
             You can also load the companion packages <code>amssymb</code> (extra symbols like
-            <code>\mathbb</code>, <code>\mathfrak</code>) and <code>amsthm</code> (theorem
-            environments). Together they form the AMS-LaTeX bundle:
+            <code>\mathbb</code>, <code>\mathfrak</code>), <code>amsthm</code> (theorem
+            environments) and <code>mathtools</code>, which extends amsmath with{' '}
+            <code>dcases</code>, <code>rcases</code>, <code>psmallmatrix</code> and many fixes:
           </p>
           <pre><code>{`\\usepackage{amsmath}
 \\usepackage{amssymb}
-\\usepackage{amsthm}`}</code></pre>
+\\usepackage{amsthm}
+\\usepackage{mathtools}   % loads amsmath itself`}</code></pre>
+
+          {/* ------------------------------------------------------------------ */}
+          <h2>Common Errors</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>Message or symptom</th>
+                <th>Cause</th>
+                <th>Fix</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><em>Missing $ inserted</em></td>
+                <td>A math command (<code>\frac</code>, <code>^</code>, <code>_</code>, <code>\alpha</code>) in text, or an unclosed <code>$</code></td>
+                <td>Wrap in <code>$...$</code> or <code>\[...\]</code>; check every <code>$</code> has a partner</td>
+              </tr>
+              <tr>
+                <td><em>Display math should end with $$</em></td>
+                <td>A <code>$</code> closes a display opened with <code>\[</code> or <code>$$</code></td>
+                <td>Close <code>\[</code> with <code>\]</code></td>
+              </tr>
+              <tr>
+                <td><em>Bad math environment delimiter</em></td>
+                <td><code>\]</code> without <code>\[</code>, or <code>\[</code> inside <code>$...$</code></td>
+                <td>Match the delimiters; do not nest display math in inline math</td>
+              </tr>
+              <tr>
+                <td><em>Environment cases undefined</em> / <em>dcases undefined</em></td>
+                <td>amsmath (for cases) or mathtools (for dcases, rcases) not loaded</td>
+                <td>Add the package to the preamble</td>
+              </tr>
+              <tr>
+                <td><em>Missing \right. inserted</em> / <em>Extra \right</em></td>
+                <td>Unbalanced <code>\left</code> and <code>\right</code>, or a line break between them in align</td>
+                <td>Pair them on the same line; use <code>\right.</code> for an invisible partner, or <code>\bigl</code>/<code>\bigr</code></td>
+              </tr>
+              <tr>
+                <td><em>Double superscript</em> / <em>Double subscript</em></td>
+                <td><code>x^a^b</code> or <code>x_i_j</code></td>
+                <td>Group: <code>{`x^{ab}`}</code>, <code>{`x_{ij}`}</code></td>
+              </tr>
+              <tr>
+                <td><em>Missing &#123; inserted</em></td>
+                <td>Nothing valid after <code>^</code>, <code>_</code> or <code>\frac</code>; often a missing argument</td>
+                <td>Supply both arguments of <code>\frac</code>, brace the script</td>
+              </tr>
+              <tr>
+                <td><em>Extra alignment tab has been changed to \cr</em></td>
+                <td>Too many <code>&amp;</code> in an <code>align</code> or <code>cases</code> row</td>
+                <td>One <code>&amp;</code> per alignment point; use <code>alignat</code> or <code>aligned</code> for more columns</td>
+              </tr>
+              <tr>
+                <td><em>Misplaced alignment tab character &amp;</em></td>
+                <td><code>&amp;</code> outside align/cases/matrix, e.g. in <code>equation</code></td>
+                <td>Switch to <code>align</code> or <code>split</code>, or write <code>\&amp;</code> for a literal ampersand</td>
+              </tr>
+              <tr>
+                <td><em>Package amsmath Error: \begin&#123;split&#125; won&apos;t work here</em></td>
+                <td><code>split</code> used outside a display environment</td>
+                <td>Put it inside <code>equation</code> or <code>align</code></td>
+              </tr>
+              <tr>
+                <td><em>Undefined control sequence \text</em> / <em>\dfrac</em> / <em>\eqref</em></td>
+                <td>amsmath not loaded</td>
+                <td><code>{`\\usepackage{amsmath}`}</code></td>
+              </tr>
+              <tr>
+                <td>Words in math come out as italic letters run together</td>
+                <td>Plain text typed inside <code>$...$</code></td>
+                <td>Wrap it in <code>\text&#123;...&#125;</code></td>
+              </tr>
+              <tr>
+                <td>Extra space above a display</td>
+                <td>Blank line before <code>\[</code></td>
+                <td>Remove the blank line; a display continues the paragraph</td>
+              </tr>
+            </tbody>
+          </table>
+
+          {/* ------------------------------------------------------------------ */}
+          <h2>Frequently Asked Questions</h2>
+          <h3>How do I write a piecewise function in LaTeX?</h3>
+          <p>
+            Use the <code>cases</code> environment from amsmath inside display math:{' '}
+            <code>{`f(x) = \\begin{cases} x^2 & \\text{if } x \\geq 0 \\\\ -x^2 & \\text{if } x < 0 \\end{cases}`}</code>.
+            The <code>&amp;</code> separates the value from its condition and <code>\\</code>{' '}
+            starts a new case. If the cases contain fractions, use <code>dcases</code> from
+            mathtools so they are set at full size.
+          </p>
+          <h3>What is the difference between $...$ and \[...\]?</h3>
+          <p>
+            <code>$...$</code> is inline math: the formula sits inside the sentence at a compact
+            size. <code>\[...\]</code> is display math: the formula is centred on its own line at
+            full size. Use <code>equation</code> instead of <code>\[...\]</code> when the display
+            needs a number.
+          </p>
+          <h3>Should I use $$...$$ in LaTeX?</h3>
+          <p>
+            No. <code>$$...$$</code> is plain TeX syntax. In LaTeX it ignores the{' '}
+            <code>fleqn</code> class option, gives inconsistent vertical spacing, and is not
+            understood by amsmath. Use <code>\[...\]</code> for an unnumbered display and{' '}
+            <code>equation</code> for a numbered one.
+          </p>
+          <h3>How do I write an nth root in LaTeX?</h3>
+          <p>
+            Give <code>\sqrt</code> an optional argument: <code>{`\\sqrt[3]{x}`}</code> is the cube
+            root and <code>{`\\sqrt[n]{x}`}</code> the nth root. If the index sits too far from the
+            radical, amsmath lets you nudge it with{' '}
+            <code>{`\\sqrt[\\leftroot{-2}\\uproot{2}n]{x}`}</code>.
+          </p>
+          <h3>Why do my fractions look tiny inside a sentence?</h3>
+          <p>
+            Inline math uses text style, which shrinks fractions, sums and integrals to fit the
+            line. Use <code>{`\\dfrac{a}{b}`}</code> or <code>\displaystyle</code> for a full-size
+            fraction inline, or write <code>a/b</code>, which is usually more readable in running
+            text anyway.
+          </p>
+          <h3>What does &ldquo;Missing $ inserted&rdquo; mean?</h3>
+          <p>
+            LaTeX met a math-only command or character (such as <code>^</code>, <code>_</code>,{' '}
+            <code>\frac</code> or <code>\alpha</code>) outside math mode, or an opening{' '}
+            <code>$</code> was never closed. Wrap the expression in <code>$...$</code> or{' '}
+            <code>\[...\]</code>, and check that every <code>$</code> has a partner.
+          </p>
 
           {/* ------------------------------------------------------------------ */}
           <h2>Next Steps</h2>
           <p>Now that you&apos;ve mastered the foundations of mathematical expressions, explore these related topics:</p>
           <ul>
             <li><Link href="/learn/integrals-sums-limits">Integrals, Sums, and Limits in LaTeX</Link> – advanced integral notation, multi-index sums, and limit constructs</li>
+            <li><Link href="/learn/brackets">Brackets and Parentheses in LaTeX</Link> – every delimiter, \left and \right, and manual sizing</li>
+            <li><Link href="/learn/multiline-equations">Multiline Equations</Link> – align, split, multline and breaking long equations</li>
             <li><Link href="/learn/matrices">Matrices in LaTeX</Link> – all matrix environments, augmented matrices, and large matrices</li>
+            <li><Link href="/learn/math-functions">Math Functions</Link> – \sin, \log, \exp and custom operators</li>
             <li><Link href="/learn/greek-letters-math-symbols">Greek Letters and Math Symbols</Link> – complete reference for Greek letters, arrows, set notation, and more</li>
             <li><Link href="/learn/subscripts-superscripts">Subscripts and Superscripts in LaTeX</Link> – nested scripts, multi-character scripts, and combining sub/superscripts</li>
             <li><Link href="/learn/equation-numbering">Equation Numbering and Referencing</Link> – \label, \eqref, cleveref, custom tags, subequations and line breaks in long equations</li>
