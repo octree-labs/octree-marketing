@@ -521,7 +521,7 @@ $\\left[\\frac{x^2}{2}\\right]_0^1$`}</code></pre>
           <h2>Free LaTeX Tools</h2>
           <ul>
             <li><Link href="https://tools.useoctree.com/tools/latex-preview" target="_blank" rel="noopener noreferrer">LaTeX Preview</Link> – Test your integrals, sums, and limits with live preview</li>
-            <li><Link href="https://tools.useoctree.com/tools/latex-equation-editor" target="_blank" rel="noopener noreferrer">LaTeX Equation Editor</Link> – Write and preview math equations visually</li>
+            <li><Link href="https://tools.useoctree.com/tools/math-to-latex" target="_blank" rel="noopener noreferrer">Math to LaTeX Converter</Link> – Turn handwritten or typed math into LaTeX</li>
             <li><Link href="https://tools.useoctree.com/tools/image-to-latex" target="_blank" rel="noopener noreferrer">Image to LaTeX</Link> – Convert handwritten or printed math to LaTeX code</li>
           </ul>
 

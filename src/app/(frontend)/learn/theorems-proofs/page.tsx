@@ -83,8 +83,8 @@ export default async function LaTeXTheoremsProofsPage() {
             The AMS classes (<code>amsart</code>, <code>amsbook</code>) already load{' '}
             <code>amsthm</code>; with any other class you load it yourself. The order matters: if{' '}
             <code>amsmath</code> is loaded <em>after</em> <code>amsthm</code>, the proof
-            environment&apos;s handling of the QED symbol in displayed equations breaks and you
-            may see &ldquo;already defined&rdquo; errors.
+            environment&apos;s handling of the QED symbol in displayed equations breaks
+            (&ldquo;The \qedhere command may not work correctly here&rdquo;).
           </p>
 
           {/* ── Numbering ── */}
@@ -357,7 +357,7 @@ See Theorem~\\ref{thm:pyth}.   % the label is prefix:suffix`}</code></pre>
             Use an empty first argument, <code>{`\\begin{boxthm}{}{pyth}`}</code>, for a theorem with
             no name. tcolorbox theorems have their own counters, so if you mix them with amsthm
             environments, give them the amsthm counter with{' '}
-            <code>use counter from=theorem</code> in the options.
+            <code>use counter*=theorem</code> in the options (<code>use counter=</code> without the star would overwrite amsthm&apos;s numbering format).
           </p>
 
           {/* ── Errors ── */}
@@ -407,7 +407,7 @@ See Theorem~\\ref{thm:pyth}.   % the label is prefix:suffix`}</code></pre>
                 <td><code>{`\\newtheorem{lemma}[theorem]{Lemma}`}</code> to share the theorem counter</td>
               </tr>
               <tr>
-                <td>&ldquo;already defined&rdquo; errors on loading, or wrong QED in equations</td>
+                <td>&ldquo;The \qedhere command may not work correctly here&rdquo;, QED in the wrong place</td>
                 <td><code>amsthm</code> loaded before <code>amsmath</code></td>
                 <td>Load <code>amsmath</code> first, then <code>amsthm</code></td>
               </tr>
@@ -473,7 +473,7 @@ See Theorem~\\ref{thm:pyth}.   % the label is prefix:suffix`}</code></pre>
   There are infinitely many primes.
 \\end{theorem}
 
-\\begin{proof}[Proof of \\cref{thm:euclid}]
+\\begin{proof}[Proof of \\Cref{thm:euclid}]
   Suppose $p_1, \\dots, p_n$ are all the primes and let
   $N = p_1 p_2 \\cdots p_n + 1$. No $p_i$ divides $N$, so $N$ has a
   prime factor not in the list, a contradiction.
@@ -541,7 +541,7 @@ See Theorem~\\ref{thm:pyth}.   % the label is prefix:suffix`}</code></pre>
           <h2>Free LaTeX Tools</h2>
           <ul>
             <li><Link href="https://tools.useoctree.com/tools/latex-preview" target="_blank" rel="noopener noreferrer">LaTeX Preview</Link> &ndash; Test theorem styles with a live PDF preview</li>
-            <li><Link href="https://tools.useoctree.com/tools/latex-equation-editor" target="_blank" rel="noopener noreferrer">LaTeX Equation Editor</Link> &ndash; Write and preview equations visually</li>
+            <li><Link href="https://tools.useoctree.com/tools/math-to-latex" target="_blank" rel="noopener noreferrer">Math to LaTeX Converter</Link> &ndash; Turn handwritten or typed math into LaTeX</li>
             <li><Link href="https://tools.useoctree.com/symbols" target="_blank" rel="noopener noreferrer">LaTeX Symbols Reference</Link> &ndash; Browse math operators and special characters</li>
           </ul>
 

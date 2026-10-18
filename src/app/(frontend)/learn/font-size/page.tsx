@@ -167,12 +167,15 @@ Everything from here on is small...
             One more subtlety: line spacing is decided when a paragraph ends. If you enlarge only
             part of a paragraph, the lines keep the normal baseline skip and the large text may
             collide with the line above. For a whole paragraph in a different size, end the
-            paragraph inside the group with <code>\par</code> or a blank line:
+            paragraph inside the group with <code>\par</code> or a blank line. The environment
+            form does not do this for you either, so leave a blank line before{' '}
+            <code>\end</code>:
           </p>
           <pre><code>{`{\\Large A heading-like paragraph in Large type.\\par}
 
 \\begin{Large}
-The environment form adds the \\par for you.
+The environment form needs the blank line too.
+
 \\end{Large}`}</code></pre>
 
           {/* ── fontsize ── */}
@@ -197,8 +200,9 @@ baseline, and it wraps correctly across lines.\\par}
           <p>
             Units are optional and default to points; <code>{`\\fontsize{14pt}{17pt}`}</code> is the
             same as <code>{`\\fontsize{14}{17}`}</code>. The <code>lmodern</code> line matters: the
-            default Computer Modern fonts exist only at fixed sizes, so a request for 14pt gets
-            substituted with 14.4pt and a warning (see <em>Common Errors</em> below). Latin Modern
+            default Computer Modern fonts exist only at fixed sizes, so a request for 15pt gets
+            substituted with 14.4pt and a warning (see <em>Common Errors</em> below; 14pt is close
+            enough to 14.4pt that LaTeX substitutes it silently). Latin Modern
             is the same design in a scalable format.
           </p>
 
@@ -408,7 +412,7 @@ $\\scriptstyle x + y$                % script-size math`}</code></pre>
             </thead>
             <tbody>
               <tr>
-                <td><em>Font shape `OT1/cmr/m/n&apos; in size &lt;14&gt; not available, size &lt;14.4&gt; substituted</em></td>
+                <td><em>Font shape `OT1/cmr/m/n&apos; in size &lt;15&gt; not available, size &lt;14.4&gt; substituted</em></td>
                 <td>Computer Modern is only available at fixed sizes; <code>\fontsize</code> asked for one in between</td>
                 <td>Load <code>{`\\usepackage{lmodern}`}</code>, or put <code>{`\\RequirePackage{fix-cm}`}</code> before <code>\documentclass</code>, or use <code>anyfontsize</code></td>
               </tr>
@@ -435,7 +439,7 @@ $\\scriptstyle x + y$                % script-size math`}</code></pre>
               <tr>
                 <td>Enlarged words overlap the line above</td>
                 <td>Baseline skip is fixed per paragraph, and the paragraph ended outside the group</td>
-                <td>Put <code>\par</code> inside the group, or use the environment form</td>
+                <td>Put <code>\par</code> or a blank line inside the group (also in the environment form)</td>
               </tr>
               <tr>
                 <td><code>\huge</code> and <code>\Huge</code> look the same</td>
@@ -451,6 +455,7 @@ $\\scriptstyle x + y$                % script-size math`}</code></pre>
 \\usepackage{lmodern}
 \\usepackage[font=small, labelfont=bf]{caption}
 \\usepackage{fancyhdr}
+\\setlength{\\headheight}{14pt}
 \\usepackage{titlesec}
 \\usepackage{relsize}
 
@@ -481,7 +486,8 @@ size.\\footnote{Set in \\texttt{\\textbackslash footnotesize}, 10pt here.}
 
 \\begin{footnotesize}
 A whole paragraph in footnote size, with the matching line spacing,
-because the environment form ends the paragraph inside the group.
+because the blank line ends the paragraph inside the group.
+
 \\end{footnotesize}
 
 \\section{Exact sizes}
