@@ -135,10 +135,10 @@ export default async function LaplaceTransformTablePage() {
           <table>
             <thead>
               <tr>
-                <th>#</th>
-                <th><em>f</em>(<em>t</em>)</th>
-                <th><em>F</em>(<em>s</em>) = &#8466;&#123;<em>f</em>(<em>t</em>)&#125;</th>
-                <th>Converges for</th>
+                <th scope="col">#</th>
+                <th scope="col"><em>f</em>(<em>t</em>)</th>
+                <th scope="col"><em>F</em>(<em>s</em>) = &#8466;&#123;<em>f</em>(<em>t</em>)&#125;</th>
+                <th scope="col">Converges for</th>
               </tr>
             </thead>
             <tbody>
@@ -156,8 +156,8 @@ export default async function LaplaceTransformTablePage() {
               <tr><td>12</td><td>cos(&omega;<em>t</em>)</td><td><em>s</em> / (<em>s</em><sup>2</sup> + &omega;<sup>2</sup>)</td><td>Re <em>s</em> &gt; 0</td></tr>
               <tr><td>13</td><td>sinh(<em>at</em>)</td><td><em>a</em> / (<em>s</em><sup>2</sup> &minus; <em>a</em><sup>2</sup>)</td><td>Re <em>s</em> &gt; |<em>a</em>|</td></tr>
               <tr><td>14</td><td>cosh(<em>at</em>)</td><td><em>s</em> / (<em>s</em><sup>2</sup> &minus; <em>a</em><sup>2</sup>)</td><td>Re <em>s</em> &gt; |<em>a</em>|</td></tr>
-              <tr><td>15</td><td><em>e</em><sup><em>at</em></sup> sin(&omega;<em>t</em>)</td><td>&omega; / ((<em>s</em> &minus; <em>a</em>)<sup>2</sup> + &omega;<sup>2</sup>)</td><td>Re <em>s</em> &gt; <em>a</em></td></tr>
-              <tr><td>16</td><td><em>e</em><sup><em>at</em></sup> cos(&omega;<em>t</em>)</td><td>(<em>s</em> &minus; <em>a</em>) / ((<em>s</em> &minus; <em>a</em>)<sup>2</sup> + &omega;<sup>2</sup>)</td><td>Re <em>s</em> &gt; <em>a</em></td></tr>
+              <tr><td>15</td><td><em>e</em><sup><em>at</em></sup> sin(&omega;<em>t</em>)</td><td>&omega; / ((<em>s</em> &minus; <em>a</em>)<sup>2</sup> + &omega;<sup>2</sup>)</td><td>Re <em>s</em> &gt; Re <em>a</em></td></tr>
+              <tr><td>16</td><td><em>e</em><sup><em>at</em></sup> cos(&omega;<em>t</em>)</td><td>(<em>s</em> &minus; <em>a</em>) / ((<em>s</em> &minus; <em>a</em>)<sup>2</sup> + &omega;<sup>2</sup>)</td><td>Re <em>s</em> &gt; Re <em>a</em></td></tr>
               <tr><td>17</td><td><em>t</em> sin(&omega;<em>t</em>)</td><td>2&omega;<em>s</em> / (<em>s</em><sup>2</sup> + &omega;<sup>2</sup>)<sup>2</sup></td><td>Re <em>s</em> &gt; 0</td></tr>
               <tr><td>18</td><td><em>t</em> cos(&omega;<em>t</em>)</td><td>(<em>s</em><sup>2</sup> &minus; &omega;<sup>2</sup>) / (<em>s</em><sup>2</sup> + &omega;<sup>2</sup>)<sup>2</sup></td><td>Re <em>s</em> &gt; 0</td></tr>
               <tr><td>19</td><td>sin(&omega;<em>t</em>) &minus; &omega;<em>t</em> cos(&omega;<em>t</em>)</td><td>2&omega;<sup>3</sup> / (<em>s</em><sup>2</sup> + &omega;<sup>2</sup>)<sup>2</sup></td><td>Re <em>s</em> &gt; 0</td></tr>
@@ -191,9 +191,9 @@ export default async function LaplaceTransformTablePage() {
           <table>
             <thead>
               <tr>
-                <th>Property</th>
-                <th><em>f</em>(<em>t</em>)</th>
-                <th><em>F</em>(<em>s</em>)</th>
+                <th scope="col">Property</th>
+                <th scope="col"><em>f</em>(<em>t</em>)</th>
+                <th scope="col"><em>F</em>(<em>s</em>)</th>
               </tr>
             </thead>
             <tbody>
@@ -371,8 +371,8 @@ $\\Lap\\{e^{at}\\} = \\dfrac{1}{s-a}$ for $\\re s > \\re a$.
   \\cos(\\omega t) & \\dfrac{s}{s^{2} + \\omega^{2}} & \\re s > 0 \\\\
   \\sinh(at) & \\dfrac{a}{s^{2} - a^{2}} & \\re s > |a| \\\\
   \\cosh(at) & \\dfrac{s}{s^{2} - a^{2}} & \\re s > |a| \\\\
-  e^{at} \\sin(\\omega t) & \\dfrac{\\omega}{(s-a)^{2} + \\omega^{2}} & \\re s > a \\\\
-  e^{at} \\cos(\\omega t) & \\dfrac{s-a}{(s-a)^{2} + \\omega^{2}} & \\re s > a \\\\
+  e^{at} \\sin(\\omega t) & \\dfrac{\\omega}{(s-a)^{2} + \\omega^{2}} & \\re s > \\re a \\\\
+  e^{at} \\cos(\\omega t) & \\dfrac{s-a}{(s-a)^{2} + \\omega^{2}} & \\re s > \\re a \\\\
   t \\sin(\\omega t) & \\dfrac{2 \\omega s}{(s^{2} + \\omega^{2})^{2}} & \\re s > 0 \\\\
   t \\cos(\\omega t) & \\dfrac{s^{2} - \\omega^{2}}{(s^{2} + \\omega^{2})^{2}} & \\re s > 0 \\\\
   \\sin(\\omega t) - \\omega t \\cos(\\omega t) & \\dfrac{2 \\omega^{3}}{(s^{2} + \\omega^{2})^{2}} & \\re s > 0 \\\\
@@ -493,8 +493,8 @@ convergence of $f$.
   \\cos(\\omega t) & \\dfrac{s}{s^{2} + \\omega^{2}} & \\re s > 0 \\\\
   \\sinh(at) & \\dfrac{a}{s^{2} - a^{2}} & \\re s > |a| \\\\
   \\cosh(at) & \\dfrac{s}{s^{2} - a^{2}} & \\re s > |a| \\\\
-  e^{at} \\sin(\\omega t) & \\dfrac{\\omega}{(s-a)^{2} + \\omega^{2}} & \\re s > a \\\\
-  e^{at} \\cos(\\omega t) & \\dfrac{s-a}{(s-a)^{2} + \\omega^{2}} & \\re s > a \\\\
+  e^{at} \\sin(\\omega t) & \\dfrac{\\omega}{(s-a)^{2} + \\omega^{2}} & \\re s > \\re a \\\\
+  e^{at} \\cos(\\omega t) & \\dfrac{s-a}{(s-a)^{2} + \\omega^{2}} & \\re s > \\re a \\\\
   t \\sin(\\omega t) & \\dfrac{2 \\omega s}{(s^{2} + \\omega^{2})^{2}} & \\re s > 0 \\\\
   t \\cos(\\omega t) & \\dfrac{s^{2} - \\omega^{2}}{(s^{2} + \\omega^{2})^{2}} & \\re s > 0 \\\\
   \\sin(\\omega t) - \\omega t \\cos(\\omega t) & \\dfrac{2 \\omega^{3}}{(s^{2} + \\omega^{2})^{2}} & \\re s > 0 \\\\
