@@ -1,6 +1,6 @@
 import type { Metadata } from 'next/types'
 
-import { mergeOpenGraph } from '@/utilities/mergeOpenGraph'
+import { learnMetadata } from '@/utilities/learnMetadata'
 import Link from 'next/link'
 import { buttonVariants } from '@/components/ui/button'
 import React from 'react'
@@ -9,6 +9,7 @@ import {
   getLearnBreadcrumbs,
 } from '@/utilities/generateBreadcrumbs'
 import { RelatedPosts } from '@/components/Learn/related-posts'
+import { LearnSchema } from '@/components/Learn/schema'
 
 export const dynamic = 'force-static'
 export const revalidate = 3600
@@ -16,12 +17,29 @@ export const revalidate = 3600
 const breadcrumbs = getLearnBreadcrumbs('LaTeX Equation Numbering', 'equation-numbering')
 const breadcrumbSchema = generateBreadcrumbSchema(breadcrumbs)
 
+const page = {
+  slug: 'equation-numbering',
+  title: 'LaTeX Equation Numbering and Referencing: \\label, \\eqref, \\tag and align',
+  seoTitle: 'LaTeX Equation Numbering: \\label, \\eqref and \\tag',
+  description: 'How to number and reference equations in LaTeX: equation vs equation*, \\label, \\ref, \\eqref and cleveref \\cref, numbering within sections, custom tags, \\nonumber and \\notag, multi-line equations with align, split, multline and gather, line breaks in long equations, subequations (1a, 1b), left-hand numbers, and common errors.',
+  keywords: 'latex equation numbering, latex reference equation, cite equation latex, latex eqref, latex label equation, latex new line in equation, latex align equation, latex split equation, latex multline, latex nonumber, latex notag, latex tag equation, latex subequations, latex numberwithin, latex equation number left, cleveref equation, latex equation without number, latex line break equation',
+}
+
+/** Last content update, used for dateModified in the article schema. */
+const LAST_UPDATED = '2026-10-17'
+
 export default async function LaTeXEquationNumberingPage() {
   return (
     <div className="pt-24 pb-24">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
+      <LearnSchema
+        slug={page.slug}
+        title={page.title}
+        description={page.description}
+        dateModified={LAST_UPDATED}
       />
       <div className="container">
         <div className="mb-8 max-w-4xl mx-auto">
@@ -626,23 +644,5 @@ is not numbered because it is never referenced; \\cref{eq:binom} is.
 }
 
 export function generateMetadata(): Metadata {
-  return {
-    title: 'LaTeX Equation Numbering and Referencing: \\label, \\eqref, \\tag and align',
-    description: 'How to number and reference equations in LaTeX: equation vs equation*, \\label, \\ref, \\eqref and cleveref \\cref, numbering within sections, custom tags, \\nonumber and \\notag, multi-line equations with align, split, multline and gather, line breaks in long equations, subequations (1a, 1b), left-hand numbers, and common errors.',
-    keywords: 'latex equation numbering, latex reference equation, cite equation latex, latex eqref, latex label equation, latex new line in equation, latex align equation, latex split equation, latex multline, latex nonumber, latex notag, latex tag equation, latex subequations, latex numberwithin, latex equation number left, cleveref equation, latex equation without number, latex line break equation',
-    openGraph: mergeOpenGraph({
-      title: 'LaTeX Equation Numbering and Referencing: \\label, \\eqref, \\tag and align',
-      description: 'Number, reference and break equations in LaTeX: \\label and \\eqref, cleveref, numbering per section, custom tags, align, split, multline and subequations.',
-      type: 'article',
-      url: '/learn/equation-numbering',
-    }),
-    twitter: {
-      card: 'summary_large_image',
-      title: 'LaTeX Equation Numbering and Referencing',
-      description: 'Number, label and reference equations in LaTeX, including multi-line equations with align and split.',
-    },
-    alternates: {
-      canonical: '/learn/equation-numbering',
-    },
-  }
+  return learnMetadata(page)
 }

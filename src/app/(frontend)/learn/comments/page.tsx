@@ -1,6 +1,6 @@
 import type { Metadata } from 'next/types'
 
-import { mergeOpenGraph } from '@/utilities/mergeOpenGraph'
+import { learnMetadata } from '@/utilities/learnMetadata'
 import Link from 'next/link'
 import { buttonVariants } from '@/components/ui/button'
 import React from 'react'
@@ -9,6 +9,7 @@ import {
   getLearnBreadcrumbs,
 } from '@/utilities/generateBreadcrumbs'
 import { RelatedPosts } from '@/components/Learn/related-posts'
+import { LearnSchema } from '@/components/Learn/schema'
 
 export const dynamic = 'force-static'
 export const revalidate = 3600
@@ -16,12 +17,29 @@ export const revalidate = 3600
 const breadcrumbs = getLearnBreadcrumbs('LaTeX Comments', 'comments')
 const breadcrumbSchema = generateBreadcrumbSchema(breadcrumbs)
 
+const page = {
+  slug: 'comments',
+  title: 'LaTeX Comments: Single-Line, Multi-Line and Block Comments',
+  seoTitle: 'LaTeX Comments: Single-Line, Multi-Line and Block',
+  description: 'How to comment in LaTeX: single-line comments with %, multi-line and block comments with the comment package, \\iffalse ... \\fi, commenting out in editors, todo notes with todonotes, and draft/final switches.',
+  keywords: 'latex comment, latex multiline comment, latex comment block, latex comment out, comment environment latex, latex todo notes, latex comment package, latex verbatim comment, latex iffalse, latex percent sign, todonotes, latex block comment, latex comment multiple lines',
+}
+
+/** Last content update, used for dateModified in the article schema. */
+const LAST_UPDATED = '2026-10-17'
+
 export default async function LaTeXCommentsPage() {
   return (
     <div className="pt-24 pb-24">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
+      <LearnSchema
+        slug={page.slug}
+        title={page.title}
+        description={page.description}
+        dateModified={LAST_UPDATED}
       />
       <div className="container">
         <div className="mb-8 max-w-4xl mx-auto">
@@ -443,23 +461,5 @@ We sampled at 22 kHz and used automatic alignment { which never
 }
 
 export function generateMetadata(): Metadata {
-  return {
-    title: 'LaTeX Comments: Single-Line, Multi-Line and Block Comments',
-    description: 'How to comment in LaTeX: single-line comments with %, multi-line and block comments with the comment package, \\iffalse ... \\fi, commenting out in editors, todo notes with todonotes, and draft/final switches.',
-    keywords: 'latex comment, latex multiline comment, latex comment block, latex comment out, comment environment latex, latex todo notes, latex comment package, latex verbatim comment, latex iffalse, latex percent sign, todonotes, latex block comment, latex comment multiple lines',
-    openGraph: mergeOpenGraph({
-      title: 'LaTeX Comments: Single-Line, Multi-Line and Block Comments',
-      description: 'Comments in LaTeX: the % sign, block comments with the comment package and \\iffalse, editor shortcuts, todonotes, and draft/final conditionals.',
-      type: 'article',
-      url: '/learn/comments',
-    }),
-    twitter: {
-      card: 'summary_large_image',
-      title: 'LaTeX Comments: Single-Line and Block Comments',
-      description: 'Comment out one line or a whole block in LaTeX, add todo notes, and keep drafts out of the final PDF.',
-    },
-    alternates: {
-      canonical: '/learn/comments',
-    },
-  }
+  return learnMetadata(page)
 }

@@ -1,6 +1,6 @@
 import type { Metadata } from 'next/types'
 
-import { mergeOpenGraph } from '@/utilities/mergeOpenGraph'
+import { learnMetadata } from '@/utilities/learnMetadata'
 import Link from 'next/link'
 import { buttonVariants } from '@/components/ui/button'
 import React from 'react'
@@ -9,6 +9,7 @@ import {
   getLearnBreadcrumbs,
 } from '@/utilities/generateBreadcrumbs'
 import { RelatedPosts } from '@/components/Learn/related-posts'
+import { LearnSchema } from '@/components/Learn/schema'
 
 export const dynamic = 'force-static'
 export const revalidate = 3600
@@ -16,12 +17,29 @@ export const revalidate = 3600
 const breadcrumbs = getLearnBreadcrumbs('LaTeX Font Size', 'font-size')
 const breadcrumbSchema = generateBreadcrumbSchema(breadcrumbs)
 
+const page = {
+  slug: 'font-size',
+  title: 'LaTeX Font Size: Commands, Document Options and \\fontsize',
+  seoTitle: 'LaTeX Font Size: Commands, Options and \\fontsize',
+  description: 'How to change font size in LaTeX: the ten size commands from \\tiny to \\Huge with their point sizes, the 10pt/11pt/12pt class options and extsizes, exact sizes with \\fontsize and \\selectfont, sizing captions, footnotes, headers and section titles, font size in math and Beamer, and fixing "font shape not available" warnings.',
+  keywords: 'latex font size, fontsize latex, latex text sizes, latex font size command, latex change font size, latex tiny, latex huge, latex large, latex small, latex fontsize selectfont, latex 14pt, extsizes, extarticle, latex caption font size, latex footnote size, latex section font size, latex math font size, beamer font size, relsize, latex font shape not available',
+}
+
+/** Last content update, used for dateModified in the article schema. */
+const LAST_UPDATED = '2026-10-17'
+
 export default async function LaTeXFontSizePage() {
   return (
     <div className="pt-24 pb-24">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
+      <LearnSchema
+        slug={page.slug}
+        title={page.title}
+        description={page.description}
+        dateModified={LAST_UPDATED}
       />
       <div className="container">
         <div className="mb-8 max-w-4xl mx-auto">
@@ -587,23 +605,5 @@ $\\displaystyle \\sum_{k=1}^{n} k = \\frac{n(n+1)}{2}$ with display-size limits.
 }
 
 export function generateMetadata(): Metadata {
-  return {
-    title: 'LaTeX Font Size: Commands, Document Options and \\fontsize',
-    description: 'How to change font size in LaTeX: the ten size commands from \\tiny to \\Huge with their point sizes, the 10pt/11pt/12pt class options and extsizes, exact sizes with \\fontsize and \\selectfont, sizing captions, footnotes, headers and section titles, font size in math and Beamer, and fixing "font shape not available" warnings.',
-    keywords: 'latex font size, fontsize latex, latex text sizes, latex font size command, latex change font size, latex tiny, latex huge, latex large, latex small, latex fontsize selectfont, latex 14pt, extsizes, extarticle, latex caption font size, latex footnote size, latex section font size, latex math font size, beamer font size, relsize, latex font shape not available',
-    openGraph: mergeOpenGraph({
-      title: 'LaTeX Font Size: Commands, Document Options and \\fontsize',
-      description: 'Every way to set font size in LaTeX: \\tiny to \\Huge with exact point sizes, class options, extsizes, \\fontsize, element-specific sizes, math and Beamer.',
-      type: 'article',
-      url: '/learn/font-size',
-    }),
-    twitter: {
-      card: 'summary_large_image',
-      title: 'LaTeX Font Size Commands',
-      description: 'Change font size in LaTeX with \\tiny to \\Huge, class options and \\fontsize.',
-    },
-    alternates: {
-      canonical: '/learn/font-size',
-    },
-  }
+  return learnMetadata(page)
 }

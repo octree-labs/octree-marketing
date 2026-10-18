@@ -1,6 +1,6 @@
 import type { Metadata } from 'next/types'
 
-import { mergeOpenGraph } from '@/utilities/mergeOpenGraph'
+import { learnMetadata } from '@/utilities/learnMetadata'
 import Link from 'next/link'
 import { buttonVariants } from '@/components/ui/button'
 import React from 'react'
@@ -9,6 +9,7 @@ import {
   getLearnBreadcrumbs,
 } from '@/utilities/generateBreadcrumbs'
 import { RelatedPosts } from '@/components/Learn/related-posts'
+import { LearnSchema } from '@/components/Learn/schema'
 
 export const dynamic = 'force-static'
 export const revalidate = 3600
@@ -16,12 +17,29 @@ export const revalidate = 3600
 const breadcrumbs = getLearnBreadcrumbs('Greek Letters & Math Symbols', 'greek-letters-math-symbols')
 const breadcrumbSchema = generateBreadcrumbSchema(breadcrumbs)
 
+const page = {
+  slug: 'greek-letters-math-symbols',
+  title: 'Greek Letters and Math Symbols in LaTeX – Complete Reference 2026',
+  seoTitle: 'Greek Letters & Math Symbols in LaTeX – Reference',
+  description: 'Complete reference for Greek letters and math symbols in LaTeX. Find every symbol: alpha, beta, gamma, delta, infinity, arrows, operators, relations, and more with copy-paste LaTeX commands.',
+  keywords: 'latex greek letters, latex alpha, latex beta, latex gamma, latex delta, latex symbols, latex math symbols, latex infinity, latex arrow, latex operators, latex relations, latex degree symbol, latex pi, latex theta, latex sigma, latex omega, latex lambda, latex epsilon, latex phi, latex psi, latex mu, latex nabla, latex partial, latex forall, latex exists',
+}
+
+/** Last content update, used for dateModified in the article schema. */
+const LAST_UPDATED = '2026-10-17'
+
 export default async function GreekLettersMathSymbolsPage() {
   return (
     <div className="pt-24 pb-24">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
+      <LearnSchema
+        slug={page.slug}
+        title={page.title}
+        description={page.description}
+        dateModified={LAST_UPDATED}
       />
       <div className="container">
         <div className="mb-8 max-w-4xl mx-auto">
@@ -616,23 +634,5 @@ $\\nexists \\, x \\in \\mathbb{R} : x^2 < 0$`}</code></pre>
 }
 
 export function generateMetadata(): Metadata {
-  return {
-    title: 'Greek Letters and Math Symbols in LaTeX – Complete Reference 2026',
-    description: 'Complete reference for Greek letters and math symbols in LaTeX. Find every symbol: alpha, beta, gamma, delta, infinity, arrows, operators, relations, and more with copy-paste LaTeX commands.',
-    keywords: 'latex greek letters, latex alpha, latex beta, latex gamma, latex delta, latex symbols, latex math symbols, latex infinity, latex arrow, latex operators, latex relations, latex degree symbol, latex pi, latex theta, latex sigma, latex omega, latex lambda, latex epsilon, latex phi, latex psi, latex mu, latex nabla, latex partial, latex forall, latex exists',
-    openGraph: mergeOpenGraph({
-      title: 'Greek Letters and Math Symbols in LaTeX – Complete Reference 2026',
-      description: 'Find every Greek letter and math symbol in LaTeX with copy-paste commands.',
-      type: 'article',
-      url: '/learn/greek-letters-math-symbols',
-    }),
-    twitter: {
-      card: 'summary_large_image',
-      title: 'Greek Letters and Math Symbols in LaTeX',
-      description: 'Complete LaTeX symbol reference: Greek letters, operators, arrows, relations.',
-    },
-    alternates: {
-      canonical: '/learn/greek-letters-math-symbols',
-    },
-  }
+  return learnMetadata(page)
 }

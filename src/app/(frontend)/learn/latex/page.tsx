@@ -1,4 +1,6 @@
 import type { Metadata } from 'next/types'
+
+import { learnMetadata } from '@/utilities/learnMetadata'
 import Link from 'next/link'
 import { buttonVariants } from '@/components/ui/button'
 import React from 'react'
@@ -7,6 +9,7 @@ import {
   getLearnBreadcrumbs,
 } from '@/utilities/generateBreadcrumbs'
 import { RelatedPosts } from '@/components/Learn/related-posts'
+import { LearnSchema } from '@/components/Learn/schema'
 
 export const dynamic = 'force-static'
 export const revalidate = 3600
@@ -14,12 +17,28 @@ export const revalidate = 3600
 const breadcrumbs = getLearnBreadcrumbs('Learn LaTeX', 'latex')
 const breadcrumbSchema = generateBreadcrumbSchema(breadcrumbs)
 
+const page = {
+  slug: 'latex',
+  title: 'Learn LaTeX – Complete Beginner Tutorial 2025',
+  description: 'Master LaTeX from scratch with this free comprehensive guide. Learn document structure, text formatting, mathematical equations, figures, tables, citations, and bibliography management.',
+  keywords: 'latex matrix, latex table generator, latex fractions, latex summation, latex math symbols, latex integral, latex greek letters, latex equations, latex subfigures, how to write latex, latex bibliography, latex figure placement, latex align equations, overleaf tutorial, latex beamer presentation, latex book template, latex poster template, latex resume template, latex cv template, latex thesis template, latex report template, latex letter template, latex booktabs, latex multicolumn table, latex vs word, bibtex tutorial, latex apa citation, latex for thesis, latex for research papers',
+}
+
+/** Last content update, used for dateModified in the article schema. */
+const LAST_UPDATED = '2026-10-17'
+
 export default async function LearnLatexPage() {
   return (
     <div className="pt-24 pb-24">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
+      <LearnSchema
+        slug={page.slug}
+        title={page.title}
+        description={page.description}
+        dateModified={LAST_UPDATED}
       />
       <div className="container">
         <div className="mb-8 max-w-4xl mx-auto">
@@ -267,24 +286,6 @@ As shown by Einstein~\\cite{einstein1905}...
 }
 
 export function generateMetadata(): Metadata {
-  return {
-    title: 'Learn LaTeX – Complete Beginner Tutorial 2025',
-    description: 'Master LaTeX from scratch with this free comprehensive guide. Learn document structure, text formatting, mathematical equations, figures, tables, citations, and bibliography management.',
-    keywords: 'latex matrix, latex table generator, latex fractions, latex summation, latex math symbols, latex integral, latex greek letters, latex equations, latex subfigures, how to write latex, latex bibliography, latex figure placement, latex align equations, overleaf tutorial, latex beamer presentation, latex book template, latex poster template, latex resume template, latex cv template, latex thesis template, latex report template, latex letter template, latex booktabs, latex multicolumn table, latex vs word, bibtex tutorial, latex apa citation, latex for thesis, latex for research papers',
-    openGraph: {
-      title: 'Learn LaTeX – Complete Beginner Tutorial 2025',
-      description: 'Master LaTeX from scratch. Free comprehensive guide covering document structure, math equations, figures, tables, and citations.',
-      type: 'article',
-      url: '/learn/latex',
-    },
-    twitter: {
-      card: 'summary_large_image',
-      title: 'Learn LaTeX – Complete Beginner Tutorial',
-      description: 'Free comprehensive LaTeX tutorial. Master document typesetting, math equations, and academic writing.',
-    },
-    alternates: {
-      canonical: '/learn/latex',
-    },
-  }
+  return learnMetadata(page)
 }
 

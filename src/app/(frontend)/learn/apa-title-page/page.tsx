@@ -1,6 +1,6 @@
 import type { Metadata } from 'next/types'
 
-import { mergeOpenGraph } from '@/utilities/mergeOpenGraph'
+import { learnMetadata, type FaqItem } from '@/utilities/learnMetadata'
 import Link from 'next/link'
 import { buttonVariants } from '@/components/ui/button'
 import React from 'react'
@@ -9,6 +9,7 @@ import {
   getLearnBreadcrumbs,
 } from '@/utilities/generateBreadcrumbs'
 import { RelatedPosts } from '@/components/Learn/related-posts'
+import { LearnSchema } from '@/components/Learn/schema'
 
 export const dynamic = 'force-static'
 export const revalidate = 3600
@@ -16,12 +17,63 @@ export const revalidate = 3600
 const breadcrumbs = getLearnBreadcrumbs('APA Title Page', 'apa-title-page')
 const breadcrumbSchema = generateBreadcrumbSchema(breadcrumbs)
 
+const page = {
+  slug: 'apa-title-page',
+  title: 'APA Title Page Format (7th Edition): Student and Professional Examples',
+  seoTitle: 'APA Title Page Format (7th Edition) + Examples',
+  description: 'How to format an APA 7 title page: exact elements and order for student and professional papers, fonts, margins, spacing, running head rules, two full examples, and complete LaTeX (apa7), Word, and Google Docs instructions.',
+  keywords: 'apa title page format, apa format title page, apa title page example, apa 7 title page, apa cover page, apa title page latex, apa 7th edition title page, apa student title page, apa professional title page, apa running head, apa7 latex class, apa title page word, apa title page google docs',
+}
+
+/** Last content update, used for dateModified in the article schema. */
+const LAST_UPDATED = '2026-10-17'
+
+const faq: FaqItem[] = [
+  {
+    question: 'Is an APA cover page the same as an APA title page?',
+    answer:
+      'Yes. "Cover page" is the informal name; the Publication Manual calls it the title page. There is no separate cover sheet in APA style.',
+  },
+  {
+    question: 'Does APA 7 require a running head?',
+    answer:
+      'Only for professional papers. Student papers omit it. If your instructor asks for one, format it the professional way: uppercase, at most 50 characters, flush left on every page, without the words "Running head".',
+  },
+  {
+    question: 'Does the title page count as page 1?',
+    answer:
+      'Yes. Numbering starts at 1 on the title page and continues through the abstract, body, references, and appendices.',
+  },
+  {
+    question: 'What if the authors have different affiliations?',
+    answer:
+      "Use superscript numerals after each author's name and list each affiliation on its own line, preceded by the matching numeral. If every author shares one affiliation, no numerals are needed.",
+  },
+  {
+    question: 'Can I use Arial or Calibri instead of Times New Roman?',
+    answer:
+      'Yes. APA 7 accepts 11-pt Arial, 11-pt Calibri, 11-pt Georgia, 10-pt Lucida Sans Unicode, 10-pt Computer Modern, and 12-pt Times New Roman. Use the same font for the whole paper.',
+  },
+  {
+    question: 'Do I need an abstract after the title page?',
+    answer:
+      'Professional papers always include an abstract on page 2. Student papers include one only if the assignment asks for it. In apa7, the abstract is printed automatically when you supply \\abstract{...}.',
+  },
+]
+
 export default async function ApaTitlePagePage() {
   return (
     <div className="pt-24 pb-24">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
+      <LearnSchema
+        slug={page.slug}
+        title={page.title}
+        description={page.description}
+        dateModified={LAST_UPDATED}
+        faq={faq}
       />
       <div className="container">
         <div className="mb-8 max-w-4xl mx-auto">
@@ -392,23 +444,5 @@ undergraduates \\parencite{lim2010}.
 }
 
 export function generateMetadata(): Metadata {
-  return {
-    title: 'APA Title Page Format (7th Edition): Student and Professional Examples',
-    description: 'How to format an APA 7 title page: exact elements and order for student and professional papers, fonts, margins, spacing, running head rules, two full examples, and complete LaTeX (apa7), Word, and Google Docs instructions.',
-    keywords: 'apa title page format, apa format title page, apa title page example, apa 7 title page, apa cover page, apa title page latex, apa 7th edition title page, apa student title page, apa professional title page, apa running head, apa7 latex class, apa title page word, apa title page google docs',
-    openGraph: mergeOpenGraph({
-      title: 'APA Title Page Format (7th Edition): Student and Professional Examples',
-      description: 'Exact APA 7 title page elements, formatting rules, worked examples, and LaTeX, Word, and Google Docs instructions.',
-      type: 'article',
-      url: '/learn/apa-title-page',
-    }),
-    twitter: {
-      card: 'summary_large_image',
-      title: 'APA Title Page Format (7th Edition)',
-      description: 'Student and professional APA 7 title page examples with LaTeX, Word, and Google Docs how-tos.',
-    },
-    alternates: {
-      canonical: '/learn/apa-title-page',
-    },
-  }
+  return learnMetadata(page)
 }

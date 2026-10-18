@@ -1,4 +1,6 @@
 import type { Metadata } from 'next/types'
+
+import { learnMetadata } from '@/utilities/learnMetadata'
 import Link from 'next/link'
 import { buttonVariants } from '@/components/ui/button'
 import React from 'react'
@@ -7,6 +9,7 @@ import {
   getLearnBreadcrumbs,
 } from '@/utilities/generateBreadcrumbs'
 import { RelatedPosts } from '@/components/Learn/related-posts'
+import { LearnSchema } from '@/components/Learn/schema'
 
 export const dynamic = 'force-static'
 export const revalidate = 3600
@@ -14,12 +17,28 @@ export const revalidate = 3600
 const breadcrumbs = getLearnBreadcrumbs('Using Colors', 'colors')
 const breadcrumbSchema = generateBreadcrumbSchema(breadcrumbs)
 
+const page = {
+  slug: 'colors',
+  title: 'Using Colors in LaTeX – xcolor Package Guide 2026',
+  description: 'Learn how to use colors in LaTeX with the xcolor package. Guide covers text color, background color, custom colors, color mixing, colored tables, and the dvipsnames palette.',
+  keywords: 'latex color, latex text color, xcolor latex, latex textcolor, latex definecolor, latex color names, latex background color, latex colorbox, latex color mixing, latex dvipsnames, latex colored text, latex rgb color, latex highlight text',
+}
+
+/** Last content update, used for dateModified in the article schema. */
+const LAST_UPDATED = '2026-10-17'
+
 export default async function LearnColorsPage() {
   return (
     <div className="pt-24 pb-24">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
+      <LearnSchema
+        slug={page.slug}
+        title={page.title}
+        description={page.description}
+        dateModified={LAST_UPDATED}
       />
       <div className="container">
         <div className="mb-8 max-w-4xl mx-auto">
@@ -644,23 +663,5 @@ Normal text, {\\color{green} green text here}, back to normal.
 }
 
 export function generateMetadata(): Metadata {
-  return {
-    title: 'Using Colors in LaTeX – xcolor Package Guide 2026',
-    description: 'Learn how to use colors in LaTeX with the xcolor package. Guide covers text color, background color, custom colors, color mixing, colored tables, and the dvipsnames palette.',
-    keywords: 'latex color, latex text color, xcolor latex, latex textcolor, latex definecolor, latex color names, latex background color, latex colorbox, latex color mixing, latex dvipsnames, latex colored text, latex rgb color, latex highlight text',
-    openGraph: {
-      title: 'Using Colors in LaTeX – xcolor Package Guide 2026',
-      description: 'Complete guide to using colors in LaTeX with xcolor package.',
-      type: 'article',
-      url: '/learn/colors',
-    },
-    twitter: {
-      card: 'summary_large_image',
-      title: 'Using Colors in LaTeX',
-      description: 'Learn to use colors in LaTeX: text color, backgrounds, custom colors, and more.',
-    },
-    alternates: {
-      canonical: '/learn/colors',
-    },
-  }
+  return learnMetadata(page)
 }

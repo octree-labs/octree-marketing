@@ -1,6 +1,6 @@
 import type { Metadata } from 'next/types'
 
-import { mergeOpenGraph } from '@/utilities/mergeOpenGraph'
+import { learnMetadata } from '@/utilities/learnMetadata'
 import Link from 'next/link'
 import { buttonVariants } from '@/components/ui/button'
 import React from 'react'
@@ -9,6 +9,7 @@ import {
   getLearnBreadcrumbs,
 } from '@/utilities/generateBreadcrumbs'
 import { RelatedPosts } from '@/components/Learn/related-posts'
+import { LearnSchema } from '@/components/Learn/schema'
 
 export const dynamic = 'force-static'
 export const revalidate = 3600
@@ -16,12 +17,28 @@ export const revalidate = 3600
 const breadcrumbs = getLearnBreadcrumbs('Bold, Italics & Underline', 'bold-italics-underline')
 const breadcrumbSchema = generateBreadcrumbSchema(breadcrumbs)
 
+const page = {
+  slug: 'bold-italics-underline',
+  title: 'Bold, Italics and Underlining in LaTeX – Guide 2026',
+  description: 'Learn how to use bold, italic, and underline text in LaTeX. Complete guide covering \\textbf, \\textit, \\underline, \\emph, and advanced formatting with soul and ulem packages.',
+  keywords: 'latex bold, latex italic, latex underline, textbf latex, textit latex, emph latex, latex text formatting, bold text in latex, italic text in latex, underline in latex, latex font styles, latex emphasis',
+}
+
+/** Last content update, used for dateModified in the article schema. */
+const LAST_UPDATED = '2026-10-17'
+
 export default async function BoldItalicsUnderlinePage() {
   return (
     <div className="pt-24 pb-24">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
+      <LearnSchema
+        slug={page.slug}
+        title={page.title}
+        description={page.description}
+        dateModified={LAST_UPDATED}
       />
       <div className="container">
         <div className="mb-8 max-w-4xl mx-auto">
@@ -662,23 +679,5 @@ $ \\bm{\\alpha} $          % Also produces bold alpha`}</code></pre>
 }
 
 export function generateMetadata(): Metadata {
-  return {
-    title: 'Bold, Italics and Underlining in LaTeX – Guide 2026',
-    description: 'Learn how to use bold, italic, and underline text in LaTeX. Complete guide covering \\textbf, \\textit, \\underline, \\emph, and advanced formatting with soul and ulem packages.',
-    keywords: 'latex bold, latex italic, latex underline, textbf latex, textit latex, emph latex, latex text formatting, bold text in latex, italic text in latex, underline in latex, latex font styles, latex emphasis',
-    openGraph: mergeOpenGraph({
-      title: 'Bold, Italics and Underlining in LaTeX – Guide 2026',
-      description: 'Complete guide to bold, italic, and underline text formatting in LaTeX with examples.',
-      type: 'article',
-      url: '/learn/bold-italics-underline',
-    }),
-    twitter: {
-      card: 'summary_large_image',
-      title: 'Bold, Italics and Underlining in LaTeX',
-      description: 'Learn bold, italic, and underline formatting in LaTeX with practical examples.',
-    },
-    alternates: {
-      canonical: '/learn/bold-italics-underline',
-    },
-  }
+  return learnMetadata(page)
 }

@@ -1,6 +1,6 @@
 import type { Metadata } from 'next/types'
 
-import { mergeOpenGraph } from '@/utilities/mergeOpenGraph'
+import { learnMetadata } from '@/utilities/learnMetadata'
 import Link from 'next/link'
 import { buttonVariants } from '@/components/ui/button'
 import React from 'react'
@@ -9,6 +9,7 @@ import {
   getLearnBreadcrumbs,
 } from '@/utilities/generateBreadcrumbs'
 import { RelatedPosts } from '@/components/Learn/related-posts'
+import { LearnSchema } from '@/components/Learn/schema'
 
 export const dynamic = 'force-static'
 export const revalidate = 3600
@@ -16,12 +17,28 @@ export const revalidate = 3600
 const breadcrumbs = getLearnBreadcrumbs('LaTeX Tables', 'tables')
 const breadcrumbSchema = generateBreadcrumbSchema(breadcrumbs)
 
+const page = {
+  slug: 'tables',
+  title: 'LaTeX Tables \u2013 Complete Guide 2026',
+  description: 'How to make a table in LaTeX: the tabular environment and table float with caption and label, booktabs rules, multicolumn and multirow, column widths with p/m/b and tabularx, float placement, landscape and multi-page tables, colored rows, decimal alignment with siunitx, footnotes in tables, and fixes for common tabular errors.',
+  keywords: 'table in latex, tabular in latex, latex table, latex tabular, how to make a table in latex, latex booktabs, latex multicolumn, latex multirow, latex table generator, latex longtable, latex hline, latex table width, latex tabularx, create table in latex, latex table example, latex table formatting, latex colored table, latex landscape table, latex sidewaystable, latex table caption, latex table placement, latex siunitx table, misplaced noalign, extra alignment tab',
+}
+
+/** Last content update, used for dateModified in the article schema. */
+const LAST_UPDATED = '2026-10-17'
+
 export default async function TablesPage() {
   return (
     <div className="pt-24 pb-24">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
+      <LearnSchema
+        slug={page.slug}
+        title={page.title}
+        description={page.description}
+        dateModified={LAST_UPDATED}
       />
       <div className="container">
         <div className="mb-8 max-w-4xl mx-auto">
@@ -1242,23 +1259,5 @@ As shown in \\cref{tab:summary} ...         % table 1
 }
 
 export function generateMetadata(): Metadata {
-  return {
-    title: 'LaTeX Tables \u2013 Complete Guide 2026',
-    description: 'How to make a table in LaTeX: the tabular environment and table float with caption and label, booktabs rules, multicolumn and multirow, column widths with p/m/b and tabularx, float placement, landscape and multi-page tables, colored rows, decimal alignment with siunitx, footnotes in tables, and fixes for common tabular errors.',
-    keywords: 'table in latex, tabular in latex, latex table, latex tabular, how to make a table in latex, latex booktabs, latex multicolumn, latex multirow, latex table generator, latex longtable, latex hline, latex table width, latex tabularx, create table in latex, latex table example, latex table formatting, latex colored table, latex landscape table, latex sidewaystable, latex table caption, latex table placement, latex siunitx table, misplaced noalign, extra alignment tab',
-    openGraph: mergeOpenGraph({
-      title: 'LaTeX Tables \u2013 Complete Guide 2026',
-      description: 'Complete guide to creating professional tables in LaTeX.',
-      type: 'article',
-      url: '/learn/tables',
-    }),
-    twitter: {
-      card: 'summary_large_image',
-      title: 'LaTeX Tables \u2013 Complete Guide',
-      description: 'Learn to create professional tables in LaTeX with booktabs and more.',
-    },
-    alternates: {
-      canonical: '/learn/tables',
-    },
-  }
+  return learnMetadata(page)
 }

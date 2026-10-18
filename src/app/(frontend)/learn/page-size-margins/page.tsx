@@ -1,6 +1,6 @@
 import type { Metadata } from 'next/types'
 
-import { mergeOpenGraph } from '@/utilities/mergeOpenGraph'
+import { learnMetadata } from '@/utilities/learnMetadata'
 import Link from 'next/link'
 import { buttonVariants } from '@/components/ui/button'
 import React from 'react'
@@ -9,6 +9,7 @@ import {
   getLearnBreadcrumbs,
 } from '@/utilities/generateBreadcrumbs'
 import { RelatedPosts } from '@/components/Learn/related-posts'
+import { LearnSchema } from '@/components/Learn/schema'
 
 export const dynamic = 'force-static'
 export const revalidate = 3600
@@ -16,12 +17,28 @@ export const revalidate = 3600
 const breadcrumbs = getLearnBreadcrumbs('Page Size & Margins', 'page-size-margins')
 const breadcrumbSchema = generateBreadcrumbSchema(breadcrumbs)
 
+const page = {
+  slug: 'page-size-margins',
+  title: 'Page Size and Margins in LaTeX – Guide 2026',
+  description: 'Learn how to set page size and margins in LaTeX using the geometry package. Complete guide covering A4, letter, custom sizes, margin settings, landscape mode, and layout options.',
+  keywords: 'latex page size, latex margins, latex geometry package, latex a4 paper, latex letter size, latex page layout, latex margin settings, latex landscape, latex page dimensions, set margins in latex, latex paper size',
+}
+
+/** Last content update, used for dateModified in the article schema. */
+const LAST_UPDATED = '2026-10-17'
+
 export default async function PageSizeMarginsPage() {
   return (
     <div className="pt-24 pb-24">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
+      <LearnSchema
+        slug={page.slug}
+        title={page.title}
+        description={page.description}
+        dateModified={LAST_UPDATED}
       />
       <div className="container">
         <div className="mb-8 max-w-4xl mx-auto">
@@ -592,23 +609,5 @@ Margins are back to the original 1-inch setting.
 }
 
 export function generateMetadata(): Metadata {
-  return {
-    title: 'Page Size and Margins in LaTeX – Guide 2026',
-    description: 'Learn how to set page size and margins in LaTeX using the geometry package. Complete guide covering A4, letter, custom sizes, margin settings, landscape mode, and layout options.',
-    keywords: 'latex page size, latex margins, latex geometry package, latex a4 paper, latex letter size, latex page layout, latex margin settings, latex landscape, latex page dimensions, set margins in latex, latex paper size',
-    openGraph: mergeOpenGraph({
-      title: 'Page Size and Margins in LaTeX – Guide 2026',
-      description: 'Complete guide to page size and margin settings in LaTeX with the geometry package.',
-      type: 'article',
-      url: '/learn/page-size-margins',
-    }),
-    twitter: {
-      card: 'summary_large_image',
-      title: 'Page Size and Margins in LaTeX',
-      description: 'Learn to set page size and margins in LaTeX with the geometry package.',
-    },
-    alternates: {
-      canonical: '/learn/page-size-margins',
-    },
-  }
+  return learnMetadata(page)
 }

@@ -1,6 +1,6 @@
 import type { Metadata } from 'next/types'
 
-import { mergeOpenGraph } from '@/utilities/mergeOpenGraph'
+import { learnMetadata } from '@/utilities/learnMetadata'
 import Link from 'next/link'
 import { buttonVariants } from '@/components/ui/button'
 import React from 'react'
@@ -9,6 +9,7 @@ import {
   getLearnBreadcrumbs,
 } from '@/utilities/generateBreadcrumbs'
 import { RelatedPosts } from '@/components/Learn/related-posts'
+import { LearnSchema } from '@/components/Learn/schema'
 
 export const dynamic = 'force-static'
 export const revalidate = 3600
@@ -16,12 +17,29 @@ export const revalidate = 3600
 const breadcrumbs = getLearnBreadcrumbs('Learn PGFPlots', 'pgfplots')
 const breadcrumbSchema = generateBreadcrumbSchema(breadcrumbs)
 
+const page = {
+  slug: 'pgfplots',
+  title: 'Learn PGFPlots – Create Plots in LaTeX Tutorial 2025',
+  seoTitle: 'Learn PGFPlots – Create Plots in LaTeX Tutorial',
+  description: 'Create publication-quality plots and charts in LaTeX with PGFPlots. Free tutorial covering line plots, bar charts, scatter plots, 3D surfaces, error bars, and CSV data import.',
+  keywords: 'pgfplots histogram, pgfplots multiple plots, pgfplots legend, pgfplots from csv, pgfplots axis labels, learn pgfplots, pgfplots tutorial, pgfplots examples, latex plots, latex graphs, latex charts, pgfplots bar chart, pgfplots scatter plot, pgfplots 3d, latex data visualization',
+}
+
+/** Last content update, used for dateModified in the article schema. */
+const LAST_UPDATED = '2026-10-17'
+
 export default async function LearnPgfplotsPage() {
   return (
     <div className="pt-24 pb-24">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
+      <LearnSchema
+        slug={page.slug}
+        title={page.title}
+        description={page.description}
+        dateModified={LAST_UPDATED}
       />
       <div className="container">
         <div className="mb-8 max-w-4xl mx-auto">
@@ -300,24 +318,6 @@ export default async function LearnPgfplotsPage() {
 }
 
 export function generateMetadata(): Metadata {
-  return {
-    title: 'Learn PGFPlots – Create Plots in LaTeX Tutorial 2025',
-    description: 'Create publication-quality plots and charts in LaTeX with PGFPlots. Free tutorial covering line plots, bar charts, scatter plots, 3D surfaces, error bars, and CSV data import.',
-    keywords: 'pgfplots histogram, pgfplots multiple plots, pgfplots legend, pgfplots from csv, pgfplots axis labels, learn pgfplots, pgfplots tutorial, pgfplots examples, latex plots, latex graphs, latex charts, pgfplots bar chart, pgfplots scatter plot, pgfplots 3d, latex data visualization',
-    openGraph: mergeOpenGraph({
-      title: 'Learn PGFPlots – Create Plots in LaTeX Tutorial 2025',
-      description: 'Create publication-quality plots and charts in LaTeX with PGFPlots. Free comprehensive tutorial.',
-      type: 'article',
-      url: '/learn/pgfplots',
-    }),
-    twitter: {
-      card: 'summary_large_image',
-      title: 'Learn PGFPlots – Create Plots in LaTeX',
-      description: 'Free PGFPlots tutorial. Create publication-quality data visualizations in LaTeX.',
-    },
-    alternates: {
-      canonical: '/learn/pgfplots',
-    },
-  }
+  return learnMetadata(page)
 }
 

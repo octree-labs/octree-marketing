@@ -1,6 +1,6 @@
 import type { Metadata } from 'next/types'
 
-import { mergeOpenGraph } from '@/utilities/mergeOpenGraph'
+import { learnMetadata } from '@/utilities/learnMetadata'
 import Link from 'next/link'
 import { buttonVariants } from '@/components/ui/button'
 import React from 'react'
@@ -9,6 +9,7 @@ import {
   getLearnBreadcrumbs,
 } from '@/utilities/generateBreadcrumbs'
 import { RelatedPosts } from '@/components/Learn/related-posts'
+import { LearnSchema } from '@/components/Learn/schema'
 
 export const dynamic = 'force-static'
 export const revalidate = 3600
@@ -16,12 +17,29 @@ export const revalidate = 3600
 const breadcrumbs = getLearnBreadcrumbs('LaTeX Quotation Marks and Quotes', 'quotes')
 const breadcrumbSchema = generateBreadcrumbSchema(breadcrumbs)
 
+const page = {
+  slug: 'quotes',
+  title: "LaTeX Quotation Marks and Quotes: `` '', csquotes and Block Quotes",
+  seoTitle: "LaTeX Quotation Marks: `` '' and csquotes",
+  description: 'How to write quotation marks in LaTeX: why "text" renders wrong, the ``double\'\' and `single\' convention, nested quotes, the csquotes package with \\enquote and autostyle, German and French quotes, the quote, quotation and verse environments, block quotes with attribution, epigraphs, quotes in Beamer, straight quotes in code and common errors.',
+  keywords: 'latex quotes, latex quotation marks, quotation marks latex, latex double quotes, latex single quotes, latex quote environment, latex block quote, latex quotation, csquotes, latex enquote, beamer quotes, latex german quotes, latex guillemets, latex straight quotes, latex apostrophe, latex verse environment, latex epigraph',
+}
+
+/** Last content update, used for dateModified in the article schema. */
+const LAST_UPDATED = '2026-10-17'
+
 export default async function LaTeXQuotesPage() {
   return (
     <div className="pt-24 pb-24">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
+      <LearnSchema
+        slug={page.slug}
+        title={page.title}
+        description={page.description}
+        dateModified={LAST_UPDATED}
       />
       <div className="container">
         <div className="mb-8 max-w-4xl mx-auto">
@@ -437,23 +455,5 @@ A straight quote in code: \\verb|s = "text"|, and a prime in math: $f'(x)$.
 }
 
 export function generateMetadata(): Metadata {
-  return {
-    title: "LaTeX Quotation Marks and Quotes: `` '' , csquotes and Block Quotes",
-    description: 'How to write quotation marks in LaTeX: why "text" renders wrong, the ``double\'\' and `single\' convention, nested quotes, the csquotes package with \\enquote and autostyle, German and French quotes, the quote, quotation and verse environments, block quotes with attribution, epigraphs, quotes in Beamer, straight quotes in code and common errors.',
-    keywords: 'latex quotes, latex quotation marks, quotation marks latex, latex double quotes, latex single quotes, latex quote environment, latex block quote, latex quotation, csquotes, latex enquote, beamer quotes, latex german quotes, latex guillemets, latex straight quotes, latex apostrophe, latex verse environment, latex epigraph',
-    openGraph: mergeOpenGraph({
-      title: "LaTeX Quotation Marks and Quotes: `` '' , csquotes and Block Quotes",
-      description: 'Correct quotation marks in LaTeX: the backtick convention, csquotes and \\enquote, German and French styles, quote/quotation/verse, attributed block quotes, Beamer and straight quotes in code.',
-      type: 'article',
-      url: '/learn/quotes',
-    }),
-    twitter: {
-      card: 'summary_large_image',
-      title: 'LaTeX Quotation Marks and Quotes',
-      description: 'Why "text" renders wrong, the `` \'\' convention, csquotes, block quotes and Beamer.',
-    },
-    alternates: {
-      canonical: '/learn/quotes',
-    },
-  }
+  return learnMetadata(page)
 }

@@ -1,6 +1,6 @@
 import type { Metadata } from 'next/types'
 
-import { mergeOpenGraph } from '@/utilities/mergeOpenGraph'
+import { learnMetadata } from '@/utilities/learnMetadata'
 import Link from 'next/link'
 import { buttonVariants } from '@/components/ui/button'
 import React from 'react'
@@ -9,6 +9,7 @@ import {
   getLearnBreadcrumbs,
 } from '@/utilities/generateBreadcrumbs'
 import { RelatedPosts } from '@/components/Learn/related-posts'
+import { LearnSchema } from '@/components/Learn/schema'
 
 export const dynamic = 'force-static'
 export const revalidate = 3600
@@ -16,12 +17,29 @@ export const revalidate = 3600
 const breadcrumbs = getLearnBreadcrumbs('LaTeX Lists', 'lists')
 const breadcrumbSchema = generateBreadcrumbSchema(breadcrumbs)
 
+const page = {
+  slug: 'lists',
+  title: 'LaTeX Lists – Itemize, Enumerate & Description Guide 2026',
+  seoTitle: 'LaTeX Lists: Itemize, Enumerate & Description',
+  description: 'Learn how to create lists in LaTeX: bulleted (itemize), numbered (enumerate), and description lists. Guide covers nesting, custom bullets, compact lists, and the enumitem package.',
+  keywords: 'latex list, latex itemize, latex enumerate, latex description list, latex bullet points, latex numbered list, latex nested list, latex list styles, enumitem latex, latex custom bullets, latex list spacing, latex inline list',
+}
+
+/** Last content update, used for dateModified in the article schema. */
+const LAST_UPDATED = '2026-10-17'
+
 export default async function LaTeXListsPage() {
   return (
     <div className="pt-24 pb-24">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
+      <LearnSchema
+        slug={page.slug}
+        title={page.title}
+        description={page.description}
+        dateModified={LAST_UPDATED}
       />
       <div className="container">
         <div className="mb-8 max-w-4xl mx-auto">
@@ -491,23 +509,5 @@ The requirements are:
 }
 
 export function generateMetadata(): Metadata {
-  return {
-    title: 'LaTeX Lists – Itemize, Enumerate & Description Guide 2026',
-    description: 'Learn how to create lists in LaTeX: bulleted (itemize), numbered (enumerate), and description lists. Guide covers nesting, custom bullets, compact lists, and the enumitem package.',
-    keywords: 'latex list, latex itemize, latex enumerate, latex description list, latex bullet points, latex numbered list, latex nested list, latex list styles, enumitem latex, latex custom bullets, latex list spacing, latex inline list',
-    openGraph: mergeOpenGraph({
-      title: 'LaTeX Lists – Itemize, Enumerate & Description Guide 2026',
-      description: 'Complete guide to creating and customizing lists in LaTeX.',
-      type: 'article',
-      url: '/learn/lists',
-    }),
-    twitter: {
-      card: 'summary_large_image',
-      title: 'LaTeX Lists – Complete Guide',
-      description: 'Learn to create bulleted, numbered, and description lists in LaTeX.',
-    },
-    alternates: {
-      canonical: '/learn/lists',
-    },
-  }
+  return learnMetadata(page)
 }

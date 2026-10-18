@@ -1,6 +1,6 @@
 import type { Metadata } from 'next/types'
 
-import { mergeOpenGraph } from '@/utilities/mergeOpenGraph'
+import { learnMetadata } from '@/utilities/learnMetadata'
 import Link from 'next/link'
 import { buttonVariants } from '@/components/ui/button'
 import React from 'react'
@@ -9,6 +9,7 @@ import {
   getLearnBreadcrumbs,
 } from '@/utilities/generateBreadcrumbs'
 import { RelatedPosts } from '@/components/Learn/related-posts'
+import { LearnSchema } from '@/components/Learn/schema'
 
 export const dynamic = 'force-static'
 export const revalidate = 3600
@@ -16,12 +17,28 @@ export const revalidate = 3600
 const breadcrumbs = getLearnBreadcrumbs('LaTeX Footnotes', 'footnotes')
 const breadcrumbSchema = generateBreadcrumbSchema(breadcrumbs)
 
+const page = {
+  slug: 'footnotes',
+  title: 'LaTeX Footnotes – Complete Guide 2026',
+  description: 'How to add footnotes in LaTeX with \\footnote, put footnotes in tables, headings and captions, use symbols or no number, and change footnote size and spacing with footmisc.',
+  keywords: 'latex footnote, footnote in latex, latex footnote table, footnote in table latex, latex footnote symbol, latex footnote without number, footnote size latex, latex footnotemark, latex footnotetext, threeparttable, footmisc, latex thanks footnote',
+}
+
+/** Last content update, used for dateModified in the article schema. */
+const LAST_UPDATED = '2026-10-17'
+
 export default async function LaTeXFootnotesPage() {
   return (
     <div className="pt-24 pb-24">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
+      <LearnSchema
+        slug={page.slug}
+        title={page.title}
+        description={page.description}
+        dateModified={LAST_UPDATED}
       />
       <div className="container">
         <div className="mb-8 max-w-4xl mx-auto">
@@ -468,23 +485,5 @@ interrupting the argument.
 }
 
 export function generateMetadata(): Metadata {
-  return {
-    title: 'LaTeX Footnotes – Complete Guide 2026',
-    description: 'How to add footnotes in LaTeX with \\footnote, put footnotes in tables, headings and captions, use symbols or no number, and change footnote size and spacing with footmisc.',
-    keywords: 'latex footnote, footnote in latex, latex footnote table, footnote in table latex, latex footnote symbol, latex footnote without number, footnote size latex, latex footnotemark, latex footnotetext, threeparttable, footmisc, latex thanks footnote',
-    openGraph: mergeOpenGraph({
-      title: 'LaTeX Footnotes – Complete Guide 2026',
-      description: 'Footnotes in LaTeX: \\footnote basics, footnotes in tables and headings, symbols, unnumbered notes, and styling with footmisc.',
-      type: 'article',
-      url: '/learn/footnotes',
-    }),
-    twitter: {
-      card: 'summary_large_image',
-      title: 'LaTeX Footnotes – Complete Guide',
-      description: 'Add footnotes in LaTeX, including inside tables, headings and captions.',
-    },
-    alternates: {
-      canonical: '/learn/footnotes',
-    },
-  }
+  return learnMetadata(page)
 }

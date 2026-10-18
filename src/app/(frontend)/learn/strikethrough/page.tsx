@@ -1,6 +1,6 @@
 import type { Metadata } from 'next/types'
 
-import { mergeOpenGraph } from '@/utilities/mergeOpenGraph'
+import { learnMetadata } from '@/utilities/learnMetadata'
 import Link from 'next/link'
 import { buttonVariants } from '@/components/ui/button'
 import React from 'react'
@@ -9,6 +9,7 @@ import {
   getLearnBreadcrumbs,
 } from '@/utilities/generateBreadcrumbs'
 import { RelatedPosts } from '@/components/Learn/related-posts'
+import { LearnSchema } from '@/components/Learn/schema'
 
 export const dynamic = 'force-static'
 export const revalidate = 3600
@@ -16,12 +17,29 @@ export const revalidate = 3600
 const breadcrumbs = getLearnBreadcrumbs('Strikethrough and Cross Out in LaTeX', 'strikethrough')
 const breadcrumbSchema = generateBreadcrumbSchema(breadcrumbs)
 
+const page = {
+  slug: 'strikethrough',
+  title: 'Strikethrough and Cross Out in LaTeX: \\sout, \\cancel and \\st',
+  seoTitle: 'Strikethrough in LaTeX: \\sout, \\cancel and \\st',
+  description: 'How to strike through and cross out text in LaTeX: \\sout and \\xout from ulem (with the normalem option), \\st from soul, \\cancel, \\bcancel, \\xcancel and \\cancelto in math, \\not for negated relations, strikethrough in tables and Beamer, colored strikes, track changes with the changes package, and common errors.',
+  keywords: 'latex strikethrough, latex cross out, cross out in latex, latex strike through text, latex sout, ulem sout, latex cancel package, latex cancel math, latex cancelto, latex st soul, latex strikethrough math, latex strikethrough beamer, latex track changes, changes package latex, latex deleted text, latex not symbol, latex red strikethrough',
+}
+
+/** Last content update, used for dateModified in the article schema. */
+const LAST_UPDATED = '2026-10-17'
+
 export default async function LaTeXStrikethroughPage() {
   return (
     <div className="pt-24 pb-24">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
+      <LearnSchema
+        slug={page.slug}
+        title={page.title}
+        description={page.description}
+        dateModified={LAST_UPDATED}
       />
       <div className="container">
         <div className="mb-8 max-w-4xl mx-auto">
@@ -399,23 +417,5 @@ based on \\replaced[id=AL]{five}{three} runs.
 }
 
 export function generateMetadata(): Metadata {
-  return {
-    title: 'Strikethrough and Cross Out in LaTeX: \\sout, \\cancel and \\st',
-    description: 'How to strike through and cross out text in LaTeX: \\sout and \\xout from ulem (with the normalem option), \\st from soul, \\cancel, \\bcancel, \\xcancel and \\cancelto in math, \\not for negated relations, strikethrough in tables and Beamer, colored strikes, track changes with the changes package, and common errors.',
-    keywords: 'latex strikethrough, latex cross out, cross out in latex, latex strike through text, latex sout, ulem sout, latex cancel package, latex cancel math, latex cancelto, latex st soul, latex strikethrough math, latex strikethrough beamer, latex track changes, changes package latex, latex deleted text, latex not symbol, latex red strikethrough',
-    openGraph: mergeOpenGraph({
-      title: 'Strikethrough and Cross Out in LaTeX: \\sout, \\cancel and \\st',
-      description: 'Strike through text with ulem and soul, cancel terms in math with the cancel package, cross out in tables and Beamer, color the line, and track changes with the changes package.',
-      type: 'article',
-      url: '/learn/strikethrough',
-    }),
-    twitter: {
-      card: 'summary_large_image',
-      title: 'Strikethrough and Cross Out in LaTeX',
-      description: '\\sout, \\st and \\cancel explained, plus colored strikes, Beamer overlays and track changes.',
-    },
-    alternates: {
-      canonical: '/learn/strikethrough',
-    },
-  }
+  return learnMetadata(page)
 }

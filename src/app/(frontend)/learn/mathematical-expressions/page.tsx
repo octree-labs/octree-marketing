@@ -1,6 +1,6 @@
 import type { Metadata } from 'next/types'
 
-import { mergeOpenGraph } from '@/utilities/mergeOpenGraph'
+import { learnMetadata } from '@/utilities/learnMetadata'
 import Link from 'next/link'
 import { buttonVariants } from '@/components/ui/button'
 import React from 'react'
@@ -9,6 +9,7 @@ import {
   getLearnBreadcrumbs,
 } from '@/utilities/generateBreadcrumbs'
 import { RelatedPosts } from '@/components/Learn/related-posts'
+import { LearnSchema } from '@/components/Learn/schema'
 
 export const dynamic = 'force-static'
 export const revalidate = 3600
@@ -16,12 +17,29 @@ export const revalidate = 3600
 const breadcrumbs = getLearnBreadcrumbs('Mathematical Expressions', 'mathematical-expressions')
 const breadcrumbSchema = generateBreadcrumbSchema(breadcrumbs)
 
+const page = {
+  slug: 'mathematical-expressions',
+  title: 'Mathematical Expressions in LaTeX – Complete Guide 2026',
+  seoTitle: 'Mathematical Expressions in LaTeX – Guide 2026',
+  description: 'Learn how to write mathematical expressions in LaTeX. Guide covers fractions, roots, aligned equations, brackets, equation numbering, cases, spacing, and the amsmath package.',
+  keywords: 'latex math, latex equation, latex fraction, latex square root, latex brackets, latex align, latex equation numbering, latex amsmath, latex math mode, latex inline math, latex display math, latex cases, latex piecewise function, how to write equations in latex',
+}
+
+/** Last content update, used for dateModified in the article schema. */
+const LAST_UPDATED = '2026-10-17'
+
 export default async function MathematicalExpressionsPage() {
   return (
     <div className="pt-24 pb-24">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
+      <LearnSchema
+        slug={page.slug}
+        title={page.title}
+        description={page.description}
+        dateModified={LAST_UPDATED}
       />
       <div className="container">
         <div className="mb-8 max-w-4xl mx-auto">
@@ -685,23 +703,5 @@ As shown in Equation~\\ref{eq:einstein}, energy and mass are equivalent.`}</code
 }
 
 export function generateMetadata(): Metadata {
-  return {
-    title: 'Mathematical Expressions in LaTeX – Complete Guide 2026',
-    description: 'Learn how to write mathematical expressions in LaTeX. Guide covers fractions, roots, aligned equations, brackets, equation numbering, cases, spacing, and the amsmath package.',
-    keywords: 'latex math, latex equation, latex fraction, latex square root, latex brackets, latex align, latex equation numbering, latex amsmath, latex math mode, latex inline math, latex display math, latex cases, latex piecewise function, how to write equations in latex',
-    openGraph: mergeOpenGraph({
-      title: 'Mathematical Expressions in LaTeX – Complete Guide 2026',
-      description: 'Complete guide to writing mathematical expressions in LaTeX.',
-      type: 'article',
-      url: '/learn/mathematical-expressions',
-    }),
-    twitter: {
-      card: 'summary_large_image',
-      title: 'Mathematical Expressions in LaTeX',
-      description: 'Learn to write fractions, equations, roots, and more in LaTeX.',
-    },
-    alternates: {
-      canonical: '/learn/mathematical-expressions',
-    },
-  }
+  return learnMetadata(page)
 }
