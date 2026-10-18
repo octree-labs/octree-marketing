@@ -621,6 +621,8 @@ $ \\bm{\\alpha} $          % Also produces bold alpha`}</code></pre>
           <h2>Next Steps</h2>
           <p>Now that you know how to format text in LaTeX, explore more topics:</p>
           <ul>
+            <li><Link href="/learn/strikethrough">Strikethrough &amp; Cross Out</Link> – \sout, \st and \cancel for struck-through text and math</li>
+            <li><Link href="/learn/quotes">LaTeX Quotation Marks &amp; Quotes</Link> – Correct quotation marks, csquotes and block quotes</li>
             <li><Link href="/learn/latex">Learn LaTeX</Link> – Complete beginner tutorial covering all the basics</li>
             <li><Link href="/learn/tikz">Learn TikZ</Link> – Create diagrams and graphics programmatically</li>
             <li><Link href="/learn/pgfplots">Learn PGFPlots</Link> – Generate publication-quality plots and charts</li>

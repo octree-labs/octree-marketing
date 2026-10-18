@@ -115,6 +115,22 @@ const getPagesSitemap = unstable_cache(
         lastmod: dateFallback,
       },
       {
+        loc: `${SITE_URL}/learn/page-numbering`,
+        lastmod: dateFallback,
+      },
+      {
+        loc: `${SITE_URL}/learn/horizontal-lines`,
+        lastmod: dateFallback,
+      },
+      {
+        loc: `${SITE_URL}/learn/quotes`,
+        lastmod: dateFallback,
+      },
+      {
+        loc: `${SITE_URL}/learn/strikethrough`,
+        lastmod: dateFallback,
+      },
+      {
         loc: `${SITE_URL}/privacy`,
         lastmod: dateFallback,
       },

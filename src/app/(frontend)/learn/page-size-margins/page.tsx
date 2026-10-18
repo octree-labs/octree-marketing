@@ -552,6 +552,8 @@ Margins are back to the original 1-inch setting.
           <h2>Next Steps</h2>
           <p>Now that you can control page layout, explore more LaTeX topics:</p>
           <ul>
+            <li><Link href="/learn/page-numbering">LaTeX Page Numbering</Link> &ndash; Roman and arabic numbering, page styles, fancyhdr headers and footers</li>
+            <li><Link href="/learn/horizontal-lines">Horizontal Lines in LaTeX</Link> &ndash; Rules in text, tables, headers and under section titles</li>
             <li><Link href="/learn/latex">Learn LaTeX</Link> &ndash; Complete beginner tutorial</li>
             <li><Link href="/learn/tikz">Learn TikZ</Link> &ndash; Create diagrams and graphics</li>
             <li><Link href="/learn/pgfplots">Learn PGFPlots</Link> &ndash; Generate publication-quality plots</li>
