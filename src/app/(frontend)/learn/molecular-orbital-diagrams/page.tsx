@@ -271,8 +271,10 @@ He2+: (σ1s)² (σ*1s)¹   bond order = (2 − 1)/2 = ½,  observed as a weak io
             The 2p AOs take three electron specifications (p<sub>x</sub>, p<sub>y</sub>,
             p<sub>z</sub>). The <code>2pMO</code> key takes two energies, the σ splitting and
             the π splitting, then six electron slots in the order σ, π<sub>y</sub>,
-            π<sub>z</sub>, π*<sub>y</sub>, π*<sub>z</sub>, σ*. A larger σ splitting than π
-            splitting puts σ<sub>2p</sub> below π<sub>2p</sub>, which is the oxygen ordering:
+            π<sub>z</sub>, π*<sub>y</sub>, π*<sub>z</sub>, σ*. modiagram takes <em>x</em> as
+            the bond axis, so its labels read 2σ<sub>x</sub>, 2π<sub>y</sub> and 2π<sub>z</sub>{' '}
+            rather than σ<sub>2p</sub>. A larger σ splitting than π splitting puts σ<sub>2p</sub>{' '}
+            below π<sub>2p</sub>, which is the oxygen ordering:
           </p>
           <pre><code>{`\\begin{modiagram}[names, labels]
   \\atom[O]{left}{2s = {0;pair}, 2p = {4;pair,up,up}}
@@ -428,11 +430,14 @@ He2+: (σ1s)² (σ*1s)¹   bond order = (2 − 1)/2 = ½,  observed as a weak io
           <h2>Lewis Structures with chemfig and Formulas with mhchem</h2>
           <p>
             An MO diagram is often shown next to the Lewis structure it improves on.{' '}
-            <code>chemfig</code> draws the structure, with <code>\lewis</code> adding lone
-            pairs at positions numbered 0&ndash;7 around the atom (0 = right, 2 = top, 4 = left,
-            6 = bottom; a colon is a pair, a dot a single electron). <code>mhchem</code>&apos;s{' '}
-            <code>\ce</code> formats formulas and charges, and works inside modiagram and TikZ
-            labels:
+            <code>chemfig</code> draws the structure, with <code>\charge</code> adding lone
+            pairs and single electrons around an atom as a list of{' '}
+            <code>angle=symbol</code> pairs: <code>\:</code> is a lone pair, <code>\.</code> a
+            single electron and <code>\|</code> a pair drawn as a line, with 0 = right, 90 = top,
+            180 = left and 270 = bottom. (Older tutorials use <code>\lewis{'{2:6:,O}'}</code>;
+            chemfig 1.6 and later no longer define it, so on a current TeX Live it fails with{' '}
+            <em>Undefined control sequence</em>.) <code>mhchem</code>&apos;s <code>\ce</code>{' '}
+            formats formulas and charges, and works inside modiagram and TikZ labels:
           </p>
           <pre><code>{`\\usepackage{chemfig}
 \\usepackage[version=4]{mhchem}
@@ -440,15 +445,16 @@ He2+: (σ1s)² (σ*1s)¹   bond order = (2 − 1)/2 = ½,  observed as a weak io
 
 \\ce{O2}, \\ce{N2}, \\ce{O2^-}, \\ce{O2^2-}, \\ce{He2^+}, \\ce{2 H2 + O2 -> 2 H2O}
 
-\\chemfig{H-H}                                  % H2
-\\chemfig{\\lewis{2:6:,O}=\\lewis{2:6:,O}}       % O=O with two lone pairs each
-\\chemfig{\\lewis{4:,N}~\\lewis{0:,N}}           % N≡N (~ is a triple bond)
-\\chemfig{\\lewis{4:,C}~\\lewis{0:,O}}           % C≡O
+\\chemfig{H-H}                                             % H2
+\\chemfig{\\charge{90=\\:,270=\\:}{O}=\\charge{90=\\:,270=\\:}{O}}   % O=O, two lone pairs each
+\\chemfig{\\charge{180=\\:}{N}~\\charge{0=\\:}{N}}                % N≡N (~ is a triple bond)
+\\chemfig{\\charge{180=\\:}{C}~\\charge{0=\\:}{O}}                % C≡O
+\\chemfig{\\charge{45=\\.}{O}}                                  % a single (radical) electron
 
 \\begin{figure}[h]
   \\centering
   \\begin{minipage}{0.3\\textwidth}\\centering
-    \\chemfig{\\lewis{2:6:,O}=\\lewis{2:6:,O}}
+    \\chemfig{\\charge{90=\\:,270=\\:}{O}=\\charge{90=\\:,270=\\:}{O}}
   \\end{minipage}
   \\begin{minipage}{0.6\\textwidth}\\centering
     \\begin{modiagram}[labels, distance=2.5cm]
@@ -521,8 +527,8 @@ He2+: (σ1s)² (σ*1s)¹   bond order = (2 − 1)/2 = ½,  observed as a weak io
               </tr>
               <tr>
                 <td><em>Undefined control sequence \lewis</em> although chemfig is loaded</td>
-                <td>Incomplete chemfig installation (<code>chemfig-lewis.tex</code> missing from a minimal TeX setup)</td>
-                <td>Install the full chemfig package or update TeX Live</td>
+                <td><code>\lewis</code> is gone from chemfig 1.6 and later; older tutorials still show it</td>
+                <td>Use <code>{`\\charge{90=\\:,270=\\:}{O}`}</code></td>
               </tr>
               <tr>
                 <td><em>The key &apos;/tikz/dash&apos; requires a value</em></td>
@@ -556,7 +562,7 @@ He2+: (σ1s)² (σ*1s)¹   bond order = (2 − 1)/2 = ½,  observed as a weak io
               <tr><td>Names and labels</td><td><code>{`\\begin{modiagram}[names, labels]`}</code></td></tr>
               <tr><td>Electron arrows in TikZ</td><td><code>{`\\node at (x,y) {$\\uparrow\\downarrow$};`}</code></td></tr>
               <tr><td>Chemical formula</td><td><code>{`\\ce{O2^-}`}</code> (mhchem)</td></tr>
-              <tr><td>Lewis structure</td><td><code>{`\\chemfig{\\lewis{2:6:,O}=\\lewis{2:6:,O}}`}</code></td></tr>
+              <tr><td>Lewis structure</td><td><code>{`\\chemfig{\\charge{90=\\:,270=\\:}{O}=\\charge{90=\\:,270=\\:}{O}}`}</code></td></tr>
               <tr><td>Bond order</td><td>(bonding &minus; antibonding) / 2</td></tr>
             </tbody>
           </table>

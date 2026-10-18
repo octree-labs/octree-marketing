@@ -49,7 +49,7 @@ const faq: FaqItem[] = [
   {
     question: 'Should hyperref be loaded before or after glossaries?',
     answer:
-      'Before. glossaries detects hyperref at load time and turns every \\gls into a link to the glossary entry; if hyperref is loaded afterwards the links are missing and you get a warning. The same order (hyperref first) applies to glossaries-extra and nomencl; the acronym package also hyperlinks when hyperref is already loaded.',
+      'Before. glossaries detects hyperref at load time and turns every \\gls into a link to the glossary entry; if hyperref is loaded afterwards the links are silently missing, with no warning to tell you why. The same order (hyperref first) applies to glossaries-extra and nomencl; the acronym package also hyperlinks when hyperref is already loaded.',
   },
   {
     question: 'How do I sort glossary entries in order of definition or first use instead of alphabetically?',
@@ -126,7 +126,7 @@ export default async function LaTeXGlossariesAcronymsPage() {
 
 \\section{Introduction}
 We compute the \\gls{gcd} of two integers, then the \\gls{gcd} again.
-Every \\gls{matrix} has an \\gls{svd}; several \\glspl{matrix} share one.
+Every \\gls{matrix} has a \\gls{svd}; several \\glspl{matrix} share one.
 \\Gls{latex} is used throughout.
 
 \\printglossary[type=\\acronymtype, title={List of Abbreviations}]
@@ -229,21 +229,26 @@ sub makeglossaries {
 }`}</code></pre>
             <p>
             With that in place, <code>latexmk -pdf main</code> runs the whole sequence and
-            repeats it until nothing changes. Overleaf ships an equivalent rule, which is why
-            glossaries &ldquo;just work&rdquo; there; Octree&apos;s compiler also runs
-            latexmk, which reads a <code>latexmkrc</code> placed next to your main file.
+            repeats it until nothing changes. latexmk reads a <code>latexmkrc</code> or{' '}
+            <code>.latexmkrc</code> from the directory it runs in, so the rule travels with the
+            project. Overleaf ships an equivalent rule, which is why glossaries &ldquo;just
+            work&rdquo; there; Octree compiles with latexmk too, so the same rule applies there
+            as long as the <code>latexmkrc</code> file is part of your project, next to the
+            main file.
           </p>
 
           <h3>Two ways to avoid the external tool</h3>
           <p>
             The <code>automake</code> package option makes glossaries call makeindex itself
-            during the LaTeX run through shell escape, so a plain{' '}
-            <code>pdflatex --shell-escape main</code> twice is enough:
+            during the LaTeX run through shell escape, so running <code>pdflatex main</code>{' '}
+            twice is enough:
           </p>
           <pre><code>{`\\usepackage[acronym,automake]{glossaries}`}</code></pre>
           <p>
-            Where shell escape is disabled, makeindex is never called and the glossary stays
-            empty. The second option needs no program at all: replace{' '}
+            makeindex is on TeX Live&apos;s restricted shell-escape list, so this works without{' '}
+            <code>--shell-escape</code>; with the <code>xindy</code> option, or where shell
+            escape is switched off entirely, nothing is called and the glossary stays empty.
+            The second option needs no program at all: replace{' '}
             <code>\makeglossaries</code> with <code>\makenoidxglossaries</code> and{' '}
             <code>\printglossaries</code> with <code>\printnoidxglossaries</code>, and TeX sorts
             the entries itself after two runs. It is slower, has trouble with non-ASCII sort
@@ -305,8 +310,7 @@ Energy $E = \\gls{hbar}\\omega$ and $E = m\\gls{c}^2$.
 
 \\begin{document}
 The \\gls{cpu} and the \\gls{api}; again the \\gls{cpu} and \\gls{api}.
-\\printabbreviations
-\\printglossaries
+\\printabbreviations   % \\printglossaries would print the same list
 \\end{document}`}</code></pre>
           <p>
             Other styles include <code>short-long</code>, <code>long-short-sc</code> (small-caps
@@ -435,7 +439,7 @@ sub makenlo2nls {
             </thead>
             <tbody>
               <tr>
-                <td>Glossary is empty; log says <em>Glossary `main&apos; has not been generated</em> or <em>is missing</em></td>
+                <td>Glossary is empty; the log only says <em>No file main.gls</em></td>
                 <td>makeglossaries was never run, so there is no <code>.gls</code> file</td>
                 <td>Run <code>makeglossaries main</code> between LaTeX runs, add the <code>.latexmkrc</code> rule, or switch to <code>\makenoidxglossaries</code></td>
               </tr>
@@ -445,7 +449,7 @@ sub makenlo2nls {
                 <td>Check the label; move every <code>\newglossaryentry</code> and <code>\newacronym</code> into the preamble</td>
               </tr>
               <tr>
-                <td><em>makeglossaries: `main.aux&apos; doesn&apos;t contain \@istfilename</em></td>
+                <td><em>No \@istfilename found in &apos;main.aux&apos; &hellip; Did you remember to use \makeglossaries?</em></td>
                 <td><code>\makeglossaries</code> is missing from the preamble, or LaTeX has not been run yet</td>
                 <td>Add <code>\makeglossaries</code> after <code>\usepackage{'{glossaries}'}</code> and run LaTeX first</td>
               </tr>
@@ -455,8 +459,8 @@ sub makenlo2nls {
                 <td>Add <code>\printglossaries</code> (or <code>\printglossary[type=...]</code>) where the list should appear</td>
               </tr>
               <tr>
-                <td><code>\gls</code> does not link, warning about hyperref</td>
-                <td>hyperref loaded after glossaries</td>
+                <td><code>\gls</code> does not link to the glossary</td>
+                <td>hyperref loaded after glossaries (no warning is given)</td>
                 <td>Load hyperref first</td>
               </tr>
               <tr>
@@ -540,7 +544,8 @@ sub makenlo2nls {
           <p>
             Before. glossaries detects hyperref at load time and turns every <code>\gls</code>{' '}
             into a link to the glossary entry; if hyperref is loaded afterwards the links are
-            missing and you get a warning. The same order (hyperref first) applies to
+            silently missing, with no warning to tell you why. The same order (hyperref first)
+            applies to
             glossaries-extra and nomencl; the acronym package also hyperlinks when hyperref is
             already loaded.
           </p>
@@ -569,7 +574,7 @@ sub makenlo2nls {
           <h2>Free LaTeX Tools</h2>
           <ul>
             <li><Link href="https://tools.useoctree.com/tools/latex-preview" target="_blank" rel="noopener noreferrer">LaTeX Preview</Link> &ndash; Test acronym and glossary code with a live PDF preview</li>
-            <li><Link href="https://tools.useoctree.com/tools/table-generator" target="_blank" rel="noopener noreferrer">LaTeX Table Generator</Link> &ndash; Build a manual list of abbreviations as a table</li>
+            <li><Link href="https://tools.useoctree.com/tools/table-to-latex" target="_blank" rel="noopener noreferrer">Table to LaTeX</Link> &ndash; Build a manual list of abbreviations as a table</li>
             <li><Link href="https://tools.useoctree.com/symbols" target="_blank" rel="noopener noreferrer">LaTeX Symbols Reference</Link> &ndash; Look up the symbols for your nomenclature</li>
           </ul>
 

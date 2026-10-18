@@ -122,9 +122,10 @@ $\\log_2 x$  $\\log_{10} x$  $\\ln x$  $\\lg x$`}</code></pre>
           {/* ── predefined ── */}
           <h2>All Predefined Function Operators</h2>
           <p>
-            These are built into LaTeX and amsmath, so no package is needed for the first
-            group. Operators marked with limits take their subscript underneath in display
-            math, like <code>\lim_{'{x \\to 0}'}</code>:
+            All of these are built into LaTeX itself except the <code>\var...</code>,{' '}
+            <code>\injlim</code> and <code>\projlim</code> variants, which need amsmath.
+            Operators marked with limits take their subscript underneath in display math, like{' '}
+            <code>\lim_{'{x \\to 0}'}</code>:
           </p>
           <table>
             <thead>
@@ -138,7 +139,7 @@ $\\log_2 x$  $\\log_{10} x$  $\\ln x$  $\\lg x$`}</code></pre>
               <tr><td>Inverse trigonometric</td><td><code>\arcsin \arccos \arctan</code> (write <code>\operatorname{'{arccot}'}</code> for the others)</td></tr>
               <tr><td>Hyperbolic</td><td><code>\sinh \cosh \tanh \coth</code></td></tr>
               <tr><td>Logarithms and exponential</td><td><code>\log \ln \lg \exp</code></td></tr>
-              <tr><td>Limits (limits below)</td><td><code>\lim \limsup \liminf \varlimsup \varliminf \injlim \projlim \varinjlim \varprojlim</code></td></tr>
+              <tr><td>Limits (limits below)</td><td><code>\lim \limsup \liminf</code>; with amsmath also <code>\varlimsup \varliminf \injlim \projlim \varinjlim \varprojlim</code></td></tr>
               <tr><td>Extrema (limits below)</td><td><code>\max \min \sup \inf</code></td></tr>
               <tr><td>Algebra</td><td><code>\det \dim \ker \deg \gcd \hom \arg \Pr</code> (<code>\det</code>, <code>\gcd</code> and <code>\Pr</code> take limits below)</td></tr>
             </tbody>
@@ -239,7 +240,8 @@ $\\log_2 x$  $\\log_{10} x$  $\\ln x$  $\\lg x$`}</code></pre>
             that prints two bars; <code>\lVert</code> and <code>\rVert</code> are the proper
             delimiters. The subscript naming the norm goes after the closing bar:
           </p>
-          <pre><code>{`\\[ \\|x\\|, \\qquad \\lVert x \\rVert_2, \\qquad \\lVert x \\rVert_\\infty,
+          <pre><code>{`\\usepackage{amsmath}   % \\lVert and \\rVert
+\\[ \\|x\\|, \\qquad \\lVert x \\rVert_2, \\qquad \\lVert x \\rVert_\\infty,
    \\qquad \\lVert A \\rVert_F, \\qquad \\left\\lVert \\frac{x}{\\|x\\|} \\right\\rVert \\]`}</code></pre>
           <p>
             Never write <code>||x||</code> with two single bars: LaTeX sets a space between
@@ -271,7 +273,8 @@ $\\log_2 x$  $\\log_{10} x$  $\\ln x$  $\\lg x$`}</code></pre>
 
           {/* ── roots, fractions ── */}
           <h2>Roots and Fractions</h2>
-          <pre><code>{`\\[ \\sqrt{x}, \\quad \\sqrt[3]{x}, \\quad \\sqrt[n]{x^2 + 1}, \\quad
+          <pre><code>{`\\usepackage{amsmath}   % \\dfrac, \\tfrac and \\binom
+\\[ \\sqrt{x}, \\quad \\sqrt[3]{x}, \\quad \\sqrt[n]{x^2 + 1}, \\quad
    \\frac{a}{b}, \\quad \\dfrac{a}{b}, \\quad \\tfrac{a}{b}, \\quad
    \\binom{n}{k} = \\frac{n!}{k!\\,(n-k)!} \\]`}</code></pre>
           <p>
