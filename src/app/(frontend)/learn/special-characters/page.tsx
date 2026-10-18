@@ -22,7 +22,7 @@ const page = {
   title: 'Special Characters in LaTeX: Underscore, Tilde, Pipe, Percent, Dollar, Hash',
   seoTitle: 'Special Characters in LaTeX: _ ~ | % $ # and More',
   description: 'How to print LaTeX\'s reserved characters # $ % & _ { } ~ ^ \\, the pipe, < and >, underscores in URLs, inverted ?/!, degree and currency signs, and errors.',
-  keywords: 'underscore in latex, latex underscore, latex vertical line, latex pipe symbol, tilde in latex, latex tilde, latex percent sign, latex dollar sign, latex hashtag, latex hash symbol, latex backslash, latex braces, latex curly braces text, latex ampersand, latex caret, latex special characters, latex reserved characters, latex question mark upside down, latex less than, latex greater than, latex degree symbol, latex copyright symbol, latex euro symbol',
+  keywords: 'underscore in latex, latex underscore, latex vertical line, latex pipe symbol, tilde in latex, latex tilde, latex percent sign, latex dollar sign, latex hashtag, latex hash symbol, latex backslash, latex braces, latex curly braces text, latex ampersand, latex caret, latex special characters, latex reserved characters, latex question mark upside down, latex less than, latex greater than, latex degree symbol, latex copyright symbol, latex euro symbol, colon symbols, latex colon, ratio symbol, such that symbol',
 }
 
 /** Last content update, used for dateModified in the article schema. */
@@ -59,6 +59,11 @@ const faq: FaqItem[] = [
     answer:
       'Use \\textbackslash in text and \\backslash in math. The sequence \\\\ is a line break, not a backslash. For a backslash in code or a file path, \\verb|C:\\path| or the listings package is simpler.',
   },
+  {
+    question: 'What is the difference between : and \\colon in LaTeX?',
+    answer:
+      'In math mode a plain : is a relation symbol with a medium space on both sides, like =, which suits ratios (a : b) and set-builder notation. \\colon is a punctuation symbol: with amsmath it sits tight against the letter before it and takes a thin space after, which is the correct form for function signatures, f\\colon A \\to B. For := and ::=, load mathtools and use \\coloneqq and \\Coloneqq, which centre the colon on the equals sign.',
+  },
 ]
 
 export default async function LaTeXSpecialCharactersPage() {
@@ -93,7 +98,7 @@ export default async function LaTeXSpecialCharactersPage() {
             <code>{'{'}</code>, <code>{'}'}</code>, <code>~</code>, <code>^</code> and{' '}
             <code>\</code>. Type one of them as ordinary text and you get a comment, a
             subscript, a table column or an error instead of the character. This guide shows how
-            to print each one, how to handle the pipe, angle brackets and quotes, how to put
+            to print each one, how to handle the pipe, angle brackets, quotes and colons, how to put
             underscores in URLs and file names, and how to typeset the degree, copyright,
             section, currency and inverted punctuation signs that are not on the keyboard.
           </p>
@@ -217,6 +222,85 @@ $\\lVert v \\rVert$          % amsmath norm with correct spacing`}</code></pre>
             <code>csquotes</code> package&apos;s <code>\enquote</code> handles nesting and
             language conventions automatically. This has its own guide:{' '}
             <Link href="/learn/quotes">quotation marks in LaTeX</Link>.
+          </p>
+
+          {/* ── Colons ── */}
+          <h2>Colon Symbols: : &#x2236; &#x2237; and \colon</h2>
+          <p>
+            In text a colon is just a colon. Type <code>:</code> and nothing special happens, so
+            a 16:9 screen or a 3:2 ratio prints as typed. The subtlety is in math mode, where
+            TeX classes <code>:</code> as a <em>relation</em> (its mathcode is{' '}
+            <code>&quot;303A</code>, class 3) and puts a medium space on both sides, exactly as
+            it does for <code>=</code>. That is right for a ratio or a &ldquo;such that&rdquo;
+            colon and wrong for a function signature, where the colon is punctuation that
+            belongs to the <em>f</em>. <code>\colon</code> is the punctuation version: the LaTeX
+            kernel defines it as a class 6 symbol, and amsmath redefines it with a negative kern
+            in front and a thin space after, so <code>f\colon A \to B</code> sets the way the AMS
+            style guide asks for.
+          </p>
+          <pre><code>{`\\usepackage{amsmath, mathtools}
+
+A 16:9 screen, a 3:2 ratio          % plain colon in text, nothing to escape
+
+$f : A \\to B$          % : is a relation, spaced on both sides like =
+$f\\colon A \\to B$      % \\colon is punctuation: tight to f, thin space after
+$a : b = c : d$        % ratio and proportion, relation spacing is right
+
+$x \\coloneqq y$        % mathtools: := with the colon centred on the = sign
+$y \\eqqcolon x$        % =:
+$x \\Coloneqq y$        % ::=
+$a \\vcentcolon b$      % centred ratio colon, like Unicode U+2236
+$a \\dblcolon b$        % centred double colon, like U+2237
+$a \\mathrel{::} b$     % without mathtools: two plain colons as one relation
+
+$\\{\\, x \\mid x > 0 \\,\\}$     % "such that" with a bar
+$\\{ x : x > 0 \\}$            % "such that" with a colon
+$\\{ x : \\lvert x \\rvert < 1 \\}$   % prefer : when the condition has bars itself`}</code></pre>
+          <p>
+            The plain colon glyph sits on the baseline, so in <code>:=</code> it hangs below the
+            equals sign. mathtools fixes this with <code>\vcentcolon</code>, a colon lifted onto
+            the math axis, and builds the definition symbols from it: <code>\coloneqq</code>{' '}
+            (&#x2254;), <code>\eqqcolon</code> (&#x2255;), <code>\Coloneqq</code> (&#x2A74;) and{' '}
+            <code>\dblcolon</code> for the proportion sign &#x2237;. There is no{' '}
+            <code>\Colon</code> in mathtools; that name exists only in unicode-math. Without
+            mathtools, <code>\mathrel{'{:}'}</code> and <code>\mathrel{'{::}'}</code> give the
+            same relation spacing with the ordinary glyph.
+          </p>
+          <p>
+            For &ldquo;such that&rdquo; in set-builder notation, <code>\mid</code> and{' '}
+            <code>:</code> are both relations with identical spacing; which one you use is a
+            matter of house style, and the colon is the safer choice when the condition contains
+            absolute-value bars (<code>\lvert x \rvert</code>) that would otherwise run into the
+            bar. Do not use <code>\colon</code> there: as punctuation it pulls toward the <em>x</em>.
+          </p>
+          <table>
+            <thead>
+              <tr>
+                <th>Symbol</th>
+                <th>Unicode</th>
+                <th>LaTeX</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>:</td><td>U+003A colon</td><td><code>:</code> in text; <code>:</code> (relation) or <code>\colon</code> (punctuation) in math</td></tr>
+              <tr><td>&#x2236;</td><td>U+2236 ratio</td><td><code>\vcentcolon</code> (mathtools) or <code>:</code></td></tr>
+              <tr><td>&#x2237;</td><td>U+2237 proportion</td><td><code>\dblcolon</code> (mathtools) or <code>\mathrel{'{::}'}</code></td></tr>
+              <tr><td>&#x2254;</td><td>U+2254 colon equals</td><td><code>\coloneqq</code> (mathtools)</td></tr>
+              <tr><td>&#x2255;</td><td>U+2255 equals colon</td><td><code>\eqqcolon</code> (mathtools)</td></tr>
+              <tr><td>&#x2A74;</td><td>U+2A74 double colon equal</td><td><code>\Coloneqq</code> (mathtools)</td></tr>
+              <tr><td>&#xFF1A;</td><td>U+FF1A fullwidth colon</td><td>CJK text only; use <code>:</code> in LaTeX</td></tr>
+            </tbody>
+          </table>
+          <p>
+            To type them outside LaTeX: the plain colon is <kbd>Alt</kbd>+<kbd>58</kbd> on a
+            Windows numeric keypad, and the others have no Alt code. In Word, type the hex code
+            and press <kbd>Alt</kbd>+<kbd>X</kbd> (<code>2254</code> becomes &#x2254;). On a Mac,
+            open the Character Viewer with <kbd>Ctrl</kbd>+<kbd>Cmd</kbd>+<kbd>Space</kbd> and
+            search for &ldquo;ratio&rdquo; or &ldquo;colon&rdquo;. Under pdfLaTeX the ratio,
+            proportion and colon-equals characters have no UTF-8 mapping, so paste the commands
+            above rather than the symbols. Which to use: <code>\colon</code> for{' '}
+            <code>f\colon A \to B</code> and nothing else; <code>:</code> or <code>\mid</code> for
+            ratios and &ldquo;such that&rdquo;; <code>\coloneqq</code> from mathtools for definitions.
           </p>
 
           {/* ── verb and url ── */}
@@ -473,6 +557,7 @@ Macro: \\texttt{\\textbackslash newcommand\\{\\textbackslash foo\\}[1]\\{\\#1\\}
               <tr><td>^</td><td><code>\textasciicircum</code></td><td><code>\hat{'{x}'}</code> (accent), <code>\wedge</code> (logic)</td></tr>
               <tr><td>\</td><td><code>\textbackslash</code></td><td><code>\backslash</code>, <code>\setminus</code></td></tr>
               <tr><td>|</td><td><code>\textbar</code></td><td><code>|</code>, <code>\lvert \rvert</code>, <code>\mid</code>, <code>\|</code></td></tr>
+              <tr><td>:</td><td><code>:</code></td><td><code>:</code> (relation), <code>\colon</code> (punctuation), <code>\coloneqq</code> (mathtools)</td></tr>
               <tr><td>&lt; &gt;</td><td><code>\textless</code>, <code>\textgreater</code></td><td><code>&lt;</code>, <code>&gt;</code></td></tr>
               <tr><td>&quot; &quot;</td><td><code>``...&apos;&apos;</code> or <code>\enquote</code></td><td><code>\text{'{``...\'\'}'}</code></td></tr>
               <tr><td>&iquest; &iexcl;</td><td><code>?`</code>, <code>!`</code>, <code>\textquestiondown</code>, <code>\textexclamdown</code></td><td></td></tr>
@@ -531,6 +616,16 @@ Macro: \\texttt{\\textbackslash newcommand\\{\\textbackslash foo\\}[1]\\{\\#1\\}
             sequence <code>\\</code> is a line break, not a backslash. For a backslash in code or
             a file path, <code>\verb|C:\path|</code> or the <code>listings</code> package is
             simpler.
+          </p>
+          <h3>What is the difference between : and \colon in LaTeX?</h3>
+          <p>
+            In math mode a plain <code>:</code> is a relation symbol with a medium space on both
+            sides, like <code>=</code>, which suits ratios (<code>a : b</code>) and set-builder
+            notation. <code>\colon</code> is a punctuation symbol: with amsmath it sits tight
+            against the letter before it and takes a thin space after, which is the correct form
+            for function signatures, <code>f\colon A \to B</code>. For <code>:=</code> and{' '}
+            <code>::=</code>, load mathtools and use <code>\coloneqq</code> and{' '}
+            <code>\Coloneqq</code>, which centre the colon on the equals sign.
           </p>
 
           {/* ── Next Steps ── */}
