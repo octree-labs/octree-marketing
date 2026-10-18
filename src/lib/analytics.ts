@@ -8,6 +8,10 @@ export const EVENTS = {
   CTA_CLICKED: 'cta_clicked',
   BLOG_POST_VIEWED: 'blog_post_viewed',
   LEARN_GUIDE_VIEWED: 'learn_guide_viewed',
+  /** The in-content "Open in Octree" box scrolled into view. Props: placement. */
+  CTA_IMPRESSION: 'cta_impression',
+  /** "Open in Octree" pressed on a blog post or learn guide. Props: source, title_length. */
+  OPEN_IN_OCTREE_CLICKED: 'open_in_octree_clicked',
 } as const
 
 export type EventName = (typeof EVENTS)[keyof typeof EVENTS]

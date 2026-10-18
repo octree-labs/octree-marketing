@@ -7,6 +7,9 @@ import { getPayload } from 'payload'
 import { draftMode } from 'next/headers'
 import React, { cache } from 'react'
 import RichText from '@/components/RichText'
+import { OpenInOctree } from '@/components/OpenInOctree'
+import { findFirstLatexCodeBlock, isLastContentNode } from '@/utilities/findLatexCodeBlock'
+import { defaultLatexDocument } from '@/utilities/wrapLatexDocument'
 
 import { PostHero } from '@/heros/PostHero'
 import { generateMeta } from '@/utilities/generateMeta'
@@ -66,6 +69,13 @@ export default async function Post({ params: paramsPromise }: Args) {
   const breadcrumbSchema = generateBreadcrumbSchema(breadcrumbs)
   const articleSchema = generateArticleSchema(post)
 
+  // "Open in Octree" boxes: one under the first LaTeX code block (rendered by
+  // RichText) and one closing the post, unless that block already ends the post.
+  const ctaSource = `www:blog:${slug}`
+  const firstLatex = findFirstLatexCodeBlock(post.content)
+  const showClosingCta = !firstLatex || !isLastContentNode(post.content, firstLatex.node)
+  const closingLatex = firstLatex?.code ?? defaultLatexDocument(post.title)
+
   return (
     <article className="pt-16 pb-16">
       <script
@@ -85,7 +95,17 @@ export default async function Post({ params: paramsPromise }: Args) {
 
       <div className="flex flex-col items-center gap-4 pt-8">
         <div className="container">
-          <RichText className="max-w-[48rem] mx-auto" data={post.content} enableGutter={false} />
+          <RichText
+            className="max-w-[48rem] mx-auto"
+            data={post.content}
+            enableGutter={false}
+            openInOctree={{ title: post.title, source: ctaSource }}
+          />
+          {showClosingCta && (
+            <div className="max-w-[48rem] mx-auto">
+              <OpenInOctree latex={closingLatex} title={post.title} source={ctaSource} />
+            </div>
+          )}
           {post.relatedPosts && post.relatedPosts.length > 0 && (
             <RelatedPosts
               className="mt-12 max-w-[52rem] lg:grid lg:grid-cols-subgrid col-start-1 col-span-3 grid-rows-[2fr]"
