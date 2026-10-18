@@ -20,6 +20,7 @@ const breadcrumbSchema = generateBreadcrumbSchema(breadcrumbs)
 const page = {
   slug: 'bold-italics-underline',
   title: 'Bold, Italics and Underlining in LaTeX – Guide 2026',
+  seoTitle: 'Bold, Italics and Underlining in LaTeX',
   description: 'Learn how to use bold, italic, and underline text in LaTeX. Complete guide covering \\textbf, \\textit, \\underline, \\emph, and advanced formatting with soul and ulem packages.',
   keywords: 'latex bold, latex italic, latex underline, textbf latex, textit latex, emph latex, latex text formatting, bold text in latex, italic text in latex, underline in latex, latex font styles, latex emphasis, italic in latex, latex italics, italics in latex, how to italicize in latex, latex italic text, italic text in latex bold italics and underlining, latex bold italic, latex underline text, latex emph vs textit, latex small caps, latex textsc, latex texttt monospace, latex textsf, latex slanted text, latex font style commands, latex text formatting commands, latex mathbf boldsymbol',
 }
@@ -329,10 +330,12 @@ multiple lines without any problems}.
 \\textit{\\textsc{italic small caps}}`}</code></pre>
 
           <p>
-            Computer Modern and Latin Modern, the default fonts, have no bold small-caps face, so{' '}
-            <code>\textbf&#123;\textsc&#123;...&#125;&#125;</code> prints plain bold and writes a
-            &ldquo;Font shape undefined&rdquo; warning to the log. Fonts such as TeX Gyre Pagella
-            (<code>\usepackage&#123;tgpagella&#125;</code>) or Libertinus provide it.
+            The default Computer Modern (in its default OT1 encoding) and Latin Modern have no
+            bold small-caps face, so <code>\textbf&#123;\textsc&#123;...&#125;&#125;</code> prints
+            plain bold and writes a &ldquo;Font shape undefined&rdquo; warning to the log. With{' '}
+            <code>\usepackage[T1]&#123;fontenc&#125;</code> the Computer Modern fonts do include one,
+            and fonts such as TeX Gyre Pagella (<code>\usepackage&#123;tgpagella&#125;</code>) or
+            Libertinus provide it in every encoding.
           </p>
 
           <h3>Typewriter / Monospace</h3>
@@ -728,7 +731,7 @@ $ \\bm{\\alpha} + \\bm{\\beta} = \\bm{\\gamma} $`}</code></pre>
               <tr>
                 <td><code>\textsc&#123;text&#125;</code></td>
                 <td>Small caps</td>
-                <td>Names, acronyms; no bold face in Computer Modern</td>
+                <td>Names, acronyms; no bold face in Latin Modern or OT1 Computer Modern</td>
               </tr>
               <tr>
                 <td><code>\texttt&#123;text&#125;</code></td>

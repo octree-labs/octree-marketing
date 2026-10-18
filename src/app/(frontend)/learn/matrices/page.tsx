@@ -21,7 +21,7 @@ const page = {
   slug: 'matrices',
   title: 'Matrices in LaTeX: pmatrix, bmatrix, Matrix Brackets and Determinants',
   seoTitle: 'LaTeX Matrices: pmatrix, bmatrix and Brackets',
-  description: 'Matrices in LaTeX with amsmath: matrix brackets compared (pmatrix, bmatrix, vmatrix), 2x2, 3x3 and 4x4 examples, determinants, inverse and transpose, augmented matrices.',
+  description: 'Matrices in LaTeX with amsmath: pmatrix, bmatrix and vmatrix compared, 2x2, 3x3 and 4x4 examples, determinants, inverse and transpose, augmented matrices.',
   keywords: 'latex matrix, latex matrices, matrix brackets latex, latex pmatrix, latex bmatrix, latex vmatrix, latex Bmatrix, latex Vmatrix, latex determinant, latex augmented matrix, latex identity matrix, latex transpose, latex smallmatrix, latex matrix inline, latex hdotsfor, latex ddots vdots cdots, MaxMatrixCols, nicematrix, latex amsmath matrix, latex array, how to write matrix in latex, latex matrix examples, 2x2 matrix latex, 3x3 matrix latex, 4x4 matrix latex, latex 2x2 matrix, latex 3x3 matrix, latex 4x4 matrix, matrix latex, latex determinant 2x2, latex determinant 3x3, latex inverse matrix, latex matrix multiplication, latex column vector, latex row vector, latex matrices 2x2 3x3 4x4 and determinants',
 }
 
@@ -395,7 +395,7 @@ B = \\begin{bmatrix}
 
 % 3x3 determinant by cofactor expansion along the first row
 \\[
-\\det(B) = \\begin{vmatrix}
+\\begin{vmatrix}
   a & b & c \\\\
   d & e & f \\\\
   g & h & i
@@ -403,6 +403,12 @@ B = \\begin{bmatrix}
 = a \\begin{vmatrix} e & f \\\\ h & i \\end{vmatrix}
 - b \\begin{vmatrix} d & f \\\\ g & i \\end{vmatrix}
 + c \\begin{vmatrix} d & e \\\\ g & h \\end{vmatrix}
+\\]
+
+% Applied to B above: the rows are in arithmetic progression, so B is singular
+\\[
+\\det(B) = 1(5 \\cdot 9 - 6 \\cdot 8) - 2(4 \\cdot 9 - 6 \\cdot 7) + 3(4 \\cdot 8 - 5 \\cdot 7)
+= -3 + 12 - 9 = 0
 \\]
 
 % 3x3 matrix times a column vector
