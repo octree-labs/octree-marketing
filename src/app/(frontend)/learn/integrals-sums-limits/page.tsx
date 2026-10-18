@@ -513,6 +513,7 @@ $\\left[\\frac{x^2}{2}\\right]_0^1$`}</code></pre>
             <li><Link href="/learn/mathematical-expressions">Mathematical Expressions in LaTeX</Link> – Equations, fractions, and core math typesetting</li>
             <li><Link href="/learn/greek-letters-math-symbols">Greek Letters &amp; Math Symbols</Link> – Complete symbol reference for scientific writing</li>
             <li><Link href="/learn/matrices">Matrices in LaTeX</Link> – Typeset matrices, determinants, and systems of equations</li>
+            <li><Link href="/learn/equation-numbering">Equation Numbering &amp; Referencing</Link> – Number and reference the displays above with \label, \eqref and align</li>
             <li><Link href="/learn/latex">Learn LaTeX Basics</Link> – Review the fundamentals</li>
           </ul>
 

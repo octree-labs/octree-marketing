@@ -131,6 +131,18 @@ const getPagesSitemap = unstable_cache(
         lastmod: dateFallback,
       },
       {
+        loc: `${SITE_URL}/learn/font-size`,
+        lastmod: dateFallback,
+      },
+      {
+        loc: `${SITE_URL}/learn/equation-numbering`,
+        lastmod: dateFallback,
+      },
+      {
+        loc: `${SITE_URL}/learn/theorems-proofs`,
+        lastmod: dateFallback,
+      },
+      {
         loc: `${SITE_URL}/privacy`,
         lastmod: dateFallback,
       },

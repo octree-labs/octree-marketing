@@ -623,6 +623,7 @@ $ \\bm{\\alpha} $          % Also produces bold alpha`}</code></pre>
           <ul>
             <li><Link href="/learn/strikethrough">Strikethrough &amp; Cross Out</Link> – \sout, \st and \cancel for struck-through text and math</li>
             <li><Link href="/learn/quotes">LaTeX Quotation Marks &amp; Quotes</Link> – Correct quotation marks, csquotes and block quotes</li>
+            <li><Link href="/learn/font-size">LaTeX Font Size</Link> – Size commands from \tiny to \Huge, class options and \fontsize, to combine with bold and italics</li>
             <li><Link href="/learn/latex">Learn LaTeX</Link> – Complete beginner tutorial covering all the basics</li>
             <li><Link href="/learn/tikz">Learn TikZ</Link> – Create diagrams and graphics programmatically</li>
             <li><Link href="/learn/pgfplots">Learn PGFPlots</Link> – Generate publication-quality plots and charts</li>
