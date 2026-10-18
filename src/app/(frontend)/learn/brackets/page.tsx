@@ -21,7 +21,7 @@ const page = {
   slug: 'brackets',
   title: 'Brackets and Parentheses in LaTeX: Sizing, \\left \\right, and Matrix Brackets',
   seoTitle: 'Brackets in LaTeX: \\left \\right, Sizes, Matrices',
-  description: 'Every bracket in LaTeX: ( ) [ ] \\{ \\}, angle brackets, absolute value and norm bars, floor and ceiling, automatic sizing with \\left \\right, manual \\big to \\Bigg, matrix brackets, cases, and mathtools \\abs and \\norm.',
+  description: 'LaTeX brackets: ( ) [ ] { }, angle brackets, bars, floor and ceiling, sizing with \\left \\right and \\big to \\Bigg, matrix brackets, cases, \\abs and \\norm.',
   keywords: 'latex brackets, brackets in latex, latex angle brackets, angular brackets latex, latex matrix brackets, latex curly braces, latex big brackets, latex left right, latex absolute value bars, latex norm, latex floor ceiling, latex langle rangle, latex parentheses size, latex bracket sizes, latex square brackets, latex pmatrix bmatrix, latex cases bracket, latex underbrace, latex missing right inserted',
 }
 

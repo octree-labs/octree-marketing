@@ -20,8 +20,8 @@ const breadcrumbSchema = generateBreadcrumbSchema(breadcrumbs)
 const page = {
   slug: 'multiline-equations',
   title: 'Multi-line Equations in LaTeX: align, split, multline, gather',
-  seoTitle: 'Multi-line Equations in LaTeX: align, split, multline',
-  description: 'Break and align equations over several lines in LaTeX: align and align*, split for one number, multline for one long equation, gather, aligned, alignat, \\intertext, page breaks, brackets across lines, and the errors to avoid.',
+  seoTitle: 'Multi-line Equations in LaTeX: align, split, gather',
+  description: 'Break and align equations over several lines with align, split, multline and gather, nest aligned blocks, add text between lines and allow page breaks.',
   keywords: 'latex new line in equation, latex multiline equation, latex align equations, latex break long equation, latex equation array, latex split equation, latex gather, latex align environment, latex multline, latex aligned, latex alignat, latex intertext, latex equation line break, latex eqnarray, latex allowdisplaybreaks, latex nonumber, latex cases, latex system of equations',
 }
 
