@@ -1,4 +1,4 @@
-import posthog from 'posthog-js'
+import posthog, { type CaptureOptions } from 'posthog-js'
 
 /**
  * Product analytics event names for the marketing site.
@@ -19,11 +19,17 @@ export function isPostHogLoaded(): boolean {
 }
 
 /** Capture a product event; a silent no-op when PostHog is not loaded. */
-export function track(event: EventName, props?: EventProps) {
+export function track(event: EventName, props?: EventProps, options?: CaptureOptions) {
   if (!isPostHogLoaded()) return
   try {
-    posthog.capture(event, props)
+    posthog.capture(event, props, options)
   } catch {
     // Analytics must never break the UI.
   }
 }
+
+/**
+ * For events fired right before a full-page navigation (CTA into the app):
+ * skip the batch queue and use sendBeacon so the request outlives the page.
+ */
+export const BEFORE_NAVIGATION: CaptureOptions = { send_instantly: true, transport: 'sendBeacon' }

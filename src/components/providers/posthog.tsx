@@ -4,7 +4,7 @@ import React, { Suspense, useEffect } from 'react'
 import { usePathname, useSearchParams } from 'next/navigation'
 import posthog from 'posthog-js'
 
-import { EVENTS, track } from '@/lib/analytics'
+import { BEFORE_NAVIGATION, EVENTS, track } from '@/lib/analytics'
 
 const POSTHOG_KEY = process.env.NEXT_PUBLIC_POSTHOG_KEY
 const POSTHOG_HOST = process.env.NEXT_PUBLIC_POSTHOG_HOST || 'https://us.i.posthog.com'
@@ -23,6 +23,8 @@ if (typeof window !== 'undefined' && POSTHOG_KEY && !posthog.__loaded) {
     capture_exceptions: true,
     cross_subdomain_cookie: true,
     persistence: 'localStorage+cookie',
+    // The contact form collects emails: never record what is typed.
+    session_recording: { maskAllInputs: true },
   })
 }
 
@@ -65,11 +67,12 @@ function PostHogCtaClicks() {
     const onClick = (event: MouseEvent) => {
       const target = event.target as Element | null
       const anchor = target?.closest?.('a[href]') as HTMLAnchorElement | null
-      if (!anchor || !anchor.href.startsWith(APP_ORIGIN)) return
+      if (!anchor || anchor.origin !== APP_ORIGIN) return
       const location =
         anchor.closest('[data-cta-location]')?.getAttribute('data-cta-location') ||
         locationFromPathname(pathname || '/')
-      track(EVENTS.CTA_CLICKED, { location, href: anchor.href })
+      // Same-tab CTAs unload this page immediately; never preventDefault, never await.
+      track(EVENTS.CTA_CLICKED, { location, href: anchor.href }, BEFORE_NAVIGATION)
     }
     document.addEventListener('click', onClick, true)
     return () => document.removeEventListener('click', onClick, true)
