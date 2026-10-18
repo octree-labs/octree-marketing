@@ -143,6 +143,18 @@ const getPagesSitemap = unstable_cache(
         lastmod: dateFallback,
       },
       {
+        loc: `${SITE_URL}/learn/glossaries-acronyms`,
+        lastmod: dateFallback,
+      },
+      {
+        loc: `${SITE_URL}/learn/math-functions`,
+        lastmod: dateFallback,
+      },
+      {
+        loc: `${SITE_URL}/learn/molecular-orbital-diagrams`,
+        lastmod: dateFallback,
+      },
+      {
         loc: `${SITE_URL}/privacy`,
         lastmod: dateFallback,
       },
