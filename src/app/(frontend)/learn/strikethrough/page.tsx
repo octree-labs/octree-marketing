@@ -93,8 +93,9 @@ export default async function LaTeXStrikethroughPage() {
           <p>
             The price of soul&apos;s syllable scanning is that it must understand everything in
             the argument. Commands with arguments must be registered first
-            (<code>{`\\soulregister{\\cite}{1}`}</code>), math and <code>\\</code> are not
-            allowed, and unusual font encodings or unregistered commands produce the error{' '}
+            (<code>{`\\soulregister{\\cite}{1}`}</code>); an unregistered one such as{' '}
+            <code>{`\\st{see \\cite{foo}}`}</code> fails with an &ldquo;extra &#125;&rdquo; error.
+            Inline math is kept as one unbreakable unit, and unusual font encodings can produce{' '}
             <em>&ldquo;Package soul Error: Reconstruction failed&rdquo;</em>. With pdfLaTeX and
             non-ASCII characters (umlauts, accented letters), use current soul (version 3,
             TeX Live 2023 or later), which includes the UTF-8 support that used to be a separate{' '}
@@ -172,7 +173,7 @@ $a \\not\\equiv b$   % \\nequiv does not exist; \\not\\equiv is fine`}</code></p
 \\end{frame}`}</code></pre>
           <p>
             Note that the <code>normalem</code> option is essential in Beamer, which relies on{' '}
-            <code>\emph</code> and <code>\alert</code> for its own highlighting. For simply
+            <code>\emph</code> for its own highlighting. For simply
             drawing attention to a change, <code>\alert</code> is often clearer than a strike.
           </p>
 
@@ -248,13 +249,13 @@ We used \\replaced[id=AL]{five}{three} runs.
                 <td><code>{`\\usepackage[normalem]{ulem}`}</code></td>
               </tr>
               <tr>
-                <td><code>\sout</code> in an equation: line in the wrong place, fractions and subscripts mis-sized</td>
-                <td>ulem boxes the math as a single unit and ignores math styles</td>
+                <td><code>\sout</code> in an equation: the line lands under the expression, not through it</td>
+                <td>ulem sets the rule as a fixed-depth limit below a <code>\mathop</code></td>
                 <td>Use <code>\cancel</code>, <code>\bcancel</code> or <code>\xcancel</code> from <code>cancel</code></td>
               </tr>
               <tr>
                 <td><em>Package soul Error: Reconstruction failed</em></td>
-                <td>A command, math or font change inside <code>\st</code> that soul cannot scan</td>
+                <td>A font change or encoding inside <code>\st</code> that soul cannot scan (an unregistered command with arguments fails with an &ldquo;extra &#125;&rdquo; error instead)</td>
                 <td>Register the command with <code>\soulregister</code>, keep markup outside <code>\st</code>, or use <code>\sout</code></td>
               </tr>
               <tr>

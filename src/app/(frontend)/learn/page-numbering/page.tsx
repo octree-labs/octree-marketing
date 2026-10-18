@@ -133,8 +133,9 @@ Body text starts on page 1.
 \\setcounter{page}{37}   % this page is numbered 37`}</code></pre>
           <p>
             A common variant is a document whose title page is counted but not printed. With{' '}
-            <code>{`\\setcounter{page}{0}`}</code> before the title page the first body page
-            comes out as 1; with <code>{`\\setcounter{page}{2}`}</code> after the title page the
+            <code>{`\\setcounter{page}{0}`}</code> before a hand-made title page the first body
+            page comes out as 1 (<code>\maketitle</code> in book and report resets the counter
+            itself, so this trick does not work there); with <code>{`\\setcounter{page}{2}`}</code> after the title page the
             title is implicitly page 1.
           </p>
 
@@ -418,6 +419,12 @@ Body text starts on page 1.
 \\usepackage{hyperref}
 
 \\pagestyle{fancy}
+% fancyhdr's \\chaptermark ignores \\frontmatter, so front-matter chapters
+% would get "Chapter 0." in the running head; this version checks it
+\\makeatletter
+\\renewcommand{\\chaptermark}[1]{%
+  \\markboth{\\if@mainmatter\\chaptername\\ \\thechapter.\\ \\fi #1}{}}
+\\makeatother
 \\fancyhf{}
 \\fancyhead[LE]{\\nouppercase{\\leftmark}}     % chapter title on even pages
 \\fancyhead[RO]{\\nouppercase{\\rightmark}}    % section title on odd pages

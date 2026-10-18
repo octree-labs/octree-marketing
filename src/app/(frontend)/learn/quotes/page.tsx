@@ -34,7 +34,7 @@ export default async function LaTeXQuotesPage() {
         </div>
 
         <article className="prose prose-lg dark:prose-invert max-w-4xl mx-auto">
-          <h1>LaTeX Quotation Marks and Quotes: `` &apos;&apos; , csquotes and Block Quotes</h1>
+          <h1>LaTeX Quotation Marks and Quotes: `` &apos;&apos;, csquotes and Block Quotes</h1>
           <p className="lead">
             Typing <code>&quot;text&quot;</code> in LaTeX gives you two closing marks instead of
             an opening and a closing one. The fix is a convention that dates back to TeX: two
@@ -201,12 +201,12 @@ She said \`\`the word \`quote' is overused.''   % nested`}</code></pre>
 \\end{quote}`}</code></pre>
           <p>
             csquotes provides <code>\blockquote</code>, which typesets short quotations inline
-            with marks and long ones (three lines or more, by default) as a block without marks,
+            with marks and long ones (more than three lines, by default) as a block without marks,
             and takes the citation as an optional argument:
           </p>
           <pre><code>{`\\blockquote[Knuth 1974, p.~671]{Premature optimization is the root of all evil.}
 
-% change the threshold: quotations of 2+ lines become block quotes
+% change the threshold: quotations longer than two lines become block quotes
 \\SetBlockThreshold{2}`}</code></pre>
           <p>
             With <code>biblatex</code>, <code>\blockcquote</code> takes a bibliography key
@@ -254,7 +254,7 @@ She said \`\`the word \`quote' is overused.''   % nested`}</code></pre>
             ordinary text use the text symbol commands:
           </p>
           <pre><code>{`\\verb|print("hello")|            % straight " in typewriter
-\\texttt{\\textquotedbl hello\\textquotedbl}   % straight " via textcomp symbols
+\\texttt{\\textquotedbl hello\\textquotedbl}   % straight " (needs \\usepackage[T1]{fontenc})
 \\textquotesingle                 % straight '
 \\textasciigrave                  % straight \``}</code></pre>
           <p>

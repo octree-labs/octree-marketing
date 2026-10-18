@@ -115,7 +115,8 @@ Chapter One \\dotfill 1
           <p>
             A line that spans half the text width is just <code>\rule</code> with a fraction. To
             centre it, put it in a <code>center</code> environment or use{' '}
-            <code>\centerline</code>, which adds no vertical space:
+            <code>\centerline</code>, which adds no vertical space (it must sit between
+            paragraphs, so leave a blank line before it):
           </p>
           <pre><code>{`\\begin{center}
   \\rule{0.5\\linewidth}{0.4pt}
@@ -263,9 +264,8 @@ Total: {\\color{red}\\hrulefill}        % \\hrulefill takes the color too`}</cod
 
 % colored header rule
 \\usepackage{xcolor}
-\\renewcommand{\\headrule}{%
-  \\hbox to\\headwidth{\\color{gray}\\leaders\\hrule height \\headrulewidth\\hfill}%
-}`}</code></pre>
+\\renewcommand{\\headrule}{{\\color{gray}%
+  \\hrule height\\headrulewidth width\\headwidth \\vskip-\\headrulewidth}}`}</code></pre>
 
           {/* ── Section titles ── */}
           <h2>Lines Under Section Titles</h2>
@@ -285,7 +285,7 @@ Total: {\\color{red}\\hrulefill}        % \\hrulefill takes the color too`}</cod
 
 % thicker rule, or a dotted one
 \\titleformat{\\section}{\\Large\\bfseries}{\\thesection}{1em}{}[{\\titlerule[1pt]}]
-\\titleformat{\\section}{\\Large\\bfseries}{\\thesection}{1em}{}[\\titlerule*[0.5pc]{.}]`}</code></pre>
+\\titleformat{\\section}{\\Large\\bfseries}{\\thesection}{1em}{}[{\\titlerule*[0.5pc]{.}}]`}</code></pre>
           <p>
             Without titlesec, the quick way is <code>{`\\section{Title}\\vspace{-1ex}\\noindent\\rule{\\linewidth}{0.4pt}`}</code>{' '}
             wrapped in a helper command, but it does not survive page breaks as gracefully.
@@ -396,8 +396,8 @@ left \\rule[-0.4cm]{0.4pt}{1cm} right  % lowered so it straddles the baseline
 \\fancyhead[L]{Horizontal Lines}
 \\fancyfoot[C]{\\thepage}
 \\renewcommand{\\headrulewidth}{0.4pt}
-\\renewcommand{\\headrule}{%
-  \\hbox to\\headwidth{\\color{gray}\\leaders\\hrule height \\headrulewidth\\hfill}}
+\\renewcommand{\\headrule}{{\\color{gray}%
+  \\hrule height\\headrulewidth width\\headwidth \\vskip-\\headrulewidth}}
 
 % rule under every section title
 \\titleformat{\\section}{\\normalfont\\Large\\bfseries}{\\thesection}{1em}{}[\\titlerule]
@@ -411,6 +411,7 @@ left \\rule[-0.4cm]{0.4pt}{1cm} right  % lowered so it straddles the baseline
 A full-width line separates this paragraph from the next.
 \\divider
 A short centred rule marks a scene break.
+
 \\centerline{\\rule{0.3\\linewidth}{0.4pt}}
 A colored dashed rule:
 \\par\\noindent{\\color{blue!60}\\hdashrule{\\linewidth}{0.6pt}{3mm 1mm}}
@@ -473,7 +474,7 @@ A colored dashed rule:
           <p>Lines in place? These guides pick up where this one stops:</p>
           <ul>
             <li><Link href="/learn/tables">LaTeX Tables</Link> &ndash; booktabs, multicolumn, multirow, longtable and colored tables</li>
-            <li><Link href="https://www.useoctree.com/blog/latex-blank-spaces-line-breaks-guide">Blank Spaces and Line Breaks in LaTeX</Link> &ndash; <code>\vspace</code>, <code>\\</code>, <code>\newline</code> and the spacing around your rules</li>
+            <li><Link href="/blog/latex-blank-spaces-line-breaks-guide">Blank Spaces and Line Breaks in LaTeX</Link> &ndash; <code>\vspace</code>, <code>\\</code>, <code>\newline</code> and the spacing around your rules</li>
             <li><Link href="/learn/page-numbering">LaTeX Page Numbering</Link> &ndash; fancyhdr headers and footers, page styles and numbering</li>
             <li><Link href="/learn/colors">Using Colors in LaTeX</Link> &ndash; The xcolor names and mixes used for colored rules</li>
             <li><Link href="/learn/tikz">Learn TikZ</Link> &ndash; Draw lines, arrows and diagrams programmatically</li>
