@@ -1,6 +1,6 @@
 import type { Metadata } from 'next/types'
 
-import { mergeOpenGraph } from '@/utilities/mergeOpenGraph'
+import { learnMetadata } from '@/utilities/learnMetadata'
 import Link from 'next/link'
 import { buttonVariants } from '@/components/ui/button'
 import React from 'react'
@@ -9,6 +9,7 @@ import {
   getLearnBreadcrumbs,
 } from '@/utilities/generateBreadcrumbs'
 import { RelatedPosts } from '@/components/Learn/related-posts'
+import { LearnSchema } from '@/components/Learn/schema'
 
 export const dynamic = 'force-static'
 export const revalidate = 3600
@@ -16,12 +17,29 @@ export const revalidate = 3600
 const breadcrumbs = getLearnBreadcrumbs('LaTeX Hyperlinks', 'hyperlinks')
 const breadcrumbSchema = generateBreadcrumbSchema(breadcrumbs)
 
+const page = {
+  slug: 'hyperlinks',
+  title: 'LaTeX Hyperlinks: hyperref, \\url, \\href and Clickable Links',
+  seoTitle: 'LaTeX Hyperlinks: hyperref, \\url and \\href',
+  description: 'How to add hyperlinks in LaTeX with the hyperref package: \\url, \\href and \\nolinkurl, email links, internal links with \\autoref and \\nameref, removing the colored link boxes, link colors, PDF metadata, breaking long URLs, and fixing common hyperref errors.',
+  keywords: 'latex hyperlink, hyperref latex, latex url, latex link, latex href, latex clickable link, latex hyperlink color, latex remove link box, latex link to section, latex email link, hidelinks, colorlinks, hypersetup, latex autoref, latex nameref, latex break long url',
+}
+
+/** Last content update, used for dateModified in the article schema. */
+const LAST_UPDATED = '2026-10-17'
+
 export default async function LaTeXHyperlinksPage() {
   return (
     <div className="pt-24 pb-24">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
+      <LearnSchema
+        slug={page.slug}
+        title={page.title}
+        description={page.description}
+        dateModified={LAST_UPDATED}
       />
       <div className="container">
         <div className="mb-8 max-w-4xl mx-auto">
@@ -497,23 +515,5 @@ Thanks to everyone who reads the manual before asking.
 }
 
 export function generateMetadata(): Metadata {
-  return {
-    title: 'LaTeX Hyperlinks: hyperref, \\url, \\href and Clickable Links',
-    description: 'How to add hyperlinks in LaTeX with the hyperref package: \\url, \\href and \\nolinkurl, email links, internal links with \\autoref and \\nameref, removing the colored link boxes, link colors, PDF metadata, breaking long URLs, and fixing common hyperref errors.',
-    keywords: 'latex hyperlink, hyperref latex, latex url, latex link, latex href, latex clickable link, latex hyperlink color, latex remove link box, latex link to section, latex email link, hidelinks, colorlinks, hypersetup, latex autoref, latex nameref, latex break long url',
-    openGraph: mergeOpenGraph({
-      title: 'LaTeX Hyperlinks: hyperref, \\url, \\href and Clickable Links',
-      description: 'Clickable links in LaTeX with hyperref: \\url, \\href, email links, internal references, link colors, removing link boxes, PDF metadata and common errors.',
-      type: 'article',
-      url: '/learn/hyperlinks',
-    }),
-    twitter: {
-      card: 'summary_large_image',
-      title: 'LaTeX Hyperlinks with hyperref',
-      description: 'Add clickable links in LaTeX, color or hide them, and fix the usual hyperref errors.',
-    },
-    alternates: {
-      canonical: '/learn/hyperlinks',
-    },
-  }
+  return learnMetadata(page)
 }

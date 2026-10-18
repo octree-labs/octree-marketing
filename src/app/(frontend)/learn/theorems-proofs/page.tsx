@@ -1,6 +1,6 @@
 import type { Metadata } from 'next/types'
 
-import { mergeOpenGraph } from '@/utilities/mergeOpenGraph'
+import { learnMetadata } from '@/utilities/learnMetadata'
 import Link from 'next/link'
 import { buttonVariants } from '@/components/ui/button'
 import React from 'react'
@@ -9,6 +9,7 @@ import {
   getLearnBreadcrumbs,
 } from '@/utilities/generateBreadcrumbs'
 import { RelatedPosts } from '@/components/Learn/related-posts'
+import { LearnSchema } from '@/components/Learn/schema'
 
 export const dynamic = 'force-static'
 export const revalidate = 3600
@@ -16,12 +17,29 @@ export const revalidate = 3600
 const breadcrumbs = getLearnBreadcrumbs('Theorems and Proofs in LaTeX', 'theorems-proofs')
 const breadcrumbSchema = generateBreadcrumbSchema(breadcrumbs)
 
+const page = {
+  slug: 'theorems-proofs',
+  title: 'Theorems, Lemmas and Proofs in LaTeX: amsthm, \\newtheorem and the QED Symbol',
+  seoTitle: 'Theorems and Proofs in LaTeX: amsthm, \\newtheorem',
+  description: 'How to write theorems, lemmas, definitions and proofs in LaTeX with amsthm: \\newtheorem with numbering within sections and shared counters, theorem styles, the proof environment, placing the end-of-proof (QED) symbol with \\qedhere, changing it to a filled square, referencing theorems with \\ref and cleveref, boxed theorems with tcolorbox, and common errors.',
+  keywords: 'latex theorem, end of proof symbol latex, theorem definition latex, latex newtheorem, amsthm, latex proof environment, latex qed symbol, qedhere, latex lemma, latex theorem numbering, latex theoremstyle, latex blacksquare, latex proof box, latex corollary, latex definition environment, thmtools, tcolorbox theorem, latex reference theorem',
+}
+
+/** Last content update, used for dateModified in the article schema. */
+const LAST_UPDATED = '2026-10-17'
+
 export default async function LaTeXTheoremsProofsPage() {
   return (
     <div className="pt-24 pb-24">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
+      <LearnSchema
+        slug={page.slug}
+        title={page.title}
+        description={page.description}
+        dateModified={LAST_UPDATED}
       />
       <div className="container">
         <div className="mb-8 max-w-4xl mx-auto">
@@ -569,23 +587,5 @@ See Theorem~\\ref{thm:pyth}.   % the label is prefix:suffix`}</code></pre>
 }
 
 export function generateMetadata(): Metadata {
-  return {
-    title: 'Theorems, Lemmas and Proofs in LaTeX: amsthm, \\newtheorem and the QED Symbol',
-    description: 'How to write theorems, lemmas, definitions and proofs in LaTeX with amsthm: \\newtheorem with numbering within sections and shared counters, theorem styles, the proof environment, placing the end-of-proof (QED) symbol with \\qedhere, changing it to a filled square, referencing theorems with \\ref and cleveref, boxed theorems with tcolorbox, and common errors.',
-    keywords: 'latex theorem, end of proof symbol latex, theorem definition latex, latex newtheorem, amsthm, latex proof environment, latex qed symbol, qedhere, latex lemma, latex theorem numbering, latex theoremstyle, latex blacksquare, latex proof box, latex corollary, latex definition environment, thmtools, tcolorbox theorem, latex reference theorem',
-    openGraph: mergeOpenGraph({
-      title: 'Theorems, Lemmas and Proofs in LaTeX: amsthm, \\newtheorem and the QED Symbol',
-      description: 'Theorems and proofs in LaTeX with amsthm: \\newtheorem, shared counters, theorem styles, the proof environment, \\qedhere, changing the QED symbol, and referencing theorems.',
-      type: 'article',
-      url: '/learn/theorems-proofs',
-    }),
-    twitter: {
-      card: 'summary_large_image',
-      title: 'Theorems and Proofs in LaTeX',
-      description: 'Set up amsthm, number theorems and lemmas, and place the QED symbol correctly.',
-    },
-    alternates: {
-      canonical: '/learn/theorems-proofs',
-    },
-  }
+  return learnMetadata(page)
 }

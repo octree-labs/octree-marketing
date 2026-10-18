@@ -1,4 +1,6 @@
 import type { Metadata } from 'next/types'
+
+import { learnMetadata } from '@/utilities/learnMetadata'
 import Link from 'next/link'
 import { buttonVariants } from '@/components/ui/button'
 import React from 'react'
@@ -7,6 +9,7 @@ import {
   getLearnBreadcrumbs,
 } from '@/utilities/generateBreadcrumbs'
 import { RelatedPosts } from '@/components/Learn/related-posts'
+import { LearnSchema } from '@/components/Learn/schema'
 
 export const dynamic = 'force-static'
 export const revalidate = 3600
@@ -14,12 +17,28 @@ export const revalidate = 3600
 const breadcrumbs = getLearnBreadcrumbs('Learn TikZ', 'tikz')
 const breadcrumbSchema = generateBreadcrumbSchema(breadcrumbs)
 
+const page = {
+  slug: 'tikz',
+  title: 'Learn TikZ – Create Diagrams in LaTeX Tutorial 2025',
+  description: 'Master TikZ for creating diagrams, flowcharts, graphs, and illustrations in LaTeX. Free tutorial covering shapes, nodes, arrows, styling, trees, and advanced techniques.',
+  keywords: 'tikz timeline, tikz block diagram, tikz neural network, tikz flowchart examples, tikz mindmap, tikz circuit diagrams, learn tikz, tikz tutorial, tikz examples, tikz diagrams, tikz graphs, tikz arrows, tikz nodes, latex diagrams, latex graphics',
+}
+
+/** Last content update, used for dateModified in the article schema. */
+const LAST_UPDATED = '2026-10-17'
+
 export default async function LearnTikzPage() {
   return (
     <div className="pt-24 pb-24">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
+      <LearnSchema
+        slug={page.slug}
+        title={page.title}
+        description={page.description}
+        dateModified={LAST_UPDATED}
       />
       <div className="container">
         <div className="mb-8 max-w-4xl mx-auto">
@@ -250,24 +269,6 @@ export default async function LearnTikzPage() {
 }
 
 export function generateMetadata(): Metadata {
-  return {
-    title: 'Learn TikZ – Create Diagrams in LaTeX Tutorial 2025',
-    description: 'Master TikZ for creating diagrams, flowcharts, graphs, and illustrations in LaTeX. Free tutorial covering shapes, nodes, arrows, styling, trees, and advanced techniques.',
-    keywords: 'tikz timeline, tikz block diagram, tikz neural network, tikz flowchart examples, tikz mindmap, tikz circuit diagrams, learn tikz, tikz tutorial, tikz examples, tikz diagrams, tikz graphs, tikz arrows, tikz nodes, latex diagrams, latex graphics',
-    openGraph: {
-      title: 'Learn TikZ – Create Diagrams in LaTeX Tutorial 2025',
-      description: 'Master TikZ for creating stunning diagrams, flowcharts, and illustrations in LaTeX. Free comprehensive tutorial.',
-      type: 'article',
-      url: '/learn/tikz',
-    },
-    twitter: {
-      card: 'summary_large_image',
-      title: 'Learn TikZ – Create Diagrams in LaTeX',
-      description: 'Free TikZ tutorial. Create diagrams, flowcharts, and graphics in LaTeX.',
-    },
-    alternates: {
-      canonical: '/learn/tikz',
-    },
-  }
+  return learnMetadata(page)
 }
 

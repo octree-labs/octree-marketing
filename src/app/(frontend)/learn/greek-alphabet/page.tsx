@@ -1,6 +1,6 @@
 import type { Metadata } from 'next/types'
 
-import { mergeOpenGraph } from '@/utilities/mergeOpenGraph'
+import { learnMetadata, type FaqItem } from '@/utilities/learnMetadata'
 import Link from 'next/link'
 import { buttonVariants } from '@/components/ui/button'
 import React from 'react'
@@ -9,6 +9,7 @@ import {
   getLearnBreadcrumbs,
 } from '@/utilities/generateBreadcrumbs'
 import { RelatedPosts } from '@/components/Learn/related-posts'
+import { LearnSchema } from '@/components/Learn/schema'
 
 export const dynamic = 'force-static'
 export const revalidate = 3600
@@ -16,12 +17,58 @@ export const revalidate = 3600
 const breadcrumbs = getLearnBreadcrumbs('Greek Alphabet', 'greek-alphabet')
 const breadcrumbSchema = generateBreadcrumbSchema(breadcrumbs)
 
+const page = {
+  slug: 'greek-alphabet',
+  title: 'The Greek Alphabet: All 24 Letters in Order (with LaTeX Commands)',
+  seoTitle: 'Greek Alphabet: All 24 Letters in Order + LaTeX',
+  description: 'The complete Greek alphabet in order: all 24 uppercase and lowercase letters with names, pronunciation, Unicode code points, HTML entities, what each letter means in math and science, how to type them, and their LaTeX commands.',
+  keywords: 'greek alphabet, greek alphabet in order, greek letters, greek alphabet symbols, greek alphabet lowercase, greek alphabet uppercase, greek letters in order, greek alphabet latex, how many letters in the greek alphabet, greek letters math, greek alphabet pronunciation, greek letters unicode, alpha beta gamma delta, last letter of greek alphabet',
+}
+
+/** Last content update, used for dateModified in the article schema. */
+const LAST_UPDATED = '2026-10-17'
+
+const faq: FaqItem[] = [
+  {
+    question: 'How many letters are in the Greek alphabet?',
+    answer:
+      'Twenty-four, each with an uppercase and a lowercase form. Counting the final sigma ς as a separate glyph gives 25 lowercase shapes, but it is still the same letter.',
+  },
+  {
+    question: 'What is the last letter of the Greek alphabet?',
+    answer:
+      'Omega (Ω ω). That is why "the alpha and the omega" means the beginning and the end, and why Ω is often chosen for "the whole" of something, such as the sample space in probability.',
+  },
+  {
+    question: 'Is there a letter J in the Greek alphabet?',
+    answer:
+      'No. Greek has no J, and no direct equivalents of the Latin letters C, F, Q, V, or W either (the archaic digamma once covered the w sound). Names with those letters are transliterated using the closest sounds, so "John" becomes Ιωάννης.',
+  },
+  {
+    question: 'Why do math and physics use Greek letters?',
+    answer:
+      'Partly tradition — Euclid, Archimedes, and Ptolemy wrote in Greek, and Renaissance mathematicians kept their notation — and partly necessity. Once the 26 Latin letters are used up for variables, Greek supplies another 24 symbols that are visually distinct from Latin ones, so θ can be an angle in the same equation where t is time.',
+  },
+  {
+    question: 'What is the difference between ε and ϵ, or φ and ϕ?',
+    answer:
+      "Nothing semantically; they are glyph variants of the same letter. LaTeX exposes both so authors can match a journal's house style. Most modern texts prefer \\varepsilon (ε) and \\varphi (φ).",
+  },
+]
+
 export default async function GreekAlphabetPage() {
   return (
     <div className="pt-24 pb-24">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
+      <LearnSchema
+        slug={page.slug}
+        title={page.title}
+        description={page.description}
+        dateModified={LAST_UPDATED}
+        faq={faq}
       />
       <div className="container">
         <div className="mb-8 max-w-4xl mx-auto">
@@ -408,23 +455,5 @@ $\\mathit{\\Gamma}$  or  $\\varGamma, \\varDelta, \\varOmega$   % amsmath
 }
 
 export function generateMetadata(): Metadata {
-  return {
-    title: 'The Greek Alphabet: All 24 Letters in Order (with LaTeX Commands)',
-    description: 'The complete Greek alphabet in order: all 24 uppercase and lowercase letters with names, pronunciation, Unicode code points, HTML entities, what each letter means in math and science, how to type them, and their LaTeX commands.',
-    keywords: 'greek alphabet, greek alphabet in order, greek letters, greek alphabet symbols, greek alphabet lowercase, greek alphabet uppercase, greek letters in order, greek alphabet latex, how many letters in the greek alphabet, greek letters math, greek alphabet pronunciation, greek letters unicode, alpha beta gamma delta, last letter of greek alphabet',
-    openGraph: mergeOpenGraph({
-      title: 'The Greek Alphabet: All 24 Letters in Order (with LaTeX Commands)',
-      description: 'All 24 Greek letters in order with uppercase, lowercase, pronunciation, Unicode, meanings in math and science, and LaTeX commands.',
-      type: 'article',
-      url: '/learn/greek-alphabet',
-    }),
-    twitter: {
-      card: 'summary_large_image',
-      title: 'The Greek Alphabet: All 24 Letters in Order',
-      description: 'Uppercase, lowercase, pronunciation, Unicode, math uses, and LaTeX commands for every Greek letter.',
-    },
-    alternates: {
-      canonical: '/learn/greek-alphabet',
-    },
-  }
+  return learnMetadata(page)
 }

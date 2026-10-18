@@ -1,6 +1,6 @@
 import type { Metadata } from 'next/types'
 
-import { mergeOpenGraph } from '@/utilities/mergeOpenGraph'
+import { learnMetadata } from '@/utilities/learnMetadata'
 import Link from 'next/link'
 import { buttonVariants } from '@/components/ui/button'
 import React from 'react'
@@ -9,6 +9,7 @@ import {
   getLearnBreadcrumbs,
 } from '@/utilities/generateBreadcrumbs'
 import { RelatedPosts } from '@/components/Learn/related-posts'
+import { LearnSchema } from '@/components/Learn/schema'
 
 export const dynamic = 'force-static'
 export const revalidate = 3600
@@ -16,12 +17,29 @@ export const revalidate = 3600
 const breadcrumbs = getLearnBreadcrumbs('LaTeX Page Numbering', 'page-numbering')
 const breadcrumbSchema = generateBreadcrumbSchema(breadcrumbs)
 
+const page = {
+  slug: 'page-numbering',
+  title: 'LaTeX Page Numbering: Roman, Arabic, Starting Pages and fancyhdr',
+  seoTitle: 'LaTeX Page Numbering: Roman, Arabic and fancyhdr',
+  description: 'How to control page numbering in LaTeX: \\pagenumbering{roman} and {arabic}, front matter in book, starting at a given page with \\setcounter, removing the number on the title page and chapter openers, page styles, fancyhdr headers and footers, "Page X of Y" with lastpage, per-chapter numbering, Beamer frame numbers and common errors.',
+  keywords: 'latex page numbering, page numbering latex, latex page number, latex roman numerals page numbers, latex start page number, latex remove page number, latex no page number first page, latex page number position, fancyhdr page number, latex page x of y, latex pagenumbering, latex setcounter page, latex frontmatter mainmatter, beamer frame number, latex thispagestyle empty',
+}
+
+/** Last content update, used for dateModified in the article schema. */
+const LAST_UPDATED = '2026-10-17'
+
 export default async function LaTeXPageNumberingPage() {
   return (
     <div className="pt-24 pb-24">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
+      <LearnSchema
+        slug={page.slug}
+        title={page.title}
+        description={page.description}
+        dateModified={LAST_UPDATED}
       />
       <div className="container">
         <div className="mb-8 max-w-4xl mx-auto">
@@ -532,23 +550,5 @@ Appendix pages continue the arabic sequence.
 }
 
 export function generateMetadata(): Metadata {
-  return {
-    title: 'LaTeX Page Numbering: Roman, Arabic, Starting Pages and fancyhdr',
-    description: 'How to control page numbering in LaTeX: \\pagenumbering{roman} and {arabic}, front matter in book, starting at a given page with \\setcounter, removing the number on the title page and chapter openers, page styles, fancyhdr headers and footers, "Page X of Y" with lastpage, per-chapter numbering, Beamer frame numbers and common errors.',
-    keywords: 'latex page numbering, page numbering latex, latex page number, latex roman numerals page numbers, latex start page number, latex remove page number, latex no page number first page, latex page number position, fancyhdr page number, latex page x of y, latex pagenumbering, latex setcounter page, latex frontmatter mainmatter, beamer frame number, latex thispagestyle empty',
-    openGraph: mergeOpenGraph({
-      title: 'LaTeX Page Numbering: Roman, Arabic, Starting Pages and fancyhdr',
-      description: 'Roman and arabic page numbers, starting at a given page, removing numbers from the title page, fancyhdr footers, "Page X of Y", per-chapter numbering and Beamer frame numbers.',
-      type: 'article',
-      url: '/learn/page-numbering',
-    }),
-    twitter: {
-      card: 'summary_large_image',
-      title: 'LaTeX Page Numbering',
-      description: 'Roman and arabic numbering, start pages, hiding numbers, fancyhdr footers and Page X of Y.',
-    },
-    alternates: {
-      canonical: '/learn/page-numbering',
-    },
-  }
+  return learnMetadata(page)
 }

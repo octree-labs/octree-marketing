@@ -1,6 +1,6 @@
 import type { Metadata } from 'next/types'
 
-import { mergeOpenGraph } from '@/utilities/mergeOpenGraph'
+import { learnMetadata } from '@/utilities/learnMetadata'
 import Link from 'next/link'
 import { buttonVariants } from '@/components/ui/button'
 import React from 'react'
@@ -9,6 +9,7 @@ import {
   getLearnBreadcrumbs,
 } from '@/utilities/generateBreadcrumbs'
 import { RelatedPosts } from '@/components/Learn/related-posts'
+import { LearnSchema } from '@/components/Learn/schema'
 
 export const dynamic = 'force-static'
 export const revalidate = 3600
@@ -16,12 +17,28 @@ export const revalidate = 3600
 const breadcrumbs = getLearnBreadcrumbs('Integrals, Sums & Limits', 'integrals-sums-limits')
 const breadcrumbSchema = generateBreadcrumbSchema(breadcrumbs)
 
+const page = {
+  slug: 'integrals-sums-limits',
+  title: 'Integrals, Sums and Limits in LaTeX – Guide 2026',
+  description: 'Learn how to write integrals, summations, and limits in LaTeX. Guide covers definite integrals, multiple integrals, summation notation, products, limits, and big operator placement.',
+  keywords: 'latex integral, latex sum, latex limit, latex summation, latex product, latex double integral, latex triple integral, latex contour integral, latex lim, latex infty, latex series, latex sigma notation, latex big operators',
+}
+
+/** Last content update, used for dateModified in the article schema. */
+const LAST_UPDATED = '2026-10-17'
+
 export default async function IntegralsSumsLimitsPage() {
   return (
     <div className="pt-24 pb-24">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
+      <LearnSchema
+        slug={page.slug}
+        title={page.title}
+        description={page.description}
+        dateModified={LAST_UPDATED}
       />
       <div className="container">
         <div className="mb-8 max-w-4xl mx-auto">
@@ -549,23 +566,5 @@ $\\left[\\frac{x^2}{2}\\right]_0^1$`}</code></pre>
 }
 
 export function generateMetadata(): Metadata {
-  return {
-    title: 'Integrals, Sums and Limits in LaTeX – Guide 2026',
-    description: 'Learn how to write integrals, summations, and limits in LaTeX. Guide covers definite integrals, multiple integrals, summation notation, products, limits, and big operator placement.',
-    keywords: 'latex integral, latex sum, latex limit, latex summation, latex product, latex double integral, latex triple integral, latex contour integral, latex lim, latex infty, latex series, latex sigma notation, latex big operators',
-    openGraph: mergeOpenGraph({
-      title: 'Integrals, Sums and Limits in LaTeX – Guide 2026',
-      description: 'Complete guide to integrals, summations, and limits in LaTeX.',
-      type: 'article',
-      url: '/learn/integrals-sums-limits',
-    }),
-    twitter: {
-      card: 'summary_large_image',
-      title: 'Integrals, Sums and Limits in LaTeX',
-      description: 'Learn to write integrals, sums, and limits in LaTeX with examples.',
-    },
-    alternates: {
-      canonical: '/learn/integrals-sums-limits',
-    },
-  }
+  return learnMetadata(page)
 }

@@ -1,6 +1,6 @@
 import type { Metadata } from 'next/types'
 
-import { mergeOpenGraph } from '@/utilities/mergeOpenGraph'
+import { learnMetadata } from '@/utilities/learnMetadata'
 import Link from 'next/link'
 import { buttonVariants } from '@/components/ui/button'
 import React from 'react'
@@ -9,6 +9,7 @@ import {
   getLearnBreadcrumbs,
 } from '@/utilities/generateBreadcrumbs'
 import { RelatedPosts } from '@/components/Learn/related-posts'
+import { LearnSchema } from '@/components/Learn/schema'
 
 export const dynamic = 'force-static'
 export const revalidate = 3600
@@ -16,12 +17,28 @@ export const revalidate = 3600
 const breadcrumbs = getLearnBreadcrumbs('Subscripts & Superscripts', 'subscripts-superscripts')
 const breadcrumbSchema = generateBreadcrumbSchema(breadcrumbs)
 
+const page = {
+  slug: 'subscripts-superscripts',
+  title: 'Subscripts and Superscripts in LaTeX – Guide 2026',
+  description: 'Learn how to write subscripts and superscripts in LaTeX. Complete guide covering math mode, text mode, combined notation, chemistry formulas, and advanced techniques with amsmath.',
+  keywords: 'latex subscript, latex superscript, latex exponent, latex power, latex underscore, latex caret, subscript in latex, superscript in latex, latex math notation, latex chemistry formulas, textsuperscript latex, textsubscript latex',
+}
+
+/** Last content update, used for dateModified in the article schema. */
+const LAST_UPDATED = '2026-10-17'
+
 export default async function SubscriptsSuperscriptsPage() {
   return (
     <div className="pt-24 pb-24">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
+      <LearnSchema
+        slug={page.slug}
+        title={page.title}
+        description={page.description}
+        dateModified={LAST_UPDATED}
       />
       <div className="container">
         <div className="mb-8 max-w-4xl mx-auto">
@@ -470,23 +487,5 @@ ${"{x^a}"}^b$      % b is superscript of (x^a)`}</code></pre>
 }
 
 export function generateMetadata(): Metadata {
-  return {
-    title: 'Subscripts and Superscripts in LaTeX – Guide 2026',
-    description: 'Learn how to write subscripts and superscripts in LaTeX. Complete guide covering math mode, text mode, combined notation, chemistry formulas, and advanced techniques with amsmath.',
-    keywords: 'latex subscript, latex superscript, latex exponent, latex power, latex underscore, latex caret, subscript in latex, superscript in latex, latex math notation, latex chemistry formulas, textsuperscript latex, textsubscript latex',
-    openGraph: mergeOpenGraph({
-      title: 'Subscripts and Superscripts in LaTeX – Guide 2026',
-      description: 'Complete guide to subscripts and superscripts in LaTeX with examples.',
-      type: 'article',
-      url: '/learn/subscripts-superscripts',
-    }),
-    twitter: {
-      card: 'summary_large_image',
-      title: 'Subscripts and Superscripts in LaTeX',
-      description: 'Learn subscript and superscript notation in LaTeX for math and science.',
-    },
-    alternates: {
-      canonical: '/learn/subscripts-superscripts',
-    },
-  }
+  return learnMetadata(page)
 }

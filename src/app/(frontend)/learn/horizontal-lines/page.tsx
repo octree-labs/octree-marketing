@@ -1,6 +1,6 @@
 import type { Metadata } from 'next/types'
 
-import { mergeOpenGraph } from '@/utilities/mergeOpenGraph'
+import { learnMetadata } from '@/utilities/learnMetadata'
 import Link from 'next/link'
 import { buttonVariants } from '@/components/ui/button'
 import React from 'react'
@@ -9,6 +9,7 @@ import {
   getLearnBreadcrumbs,
 } from '@/utilities/generateBreadcrumbs'
 import { RelatedPosts } from '@/components/Learn/related-posts'
+import { LearnSchema } from '@/components/Learn/schema'
 
 export const dynamic = 'force-static'
 export const revalidate = 3600
@@ -16,12 +17,29 @@ export const revalidate = 3600
 const breadcrumbs = getLearnBreadcrumbs('Horizontal Lines in LaTeX', 'horizontal-lines')
 const breadcrumbSchema = generateBreadcrumbSchema(breadcrumbs)
 
+const page = {
+  slug: 'horizontal-lines',
+  title: 'Horizontal Lines in LaTeX: \\hrule, \\rule, \\hrulefill and Table Rules',
+  seoTitle: 'Horizontal Lines in LaTeX: \\hrule, \\rule, \\hline',
+  description: 'How to draw a horizontal line in LaTeX: \\hrule vs \\rule{\\linewidth}{0.4pt}, \\hrulefill and \\dotfill, partial and centred lines, colored and dashed rules, \\hline and booktabs rules in tables, header and footer rules with fancyhdr, rules under section titles, signature lines and the Misplaced \\noalign error.',
+  keywords: 'horizontal line latex, latex horizontal line, latex horizontal line in text, latex horizontal rule, latex hrule, latex rule, latex hrulefill, latex line across page, latex draw line, latex dashed line, latex colored line, latex hline, booktabs toprule midrule bottomrule, latex signature line, latex headrulewidth, misplaced noalign, latex vertical line',
+}
+
+/** Last content update, used for dateModified in the article schema. */
+const LAST_UPDATED = '2026-10-17'
+
 export default async function LaTeXHorizontalLinesPage() {
   return (
     <div className="pt-24 pb-24">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
+      <LearnSchema
+        slug={page.slug}
+        title={page.title}
+        description={page.description}
+        dateModified={LAST_UPDATED}
       />
       <div className="container">
         <div className="mb-8 max-w-4xl mx-auto">
@@ -514,23 +532,5 @@ A colored dashed rule:
 }
 
 export function generateMetadata(): Metadata {
-  return {
-    title: 'Horizontal Lines in LaTeX: \\hrule, \\rule, \\hrulefill and Table Rules',
-    description: 'How to draw a horizontal line in LaTeX: \\hrule vs \\rule{\\linewidth}{0.4pt}, \\hrulefill and \\dotfill, partial and centred lines, colored and dashed rules, \\hline and booktabs rules in tables, header and footer rules with fancyhdr, rules under section titles, signature lines and the Misplaced \\noalign error.',
-    keywords: 'horizontal line latex, latex horizontal line, latex horizontal line in text, latex horizontal rule, latex hrule, latex rule, latex hrulefill, latex line across page, latex draw line, latex dashed line, latex colored line, latex hline, booktabs toprule midrule bottomrule, latex signature line, latex headrulewidth, misplaced noalign, latex vertical line',
-    openGraph: mergeOpenGraph({
-      title: 'Horizontal Lines in LaTeX: \\hrule, \\rule, \\hrulefill and Table Rules',
-      description: 'Every way to draw a horizontal line in LaTeX: \\hrule, \\rule, \\hrulefill, colored and dashed rules, table rules with booktabs, header rules, section rules and signature lines.',
-      type: 'article',
-      url: '/learn/horizontal-lines',
-    }),
-    twitter: {
-      card: 'summary_large_image',
-      title: 'Horizontal Lines in LaTeX',
-      description: '\\hrule, \\rule and \\hrulefill explained, plus table, header and section rules.',
-    },
-    alternates: {
-      canonical: '/learn/horizontal-lines',
-    },
-  }
+  return learnMetadata(page)
 }

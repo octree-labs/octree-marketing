@@ -1,6 +1,6 @@
 import type { Metadata } from 'next/types'
 
-import { mergeOpenGraph } from '@/utilities/mergeOpenGraph'
+import { learnMetadata } from '@/utilities/learnMetadata'
 import Link from 'next/link'
 import { buttonVariants } from '@/components/ui/button'
 import React from 'react'
@@ -9,6 +9,7 @@ import {
   getLearnBreadcrumbs,
 } from '@/utilities/generateBreadcrumbs'
 import { RelatedPosts } from '@/components/Learn/related-posts'
+import { LearnSchema } from '@/components/Learn/schema'
 
 export const dynamic = 'force-static'
 export const revalidate = 3600
@@ -16,12 +17,28 @@ export const revalidate = 3600
 const breadcrumbs = getLearnBreadcrumbs('Matrices', 'matrices')
 const breadcrumbSchema = generateBreadcrumbSchema(breadcrumbs)
 
+const page = {
+  slug: 'matrices',
+  title: 'Matrices in LaTeX – Complete Guide 2026',
+  description: 'Learn how to create matrices in LaTeX using amsmath. Guide covers pmatrix, bmatrix, vmatrix, augmented matrices, determinants, identity matrices, and matrix operations.',
+  keywords: 'latex matrix, latex pmatrix, latex bmatrix, latex vmatrix, latex determinant, latex augmented matrix, latex identity matrix, latex matrix multiplication, latex amsmath matrix, latex array, how to write matrix in latex, latex matrix examples',
+}
+
+/** Last content update, used for dateModified in the article schema. */
+const LAST_UPDATED = '2026-10-17'
+
 export default async function MatricesPage() {
   return (
     <div className="pt-24 pb-24">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
+      <LearnSchema
+        slug={page.slug}
+        title={page.title}
+        description={page.description}
+        dateModified={LAST_UPDATED}
       />
       <div className="container">
         <div className="mb-8 max-w-4xl mx-auto">
@@ -828,23 +845,5 @@ A A^{-1} = A^{-1} A = I
 }
 
 export function generateMetadata(): Metadata {
-  return {
-    title: 'Matrices in LaTeX – Complete Guide 2026',
-    description: 'Learn how to create matrices in LaTeX using amsmath. Guide covers pmatrix, bmatrix, vmatrix, augmented matrices, determinants, identity matrices, and matrix operations.',
-    keywords: 'latex matrix, latex pmatrix, latex bmatrix, latex vmatrix, latex determinant, latex augmented matrix, latex identity matrix, latex matrix multiplication, latex amsmath matrix, latex array, how to write matrix in latex, latex matrix examples',
-    openGraph: mergeOpenGraph({
-      title: 'Matrices in LaTeX – Complete Guide 2026',
-      description: 'Complete guide to creating matrices in LaTeX with amsmath.',
-      type: 'article',
-      url: '/learn/matrices',
-    }),
-    twitter: {
-      card: 'summary_large_image',
-      title: 'Matrices in LaTeX',
-      description: 'Learn to create and format matrices in LaTeX with practical examples.',
-    },
-    alternates: {
-      canonical: '/learn/matrices',
-    },
-  }
+  return learnMetadata(page)
 }
