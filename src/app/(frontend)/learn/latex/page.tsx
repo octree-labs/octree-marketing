@@ -213,6 +213,8 @@ As shown by Einstein~\\cite{einstein1905}...
             <li><Link href="/learn/page-size-margins">Page Size &amp; Margins</Link> – Control your document layout</li>
             <li><Link href="/learn/lists">LaTeX Lists</Link> – Create bulleted and numbered lists</li>
             <li><Link href="/learn/tables">LaTeX Tables</Link> – Build professional tables</li>
+            <li><Link href="/learn/hyperlinks">LaTeX Hyperlinks</Link> – Add clickable links with hyperref</li>
+            <li><Link href="/learn/comments">LaTeX Comments</Link> – Comment out lines and blocks, add todo notes</li>
             <li><Link href="/learn/colors">Using Colors</Link> – Add color to your documents</li>
             <li><Link href="/learn/mathematical-expressions">Mathematical Expressions</Link> – Write equations and formulas</li>
             <li><Link href="/learn/greek-letters-math-symbols">Greek Letters &amp; Symbols</Link> – Complete symbol reference</li>

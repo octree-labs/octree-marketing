@@ -113,6 +113,18 @@ const learnTopics = [
     description: 'APA 7 student and professional title pages: exact elements, formatting rules, worked examples, and the apa7 LaTeX class.',
     color: 'from-fuchsia-500/10 to-fuchsia-600/5',
   },
+  {
+    slug: 'hyperlinks',
+    title: 'LaTeX Hyperlinks',
+    description: 'Clickable links in LaTeX with hyperref: \\url, \\href, email links, internal references, link colors, removing link boxes, and PDF metadata.',
+    color: 'from-yellow-500/10 to-yellow-600/5',
+  },
+  {
+    slug: 'comments',
+    title: 'LaTeX Comments',
+    description: 'Single-line comments with %, block comments with the comment package and \\iffalse, editor shortcuts, todonotes, and draft/final switches.',
+    color: 'from-slate-500/10 to-slate-600/5',
+  },
 ]
 
 export default function LearnPage() {
