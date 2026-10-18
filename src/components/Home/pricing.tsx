@@ -1,26 +1,36 @@
 'use client'
 
 import { useState } from 'react'
-import { Check, Users } from 'lucide-react'
+import { Check, GraduationCap, Users, Zap } from 'lucide-react'
 import { cn } from '@/utilities/ui'
 import Compass from '@/components/icons/compass'
 import Sparkles from '@/components/icons/sparkles'
 import { PrimaryButton } from './primary-button'
 
+const APP_URL = 'https://app.useoctree.com'
+
+/** Keep in sync with data/constants.ts (PRO_PLANS, CREDIT_PACKS) in the app. */
+const PLANS = {
+  monthly: { price: '9.99', per: '/ month', note: 'Billed monthly · cancel anytime' },
+  annual: { price: '79', per: '/ year', note: '$6.58/mo · 2 months free · cancel anytime' },
+} as const
+
 export function Pricing() {
-  const [isMonthly, setIsMonthly] = useState(true)
+  const [isAnnual, setIsAnnual] = useState(false)
+  const plan = isAnnual ? PLANS.annual : PLANS.monthly
 
   const starterFeatures = [
-    '3-day free trial',
-    'Unlimited edits',
-    'Unlimited documents',
+    '5 AI edits per day',
+    'Unlimited projects and files',
+    'Fast PDF preview',
     'Community support',
   ]
 
   const proFeatures = [
+    '500 AI edits per month',
     'AI document generation',
-    'Unlimited edits',
-    'Unlimited documents',
+    'Export as PDF or ZIP',
+    'Unlimited projects and files',
     'Priority support',
   ]
 
@@ -39,32 +49,32 @@ export function Pricing() {
           description="Simple, transparent pricing for all your editing needs"
         />
 
-        {/* Weekly/Monthly Toggle */}
+        {/* Monthly/Annual Toggle */}
         <div className="flex justify-center">
           <div className="inline-flex items-center bg-neutral-100 rounded-full p-1">
             <button
-              onClick={() => setIsMonthly(false)}
+              onClick={() => setIsAnnual(false)}
               className={cn(
                 'px-5 py-2 rounded-full text-sm font-medium transition-all',
-                !isMonthly
-                  ? 'bg-white text-black shadow-sm'
-                  : 'text-neutral-500 hover:text-neutral-700',
-              )}
-            >
-              Weekly
-            </button>
-            <button
-              onClick={() => setIsMonthly(true)}
-              className={cn(
-                'px-5 py-2 rounded-full text-sm font-medium transition-all flex items-center gap-2',
-                isMonthly
+                !isAnnual
                   ? 'bg-white text-black shadow-sm'
                   : 'text-neutral-500 hover:text-neutral-700',
               )}
             >
               Monthly
+            </button>
+            <button
+              onClick={() => setIsAnnual(true)}
+              className={cn(
+                'px-5 py-2 rounded-full text-sm font-medium transition-all flex items-center gap-2',
+                isAnnual
+                  ? 'bg-white text-black shadow-sm'
+                  : 'text-neutral-500 hover:text-neutral-700',
+              )}
+            >
+              Annual
               <span className="text-xs bg-primary/10 text-primary px-2 py-0.5 rounded-full font-medium">
-                Save 50%
+                2 months free
               </span>
             </button>
           </div>
@@ -74,12 +84,12 @@ export function Pricing() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
         <PricingCard
           icon={<Compass className="w-4 h-4 md:w-5 md:h-5" />}
-          name="Trial"
-          description="Try Octree risk-free for 3 days"
-          price="Free"
+          name="Free"
+          description="Everything you need to start writing in LaTeX"
+          price="$0"
           features={starterFeatures}
           buttonText="Get Started"
-          buttonHref="https://github.com/octree-labs/octree"
+          buttonHref={`${APP_URL}/auth/sign-up`}
         />
 
         <PricingCard
@@ -87,17 +97,17 @@ export function Pricing() {
           name="Pro"
           description="Perfect for research teams and power users"
           price={
-            <div className="flex items-baseline gap-2">
+            <div className="flex flex-col gap-1">
               <div>
-                ${isMonthly ? '2.49' : '4.99'}{' '}
-                <span className="text-base md:text-lg font-normal">/ Week</span>
+                ${plan.price}{' '}
+                <span className="text-base md:text-lg font-normal">{plan.per}</span>
               </div>
-              {isMonthly && <span className="text-xs font-normal opacity-70">Billed monthly</span>}
+              <span className="text-xs font-normal opacity-70">{plan.note}</span>
             </div>
           }
           features={proFeatures}
           buttonText="Get Started"
-          buttonHref={`https://app.useoctree.com/buy?annual=${isMonthly}`}
+          buttonHref={`${APP_URL}/buy?plan=${isAnnual ? 'annual' : 'monthly'}`}
           isDark
         />
 
@@ -111,6 +121,56 @@ export function Pricing() {
           buttonHref="https://cal.com/basilyusuf1709/quick-chat"
         />
       </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+        <OfferRow
+          icon={<GraduationCap className="size-5" />}
+          title="Semester pass · $29 for 4 months"
+          description="Students: all of Pro for the term, billed once every 4 months. Cancel anytime."
+          href={`${APP_URL}/buy?plan=semester`}
+          cta="Get the Semester pass"
+        />
+        <OfferRow
+          icon={<Zap className="size-5" />}
+          title="100 AI edits · $5"
+          description="Out of edits? Buy a pack on any plan. Credits never expire and are used after your plan's edits."
+          href={`${APP_URL}/buy?plan=credits_100`}
+          cta="Buy edits"
+        />
+      </div>
+    </div>
+  )
+}
+
+function OfferRow({
+  icon,
+  title,
+  description,
+  href,
+  cta,
+}: {
+  icon: React.ReactNode
+  title: string
+  description: string
+  href: string
+  cta: string
+}) {
+  return (
+    <div className="p-5 md:p-6 flex flex-col sm:flex-row sm:items-center gap-4 border-2 border-neutral-100 rounded-2xl md:rounded-3xl shadow-sm">
+      <div className="size-10 shrink-0 rounded-full bg-primary/10 text-primary flex items-center justify-center">
+        {icon}
+      </div>
+      <div className="flex-1 flex flex-col gap-1">
+        <p className="text-base md:text-lg font-medium">{title}</p>
+        <p className="text-sm text-neutral-600">{description}</p>
+      </div>
+      <a
+        href={href}
+        className="text-sm font-medium text-primary whitespace-nowrap hover:underline"
+        data-location="pricing"
+      >
+        {cta} →
+      </a>
     </div>
   )
 }
