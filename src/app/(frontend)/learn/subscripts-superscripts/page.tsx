@@ -114,7 +114,7 @@ export default async function SubscriptsSuperscriptsPage() {
               <tr><td>1st, 2nd in a sentence</td><td><code>{`1\\textsuperscript{st}`}</code></td><td>text mode</td></tr>
               <tr><td>H₂O in a sentence</td><td><code>{`H\\textsubscript{2}O`}</code></td><td>text mode</td></tr>
               <tr><td>limits above and below Σ</td><td><code>{`$\\sum\\limits_{i=1}^{n}$`}</code></td><td>math mode</td></tr>
-              <tr><td>carbon-14 prescripts</td><td><code>{`$${'{}'}^{14}_{6}\\mathrm{C}$`}</code></td><td>math mode</td></tr>
+              <tr><td>carbon-14 prescripts</td><td><code>{`\${}^{14}_{6}\\mathrm{C}$`}</code></td><td>math mode</td></tr>
             </tbody>
           </table>
 
@@ -291,8 +291,8 @@ $a_{n}^{2}$
 $T_{\\mu\\nu}^{\\alpha\\beta}$   % tensor notation
 
 % Simultaneous notation in physics
-$${'{}'}^{14}_{6}\\mathrm{C}$    % carbon-14 isotope notation
-$${'{}'}^{A}_{Z}X$             % general isotope notation`}</code></pre>
+\${}^{14}_{6}\\mathrm{C}$    % carbon-14 isotope notation
+\${}^{A}_{Z}X$             % general isotope notation`}</code></pre>
 
           <p>
             When combining subscripts and superscripts, LaTeX automatically handles the vertical positioning.
@@ -305,7 +305,7 @@ $${'{}'}^{A}_{Z}X$             % general isotope notation`}</code></pre>
             superscript to an already-subscripted group:
           </p>
           <pre><code>{`$x_i^2$      % i and 2 stacked, both attached to x
-$${'{'}x_i${'}'}^2$    % 2 is a superscript of the group (x_i): it sits further right
+\${x_i}^2$    % 2 is a superscript of the group (x_i): it sits further right
 $(x_i)^2$    % the explicit, unambiguous form
 $x_{i}{}^{2}$ % an empty group staggers the scripts (used for tensors)`}</code></pre>
           <p>
@@ -401,9 +401,9 @@ The sum $\\displaystyle\\sum_{i=1}^{n} x_i$ is full size.
             group <code>&#123;&#125;</code> so they have something to hang on:
           </p>
           <pre><code>{`% Empty-group trick (no package needed)
-$${'{}'}^{14}_{6}\\mathrm{C}$     % carbon-14
-$${'{}'}_{92}^{235}\\mathrm{U}$   % uranium-235
-$${'{}'}^{t}A$                   % transpose, French style
+\${}^{14}_{6}\\mathrm{C}$     % carbon-14
+\${}_{92}^{235}\\mathrm{U}$   % uranium-235
+\${}^{t}A$                   % transpose, French style
 
 % mathtools \\prescript{sup}{sub}{base} aligns the prescripts properly
 \\usepackage{mathtools}
@@ -536,7 +536,7 @@ CO\\textsubscript{2} is carbon dioxide.
               </tr>
               <tr>
                 <td>Isotopes</td>
-                <td><code>{`$${'{}'}^{14}_{6}\\mathrm{C}$`}</code></td>
+                <td><code>{`\${}^{14}_{6}\\mathrm{C}$`}</code></td>
                 <td>Nuclear isotope notation</td>
               </tr>
               <tr>
@@ -659,7 +659,7 @@ $\\sum_{\\substack{i=1 \\\\ i \\neq j}}^{n} a_i$
               </tr>
               <tr>
                 <td><code>{`{}^{}_{}`}</code></td>
-                <td><code>{`$${'{}'}^{14}_{6}\\mathrm{C}$`}</code></td>
+                <td><code>{`\${}^{14}_{6}\\mathrm{C}$`}</code></td>
                 <td>Prescripts (isotope)</td>
               </tr>
               <tr>
@@ -734,7 +734,7 @@ $\\sum_{\\substack{i=1 \\\\ i \\neq j}}^{n} a_i$
               <tr>
                 <td><em>Double superscript</em></td>
                 <td>Two <code>^</code> on one base: <code>$x^a^b$</code></td>
-                <td><code>{`$x^{ab}$`}</code> or <code>{`$${'{'}x^a${'}'}^b$`}</code>, depending on what you mean</td>
+                <td><code>{`$x^{ab}$`}</code> or <code>{`\${x^a}^b$`}</code>, depending on what you mean</td>
               </tr>
               <tr>
                 <td><em>Double subscript</em></td>
@@ -804,7 +804,7 @@ $x^a^b$        % error: Double superscript
 
 % CORRECT: group appropriately
 $x^{ab}$       % a and b together as superscript
-$${'{'}x^a${'}'}^b$      % b is superscript of (x^a)
+\${x^a}^b$      % b is superscript of (x^a)
 
 % WRONG: nothing after the operator
 $x^$           % Missing { inserted
@@ -846,14 +846,14 @@ $x^{}$         % empty group is allowed (rarely useful)`}</code></pre>
           <p>
             You attached two superscripts to the same base, as in <code>$x^a^b$</code>. LaTeX cannot
             tell whether you mean x<sup>ab</sup> or (x<sup>a</sup>)<sup>b</sup>, so you have to group
-            one of them: <code>{`$x^{ab}$`}</code> or <code>{`$${'{'}x^a${'}'}^b$`}</code>.
+            one of them: <code>{`$x^{ab}$`}</code> or <code>{`\${x^a}^b$`}</code>.
             &ldquo;Double subscript&rdquo; is the same problem with underscores.
           </p>
           <h3>How do I put a subscript and a superscript on the same symbol?</h3>
           <p>
             Write both after the base in either order: <code>$x_i^2$</code> and <code>$x^2_i$</code>{' '}
             give the same result, with the two scripts stacked. For a prescript on the left, as in
-            isotope notation, use <code>{`$${'{}'}^{14}_{6}\\mathrm{C}$`}</code> or{' '}
+            isotope notation, use <code>{`\${}^{14}_{6}\\mathrm{C}$`}</code> or{' '}
             <code>{`\\prescript{14}{6}{\\mathrm{C}}`}</code> from mathtools.
           </p>
 
