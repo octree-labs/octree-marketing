@@ -19,8 +19,8 @@ const breadcrumbSchema = generateBreadcrumbSchema(breadcrumbs)
 const learnTopics = [
   {
     slug: 'latex',
-    title: 'Learn LaTeX',
-    description: 'Master the fundamentals of LaTeX for professional document typesetting. From basic syntax to advanced formatting techniques.',
+    title: 'LaTeX Tutorial for Beginners',
+    description: 'Your first LaTeX document in 15 minutes: zero-install setup, the preamble, formatting, sections, math, tables, figures, citations and reading the error log.',
     image: '/logos/LaTeX_logo.svg.png',
     color: 'from-blue-500/10 to-blue-600/5',
   },
@@ -58,8 +58,8 @@ const learnTopics = [
   },
   {
     slug: 'lists',
-    title: 'LaTeX Lists',
-    description: 'Create bulleted, numbered, and description lists in LaTeX. Customize bullets, numbering, and spacing with enumitem.',
+    title: 'Lists and Bullet Points',
+    description: 'Bullet points and numbered lists in LaTeX with itemize, enumerate and description. Custom bullets, enumitem labels and spacing, inline lists and Beamer.',
     color: 'from-teal-500/10 to-teal-600/5',
   },
   {
