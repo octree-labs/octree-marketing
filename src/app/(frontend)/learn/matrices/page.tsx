@@ -448,9 +448,9 @@ then $A + I = \\begin{psmallmatrix} 2 & 2 \\\\ 3 & 5 \\end{psmallmatrix}$.`}</co
 \\]`}</code></pre>
 
           <p>
-            The <code>c</code> columns in <code>array</code> are set slightly wider apart than
-            in <code>pmatrix</code>; add <code>@&#123;&#125;</code> at the ends of the
-            specification to trim the outer padding. You can also define a reusable augmented
+            Unlike <code>pmatrix</code>, <code>array</code> keeps a column&apos;s worth of padding
+            (<code>\arraycolsep</code>) inside the outer brackets; add <code>@&#123;&#125;</code>{' '}
+            at the ends of the specification to trim it. You can also define a reusable augmented
             matrix environment in your preamble:
           </p>
 
@@ -840,9 +840,11 @@ M = \\begin{pmatrix}
 \\end{pNiceMatrix}
 \\]`}</code></pre>
           <p>
-            nicematrix needs two compilation runs for its rules and labels to appear. The older{' '}
-            <code>blkarray</code> and <code>kbordermatrix</code> packages do the same job for
-            labelled matrices with less flexibility.
+            nicematrix stores cell positions in the <code>.aux</code> file, so features that
+            depend on them (dotted lines across cells, blocks, labels outside the brackets) can be
+            misplaced on the first run; compile twice. The older <code>blkarray</code> package and
+            plain TeX&apos;s <code>\bordermatrix</code> do the same job for labelled matrices with
+            less flexibility.
           </p>
 
           {/* ── Errors ── */}

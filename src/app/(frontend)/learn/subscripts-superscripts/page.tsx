@@ -37,7 +37,7 @@ const faq: FaqItem[] = [
   {
     question: 'How do you write a subscript in LaTeX?',
     answer:
-      'Use the underscore in math mode: $x_i$ or, for more than one character, $x_{i+1}$. In running text use \\textsubscript{...}, so water is H\\textsubscript{2}O. Both text commands are built into LaTeX since 2015.',
+      'Use the underscore in math mode: $x_i$ or, for more than one character, $x_{i+1}$. In running text use \\textsubscript{...}, so water is H\\textsubscript{2}O. Neither needs a package: \\textsuperscript has always been part of LaTeX 2e and \\textsubscript joined the kernel in 2015.',
   },
   {
     question: 'How do I write squared in LaTeX?',
@@ -270,8 +270,8 @@ an area of 5 m\\textsuperscript{2}`}</code></pre>
               typing the squared symbol and superscript numbers
             </Link>{' '}
             covers the keyboard shortcuts for Windows, Mac, Word and Google Docs. In a LaTeX source
-            file, prefer <code>^2</code>: pasting the ² character works under XeLaTeX and LuaLaTeX
-            and with <code>utf8</code> input in pdfLaTeX, but it is typeset as a text character,
+            file, prefer <code>^2</code>: pasting the ² character into running text works under XeLaTeX
+            and LuaLaTeX and with <code>utf8</code> input in pdfLaTeX, but it is typeset as a text character,
             not a math superscript, and will not align with <code>^</code> exponents next to it.
           </p>
 
@@ -613,7 +613,7 @@ $\\sideset{_a^b}{_c^d}{\\sum}$
 % \\substack: stacked subscripts (multi-line conditions)
 $\\sum_{\\substack{i=1 \\\\ i \\neq j}}^{n} a_i$
 
-% \\stackrel: deprecated, use \\overset instead
+% \\stackrel: older kernel command; \\overset does the same and more
 % $\\stackrel{\\text{def}}{=}$`}</code></pre>
 
           <p>
@@ -743,7 +743,7 @@ $\\sum_{\\substack{i=1 \\\\ i \\neq j}}^{n} a_i$
               </tr>
               <tr>
                 <td><em>Missing &#123; inserted</em></td>
-                <td>Nothing usable after <code>^</code> or <code>_</code>: <code>$x^$</code>, <code>$x_\$</code>, <code>$x^\left($</code></td>
+                <td>Nothing usable after <code>^</code> or <code>_</code>: <code>$x^$</code>, <code>$x_$</code>, <code>$x^\left($</code></td>
                 <td>Put a token or a braced group after the operator</td>
               </tr>
               <tr>
@@ -825,8 +825,9 @@ $x^{}$         % empty group is allowed (rarely useful)`}</code></pre>
           <p>
             Use the underscore in math mode: <code>$x_i$</code> or, for more than one character,{' '}
             <code>{`$x_{i+1}$`}</code>. In running text use <code>{`\\textsubscript{...}`}</code>,
-            so water is <code>{`H\\textsubscript{2}O`}</code>. Both text commands are built into
-            LaTeX since 2015.
+            so water is <code>{`H\\textsubscript{2}O`}</code>. Neither needs a package:{' '}
+            <code>\textsuperscript</code> has always been part of LaTeX 2e and{' '}
+            <code>\textsubscript</code> joined the kernel in 2015.
           </p>
           <h3>How do I write squared in LaTeX?</h3>
           <p>

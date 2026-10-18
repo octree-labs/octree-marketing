@@ -366,7 +366,7 @@ $\\int_a^b f(x) \\, dx$
               <tr>
                 <td><code>\oiint</code></td>
                 <td>Closed surface integral sign</td>
-                <td>Closed surface integral (esint or physics)</td>
+                <td>Closed surface integral (esint)</td>
               </tr>
               <tr>
                 <td><code>\idotsint</code></td>
@@ -826,7 +826,7 @@ $\\frac{d f}{d x}$ for a function of two variables
 $\\frac{\\partial f}{\\partial x}$
 
 % WRONG: two conditions with \\\\ outside \\substack
-$\\sum_{i=1 \\\\ i \\ne j}$     % error or garbage
+$\\sum_{i=1 \\\\ i \\ne j}$     % no error, but the line breaks inside the formula
 % CORRECT
 $\\sum_{\\substack{i=1 \\\\ i \\ne j}}$`}</code></pre>
           <table>
@@ -845,8 +845,8 @@ $\\sum_{\\substack{i=1 \\\\ i \\ne j}}$`}</code></pre>
               </tr>
               <tr>
                 <td><em>Undefined control sequence \dv</em> / <em>\pdv</em> / <em>\oiint</em></td>
-                <td>physics (or esint) not loaded</td>
-                <td><code>{`\\usepackage{physics}`}</code></td>
+                <td>physics (for <code>\dv</code>, <code>\pdv</code>) or esint (for <code>\oiint</code>) not loaded</td>
+                <td><code>{`\\usepackage{physics}`}</code> or <code>{`\\usepackage{esint}`}</code></td>
               </tr>
               <tr>
                 <td><em>Command \dd already defined</em></td>
@@ -934,7 +934,7 @@ $\\sum_{\\substack{i=1 \\\\ i \\ne j}}$`}</code></pre>
             <li><Link href="https://tools.useoctree.com/tools/latex-preview" target="_blank" rel="noopener noreferrer">LaTeX Preview</Link> – Test your integrals, sums, and limits with live preview</li>
             <li><Link href="https://tools.useoctree.com/symbols/summation" target="_blank" rel="noopener noreferrer">Summation Symbol</Link> – Copy Σ and the LaTeX for every summation variant</li>
             <li><Link href="https://tools.useoctree.com/tools/math-to-latex" target="_blank" rel="noopener noreferrer">Math to LaTeX Converter</Link> – Turn handwritten or typed math into LaTeX</li>
-            <li><Link href="https://tools.useoctree.com/tools/image-to-latex" target="_blank" rel="noopener noreferrer">Image to LaTeX</Link> – Convert handwritten or printed math to LaTeX code</li>
+            <li><Link href="https://tools.useoctree.com/tools/ai-latex-generator" target="_blank" rel="noopener noreferrer">AI LaTeX Generator</Link> – Describe a formula in words and get the LaTeX</li>
           </ul>
 
           <RelatedPosts searchTerm="LaTeX calculus" title="Related Articles" />

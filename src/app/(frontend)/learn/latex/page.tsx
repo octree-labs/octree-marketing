@@ -134,7 +134,7 @@ export default async function LearnLatexPage() {
             For local, offline work install a TeX distribution and an editor:
           </p>
           <ul>
-            <li><strong>TeX Live</strong> (Windows, Linux; on macOS as <strong>MacTeX</strong>) &ndash; the complete distribution, about 5 GB with every package. Install once a year.</li>
+            <li><strong>TeX Live</strong> (Windows, Linux; on macOS as <strong>MacTeX</strong>) &ndash; the complete distribution, several gigabytes with every package. Install once a year.</li>
             <li><strong>MiKTeX</strong> (Windows, also macOS and Linux) &ndash; smaller; installs packages on demand the first time a document needs them.</li>
             <li><strong>An editor</strong> &ndash; TeXstudio and TeXworks come with everything configured; VS Code with the LaTeX Workshop extension is popular with programmers.</li>
           </ul>
@@ -395,16 +395,17 @@ Table~\\ref{tab:grades} lists the results.`}</code></pre>
 
 \\begin{figure}[htbp]
   \\centering
-  \\includegraphics[width=0.8\\textwidth]{plot.png}
+  \\includegraphics[width=0.8\\textwidth]{example-image}
   \\caption{A descriptive caption.}
   \\label{fig:plot}
 \\end{figure}
 
 See Figure~\\ref{fig:plot}.`}</code></pre>
           <ul>
+            <li><code>example-image</code> is a placeholder picture that ships with every TeX distribution (the <code>mwe</code> package), so the snippet compiles as written; replace it with your own file name, such as <code>plot.png</code>.</li>
             <li><code>[htbp]</code> lists the placements LaTeX may use: here, top of page, bottom, or a page of floats. It is a preference, not a command; <code>[H]</code> from the <code>float</code> package forces &ldquo;exactly here&rdquo;.</li>
             <li><code>width=0.8\textwidth</code> scales the image to 80% of the text width; <code>scale=0.5</code> and <code>height=5cm</code> also work.</li>
-            <li>PDF, PNG and JPEG are accepted by pdfLaTeX. Convert SVG and EPS to PDF first, or use the <code>svg</code> package.</li>
+            <li>PDF, PNG and JPEG are accepted by pdfLaTeX; an EPS file is converted to PDF on the fly (graphicx loads <code>epstopdf</code> for you), and SVG needs the <code>svg</code> package or a manual export to PDF.</li>
             <li>Put images in a folder and point to it once: <code>\graphicspath&#123;&#123;figures/&#125;&#125;</code>.</li>
             <li>Side-by-side images use the <code>subcaption</code> package.</li>
           </ul>
@@ -440,7 +441,7 @@ See Figure~\\ref{fig:plot}.`}</code></pre>
 \\bibliography{references}     % the .bib file without extension`}</code></pre>
           <h3>biblatex (modern)</h3>
           <pre><code>{`\\usepackage[backend=biber,style=authoryear]{biblatex}   % preamble
-\\addbibresource{references.bib}
+\\addbibresource{references.bib}                        % also preamble
 
 \\textcite{knuth1984} wrote it; see also \\parencite{einstein1905}.
 

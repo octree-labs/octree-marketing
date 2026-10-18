@@ -42,7 +42,7 @@ const faq: FaqItem[] = [
   {
     question: 'Should I use $$...$$ in LaTeX?',
     answer:
-      'No. $$...$$ is plain TeX syntax. In LaTeX it ignores the fleqn class option, gives inconsistent vertical spacing, and is not understood by amsmath. Use \\[...\\] for an unnumbered display and equation for a numbered one.',
+      'No. $$...$$ is plain TeX syntax. In LaTeX it ignores the fleqn class option and is not understood by amsmath, so \\tag and \\qedhere do not work inside it. Use \\[...\\] for an unnumbered display and equation for a numbered one.',
   },
   {
     question: 'How do I write an nth root in LaTeX?',
@@ -116,10 +116,11 @@ export default async function MathematicalExpressionsPage() {
 % Equivalent using \\(...\\)
 The Pythagorean theorem states that \\(a^2 + b^2 = c^2\\).`}</code></pre>
           <p>
-            The two forms are equivalent. <code>\(...\)</code> has one practical advantage: a
-            missing closing <code>\)</code> is reported where it happens, whereas a missing{' '}
-            <code>$</code> makes LaTeX read the rest of the paragraph as math and report an error
-            somewhere else. Inline mode automatically reduces the size of large operators,
+            The two forms are equivalent. <code>\(...\)</code> has one practical advantage:
+            because the opening and closing commands differ, a forgotten <code>\)</code> is caught
+            at the next <code>\(</code> (<em>Bad math environment delimiter</em>), whereas a
+            forgotten <code>$</code> silently pairs with the next <code>$</code> and the error
+            surfaces somewhere else. Inline mode automatically reduces the size of large operators,
             fractions, and limits so the formula fits within the line height. For instance, a
             fraction like <code>$\frac&#123;1&#125;&#123;2&#125;$</code> will appear smaller than
             in display mode.
@@ -154,11 +155,12 @@ The Pythagorean theorem states that \\(a^2 + b^2 = c^2\\).`}</code></pre>
           <p>
             You will see <code>$$...$$</code> in older documents and on the web. It is plain TeX
             syntax, and in LaTeX it misbehaves in three ways: it ignores the <code>fleqn</code>{' '}
-            class option that left-aligns displays, it gets the vertical space above and below
-            the display wrong in some situations (double spacing after a display that ends a
-            paragraph), and amsmath does not know about it, so features such as{' '}
-            <code>\qedhere</code> and <code>\tag</code> fail inside it. Use{' '}
-            <code>\[...\]</code> instead; it costs the same number of keystrokes.
+            class option, so the display stays centred while every <code>\[...\]</code> moves
+            to the left margin; amsmath does not know about it, so <code>\tag</code> stops with{' '}
+            <em>\tag not allowed here</em> and <code>\qedhere</code> puts the QED box in the wrong
+            place; and it is unchecked, so a stray <code>$$</code> inside other math goes
+            unnoticed where <code>\[</code> would report <em>Bad math environment delimiter</em>.
+            Use <code>\[...\]</code> instead; it costs the same number of keystrokes.
           </p>
           <pre><code>{`% Avoid
 $$ E = mc^2 $$
@@ -993,8 +995,9 @@ As shown in Equation~\\ref{eq:einstein}, energy and mass are equivalent.`}</code
           <h3>Should I use $$...$$ in LaTeX?</h3>
           <p>
             No. <code>$$...$$</code> is plain TeX syntax. In LaTeX it ignores the{' '}
-            <code>fleqn</code> class option, gives inconsistent vertical spacing, and is not
-            understood by amsmath. Use <code>\[...\]</code> for an unnumbered display and{' '}
+            <code>fleqn</code> class option and is not understood by amsmath, so{' '}
+            <code>\tag</code> and <code>\qedhere</code> do not work inside it. Use{' '}
+            <code>\[...\]</code> for an unnumbered display and{' '}
             <code>equation</code> for a numbered one.
           </p>
           <h3>How do I write an nth root in LaTeX?</h3>
