@@ -103,9 +103,8 @@ export default async function LaTeXHyperlinksPage() {
           <pre><code>{`\\href{file:./appendix.pdf}{the appendix}
 \\href{run:./analysis.xlsx}{the spreadsheet}
 
-% Relative links resolve against a base URL
-\\hyperbaseurl{https://www.useoctree.com/}
-\\href{learn/footnotes}{the footnotes guide}`}</code></pre>
+% A target without a scheme is treated as a local file, not a web URL
+\\href{appendix.pdf}{the appendix}   % same as file:appendix.pdf`}</code></pre>
           <p>
             Links to figures or data hosted online are more robust than file links; if a document
             is going to be emailed or uploaded, prefer a full <code>https://</code> address.
@@ -124,7 +123,7 @@ export default async function LaTeXHyperlinksPage() {
 
 % 2. Add extra break points yourself (after loading hyperref)
 \\makeatletter
-\\g@addto@macro{\\UrlBreaks}{\\UrlOrds}   % allow breaks after letters/digits too
+\\g@addto@macro{\\UrlBreaks}{\\UrlOrds}   % also allow breaks after - * ~ ' \"
 \\makeatother
 
 % 3. Let URLs break anywhere: load xurl after hyperref
@@ -274,7 +273,7 @@ As noted \\hyperlink{data-note}{earlier}, the data are recent.`}</code></pre>
           </p>
           <pre><code>{`\\href{mailto:ada@example.edu}{ada@example.edu}
 \\href{mailto:ada@example.edu}{\\nolinkurl{ada@example.edu}}
-\\href{mailto:ada@example.edu?subject=Question about the paper}{Email the author}`}</code></pre>
+\\href{mailto:ada@example.edu?subject=Question%20about%20the%20paper}{Email the author}`}</code></pre>
 
           {/* ── Fragile contexts ── */}
           <h2>Links in Section Titles, Captions and Footnotes</h2>
@@ -288,7 +287,7 @@ As noted \\hyperlink{data-note}{earlier}, the data are recent.`}</code></pre>
           <pre><code>{`\\section{Results for \\texorpdfstring{$\\alpha > 1$}{alpha > 1}}
 \\section{The \\texorpdfstring{\\href{https://ctan.org}{CTAN}}{CTAN} archive}
 
-% In a caption, \\url is fragile: protect it or use a short caption
+% In a caption, URLs with special characters can break: use a short caption
 \\caption[Data source]{Data from \\protect\\url{https://example.org/data}}
 
 % Inside a footnote \\url and \\href work when the address has no special
@@ -302,7 +301,7 @@ Details are online.\\footnote{\\url{https://example.org/details}}`}</code></pre>
             of <code>\href</code> both accept <code>%</code>, <code>#</code>, <code>~</code>,{' '}
             <code>&amp;</code> and <code>_</code> as they are. The exception is when the command
             sits inside the argument of another command (a <code>\footnote</code>, a{' '}
-            <code>\newcommand</code> definition, a table cell). There the characters are read by
+            <code>\newcommand</code> definition, a <code>\multicolumn</code> or <code>tabularx</code> cell). There the characters are read by
             TeX before <code>\url</code> sees them. For <code>\href</code> the fix is simple:
             hyperref accepts the escaped forms <code>\%</code>, <code>\#</code>,{' '}
             <code>\&amp;</code>, <code>\_</code> and <code>\~</code> in the URL argument. For{' '}

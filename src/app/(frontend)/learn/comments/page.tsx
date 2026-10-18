@@ -100,8 +100,8 @@ and a \\badcommand that does not exist.
             <code>\end{'{'}comment{'}'}</code> must each stand on a line of their own, with no
             leading spaces and nothing after them. The package reads the file line by line looking
             for exactly that line, so <code>{`text \\end{comment}`}</code> or an indented{' '}
-            <code>\end{'{'}comment{'}'}</code> is not recognised and the comment runs to the end
-            of the file.
+            <code>\end{'{'}comment{'}'}</code> is not recognised and LaTeX stops with{' '}
+            <em>Runaway argument? File ended while scanning use of \next</em>.
           </p>
 
           <h3>Named blocks: \includecomment and \excludecomment</h3>
@@ -131,7 +131,7 @@ Reviewer 2 asked for a longer proof here.
           <p>
             If you already load <code>verbatim</code> (for <code>\verbatiminput</code>, say), it
             provides a <code>comment</code> environment too, with the same name and the same
-            effect. Do not load both packages; pick one.
+            effect. Do not load both packages; pick one (loading <code>verbatim</code> then <code>comment</code> fails with <em>Bad space factor</em> at the first <code>\end{'{'}comment{'}'}</code>).
           </p>
           <pre><code>{`\\usepackage{verbatim}
 
@@ -166,8 +166,9 @@ This block is not typeset. Braces { do not } need { to balance.
           <p>
             You will also see <code>\if0 ... \fi</code> in older documents. <code>\if</code>{' '}
             compares the next two character tokens, so <code>\if0</code> followed by a line break
-            compares <code>0</code> with a space and is false. It breaks as soon as the commented
-            text happens to start with <code>0</code>; <code>\iffalse</code> has no such edge case.
+            compares <code>0</code> with a space and is false. The only edge case is <code>\if0</code> immediately
+            followed, with no space or line break, by <code>0</code> or a macro expanding to it;{' '}
+            <code>\iffalse</code> has no such edge case.
           </p>
 
           <h3>A macro that swallows its argument</h3>
@@ -264,13 +265,14 @@ The results\\todo{Add the 2026 data} are summarised in Table~2.
           <p>
             <code>%</code> works anywhere, including table rows and multi-line equations. The one
             thing to watch is position: a comment after <code>&amp;</code> but before{' '}
-            <code>\\</code> swallows the <code>\\</code> and merges the row with the next one.
-            Put the comment after the row terminator:
+            <code>\\</code> swallows the <code>\\</code>, so the next row runs into this one and
+            LaTeX stops with <em>Extra alignment tab has been changed to \cr</em>. Put the comment
+            after the row terminator:
           </p>
           <pre><code>{`\\begin{tabular}{lr}
   Item & Value \\\\ % header row
-  A    & 12    \\\\ % first data row
-  B    & 7     % WRONG: the \\\\ on this line is now part of the comment \\\\
+  A    & 12    % WRONG: the \\\\ on this line is now part of the comment \\\\
+  B    & 7     \\\\ % this row now collides with the one above
 \\end{tabular}
 
 \\begin{align}
