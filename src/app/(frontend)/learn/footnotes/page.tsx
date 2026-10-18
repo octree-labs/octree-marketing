@@ -427,6 +427,7 @@ interrupting the argument.
           <ul>
             <li><Link href="/learn/tables">LaTeX Tables</Link> &ndash; booktabs, multicolumn, longtable and colored tables</li>
             <li><Link href="/learn/hyperlinks">LaTeX Hyperlinks</Link> &ndash; hyperref, \url, \href and the hyperfootnotes option</li>
+            <li><Link href="/learn/quotes">LaTeX Quotation Marks &amp; Quotes</Link> &ndash; Quotation marks, csquotes and block quotes with attribution</li>
             <li><Link href="/learn/comments">LaTeX Comments</Link> &ndash; Single-line and block comments, todo notes</li>
             <li><Link href="/learn/page-size-margins">Page Size &amp; Margins</Link> &ndash; Control page layout with the geometry package</li>
             <li><Link href="/learn/bold-italics-underline">Bold, Italics &amp; Underline</Link> &ndash; Text formatting commands and packages</li>

@@ -125,6 +125,30 @@ const learnTopics = [
     description: 'Single-line comments with %, block comments with the comment package and \\iffalse, editor shortcuts, todonotes, and draft/final switches.',
     color: 'from-slate-500/10 to-slate-600/5',
   },
+  {
+    slug: 'page-numbering',
+    title: 'LaTeX Page Numbering',
+    description: 'Roman and arabic page numbers, starting at a given page, removing the number on the title page, fancyhdr footers, "Page X of Y" and Beamer frame numbers.',
+    color: 'from-stone-500/10 to-stone-600/5',
+  },
+  {
+    slug: 'horizontal-lines',
+    title: 'Horizontal Lines in LaTeX',
+    description: '\\hrule, \\rule and \\hrulefill, partial and centred lines, colored and dashed rules, table rules with booktabs, header rules and signature lines.',
+    color: 'from-zinc-500/10 to-zinc-600/5',
+  },
+  {
+    slug: 'quotes',
+    title: 'LaTeX Quotation Marks & Quotes',
+    description: 'The ``double\'\' and `single\' convention, csquotes and \\enquote, German and French quotes, quote and quotation environments, block quotes with attribution and Beamer.',
+    color: 'from-neutral-500/10 to-neutral-600/5',
+  },
+  {
+    slug: 'strikethrough',
+    title: 'Strikethrough & Cross Out',
+    description: 'Strike through text with ulem \\sout and soul \\st, cancel terms in math with the cancel package, cross out in tables and Beamer, and track changes.',
+    color: 'from-gray-500/10 to-gray-600/5',
+  },
 ]
 
 export default function LearnPage() {

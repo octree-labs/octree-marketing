@@ -856,6 +856,7 @@ on page~\\pageref{tab:summary}.`}</code></pre>
           <h2>Next Steps</h2>
           <p>Now that you can create professional tables in LaTeX, explore more topics:</p>
           <ul>
+            <li><Link href="/learn/horizontal-lines">Horizontal Lines in LaTeX</Link> &ndash; \hline, \cline and booktabs rules explained, plus rules outside tables</li>
             <li><Link href="/learn/footnotes">LaTeX Footnotes</Link> &ndash; Add footnotes inside tables with threeparttable and footnotemark</li>
             <li><Link href="/learn/lists">LaTeX Lists</Link> &ndash; Create ordered, unordered, and description lists</li>
             <li><Link href="/learn/page-size-margins">Page Size &amp; Margins</Link> &ndash; Control page layout with the geometry package</li>
