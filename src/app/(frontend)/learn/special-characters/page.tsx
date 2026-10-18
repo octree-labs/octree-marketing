@@ -21,7 +21,7 @@ const page = {
   slug: 'special-characters',
   title: 'Special Characters in LaTeX: Underscore, Tilde, Pipe, Percent, Dollar, Hash',
   seoTitle: 'Special Characters in LaTeX: _ ~ | % $ # and More',
-  description: 'How to type the ten reserved characters in LaTeX (# $ % & _ { } ~ ^ \\), the pipe, < and >, underscores in URLs and file names, inverted ?/!, degree, copyright and currency signs, and the errors they cause.',
+  description: 'How to print LaTeX\'s reserved characters # $ % & _ { } ~ ^ \\, the pipe, < and >, underscores in URLs, inverted ?/!, degree and currency signs, and errors.',
   keywords: 'underscore in latex, latex underscore, latex vertical line, latex pipe symbol, tilde in latex, latex tilde, latex percent sign, latex dollar sign, latex hashtag, latex hash symbol, latex backslash, latex braces, latex curly braces text, latex ampersand, latex caret, latex special characters, latex reserved characters, latex question mark upside down, latex less than, latex greater than, latex degree symbol, latex copyright symbol, latex euro symbol',
 }
 
