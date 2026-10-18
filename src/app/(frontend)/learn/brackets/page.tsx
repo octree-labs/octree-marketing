@@ -22,7 +22,7 @@ const page = {
   title: 'Brackets and Parentheses in LaTeX: Sizing, \\left \\right, and Matrix Brackets',
   seoTitle: 'Brackets in LaTeX: \\left \\right, Sizes, Matrices',
   description: 'LaTeX brackets: ( ) [ ] { }, angle brackets, bars, floor and ceiling, sizing with \\left \\right and \\big to \\Bigg, matrix brackets, cases, \\abs and \\norm.',
-  keywords: 'latex brackets, brackets in latex, latex angle brackets, angular brackets latex, latex matrix brackets, latex curly braces, latex big brackets, latex left right, latex absolute value bars, latex norm, latex floor ceiling, latex langle rangle, latex parentheses size, latex bracket sizes, latex square brackets, latex pmatrix bmatrix, latex cases bracket, latex underbrace, latex missing right inserted',
+  keywords: 'latex brackets, brackets in latex, latex angle brackets, angular brackets latex, latex matrix brackets, latex curly braces, latex big brackets, latex left right, latex absolute value bars, latex norm, latex floor ceiling, latex langle rangle, latex parentheses size, latex bracket sizes, latex square brackets, latex pmatrix bmatrix, latex cases bracket, latex underbrace, latex missing right inserted, latex accolades, accolades latex, latex curly brackets, latex braces, latex print curly braces, latex parentheses, latex brackets in text, latex escape braces, latex interval notation, latex set builder notation, latex inner product, latex textbraceleft, latex bracket types, latex brackets and parentheses printing',
 }
 
 /** Last content update, used for dateModified in the article schema. */
@@ -48,6 +48,11 @@ const faq: FaqItem[] = [
     question: 'Why do I get "Missing \\right. inserted"?',
     answer:
       'Every \\left must be matched by a \\right in the same line and the same cell of an alignment. A \\left( on one line of an align and the \\right) on the next, or on the other side of an &, triggers this error (inside align it is reported as "Extra }, or forgotten \\right"). Close the first line with \\right. and open the next with \\left. (the dot is an invisible delimiter), or use the manual \\bigl and \\bigr sizes, which need no matching.',
+  },
+  {
+    question: 'What are accolades in LaTeX?',
+    answer:
+      'Accolades is the Dutch and French name for curly braces { }. In LaTeX they are grouping characters, so to print them write \\{ and \\} (in text or math), \\textbraceleft and \\textbraceright in text, or \\lbrace and \\rbrace in math. \\left\\{ ... \\right\\} sizes them automatically, and Bmatrix puts them around a matrix.',
   },
   {
     question: 'How do I write curly braces in LaTeX?',
@@ -168,6 +173,27 @@ set-builder $\\{\\, x \\in \\mathbb{R} \\mid x > 0 \\,\\}$.`}</code></pre>
             convention, not a requirement; they stop the braces from crowding the contents.
           </p>
 
+          <h3>Accolades, braces, curly brackets: printing them in text</h3>
+          <p>
+            Curly braces go by several names: <em>accolades</em> in Dutch and French,{' '}
+            <em>curly brackets</em> in British usage, <em>braces</em> in American usage and in the
+            TeX documentation. Whatever you call them, they are the only bracket that needs
+            escaping. Parentheses and square brackets print as typed in text and in math, and{' '}
+            <code>\textbraceleft</code> and <code>\textbraceright</code> are the text-mode names
+            of <code>{`\\{`}</code> and <code>{`\\}`}</code>, useful inside <code>\texttt</code>.
+            For a snippet of code that is full of braces, <code>\verb</code> prints its argument
+            literally:
+          </p>
+          <pre><code>{`Parentheses (like these) and square brackets [like these] print as typed.
+Accolades, or curly braces, need a backslash: \\{ and \\}.
+In typewriter type: \\texttt{\\{\\}} or \\texttt{\\textbraceleft\\textbraceright}.
+A literal command: \\verb|\\section{Title}| prints the braces as well.`}</code></pre>
+          <p>
+            One square-bracket trap: a <code>[</code> directly after <code>\item</code>,{' '}
+            <code>\\</code> or a sectioning command is read as the start of an optional argument.
+            Hide it in a group: <code>\item {'{[}'}a, b] is an interval</code>.
+          </p>
+
           {/* ── left right ── */}
           <h2>Automatic Sizing with \left and \right</h2>
           <p>
@@ -256,6 +282,35 @@ set-builder $\\{\\, x \\in \\mathbb{R} \\mid x > 0 \\,\\}$.`}</code></pre>
             are fixed; amsmath makes them scale with the current font size, which is one more
             reason to load it.
           </p>
+
+          {/* ── Patterns ── */}
+          <h2>Intervals, Sets and Inner Products</h2>
+          <p>
+            The everyday uses of brackets rarely need sizing, but each has one detail worth
+            knowing. Intervals mix bracket types freely, and the reversed-bracket notation used in
+            French and Dutch texts works because <code>]</code> and <code>[</code> are ordinary
+            characters in math. Set-builder notation needs <code>\mid</code> rather than{' '}
+            <code>|</code> so the bar gets relation spacing. Inner products are{' '}
+            <code>\langle</code> and <code>\rangle</code>, never <code>&lt;</code> and{' '}
+            <code>&gt;</code>:
+          </p>
+          <pre><code>{`% Intervals: closed, open, half-open, and the French ]a, b[ for open
+$[a, b]$ \\quad $(a, b)$ \\quad $[a, b)$ \\quad $]a, b[$ \\quad $(-\\infty, 0]$
+
+% Sets and set-builder notation
+$\\{1, 2, 3\\}$ \\quad $\\{\\, x \\in \\mathbb{R} \\mid x > 0 \\,\\}$ \\quad $\\emptyset = \\{\\}$
+
+% Inner product, and the physics bra-ket
+$\\langle u, v \\rangle$ \\quad $\\langle \\psi \\mid \\phi \\rangle$
+
+% Sizing examples: tall contents, matched brackets
+\\[
+  \\left[ \\frac{\\sum_{i=1}^{n} x_i}{n} \\right]
+  \\qquad
+  \\left\\{ x \\in \\mathbb{R} : x > 0 \\right\\}
+  \\qquad
+  \\left\\langle \\frac{u}{\\|u\\|}, v \\right\\rangle
+\\]`}</code></pre>
 
           {/* ── Nested ── */}
           <h2>Nested Brackets</h2>
@@ -608,6 +663,15 @@ $M = \\begin{psmallmatrix} 1 & 2 \\\\ 3 & 4 \\end{psmallmatrix}$ inline.`}</code
             <code>\right.</code> and open the next with <code>\left.</code> (the dot is an
             invisible delimiter), or use the manual <code>\bigl</code> and <code>\bigr</code>{' '}
             sizes, which need no matching.
+          </p>
+          <h3>What are accolades in LaTeX?</h3>
+          <p>
+            Accolades is the Dutch and French name for curly braces {'{ }'}. In LaTeX they are
+            grouping characters, so to print them write <code>{`\\{`}</code> and{' '}
+            <code>{`\\}`}</code> (in text or math), <code>\textbraceleft</code> and{' '}
+            <code>\textbraceright</code> in text, or <code>\lbrace</code> and <code>\rbrace</code>{' '}
+            in math. <code>{`\\left\\{ ... \\right\\}`}</code> sizes them automatically, and{' '}
+            <code>Bmatrix</code> puts them around a matrix.
           </p>
           <h3>How do I write curly braces in LaTeX?</h3>
           <p>

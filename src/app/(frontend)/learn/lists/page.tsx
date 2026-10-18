@@ -22,7 +22,7 @@ const page = {
   title: 'Lists and Bullet Points in LaTeX: itemize, enumerate, description',
   seoTitle: 'Lists and Bullet Points in LaTeX',
   description: 'Bullet points and numbered lists in LaTeX: itemize, enumerate and description, custom bullets, enumitem labels and spacing, inline lists and Beamer.',
-  keywords: 'bullet points in latex, latex bullet points, latex list, latex itemize, latex enumerate, latex numbered list, latex description list, latex custom bullets, latex nested list, enumitem latex, latex list spacing, latex inline list, latex bullet symbol, latex checkmark bullet, latex change bullet style, latex resume list numbering, latex beamer itemize, something\'s wrong perhaps a missing item, too deeply nested latex',
+  keywords: 'bullet points in latex, latex bullet points, latex list, latex itemize, latex enumerate, latex numbered list, latex description list, latex custom bullets, latex nested list, enumitem latex, latex list spacing, latex inline list, latex bullet symbol, latex checkmark bullet, latex change bullet style, latex resume list numbering, latex beamer itemize, something\'s wrong perhaps a missing item, too deeply nested latex, latex itemize enumerate description, latex star bullet, latex list indentation, latex leftmargin, latex multicolumn list',
 }
 
 /** Last content update, used for dateModified in the article schema. */
@@ -416,6 +416,23 @@ See item~\\ref{it:first}.   % prints "i", not "(i)"`}</code></pre>
             </tbody>
           </table>
 
+          <p>
+            The same key sets the bullet for an itemize list, so you do not need to repeat{' '}
+            <code>\item[...]</code> on every line:
+          </p>
+          <pre><code>{`\\usepackage{amssymb}
+\\begin{itemize}[label=$\\star$]
+  \\item Every item gets a star
+\\end{itemize}
+
+% Other common labels: $\\bullet$ $\\circ$ $\\diamond$ $\\checkmark$ (amssymb) and --
+\\begin{itemize}[label=$\\checkmark$, leftmargin=*]
+  \\item Checklist item
+\\end{itemize}
+\\begin{itemize}[label=--]
+  \\item Dash bullet
+\\end{itemize}`}</code></pre>
+
           <h3>Resuming and starting at a number</h3>
           <pre><code>{`\\begin{enumerate}
   \\item One
@@ -481,7 +498,7 @@ A paragraph of explanation between the two halves.
             <code>itemsep</code> for anything you want to look consistent.
           </p>
 
-          <h3>Margins: leftmargin=*</h3>
+          <h3>Margins: leftmargin=* and fixed indents</h3>
           <p>
             <code>leftmargin=*</code> tells enumitem to compute the indent from the width of the
             label, so wide labels such as &ldquo;Step 10:&rdquo; do not collide with the text and
@@ -494,6 +511,10 @@ A paragraph of explanation between the two halves.
 
 \\begin{itemize}[leftmargin=0pt, itemindent=1em]
   \\item Bullet flush with the margin
+\\end{itemize}
+
+\\begin{itemize}[leftmargin=2cm]
+  \\item A fixed 2 cm indent, whatever the label width
 \\end{itemize}
 
 \\begin{enumerate}[label=\\alph*), leftmargin=*, nosep]

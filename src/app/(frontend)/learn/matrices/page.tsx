@@ -21,8 +21,8 @@ const page = {
   slug: 'matrices',
   title: 'Matrices in LaTeX: pmatrix, bmatrix, Matrix Brackets and Determinants',
   seoTitle: 'LaTeX Matrices: pmatrix, bmatrix and Brackets',
-  description: 'Matrices in LaTeX with amsmath: matrix brackets compared (pmatrix, bmatrix, vmatrix), smallmatrix inline, augmented matrices, transpose and determinants.',
-  keywords: 'latex matrix, latex matrices, matrix brackets latex, latex pmatrix, latex bmatrix, latex vmatrix, latex Bmatrix, latex Vmatrix, latex determinant, latex augmented matrix, latex identity matrix, latex transpose, latex smallmatrix, latex matrix inline, latex hdotsfor, latex ddots vdots cdots, MaxMatrixCols, nicematrix, latex amsmath matrix, latex array, how to write matrix in latex, latex matrix examples',
+  description: 'Matrices in LaTeX with amsmath: pmatrix, bmatrix and vmatrix compared, 2x2, 3x3 and 4x4 examples, determinants, inverse and transpose, augmented matrices.',
+  keywords: 'latex matrix, latex matrices, matrix brackets latex, latex pmatrix, latex bmatrix, latex vmatrix, latex Bmatrix, latex Vmatrix, latex determinant, latex augmented matrix, latex identity matrix, latex transpose, latex smallmatrix, latex matrix inline, latex hdotsfor, latex ddots vdots cdots, MaxMatrixCols, nicematrix, latex amsmath matrix, latex array, how to write matrix in latex, latex matrix examples, 2x2 matrix latex, 3x3 matrix latex, 4x4 matrix latex, latex 2x2 matrix, latex 3x3 matrix, latex 4x4 matrix, matrix latex, latex determinant 2x2, latex determinant 3x3, latex inverse matrix, latex matrix multiplication, latex column vector, latex row vector, latex matrices 2x2 3x3 4x4 and determinants',
 }
 
 /** Last content update, used for dateModified in the article schema. */
@@ -53,6 +53,16 @@ const faq: FaqItem[] = [
     question: 'Why do I get "Extra alignment tab has been changed to \\cr"?',
     answer:
       'A row has more & separators than the matrix allows. Either you have a stray & in one row, or the matrix has more than 10 columns, which is the amsmath default. Raise the limit in the preamble with \\setcounter{MaxMatrixCols}{20}.',
+  },
+  {
+    question: 'How do I write a 3x3 matrix in LaTeX?',
+    answer:
+      'Use bmatrix or pmatrix with three entries per row and three rows: \\[ \\begin{bmatrix} 1 & 2 & 3 \\\\ 4 & 5 & 6 \\\\ 7 & 8 & 9 \\end{bmatrix} \\]. A 2x2 or 4x4 matrix is the same environment with two or four entries per row; amsmath allows up to 10 columns by default.',
+  },
+  {
+    question: 'How do I write a determinant in LaTeX?',
+    answer:
+      'Use the vmatrix environment, which puts vertical bars around the entries: \\begin{vmatrix} a & b \\\\ c & d \\end{vmatrix} = ad - bc. For the function form write \\det(A) or \\det A; \\det is a predefined operator and is set upright with the correct spacing.',
   },
   {
     question: 'How do I write the transpose of a matrix?',
@@ -329,6 +339,121 @@ A = \\begin{bmatrix}
   b_2
 \\end{bmatrix}
 \\]`}</code></pre>
+
+          {/* ── 2x2, 3x3, 4x4 ── */}
+          <h2>2x2, 3x3 and 4x4 Matrices: Worked Examples</h2>
+          <p>
+            The syntax does not change with the size: a 2x2 matrix in LaTeX has two entries per
+            row and two rows, a 4x4 matrix has four of each. The examples below use{' '}
+            <code>bmatrix</code>; swap in <code>pmatrix</code> for parentheses. Each size comes
+            with its determinant, written with <code>vmatrix</code> and <code>\det</code> (the next
+            section), and the 2x2 case shows the inverse and transpose that the{' '}
+            <em>Matrix Operations</em> section covers in full.
+          </p>
+
+          <h3>2x2 matrix</h3>
+          <pre><code>{`% 2x2 matrix in square brackets
+\\[
+A = \\begin{bmatrix}
+  a & b \\\\
+  c & d
+\\end{bmatrix}
+\\]
+
+% 2x2 determinant with vmatrix, and with \\det
+\\[
+\\det(A) = \\begin{vmatrix}
+  a & b \\\\
+  c & d
+\\end{vmatrix}
+= ad - bc
+\\]
+
+% 2x2 inverse and transpose
+\\[
+A^{-1} = \\frac{1}{ad - bc}
+\\begin{bmatrix}
+  d & -b \\\\
+  -c & a
+\\end{bmatrix},
+\\qquad
+A^{\\mathsf{T}} = \\begin{bmatrix}
+  a & c \\\\
+  b & d
+\\end{bmatrix}
+\\]`}</code></pre>
+
+          <h3>3x3 matrix</h3>
+          <pre><code>{`% 3x3 matrix
+\\[
+B = \\begin{bmatrix}
+  1 & 2 & 3 \\\\
+  4 & 5 & 6 \\\\
+  7 & 8 & 9
+\\end{bmatrix}
+\\]
+
+% 3x3 determinant by cofactor expansion along the first row
+\\[
+\\begin{vmatrix}
+  a & b & c \\\\
+  d & e & f \\\\
+  g & h & i
+\\end{vmatrix}
+= a \\begin{vmatrix} e & f \\\\ h & i \\end{vmatrix}
+- b \\begin{vmatrix} d & f \\\\ g & i \\end{vmatrix}
++ c \\begin{vmatrix} d & e \\\\ g & h \\end{vmatrix}
+\\]
+
+% Applied to B above: the rows are in arithmetic progression, so B is singular
+\\[
+\\det(B) = 1(5 \\cdot 9 - 6 \\cdot 8) - 2(4 \\cdot 9 - 6 \\cdot 7) + 3(4 \\cdot 8 - 5 \\cdot 7)
+= -3 + 12 - 9 = 0
+\\]
+
+% 3x3 matrix times a column vector
+\\[
+B\\mathbf{x} = \\begin{bmatrix}
+  1 & 2 & 3 \\\\
+  4 & 5 & 6 \\\\
+  7 & 8 & 9
+\\end{bmatrix}
+\\begin{bmatrix} x_1 \\\\ x_2 \\\\ x_3 \\end{bmatrix}
+\\]`}</code></pre>
+
+          <h3>4x4 matrix</h3>
+          <pre><code>{`% 4x4 matrix with double-subscripted entries
+\\[
+C = \\begin{bmatrix}
+  c_{11} & c_{12} & c_{13} & c_{14} \\\\
+  c_{21} & c_{22} & c_{23} & c_{24} \\\\
+  c_{31} & c_{32} & c_{33} & c_{34} \\\\
+  c_{41} & c_{42} & c_{43} & c_{44}
+\\end{bmatrix}
+\\]
+
+% 4x4 identity, and a 4x4 homogeneous transformation (translation by t)
+\\[
+I_4 = \\begin{bmatrix}
+  1 & 0 & 0 & 0 \\\\
+  0 & 1 & 0 & 0 \\\\
+  0 & 0 & 1 & 0 \\\\
+  0 & 0 & 0 & 1
+\\end{bmatrix},
+\\qquad
+T = \\begin{bmatrix}
+  1 & 0 & 0 & t_x \\\\
+  0 & 1 & 0 & t_y \\\\
+  0 & 0 & 1 & t_z \\\\
+  0 & 0 & 0 & 1
+\\end{bmatrix}
+\\]`}</code></pre>
+          <p>
+            Entries like <code>{`c_{11}`}</code> need braces around the two-digit subscript;{' '}
+            <code>c_11</code> would subscript only the first 1. Past four columns the same pattern
+            continues up to the amsmath limit of ten, which the <em>Matrix Sizing</em> section
+            shows how to raise.
+          </p>
 
           {/* ── vmatrix ── */}
           <h2>Determinants (vmatrix) and \det</h2>
@@ -1054,6 +1179,21 @@ M = \\begin{pmatrix}
             stray <code>&amp;</code> in one row, or the matrix has more than 10 columns, which is
             the amsmath default. Raise the limit in the preamble with{' '}
             <code>{`\\setcounter{MaxMatrixCols}{20}`}</code>.
+          </p>
+          <h3>How do I write a 3x3 matrix in LaTeX?</h3>
+          <p>
+            Use <code>bmatrix</code> or <code>pmatrix</code> with three entries per row and three
+            rows:{' '}
+            <code>{`\\[ \\begin{bmatrix} 1 & 2 & 3 \\\\ 4 & 5 & 6 \\\\ 7 & 8 & 9 \\end{bmatrix} \\]`}</code>.
+            A 2x2 or 4x4 matrix is the same environment with two or four entries per row; amsmath
+            allows up to 10 columns by default.
+          </p>
+          <h3>How do I write a determinant in LaTeX?</h3>
+          <p>
+            Use the <code>vmatrix</code> environment, which puts vertical bars around the entries:{' '}
+            <code>{`\\begin{vmatrix} a & b \\\\ c & d \\end{vmatrix} = ad - bc`}</code>. For the
+            function form write <code>\det(A)</code> or <code>\det A</code>; <code>\det</code> is a
+            predefined operator and is set upright with the correct spacing.
           </p>
           <h3>How do I write the transpose of a matrix?</h3>
           <p>
