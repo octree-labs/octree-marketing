@@ -224,6 +224,12 @@ const learnTopics = [
     description: 'Power, product, quotient and chain rules, a table of common and trig derivatives, the six inverse trig derivatives, worked examples and the LaTeX for every formula.',
     color: 'from-amber-500/10 to-orange-600/5',
   },
+  {
+    slug: 'apa-headings',
+    title: 'APA Headings',
+    description: 'The five APA 7 heading levels with exact formatting, the rules for choosing a level, a worked outline of a student paper, and the headings in LaTeX with apa7 or titlesec.',
+    color: 'from-rose-500/10 to-red-600/5',
+  },
 ]
 
 export default function LearnPage() {
