@@ -8,15 +8,17 @@ export function PrimaryButton({
   className,
   href = 'https://app.useoctree.com/',
   location,
+  onClick,
 }: {
   children: React.ReactNode
   className?: string
   href?: string
   /** Where on the site this CTA lives; recorded as the `location` of the cta_clicked event. */
   location?: string
+  onClick?: React.MouseEventHandler<HTMLAnchorElement>
 }) {
   return (
-    <Link href={href} data-cta-location={location}>
+    <Link href={href} data-cta-location={location} onClick={onClick}>
       <Button
         className={cn(
           'group w-fit',
