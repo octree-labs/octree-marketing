@@ -594,8 +594,10 @@ one volume of a set \\autocite[140]{santos2020}, a republished classic
             examples enter one. <code>origdate</code> supplies the original publication year of a
             republished work, <code>volume</code> prints &quot;Vol. 2&quot; after the title, and{' '}
             <code>volumes = &#123;4&#125;</code> on an entry for a whole set prints &quot;4
-            vols.&quot; after the year. The e-book and whole-set forms are not in the compiled
-            example above, so check them against the handbook patterns earlier on this page.
+            volumes.&quot; after the year (the handbook pattern abbreviates it to &quot;4 vols.&quot;,
+            so edit the output if your instructor is strict). Both forms were compiled with
+            biblatex-mla 2.1a; the e-book entry renders as &quot;E-book ed., Brightwater P,
+            2024.&quot;, which matches the handbook pattern earlier on this page.
             Everything else, including the comma versus period punctuation between elements, comes
             out of the <code>.bib</code> data.
           </p>
