@@ -230,6 +230,12 @@ const learnTopics = [
     description: 'The five APA 7 heading levels with exact formatting, the rules for choosing a level, a worked outline of a student paper, and the headings in LaTeX with apa7 or titlesec.',
     color: 'from-rose-500/10 to-red-600/5',
   },
+  {
+    slug: 'ama-citation-format',
+    title: 'AMA Citation Format',
+    description: 'Superscript in-text citations, the numbered reference list, examples for journal articles, books, chapters, websites and reports, AMA vs APA vs Vancouver, and AMA citations in LaTeX.',
+    color: 'from-rose-500/10 to-red-600/5',
+  },
 ]
 
 export default function LearnPage() {
