@@ -130,8 +130,9 @@ export default async function MlaBookCitationPage() {
                 <td>Publisher</td>
                 <td>
                   Drop business words (Inc., Co., Ltd., Press is kept) and initial articles;
-                  write University Press as UP (Oxford UP, U of Chicago P). Omit the publisher
-                  when it is the same as the author.
+                  write University Press as UP (Oxford UP, U of Chicago P). When the author is
+                  also the publisher, begin the entry with the title and name the organization
+                  only as publisher.
                 </td>
               </tr>
               <tr>
@@ -239,7 +240,8 @@ export default async function MlaBookCitationPage() {
             <p>In-text: (Vance 58)</p>
           </blockquote>
           <p>
-            Named editions work the same way: Revised ed., Expanded ed. The edition is required
+            Named editions work the same way, abbreviated as the handbook does: Rev. ed., Expanded
+            ed. The edition is required
             because page numbers differ between editions.
           </p>
 
@@ -346,9 +348,10 @@ export default async function MlaBookCitationPage() {
             </li>
             <li>
               <strong>Same author, several works.</strong> Give the name in the first entry only;
-              in later entries replace it with three hyphens and a period (---.) and order those
-              entries alphabetically by title. A work the author wrote alone comes before works
-              written with others.
+              in later entries replace it with three hyphens and a period (---.), or three em
+              dashes used consistently, and order those entries alphabetically by title. A work
+              the author wrote alone comes before works written with others, and a co-authored
+              entry repeats the full name rather than the dashes.
             </li>
             <li>
               <strong>One entry per source.</strong> A book you cite twenty times appears once.
@@ -584,13 +587,17 @@ one volume of a set \\autocite[140]{santos2020}, a republished classic
 }`}</code></pre>
           <p>
             A few field notes. <code>edition = &#123;2&#125;</code> as a bare number is printed as
-            &quot;2nd ed.&quot;; a named edition such as <code>&#123;Revised ed.&#125;</code> is
-            printed as typed, which is also how to get &quot;E-book ed.&quot; into an entry.{' '}
-            <code>origdate</code> supplies the original publication year of a republished work, and{' '}
-            <code>volume</code> prints &quot;Vol. 2&quot; after the title. The e-book and
-            whole-set multivolume forms are the two the style has no dedicated field for, so check
-            those entries against the examples above. Everything else, including the comma versus
-            period punctuation between elements, comes out of the <code>.bib</code> data.
+            &quot;2nd ed.&quot;; a named edition such as <code>&#123;Rev. ed.&#125;</code> is
+            printed as typed (the style also rewrites a spelled-out &quot;edition&quot; to
+            &quot;ed.&quot;), and there is no separate e-book field, so{' '}
+            <code>edition = &#123;E-book ed.&#125;</code> is how the package&apos;s own MLA 9
+            examples enter one. <code>origdate</code> supplies the original publication year of a
+            republished work, <code>volume</code> prints &quot;Vol. 2&quot; after the title, and{' '}
+            <code>volumes = &#123;4&#125;</code> on an entry for a whole set prints &quot;4
+            vols.&quot; after the year. The e-book and whole-set forms are not in the compiled
+            example above, so check them against the handbook patterns earlier on this page.
+            Everything else, including the comma versus period punctuation between elements, comes
+            out of the <code>.bib</code> data.
           </p>
 
           <h3>Printing the Works Cited and the hanging indent</h3>
@@ -613,9 +620,11 @@ one volume of a set \\autocite[140]{santos2020}, a republished classic
             <code>\doublespacing</code>, the list is double-spaced with no extra gap between
             entries. If you are building the list by hand instead, the{' '}
             <Link href="/learn/mla-in-text-citation">in-text citation guide</Link> has a two-line
-            fallback using <code>\hangindent</code>. Repeated authors are printed with the three-dash
-            form the handbook prescribes, so write the full name in every <code>.bib</code> entry and
-            let the style collapse it.
+            fallback using <code>\hangindent</code>. Repeated authors are collapsed for you: write
+            the full name in every <code>.bib</code> entry and the style prints the later entries
+            with three em dashes (&#8212;&#8212;&#8212;.), which the handbook accepts in place of
+            three hyphens as long as a paper uses one form throughout; the package option{' '}
+            <code>longdash=false</code> switches to hyphens.
           </p>
 
           {/* ───────────────────────────── FAQ ───────────────────────────── */}
