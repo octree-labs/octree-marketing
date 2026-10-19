@@ -12,6 +12,10 @@ export const EVENTS = {
   CTA_IMPRESSION: 'cta_impression',
   /** "Open in Octree" pressed on a blog post or learn guide. Props: source, title_length. */
   OPEN_IN_OCTREE_CLICKED: 'open_in_octree_clicked',
+  /** A pricing section was at least half in the viewport, once per page load. Props: section. */
+  PRICING_VIEWED: 'pricing_viewed',
+  /** A plan button or link in a pricing section was pressed. Props: plan, cta, href (path only). */
+  PRICING_PLAN_CLICKED: 'pricing_plan_clicked',
 } as const
 
 export type EventName = (typeof EVENTS)[keyof typeof EVENTS]

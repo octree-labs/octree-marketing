@@ -1,8 +1,9 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Check, GraduationCap, Users, Zap } from 'lucide-react'
 import { cn } from '@/utilities/ui'
+import { BEFORE_NAVIGATION, EVENTS, track } from '@/lib/analytics'
 import Compass from '@/components/icons/compass'
 import Sparkles from '@/components/icons/sparkles'
 import { PrimaryButton } from './primary-button'
@@ -15,9 +16,46 @@ const PLANS = {
   annual: { price: '79', per: '/ year', note: '$6.58/mo · save 34% · cancel anytime' },
 } as const
 
-export function Pricing() {
+/** Fires pricing_viewed once per page load, when at least half of the section is visible. */
+function usePricingViewed(ref: React.RefObject<HTMLElement | null>, section: string) {
+  useEffect(() => {
+    const el = ref.current
+    if (!el || typeof IntersectionObserver === 'undefined') return
+    let seen = false
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (seen || !entries.some((entry) => entry.isIntersecting)) return
+        seen = true
+        observer.disconnect()
+        track(EVENTS.PRICING_VIEWED, { section })
+      },
+      { threshold: 0.5 },
+    )
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [ref, section])
+}
+
+/** "https://app.useoctree.com/buy?plan=annual" -> "/buy?plan=annual"; never the origin. */
+function pathOf(href: string): string {
+  try {
+    const url = new URL(href, 'https://www.useoctree.com')
+    return url.pathname + url.search
+  } catch {
+    return href
+  }
+}
+
+/** Plan links navigate away: send the event instantly, never await it. */
+function trackPlanClick(plan: string, cta: string, href: string) {
+  track(EVENTS.PRICING_PLAN_CLICKED, { plan, cta, href: pathOf(href) }, BEFORE_NAVIGATION)
+}
+
+export function Pricing({ section = 'home' }: { section?: string }) {
   const [isAnnual, setIsAnnual] = useState(false)
   const plan = isAnnual ? PLANS.annual : PLANS.monthly
+  const sectionRef = useRef<HTMLDivElement>(null)
+  usePricingViewed(sectionRef, section)
 
   const starterFeatures = [
     '5 AI edits per day',
@@ -42,7 +80,10 @@ export function Pricing() {
   ]
 
   return (
-    <div className="py-[34px] md:py-[68px] max-w-[var(--grid-max-width)] mx-auto flex flex-col gap-8 md:gap-12 px-6 md:px-12">
+    <div
+      ref={sectionRef}
+      className="py-[34px] md:py-[68px] max-w-[var(--grid-max-width)] mx-auto flex flex-col gap-8 md:gap-12 px-6 md:px-12"
+    >
       <div className="flex flex-col gap-6 md:gap-8">
         <SectionHeader
           title="Pricing"
@@ -84,6 +125,7 @@ export function Pricing() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
         <PricingCard
           icon={<Compass className="w-4 h-4 md:w-5 md:h-5" />}
+          plan="free"
           name="Free"
           description="Everything you need to start writing in LaTeX"
           price="$0"
@@ -94,6 +136,7 @@ export function Pricing() {
 
         <PricingCard
           icon={<Sparkles className="size-4 text-primary" />}
+          plan={isAnnual ? 'annual' : 'monthly'}
           name="Pro"
           description="Perfect for research teams and power users"
           price={
@@ -113,6 +156,7 @@ export function Pricing() {
 
         <PricingCard
           icon={<Users className="size-4" />}
+          plan="enterprise"
           name="Enterprise"
           description="For large organizations with custom needs"
           price="Custom"
@@ -124,6 +168,7 @@ export function Pricing() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
         <OfferRow
+          plan="semester"
           icon={<GraduationCap className="size-5" />}
           title="Semester pass · $29 for 4 months"
           description="Students: all of Pro for the term, billed once every 4 months. Cancel anytime."
@@ -131,6 +176,7 @@ export function Pricing() {
           cta="Get the Semester pass"
         />
         <OfferRow
+          plan="credits_100"
           icon={<Zap className="size-5" />}
           title="100 AI edits · $5"
           description="Out of edits? Buy a pack on any plan. Credits never expire and are used after your plan's edits."
@@ -143,12 +189,14 @@ export function Pricing() {
 }
 
 function OfferRow({
+  plan,
   icon,
   title,
   description,
   href,
   cta,
 }: {
+  plan: string
   icon: React.ReactNode
   title: string
   description: string
@@ -168,6 +216,7 @@ function OfferRow({
         href={href}
         className="text-sm font-medium text-primary whitespace-nowrap hover:underline"
         data-location="pricing"
+        onClick={() => trackPlanClick(plan, cta, href)}
       >
         {cta} →
       </a>
@@ -205,6 +254,7 @@ function FeatureItem({ text, isDark = false }: { text: string; isDark?: boolean 
 }
 
 function PricingCard({
+  plan,
   icon,
   name,
   description,
@@ -214,6 +264,7 @@ function PricingCard({
   buttonHref,
   isDark = false,
 }: {
+  plan: string
   icon: React.ReactNode
   name: string
   description: string
@@ -258,6 +309,7 @@ function PricingCard({
         className={isDark ? 'from-white to-white text-black' : undefined}
         href={buttonHref}
         location="pricing"
+        onClick={() => trackPlanClick(plan, buttonText, buttonHref ?? APP_URL)}
       >
         {buttonText}
       </PrimaryButton>
