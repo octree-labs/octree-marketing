@@ -96,9 +96,9 @@ export default async function AmaCitationFormatPage() {
             AMA style is the house style of the American Medical Association, published as the{' '}
             <em>AMA Manual of Style: A Guide for Authors and Editors</em>. The 11th edition is the
             current one. It is the required style for the JAMA Network journals (<em>JAMA</em>,{' '}
-            <em>JAMA Internal Medicine</em>, <em>JAMA Pediatrics</em> and the rest) and for most
-            US medical, nursing, pharmacy and public health journals, and it is what medical and
-            health science students are usually told to use for coursework.
+            <em>JAMA Internal Medicine</em>, <em>JAMA Pediatrics</em> and the rest) and for many
+            other US medical, nursing, pharmacy and public health journals, and it is the style
+            medical and health science students are often asked to use for coursework.
           </p>
           <p>
             Three things distinguish it from the author-date styles used in the social sciences:
@@ -338,7 +338,7 @@ export default async function AmaCitationFormatPage() {
           <table>
             <thead>
               <tr>
-                <th scope="col"></th>
+                <th scope="col">Feature</th>
                 <th scope="col">AMA (11th ed)</th>
                 <th scope="col">APA (7th ed)</th>
                 <th scope="col">Vancouver (NLM/ICMJE)</th>
@@ -409,22 +409,30 @@ export default async function AmaCitationFormatPage() {
             <code>biblatex-ama</code> is not on CTAN. It is a two-file project on GitHub,{' '}
             <Link href="https://github.com/dli-stats/biblatex-ama" target="_blank" rel="noopener noreferrer">
               dli-stats/biblatex-ama
-            </Link>, built on the <code>biblatex-ext</code> numeric style. Download{' '}
-            <code>ama.bbx</code> and <code>ama.cbx</code> into the folder that holds your{' '}
-            <code>.tex</code> file, and <code>style=ama</code> will be found. It needs the{' '}
-            <code>biber</code> backend, which Octree, Overleaf and every full TeX Live install
-            provide; <code>latexmk -pdf</code> runs it for you.
+            </Link>, whose citation commands come from the <code>biblatex-ext</code> package.
+            Download <code>ama.bbx</code> and <code>ama.cbx</code> into the folder that holds your{' '}
+            <code>.tex</code> file, and <code>style=ama</code> will be found. It needs{' '}
+            <code>biblatex-ext</code> and the <code>biber</code> backend, which Octree, Overleaf and
+            every full TeX Live install provide; <code>latexmk -pdf</code> runs biber for you.
           </p>
           <p>
-            Two things to know about the style. Its <code>\cite</code> prints a parenthesized
-            number, (1), so for AMA superscripts use <code>\supercite</code>. And out of the box it
-            prints an en dash in page ranges, a space after the semicolon in the journal line and no
-            DOI. The preamble below corrects those; with it, the journal article entry comes out
-            exactly as the manual specifies.
+            Three things to know about the style. Its <code>\cite</code> prints a parenthesized
+            number, (1), so for AMA superscripts use <code>\supercite</code>. Its citation style
+            does not collapse <sup>1,2,3</sup> into <sup>1-3</sup>; loading the bibliography half
+            on its own (<code>bibstyle=ama</code>) with biblatex-ext&apos;s{' '}
+            <code>ext-numeric-comp</code> citation style does, at the cost of the two name-format
+            lines that <code>ama.cbx</code> would otherwise supply. And out of the box it prints an
+            en dash in page ranges, a space after the semicolon in the journal line and no DOI. The
+            preamble below handles all of that; with it, the journal article entry comes out exactly
+            as the manual specifies.
           </p>
           <pre><code>{`\\documentclass[11pt]{article}
-\\usepackage[backend=biber,style=ama,doi=true,dateabbrev=false,urldate=long]{biblatex}
+\\usepackage[backend=biber,bibstyle=ama,citestyle=ext-numeric-comp,doi=true,dateabbrev=false,urldate=long]{biblatex}
 \\addbibresource{refs.bib}
+
+% Name format that ama.cbx would set; needed because citestyle replaces it.
+\\DeclareNameAlias{default}{family-given}            % Okafor AB, not AB Okafor
+\\renewcommand*{\\revsdnamepunct}{}                   % no comma between surname and initials
 
 % Corrections so the output follows the AMA Manual of Style, 11th ed.
 \\renewcommand*{\\multicitedelim}{\\addcomma}            % 2,3 not 2, 3
@@ -519,7 +527,9 @@ did not stratify by kidney function.
             puts a comma rather than a semicolon between publisher and year in book entries, writes
             &quot;Ed. by&quot; instead of &quot;In: &hellip; eds&quot; for chapters, prefixes the
             website URL with &quot;url:&quot; and puts the accessed date in parentheses, and ends the
-            DOI with a period. Those are a few minutes of editing in a short reference list.
+            DOI with a period. It also sets the web page title in italics and leaves out the site
+            name and the &quot;Published&quot; label. Those are a few minutes of editing in a short
+            reference list.
           </p>
 
           <h3>Option 2: BibTeX with natbib and the vancouver style</h3>
@@ -544,8 +554,8 @@ did not stratify by kidney function.
 
 Statin therapy lowers the rate of major cardiovascular events in adults
 older than 75 years.\\cite{okafor2024} Dose adjustment is covered in standard
-references,\\cite{harrow2022,nakamura2022} and current targets are published
-online.\\cite{ridgeline2025}
+references,\\cite{harrow2022,nakamura2022} and the pooled analysis\\cite{okafor2024}
+did not stratify by kidney function.
 
 \\bibliographystyle{vancouver}
 \\bibliography{refs}
@@ -554,8 +564,9 @@ online.\\cite{ridgeline2025}
           <p>
             <code>comma</code> separates multiple citations with a comma instead of natbib&apos;s
             default semicolon, and <code>sort&amp;compress</code> turns <sup>2,3,4</sup> into{' '}
-            <sup>2-4</sup>. BibTeX styles do not know the <code>@online</code> and{' '}
-            <code>@report</code> entry types from the biblatex example, so use <code>@misc</code>{' '}
+            <sup>2-4</sup>. The example cites only the first three entries of <code>refs.bib</code>{' '}
+            because BibTeX styles do not know the <code>@online</code> and <code>@report</code>{' '}
+            entry types from the biblatex example; for those, use <code>@misc</code>{' '}
             with a <code>howpublished</code> or <code>note</code> field for web pages and{' '}
             <code>@techreport</code> for reports. As a last resort, <code>\bibliographystyle&#123;unsrt&#125;</code>{' '}
             also keeps citation order but prints full first names and &quot;and&quot;, which you
