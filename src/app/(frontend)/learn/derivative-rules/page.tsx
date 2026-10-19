@@ -42,7 +42,7 @@ const faq: FaqItem[] = [
   {
     question: 'What are the inverse trig derivatives?',
     answer:
-      'arcsin x → 1/√(1 − x²), arccos x → −1/√(1 − x²), arctan x → 1/(1 + x²), arccot x → −1/(1 + x²), arcsec x → 1/(|x|√(x² − 1)), and arccsc x → −1/(|x|√(x² − 1)). Each co-function is the negative of its partner because arcsin x + arccos x = π/2 (and likewise for the other pairs), so the pair’s derivatives must sum to zero. The square-root ones need |x| < 1, and the arcsec and arccsc ones need |x| > 1.',
+      'arcsin x → 1/√(1 − x²), arccos x → −1/√(1 − x²), arctan x → 1/(1 + x²), arccot x → −1/(1 + x²), arcsec x → 1/(|x|√(x² − 1)), and arccsc x → −1/(|x|√(x² − 1)). Each co-function is the negative of its partner because arcsin x + arccos x = π/2 (and likewise for the other pairs), so the pair\'s derivatives must sum to zero. The arcsin and arccos ones need |x| < 1, and the arcsec and arccsc ones need |x| > 1.',
   },
   {
     question: 'How do I write d/dx in LaTeX?',
@@ -285,8 +285,9 @@ export default async function DerivativeRulesPage() {
             The |<em>x</em>| in the arcsec and arccsc rows comes from the usual choice of range,
             [0, &pi;/2) &cup; (&pi;/2, &pi;] for arcsec, on which the function is increasing for both{' '}
             <em>x</em> &gt; 1 and <em>x</em> &lt; &minus;1; some textbooks choose a different range and
-            drop the absolute value. The derivatives are undefined at <em>x</em> = &plusmn;1, where
-            the inverse functions have vertical tangents.
+            drop the absolute value. The four square-root formulas are undefined at <em>x</em> = &plusmn;1, where
+            arcsin, arccos, arcsec and arccsc have vertical tangents; arctan and arccot are
+            differentiable everywhere.
           </p>
           <p>
             With the chain rule these become general formulas. For an inner function <em>u</em>(<em>x</em>),
@@ -478,7 +479,7 @@ Product and chain rule, $f(x) = x^2 \\sin(3x)$:
         &= 2x \\sin(3x) + 3x^2 \\cos(3x).
 \\end{align*}
 
-Quotient rule, $g(x) = \\dfrac{3x - 1}{x^2 + 2}$:
+\\noindent Quotient rule, $g(x) = \\dfrac{3x - 1}{x^2 + 2}$:
 \\begin{align*}
   g'(x) &= \\frac{(x^2 + 2)(3) - (3x - 1)(2x)}{(x^2 + 2)^2} \\\\
         &= \\frac{3x^2 + 6 - 6x^2 + 2x}{(x^2 + 2)^2} \\\\
@@ -526,7 +527,7 @@ Quotient rule, $g(x) = \\dfrac{3x - 1}{x^2 + 2}$:
             arccsc <em>x</em> &rarr; &minus;1/(|<em>x</em>|&radic;(<em>x</em><sup>2</sup> &minus; 1)).
             Each co-function is the negative of its partner because arcsin <em>x</em> + arccos <em>x</em> = &pi;/2
             (and likewise for the other pairs), so the pair&apos;s derivatives must sum to zero. The
-            square-root ones need |<em>x</em>| &lt; 1, and the arcsec and arccsc ones need |<em>x</em>| &gt; 1.
+            arcsin and arccos ones need |<em>x</em>| &lt; 1, and the arcsec and arccsc ones need |<em>x</em>| &gt; 1.
           </p>
           <h3>How do I write d/d<em>x</em> in LaTeX?</h3>
           <p>
