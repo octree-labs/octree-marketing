@@ -218,6 +218,12 @@ const learnTopics = [
     description: '26 Laplace transform pairs with regions of convergence, every property and theorem, worked inverse transforms by partial fractions, and the LaTeX source for the table.',
     color: 'from-indigo-500/10 to-blue-600/5',
   },
+  {
+    slug: 'derivative-rules',
+    title: 'Derivative Rules',
+    description: 'Power, product, quotient and chain rules, a table of common and trig derivatives, the six inverse trig derivatives, worked examples and the LaTeX for every formula.',
+    color: 'from-amber-500/10 to-orange-600/5',
+  },
 ]
 
 export default function LearnPage() {
@@ -289,7 +295,7 @@ export function generateMetadata(): Metadata {
   return {
     title: 'Learn LaTeX, TikZ & PGFPlots – Free Tutorials',
     description: 'Master LaTeX and its powerful packages with comprehensive tutorials. Learn document typesetting, diagrams with TikZ, and data visualization with PGFPlots. Free beginner-friendly guides.',
-    keywords: 'latex online editor, latex resume template, latex cv template, latex math symbols, latex equations, latex matrix, latex fractions, latex table generator, how to write latex, overleaf tutorial, latex beamer presentation, tikz flowchart examples, pgfplots histogram, learn latex, latex tutorial, latex bold, latex italic, latex underline, latex page margins, latex geometry, latex subscript, latex superscript, latex lists, latex itemize, latex enumerate, latex greek letters, latex colors, xcolor latex, latex math expressions, latex integrals, latex sums, latex limits, latex matrices, latex tables, latex booktabs, laplace transform table, laplace table',
+    keywords: 'latex online editor, latex resume template, latex cv template, latex math symbols, latex equations, latex matrix, latex fractions, latex table generator, how to write latex, overleaf tutorial, latex beamer presentation, tikz flowchart examples, pgfplots histogram, learn latex, latex tutorial, latex bold, latex italic, latex underline, latex page margins, latex geometry, latex subscript, latex superscript, latex lists, latex itemize, latex enumerate, latex greek letters, latex colors, xcolor latex, latex math expressions, latex integrals, latex sums, latex limits, latex matrices, latex tables, latex booktabs, laplace transform table, laplace table, derivative rules, trig derivatives, inverse trig derivatives',
     openGraph: mergeOpenGraph({
       title: 'Learn LaTeX, TikZ & PGFPlots – Free Tutorials',
       description: 'Master LaTeX and its powerful packages with comprehensive tutorials. Free beginner-friendly guides for document typesetting, diagrams, and data visualization.',
