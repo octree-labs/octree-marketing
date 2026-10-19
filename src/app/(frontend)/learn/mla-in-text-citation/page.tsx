@@ -503,7 +503,9 @@ export default async function MlaInTextCitationPage() {
             The style reads the author count from the <code>.bib</code> entry, so two authors come
             out as &quot;Harrow and Vance&quot; and three or more as &quot;Lindqvist et al.&quot;
             without any change to the command. When two works by one author are cited, it adds the
-            short title itself, and a corporate author written in double braces,{' '}
+            title itself: give each entry a <code>shorttitle</code> field so the parenthetical reads
+            (Okafor, <em>Reading Mind</em> 23) rather than carrying the full title. A corporate
+            author written in double braces,{' '}
             <code>&#123;&#123;Ridgeline Literacy Institute&#125;&#125;</code>, is printed in full.
             The style also tracks repeated citations of the same source, so the output can be
             shorter than the command suggests in a run of consecutive citations; check the compiled
@@ -513,6 +515,8 @@ export default async function MlaInTextCitationPage() {
           <h3>Complete example</h3>
           <pre><code>{`\\documentclass[12pt]{article}
 \\usepackage[letterpaper,margin=1in]{geometry}
+\\usepackage[american]{babel}
+\\usepackage{csquotes}
 \\usepackage{setspace}
 \\usepackage[style=mla]{biblatex}   % biblatex-mla (MLA 9); needs biber
 \\addbibresource{refs.bib}

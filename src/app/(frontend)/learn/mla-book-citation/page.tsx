@@ -474,6 +474,8 @@ export default async function MlaBookCitationPage() {
           <h3>Complete example</h3>
           <pre><code>{`\\documentclass[12pt]{article}
 \\usepackage[letterpaper,margin=1in]{geometry}
+\\usepackage[american]{babel}
+\\usepackage{csquotes}
 \\usepackage{setspace}
 \\usepackage[style=mla]{biblatex}   % biblatex-mla (MLA 9); needs biber
 \\addbibresource{books.bib}
@@ -495,6 +497,7 @@ one volume of a set \\autocite[140]{santos2020}, a republished classic
 \\end{document}`}</code></pre>
           <p>The matching <code>books.bib</code>:</p>
           <pre><code>{`@book{okafor2024,
+  shorttitle = {Reading Mind},
   author    = {Okafor, Adaeze},
   title     = {The Reading Mind: Attention in the Age of Screens},
   publisher = {Brightwater Press},
@@ -533,6 +536,7 @@ one volume of a set \\autocite[140]{santos2020}, a republished classic
 }
 
 @inbook{okafor2024cliff,
+  shorttitle = {Ten-Minute Cliff},
   author    = {Okafor, Adaeze},
   title     = {The Ten-Minute Cliff},
   booktitle = {The Reading Mind: Attention in the Age of Screens},
