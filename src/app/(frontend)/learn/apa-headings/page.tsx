@@ -377,11 +377,13 @@ The results extend earlier findings to a student sample.
 \\titleformat{\\subparagraph}[runin]{\\normalfont\\normalsize\\bfseries\\itshape}{}{0pt}{}[.]
 
 % No extra space around headings: APA papers are double-spaced throughout.
-\\titlespacing*{\\section}{0pt}{0pt}{0pt}
-\\titlespacing*{\\subsection}{0pt}{0pt}{0pt}
-\\titlespacing*{\\subsubsection}{0pt}{0pt}{0pt}
-\\titlespacing*{\\paragraph}{\\parindent}{0pt}{\\wordsep}
-\\titlespacing*{\\subparagraph}{\\parindent}{0pt}{\\wordsep}
+% Unstarred on purpose: \\titlespacing* would remove the indent of the
+% paragraph after a Level 1, 2 or 3 heading, and APA keeps that indent.
+\\titlespacing{\\section}{0pt}{0pt}{0pt}
+\\titlespacing{\\subsection}{0pt}{0pt}{0pt}
+\\titlespacing{\\subsubsection}{0pt}{0pt}{0pt}
+\\titlespacing{\\paragraph}{\\parindent}{0pt}{\\wordsep}
+\\titlespacing{\\subparagraph}{\\parindent}{0pt}{\\wordsep}
 
 \\begin{document}
 
@@ -416,11 +418,14 @@ Accuracy was lower after 24 hours of wakefulness.
             <code>\itshape</code> give bold and bold italic, <code>\centering</code> centers Level
             1), an empty label since there is no number, and for Levels 4 and 5 the{' '}
             <code>[runin]</code> shape plus a trailing <code>[.]</code> that appends the period
-            after the heading text. The <code>\titlespacing*</code> lines remove the vertical
+            after the heading text. The <code>\titlespacing</code> lines remove the vertical
             space <code>article</code> normally adds around headings, so the double spacing
             carries through, and set the left indent of the run-in headings to{' '}
             <code>\parindent</code> with a normal word space (<code>\wordsep</code>) between the
-            period and the first word of the paragraph. Margins, paper size and line spacing come
+            period and the first word of the paragraph. Keep them unstarred: the starred{' '}
+            <code>\titlespacing*</code> suppresses the indent of the paragraph after a Level 1, 2
+            or 3 heading, and APA wants that paragraph indented like any other (<code>apa7</code>{' '}
+            indents it for you). Margins, paper size and line spacing come
             from <code>geometry</code> and <code>setspace</code>; the{' '}
             <Link href="/learn/page-size-margins">page size and margins guide</Link> explains those
             options.
