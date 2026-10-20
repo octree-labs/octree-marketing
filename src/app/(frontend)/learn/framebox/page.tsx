@@ -44,12 +44,12 @@ const faq: FaqItem[] = [
   {
     question: 'How do I make a checkbox in LaTeX?',
     answer:
-      'Load amssymb and write $\\square$ for an empty checkbox and $\\boxtimes$ for a checked one. Without any package, \\fbox{\\phantom{X}} draws a text-mode square the size of a capital letter. For clickable boxes in a PDF form you need the hyperref Form environment instead.',
+      'Load amssymb and write $\\square$ for an empty checkbox and $\\boxtimes$ for a checked one. Without any package, \\fbox{\\phantom{X}} draws a near-square text-mode box the size of a capital letter. For clickable boxes in a PDF form you need the hyperref Form environment instead.',
   },
   {
     question: 'What is the difference between \\fbox and \\framebox?',
     answer:
-      '\\fbox{text} fits the frame to its content. \\framebox[width][pos]{text} does the same but takes an optional width and an alignment (c by default, l, r or s). With no optional arguments the two are identical. \\framebox also has a picture-mode form, \\framebox(w,h){text}, chosen whenever the first character after the command is an opening parenthesis.',
+      '\\fbox{text} fits the frame to its content. \\framebox[width][pos]{text} does the same but takes an optional total width, frame included, and an alignment (c by default, l, r or s). With no optional arguments the two are identical. \\framebox also has a picture-mode form, \\framebox(w,h){text}, chosen whenever the first character after the command is an opening parenthesis.',
   },
   {
     question: 'Why does my \\fbox overflow the margin?',
@@ -106,9 +106,9 @@ export default async function FrameboxPage() {
 
 A framed word: \\fbox{boxed text} sits inline, and math works too: \\fbox{$E = mc^2$}.
 
-Fixed width: \\framebox[4cm]{centred} \\framebox[4cm][l]{left} \\framebox[4cm][r]{right}
+Fixed width: \\framebox[3cm]{centred} \\framebox[3cm][l]{left} \\framebox[3cm][r]{right}
 
-Blank fields: Name: \\framebox[5cm]{\\strut} \\quad Date: \\framebox[3cm]{\\strut}
+Blank fields: Name: \\framebox[4cm]{\\strut} \\quad Date: \\framebox[3cm]{\\strut}
 
 Checkboxes: $\\square$ Yes \\quad $\\square$ No \\quad $\\boxtimes$ Done
 
@@ -156,7 +156,7 @@ Back to the defaults outside the group: \\fbox{default frame}`}</code></pre>
           <h2>\framebox: Fixed Width and Alignment</h2>
           <p>
             <code>\framebox[width][pos]&#123;text&#125;</code> is <code>\fbox</code> with two
-            optional arguments. The first is the width of the content area; the second says where
+            optional arguments. The first is the total width of the box, frame included; the second says where
             the text sits in it: <code>c</code> centred (the default), <code>l</code> left,{' '}
             <code>r</code> right, or <code>s</code> to stretch the inter-word space so the text
             fills the box. <code>\makebox</code> takes the same arguments and draws no frame.
@@ -171,13 +171,16 @@ Stretched, the inter-word space grows: \\framebox[6cm][s]{one two three}
 
 Same width, no frame: \\makebox[4cm][l]{left}`}</code></pre>
           <p>
-            The width is the content width. The frame adds <code>\fboxsep</code> and{' '}
-            <code>\fboxrule</code> on each side, so <code>\framebox[4cm]&#123;..&#125;</code> is
-            4cm + 6.8pt wide on the page. There is also a picture-mode form,{' '}
-            <code>\framebox(4,1.5)&#123;text&#125;</code>, which measures in{' '}
-            <code>\unitlength</code> and is meant for the <code>picture</code> environment; it
-            compiled fine in our test, but it is rarely what people searching for a frame box want,
-            and it is the cause of one error <a href="#common-errors">listed below</a>.
+            The width is the total width: <code>\framebox[4cm]&#123;..&#125;</code> measures
+            exactly 4cm on the page, with the <code>\fboxsep</code> padding and the{' '}
+            <code>\fboxrule</code> rule taken out of that 4cm, so{' '}
+            <code>\noindent\framebox[\linewidth]&#123;..&#125;</code> fits the line exactly.{' '}
+            <code>\fbox</code> works the other way round and adds the frame outside its content,
+            which is what makes the <a href="#multi-line-boxes">multi-line boxes</a> below overflow.
+            There is also a picture-mode form, <code>\framebox(4,1.5)&#123;text&#125;</code>, which
+            measures in <code>\unitlength</code> and is meant for the <code>picture</code>{' '}
+            environment; it is rarely what people searching for a frame box want, and it is the cause
+            of one error <a href="#common-errors">listed below</a>.
           </p>
 
           {/* ───────────────────────────── Empty boxes ───────────────────────────── */}
@@ -202,7 +205,7 @@ Multi-line answer box, 5cm wide and 3cm tall: \\fbox{\\parbox[c][3cm][t]{5cm}{\\
           <p>
             For checkboxes, <code>amssymb</code> provides <code>$\square$</code> (empty) and{' '}
             <code>$\boxtimes$</code> (checked). Without a package,{' '}
-            <code>\fbox&#123;\phantom&#123;X&#125;&#125;</code> draws a square the size of a capital
+            <code>\fbox&#123;\phantom&#123;X&#125;&#125;</code> draws a near-square box the size of a capital
             letter, 14.3pt by 13.6pt in a 10pt document. A typical form row:
           </p>
           <pre><code>{`\\usepackage{amssymb}
@@ -215,7 +218,7 @@ Multi-line answer box, 5cm wide and 3cm tall: \\fbox{\\parbox[c][3cm][t]{5cm}{\\
 
 \\noindent Text-mode checkbox without amssymb: \\fbox{\\phantom{X}}
 
-\\noindent Comments:\\\\[4pt]
+\\noindent Comments:\\par\\vspace{4pt}
 \\noindent\\fbox{\\parbox[c][3cm][t]{\\dimexpr\\linewidth-2\\fboxsep-2\\fboxrule\\relax}{\\strut}}`}</code></pre>
           <p>
             These are printed boxes for a form you fill in by hand. Boxes that can be ticked in a
@@ -277,8 +280,10 @@ Inline: $\\boxed{E = mc^2}$.`}</code></pre>
           <p>
             With <code>xcolor</code> loaded, <code>\fcolorbox&#123;frame&#125;&#123;background&#125;&#123;text&#125;</code>{' '}
             draws a colored frame over a colored background, and{' '}
-            <code>\colorbox&#123;background&#125;&#123;text&#125;</code> fills without a frame. Both
-            obey <code>\fboxsep</code> and <code>\fboxrule</code>. The color names, mixes such as{' '}
+            <code>\colorbox&#123;background&#125;&#123;text&#125;</code> fills without a frame.{' '}
+            <code>\fcolorbox</code> obeys <code>\fboxsep</code> and <code>\fboxrule</code>;{' '}
+            <code>\colorbox</code> has no rule, so only <code>\fboxsep</code> applies. The color
+            names, mixes such as{' '}
             <code>green!60!black</code> and your own <code>\definecolor</code> palettes are covered
             in the <Link href="/learn/colors">colors guide</Link>.
           </p>
@@ -293,7 +298,7 @@ Inline: $\\boxed{E = mc^2}$.`}</code></pre>
             Rounded corners, shadows, titles and boxes that break across pages are beyond{' '}
             <code>\fbox</code>. That is what <code>tcolorbox</code> is for, and the{' '}
             <Link href="/blog/colored-boxes-latex-tcolorbox-guide">tcolorbox guide</Link> goes
-            through its options; the shortest useful example is six lines:
+            through its options. The smallest useful example:
           </p>
           <pre><code>{`\\usepackage[most]{tcolorbox}
 
@@ -353,7 +358,7 @@ Tight frame, no padding: {\\setlength{\\fboxsep}{0pt}\\fbox{\\rule{3cm}{1cm}}}  
             </thead>
             <tbody>
               <tr>
-                <td>Text after a blank line is pulled onto the same line inside the box, often with <code>Overfull \hbox (315.52344pt too wide)</code></td>
+                <td>Text after a blank line is pulled onto the same line inside the box, with a large <code>Overfull \hbox</code> in the log</td>
                 <td>A blank line inside <code>\fbox&#123;...&#125;</code>. There is no error: the box is a single horizontal line, the paragraph break is ignored and the whole text runs on without wrapping.</td>
                 <td>Put a <code>\parbox</code> or <code>minipage</code> inside the <code>\fbox</code>, as in <a href="#multi-line-boxes">multi-line boxes</a>.</td>
               </tr>
@@ -413,15 +418,15 @@ Tight frame, no padding: {\\setlength{\\fboxsep}{0pt}\\fbox{\\rule{3cm}{1cm}}}  
           <p>
             Load <code>amssymb</code> and write <code>$\square$</code> for an empty checkbox and{' '}
             <code>$\boxtimes$</code> for a checked one. Without any package,{' '}
-            <code>\fbox&#123;\phantom&#123;X&#125;&#125;</code> draws a text-mode square the size of a
+            <code>\fbox&#123;\phantom&#123;X&#125;&#125;</code> draws a near-square text-mode box the size of a
             capital letter. For clickable boxes in a PDF form you need the <code>hyperref</code>{' '}
             <code>Form</code> environment instead.
           </p>
           <h3>What is the difference between \fbox and \framebox?</h3>
           <p>
             <code>\fbox&#123;text&#125;</code> fits the frame to its content.{' '}
-            <code>\framebox[width][pos]&#123;text&#125;</code> does the same but takes an optional
-            width and an alignment (<code>c</code> by default, <code>l</code>, <code>r</code> or{' '}
+            <code>\framebox[width][pos]&#123;text&#125;</code> does the same but takes an optional total width, frame included,
+            and an alignment (<code>c</code> by default, <code>l</code>, <code>r</code> or{' '}
             <code>s</code>). With no optional arguments the two are identical. <code>\framebox</code>{' '}
             also has a picture-mode form, <code>\framebox(w,h)&#123;text&#125;</code>, chosen
             whenever the first character after the command is an opening parenthesis.
