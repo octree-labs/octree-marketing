@@ -98,8 +98,9 @@ export default async function BibliographyExamplesPage() {
             biblatex), an annotated bibliography example and the errors you will meet.
           </p>
           <p>
-            Every document on this page was compiled with pdfLaTeX, BibTeX 0.99d and biber 2.22 on
-            TeX Live 2026, and the rendered entries were read back from the PDFs. Where a document
+            Every document on this page was compiled with pdfLaTeX 1.40.28, BibTeX 0.99d and biber
+            2.21 on TeX Live 2025 (biblatex 3.21, biblatex-apa 9.20, biblatex-mla 2.1a,
+            biblatex-chicago 3.18), and the rendered entries were read back from the PDFs. Where a document
             needs a <code>.bib</code> file, a <code>filecontents</code> block writes it for you, so
             each example is a single file that compiles in one run.
           </p>
@@ -776,7 +777,7 @@ chapters 14 and 15 for the line-breaking parameters discussed in Section 3.
           {/* ───────────────────────────── Errors ───────────────────────────── */}
           <h2 id="common-errors">Common Bibliography Errors</h2>
           <p>
-            Each message was reproduced on TeX Live 2026. BibTeX and biber write to the{' '}
+            Each message was reproduced on TeX Live 2025. BibTeX and biber write to the{' '}
             <code>.blg</code> file; LaTeX&apos;s own warnings are in the <code>.log</code>.
           </p>
           <table>
