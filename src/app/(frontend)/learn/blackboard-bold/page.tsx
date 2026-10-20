@@ -146,7 +146,7 @@ $\\mathbb{F}_q$, projective space $\\mathbb{P}^n(\\mathbb{C})$ and a
 Hilbert space $\\mathbb{H}$.
 
 \\[
-  \\forall \\varepsilon > 0\; \\exists N \\in \\mathbb{N} :
+  \\forall \\varepsilon > 0\\; \\exists N \\in \\mathbb{N} :
   n > N \\implies |x_n - x| < \\varepsilon .
 \\]
 
