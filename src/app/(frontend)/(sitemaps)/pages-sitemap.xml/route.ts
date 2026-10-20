@@ -187,6 +187,14 @@ const getPagesSitemap = unstable_cache(
         lastmod: dateFallback,
       },
       {
+        loc: `${SITE_URL}/learn/mla-in-text-citation`,
+        lastmod: dateFallback,
+      },
+      {
+        loc: `${SITE_URL}/learn/mla-book-citation`,
+        lastmod: dateFallback,
+      },
+      {
         loc: `${SITE_URL}/privacy`,
         lastmod: dateFallback,
       },

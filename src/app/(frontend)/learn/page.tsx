@@ -236,6 +236,18 @@ const learnTopics = [
     description: 'Superscript in-text citations, the numbered reference list, examples for journal articles, books, chapters, websites and reports, AMA vs APA vs Vancouver, and AMA citations in LaTeX.',
     color: 'from-rose-500/10 to-red-600/5',
   },
+  {
+    slug: 'mla-in-text-citation',
+    title: 'MLA In-Text Citation',
+    description: 'The author-page rule, one to three-plus authors, corporate and missing authors, no page numbers, qtd. in, block quotes, repeat citations, a ten-example table and MLA citations in LaTeX with biblatex-mla.',
+    color: 'from-rose-500/10 to-red-600/5',
+  },
+  {
+    slug: 'mla-book-citation',
+    title: 'MLA Book Citation',
+    description: 'The Works Cited pattern for a book, examples for one or more authors, edited, translated, later-edition, e-book, multivolume and no-author books with their in-text forms, and a generated Works Cited in LaTeX.',
+    color: 'from-rose-500/10 to-red-600/5',
+  },
 ]
 
 export default function LearnPage() {
