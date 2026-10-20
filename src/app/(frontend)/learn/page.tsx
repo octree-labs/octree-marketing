@@ -248,6 +248,12 @@ const learnTopics = [
     description: 'The Works Cited pattern for a book, examples for one or more authors, edited, translated, later-edition, e-book, multivolume and no-author books with their in-text forms, and a generated Works Cited in LaTeX.',
     color: 'from-rose-500/10 to-red-600/5',
   },
+  {
+    slug: 'blackboard-bold',
+    title: 'Blackboard Bold in LaTeX',
+    description: '\\mathbb{R} with amssymb, all 26 letters with their Unicode code points, lowercase letters and the indicator 1 with dsfont, bbm and bbold, \\symbb with unicode-math, bold vs blackboard bold, and the common mistakes.',
+    color: 'from-indigo-500/10 to-indigo-600/5',
+  },
 ]
 
 export default function LearnPage() {
