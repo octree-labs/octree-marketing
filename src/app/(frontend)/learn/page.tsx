@@ -255,6 +255,12 @@ const learnTopics = [
     color: 'from-rose-500/10 to-red-600/5',
   },
   {
+    slug: 'bibliography-examples',
+    title: 'Bibliography Examples',
+    description: 'APA 7, MLA 9, Chicago and IEEE bibliography entries with the BibTeX source for each, complete thebibliography, BibTeX and biblatex documents, an annotated bibliography example and the common errors.',
+    color: 'from-rose-500/10 to-fuchsia-600/5',
+  },
+  {
     slug: 'blackboard-bold',
     title: 'Blackboard Bold in LaTeX',
     description: '\\mathbb{R} with amssymb, all 26 letters with their Unicode code points, lowercase letters and the indicator 1 with dsfont, bbm and bbold, \\symbb with unicode-math, bold vs blackboard bold, and the common mistakes.',

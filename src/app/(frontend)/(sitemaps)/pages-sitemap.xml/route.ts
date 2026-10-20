@@ -199,6 +199,10 @@ const getPagesSitemap = unstable_cache(
         lastmod: dateFallback,
       },
       {
+        loc: `${SITE_URL}/learn/bibliography-examples`,
+        lastmod: dateFallback,
+      },
+      {
         loc: `${SITE_URL}/learn/blackboard-bold`,
         lastmod: dateFallback,
       },
