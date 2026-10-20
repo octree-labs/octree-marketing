@@ -430,7 +430,7 @@ Sets, two conventions: $\\mathbb{R}$, $\\mathbb{Z}$ \\quad or \\quad $\\mathbf{R
             <li>
               <code>\boldsymbol</code> (from amsmath) and <code>\bm</code> (from the bm package)
               produce bold italic and bold symbols, so <code>\boldsymbol&#123;\alpha&#125;</code> is
-              the bold vector 𝛂.
+              the bold vector 𝜶.
             </li>
             <li>
               <code>\mathbb</code> is a different alphabet, not a weight. It marks a specific named
@@ -438,8 +438,7 @@ Sets, two conventions: $\\mathbb{R}$, $\\mathbb{Z}$ \\quad or \\quad $\\mathbf{R
             </li>
           </ul>
           <p>
-            Historically, print used bold for number sets and the blackboard form was a lecture-hall
-            substitute. Today both are common; some journals and textbooks still ask for{' '}
+            Both conventions are common today: some journals and textbooks still ask for{' '}
             <code>\mathbf&#123;R&#125;</code>, many others expect <code>\mathbb&#123;R&#125;</code>.
             Whatever you choose, do not mix them, and never use bold for both vectors and sets in
             the same paper. A <code>\newcommand&#123;\R&#125;&#123;...&#125;</code> in the preamble
