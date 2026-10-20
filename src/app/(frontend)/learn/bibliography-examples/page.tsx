@@ -34,7 +34,7 @@ const faq: FaqItem[] = [
   {
     question: 'What does a bibliography look like?',
     answer:
-      'An alphabetical list of sources at the end of a document, one entry per source, giving author, title, publisher or journal and year in the order the style prescribes. In APA 7 a book is Knuth, D. E. (1984). The TeXbook. Addison-Wesley.; in MLA 9 it is Knuth, Donald E. The TeXbook. Addison-Wesley, 1984. Entries hang indented, except in numbered styles such as IEEE, which label them [1], [2] in citation order.',
+      'An alphabetical list of sources at the end of a document, one entry per source, giving author, title, publisher or journal and year in the order the style prescribes. In APA 7 a book is "Knuth, D. E. (1984). The TeXbook. Addison-Wesley." and in MLA 9 "Knuth, Donald E. The TeXbook. Addison-Wesley, 1984." Entries hang indented, except in numbered styles such as IEEE, which label them [1], [2] in citation order.',
   },
   {
     question: 'What is the difference between a bibliography and a reference list?',
@@ -59,7 +59,7 @@ const faq: FaqItem[] = [
   {
     question: 'Should I use BibTeX or biblatex?',
     answer:
-      'Use biblatex with biber when the document must follow a named style exactly: biblatex-apa, biblatex-mla, biblatex-chicago and biblatex-ieee implement the current editions and give you \\textcite, \\parencite and \\footcite. Use classic BibTeX when a journal or thesis template hands you a .bst file. The .bib file is the same for both, so switching later costs almost nothing.',
+      'Use biblatex with biber when the document must follow a named style exactly: biblatex-apa, biblatex-mla, biblatex-chicago and biblatex-ieee follow the handbooks (APA 7, MLA 9, Chicago 17) and give you \\textcite, \\parencite and \\footcite. Use classic BibTeX when a journal or thesis template hands you a .bst file. The .bib file is the same for both, so switching later costs almost nothing.',
   },
 ]
 
@@ -92,13 +92,13 @@ export default async function BibliographyExamplesPage() {
           <p className="lead">
             A <strong>bibliography example</strong> is only useful if you can see both sides of it:
             the entry as it appears on the page and the source that generates it. This guide shows
-            the same sources, Knuth&apos;s <em>TeXbook</em>, his article on literate programming
-            and a website, in APA 7, MLA 9, Chicago and IEEE, each with the BibTeX entry that
-            produces it, then three complete LaTeX documents (<code>thebibliography</code>, BibTeX,
+            the same three sources (Knuth&apos;s <em>TeXbook</em>, his article on literate
+            programming and a website) in APA 7, MLA 9, Chicago and IEEE, each with the BibTeX
+            entry that produces it, then three complete LaTeX documents (<code>thebibliography</code>, BibTeX,
             biblatex), an annotated bibliography example and the errors you will meet.
           </p>
           <p>
-            Every document on this page was compiled with pdfLaTeX 1.40.28, BibTeX 0.99d and biber
+            Every document on this page was compiled with pdfTeX 1.40.28, BibTeX 0.99d and biber
             2.21 on TeX Live 2025 (biblatex 3.21, biblatex-apa 9.20, biblatex-mla 2.1a,
             biblatex-chicago 3.18), and the rendered entries were read back from the PDFs. Where a document
             needs a <code>.bib</code> file, a <code>filecontents</code> block writes it for you, so
@@ -136,28 +136,36 @@ export default async function BibliographyExamplesPage() {
           <h3>APA 7 bibliography example</h3>
           <p>
             Author surname and initials, year in parentheses, sentence-case title, italics for the
-            book or journal name. The DOI is printed as a link and the website entry gets a
-            retrieval date because the page has no publication date.
+            book or journal name. The DOI is printed as a link. The website entry carries a
+            retrieval date because <code>urldate</code> is set; APA 7 asks for one only when a page
+            is designed to change and is not archived, so leave <code>urldate</code> out for a
+            stable page. APA 7 also does not list a whole website at all (a mention in the text
+            with the URL is enough), so read the CTAN entry as the shape of an undated web page.
           </p>
           <blockquote>
-            <p>Knuth, D. E. (1984a). <em>The TeXbook</em>. Addison-Wesley.</p>
-            <p>
-              Knuth, D. E. (1984b). Literate programming. <em>The Computer Journal, 27</em>(2),
-              97–111. https://doi.org/10.1093/comjnl/27.2.97
-            </p>
             <p>
               CTAN. (n.d.). <em>Comprehensive TeX archive network</em>. Retrieved October 20,
               2026, from https://ctan.org/
             </p>
-            <p>In-text: (Knuth, 1984a), Knuth (1984b), (CTAN, n.d.)</p>
+            <p>
+              Knuth, D. E. (1984a). Literate programming. <em>The Computer Journal, 27</em>(2),
+              97–111. https://doi.org/10.1093/comjnl/27.2.97
+            </p>
+            <p>Knuth, D. E. (1984b). <em>The TeXbook</em>. Addison-Wesley.</p>
+            <p>
+              In-text: (Knuth, 1984b) for the book, (Knuth, 1984a) or Knuth (1984a) for the
+              article, (CTAN, n.d.)
+            </p>
           </blockquote>
           <p>
             The <em>a</em> and <em>b</em> are added by the style because one author has two works
-            in the same year; a single Knuth entry would print as (Knuth, 1984). The BibTeX source:
+            in the same year, in title order as APA 7 requires; a single Knuth entry would print as
+            (Knuth, 1984). The BibTeX source:
           </p>
           <pre><code>{`@book{knuth1984,
   author    = {Knuth, Donald E.},
   title     = {The {\\TeX}book},
+  sorttitle = {TeXbook},
   publisher = {Addison-Wesley},
   address   = {Reading, MA},
   year      = {1984}
@@ -183,7 +191,10 @@ export default async function BibliographyExamplesPage() {
           <p>
             <code>{'{\\TeX}'}</code> is braced so the APA style, which lowercases titles to
             sentence case, leaves it alone; the corporate author is double-braced so it is not split
-            into a first and last name. <code>@online</code> with <code>urldate</code> is a biblatex
+            into a first and last name. <code>sorttitle</code> is there because biber drops the{' '}
+            <code>\TeX</code> macro when it builds the sort key, leaving &quot;book&quot;, which
+            would put <em>The TeXbook</em> ahead of &quot;Literate programming&quot; and swap the
+            letters. <code>@online</code> with <code>urldate</code> is a biblatex
             entry type; classic BibTeX styles want <code>@misc</code> with{' '}
             <code>howpublished = {'{\\url{...}}'}</code> and the access date in <code>note</code>.
           </p>
@@ -216,15 +227,17 @@ export default async function BibliographyExamplesPage() {
             the full form is (Knuth, &quot;Literate Programming&quot; 98).
           </p>
           <p>
-            The source is the same three entries as APA. The only change in the LaTeX is the style
-            line, <code>\usepackage[style=mla]&#123;biblatex&#125;</code>, which also adds the
+            The source is the same three entries as APA, untouched. The only change in the LaTeX is
+            the style line, <code>\usepackage[style=mla]&#123;biblatex&#125;</code>, which also adds the
             short title to in-text citations when an author has several works. Author names are
             typed <code>Last, First</code>:
           </p>
           <pre><code>{`@book{knuth1984,
   author    = {Knuth, Donald E.},
   title     = {The {\\TeX}book},
+  sorttitle = {TeXbook},
   publisher = {Addison-Wesley},
+  address   = {Reading, MA},
   year      = {1984}
 }
 
@@ -270,15 +283,16 @@ export default async function BibliographyExamplesPage() {
               Lamport, Leslie. <em>LaTeX: A Document Preparation System</em>. 2nd ed. Reading, MA:
               Addison-Wesley, 1994.
             </p>
-            <p>Note 1: 1. Donald E. Knuth, <em>The TeXbook</em> (Reading, MA: Addison-Wesley, 1984), 42.</p>
+            <p>Footnote 1: Donald E. Knuth, <em>The TeXbook</em> (Reading, MA: Addison-Wesley, 1984), 42.</p>
             <p>
-              Note 3: 3. Donald E. Knuth, &quot;Literate Programming,&quot; <em>The Computer Journal</em>{' '}
+              Footnote 3: Donald E. Knuth, &quot;Literate Programming,&quot; <em>The Computer Journal</em>{' '}
               27, no. 2 (1984): 98, https://doi.org/10.1093/comjnl/27.2.97.
             </p>
           </blockquote>
           <p>
-            The source adds <code>address</code> (biblatex also accepts <code>location</code>) and
-            a numeric <code>edition</code>, which the style prints as &quot;2nd ed.&quot;:
+            The source keeps <code>address</code> (biblatex&apos;s own name is <code>location</code>),
+            which Chicago prints and APA 7 drops, and adds a numeric <code>edition</code>, which
+            the style prints as &quot;2nd ed.&quot;:
           </p>
           <pre><code>{`@book{knuth1984,
   author    = {Knuth, Donald E.},
@@ -312,7 +326,7 @@ export default async function BibliographyExamplesPage() {
           <p>
             Numbered in order of first citation, initials before the surname, article titles in
             sentence case inside quotation marks, the journal in italics,{' '}
-            <em>vol.</em>, <em>no.</em>, <em>pp.</em>, and the year last. Conference papers start
+            <em>vol.</em>, <em>no.</em>, <em>pp.</em>, then the year. Conference papers start
             with &quot;in&quot; and the proceedings title.
           </p>
           <blockquote>
@@ -360,8 +374,11 @@ export default async function BibliographyExamplesPage() {
   pages     = {45--52}
 }`}</code></pre>
           <p>
-            For the medical numbered style, which looks similar but uses superscripts and no
-            brackets, see <Link href="/learn/ama-citation-format">AMA Citation Format</Link>.
+            IEEE&apos;s own templates ship <code>IEEEtran.bst</code> for classic BibTeX; it prints
+            the book exactly as above, drops the DOI, and replaces a repeated author with a dash
+            (it is in the BibTeX table below). For the medical numbered style, which looks similar
+            but uses superscripts and no brackets, see{' '}
+            <Link href="/learn/ama-citation-format">AMA Citation Format</Link>.
           </p>
 
           {/* ───────────────────────────── LaTeX ───────────────────────────── */}
@@ -370,16 +387,18 @@ export default async function BibliographyExamplesPage() {
             The three methods differ in where the formatting lives. With <code>thebibliography</code>{' '}
             you type the formatted entries yourself. With BibTeX a <code>.bst</code> style file
             formats entries from a <code>.bib</code> database. With biblatex a LaTeX package does
-            the formatting and biber does the sorting; the current APA, MLA, Chicago and IEEE
-            styles are biblatex styles.
+            the formatting and biber does the sorting. The maintained APA 7, MLA 9 and Chicago
+            styles are biblatex packages; IEEE ships <code>IEEEtran.bst</code> for BibTeX and has
+            a biblatex counterpart.
           </p>
 
-          <h3>thebibliography example: no external file</h3>
+          <h3>thebibliography: no external file</h3>
           <p>
             The argument is the widest label you expect (<code>9</code> for up to nine entries,{' '}
             <code>99</code> for up to 99); each <code>\bibitem&#123;key&#125;</code> becomes a
             numbered entry that <code>\cite&#123;key&#125;</code> refers to. <code>\newblock</code>{' '}
-            is an optional separator that some classes turn into a line break:
+            is an optional separator that the <code>openbib</code> class option turns into a line
+            break:
           </p>
           <pre><code>{`\\documentclass{article}
 \\begin{document}
@@ -418,7 +437,7 @@ Donald E. Knuth.
             in the book classes).
           </p>
 
-          <h3>BibTeX example: .bib file plus a .bst style</h3>
+          <h3>BibTeX: a .bib file plus a .bst style</h3>
           <p>
             Put the sources in <code>refs.bib</code>, pick a style with{' '}
             <code>\bibliographystyle</code> and print the list with <code>\bibliography</code>. The
@@ -469,6 +488,8 @@ came out of the same project \\cite{knuth1984lp}.
 
 \\end{document}`}</code></pre>
           <p>
+            <code>edition = &#123;2nd&#125;</code> is spelled out because the <code>.bst</code> styles
+            print the field as typed (&quot;2nd edition&quot;), where biblatex wants the number.
             Only entries you cite are printed; add <code>\nocite&#123;*&#125;</code> before{' '}
             <code>\bibliography</code> to print the whole file. Swapping the style line changes
             every entry at once. The Knuth book under each of the standard styles, as compiled:
@@ -498,6 +519,11 @@ came out of the same project \\cite{knuth1984lp}.
                 <td>[1] D. E. Knuth, <em>The TeXbook</em>. Reading, MA: Addison-Wesley, 1984.</td>
               </tr>
               <tr>
+                <td><code>\bibliographystyle&#123;IEEEtran&#125;</code></td>
+                <td>[1], in citation order</td>
+                <td>Same as ieeetr for this entry; IEEE&apos;s own style, which prints a repeated author as a dash and omits the DOI</td>
+              </tr>
+              <tr>
                 <td><code>\bibliographystyle&#123;apalike&#125;</code></td>
                 <td>[Knuth, 1984a]</td>
                 <td>[Knuth, 1984a] Knuth, D. E. (1984a). <em>The TeXbook</em>. Addison-Wesley, Reading, MA.</td>
@@ -510,8 +536,9 @@ came out of the same project \\cite{knuth1984lp}.
             </tbody>
           </table>
           <p>
-            <code>apalike</code> is APA-like, not APA 7: it keeps the place of publication and
-            brackets the citation. For author-year citations in parentheses load natbib, which
+            <code>apalike</code> is APA-like, not APA 7: it keeps the place of publication, brackets
+            the citation and, since it ignores <code>sorttitle</code>, still labels <em>The
+            TeXbook</em> 1984a. For author-year citations in parentheses load natbib, which
             adds <code>\citep</code> and <code>\citet</code>:
           </p>
           <pre><code>{`\\usepackage[round]{natbib}   % preamble
@@ -521,7 +548,7 @@ came out of the same project \\cite{knuth1984lp}.
 \\bibliographystyle{plainnat}
 \\bibliography{refs}`}</code></pre>
 
-          <h3>biblatex example: style=apa with biber</h3>
+          <h3>biblatex: style=apa with biber</h3>
           <p>
             biblatex moves the setup into the preamble: the style is a package option, the{' '}
             <code>.bib</code> file is registered with <code>\addbibresource</code>, and{' '}
@@ -538,6 +565,7 @@ came out of the same project \\cite{knuth1984lp}.
 @book{knuth1984,
   author    = {Knuth, Donald E.},
   title     = {The {\\TeX}book},
+  sorttitle = {TeXbook},
   publisher = {Addison-Wesley},
   address   = {Reading, MA},
   year      = {1984}
@@ -634,8 +662,9 @@ out of the same project \\parencite{knuth1984lp}; every package is archived onli
           <h3>The .bib entry types</h3>
           <p>
             The entry type decides which fields a style expects. The required fields are the ones
-            the classic BibTeX styles warn about when missing; biblatex also accepts{' '}
-            <code>journaltitle</code>, <code>location</code> and <code>date</code> as aliases.
+            the classic BibTeX styles warn about when missing. biblatex&apos;s own names are{' '}
+            <code>journaltitle</code>, <code>location</code> and <code>date</code>; it reads{' '}
+            <code>journal</code>, <code>address</code> and <code>year</code> as aliases for them.
           </p>
           <table>
             <thead>
@@ -688,7 +717,10 @@ out of the same project \\parencite{knuth1984lp}; every package is archived onli
           <p>
             Separate authors with <code>and</code>, never commas; write page ranges with a double
             hyphen, <code>97--111</code>; and brace anything whose capitalization must survive,{' '}
-            <code>{'{DNA}'}</code>, <code>{'{\\LaTeX}'}</code>. A deeper treatment of the file, with the
+            <code>{'{DNA}'}</code>, <code>{'{\\LaTeX}'}</code>. The classic styles (<code>plain</code>,{' '}
+            <code>unsrt</code>, <code>ieeetr</code>, <code>apalike</code>) ignore <code>doi</code>,{' '}
+            <code>url</code> and <code>isbn</code>; <code>plainnat</code> and biblatex print them. A
+            deeper treatment of the file, with the
             warnings each mistake produces, is in{' '}
             <Link href="/blog/bibtex-errors-automatic-fix-guide">BibTeX Errors and How to Fix Them</Link>;
             exporting a <code>.bib</code> from a reference manager is in the{' '}
@@ -768,8 +800,10 @@ chapters 14 and 15 for the line-breaking parameters discussed in Section 3.
 \\end{document}`}</code></pre>
           <p>
             The standard biblatex styles (<code>authoryear</code>, <code>numeric</code>, and the
-            MLA and IEEE packages) ignore <code>annotation</code>. Two preamble lines print it as
-            an indented paragraph after each entry; compiled with <code>style=authoryear</code>:
+            MLA and IEEE packages) ignore <code>annotation</code>; <code>biblatex-chicago</code> prints
+            it with the <code>annotation=true</code> option. For the others, two preamble lines
+            print it as an indented paragraph after each entry; compiled with{' '}
+            <code>style=authoryear</code>:
           </p>
           <pre><code>{`\\DeclareFieldFormat{annotation}{\\par\\vspace{0.5\\baselineskip}\\noindent #1}
 \\renewbibmacro*{finentry}{\\finentry\\printfield{annotation}}`}</code></pre>
@@ -845,8 +879,9 @@ chapters 14 and 15 for the line-breaking parameters discussed in Section 3.
           <p>
             An alphabetical list of sources at the end of a document, one entry per source, giving
             author, title, publisher or journal and year in the order the style prescribes. In APA 7
-            a book is Knuth, D. E. (1984). <em>The TeXbook</em>. Addison-Wesley.; in MLA 9 it is
-            Knuth, Donald E. <em>The TeXbook</em>. Addison-Wesley, 1984. Entries hang indented,
+            a book is &quot;Knuth, D. E. (1984). <em>The TeXbook</em>. Addison-Wesley.&quot; and in
+            MLA 9 &quot;Knuth, Donald E. <em>The TeXbook</em>. Addison-Wesley, 1984.&quot; Entries
+            hang indented,
             except in numbered styles such as IEEE, which label them [1], [2] in citation order.
           </p>
           <h3>What is the difference between a bibliography and a reference list?</h3>
@@ -889,8 +924,8 @@ chapters 14 and 15 for the line-breaking parameters discussed in Section 3.
           <h3>Should I use BibTeX or biblatex?</h3>
           <p>
             Use biblatex with biber when the document must follow a named style exactly:
-            biblatex-apa, biblatex-mla, biblatex-chicago and biblatex-ieee implement the current
-            editions and give you <code>\textcite</code>, <code>\parencite</code> and{' '}
+            biblatex-apa, biblatex-mla, biblatex-chicago and biblatex-ieee follow the handbooks
+            (APA 7, MLA 9, Chicago 17) and give you <code>\textcite</code>, <code>\parencite</code> and{' '}
             <code>\footcite</code>. Use classic BibTeX when a journal or thesis template hands you
             a <code>.bst</code> file. The <code>.bib</code> file is the same for both, so switching
             later costs almost nothing.
