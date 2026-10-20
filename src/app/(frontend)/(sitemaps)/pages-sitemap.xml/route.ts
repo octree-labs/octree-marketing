@@ -79,6 +79,10 @@ const getPagesSitemap = unstable_cache(
         lastmod: dateFallback,
       },
       {
+        loc: `${SITE_URL}/learn/framebox`,
+        lastmod: dateFallback,
+      },
+      {
         loc: `${SITE_URL}/learn/mathematical-expressions`,
         lastmod: dateFallback,
       },

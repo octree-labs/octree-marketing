@@ -75,6 +75,12 @@ const learnTopics = [
     color: 'from-pink-500/10 to-pink-600/5',
   },
   {
+    slug: 'framebox',
+    title: 'Framebox and Boxed Text',
+    description: 'Draw a box around text with \\fbox and \\framebox: fixed widths and alignment, empty boxes and checkboxes for forms, multi-line boxes with \\parbox and minipage, \\boxed equations and colored frames.',
+    color: 'from-slate-500/10 to-slate-600/5',
+  },
+  {
     slug: 'mathematical-expressions',
     title: 'Mathematical Expressions',
     description: 'Write fractions, roots, aligned equations, and more in LaTeX. Complete guide to math typesetting with amsmath.',
