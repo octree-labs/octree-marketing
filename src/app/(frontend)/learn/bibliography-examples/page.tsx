@@ -202,11 +202,19 @@ export default async function BibliographyExamplesPage() {
             </p>
             <p>
               Knuth, Donald E. &quot;Literate Programming.&quot; <em>The Computer Journal</em>, vol.
-              27, no. 2, 1984, pp. 97–111, https://doi.org/10.1093/comjnl/27.2.97.
+              27, no. 2, 1984, pp. 97–111. https://doi.org/10.1093/comjnl/27.2.97.
             </p>
             <p>———. <em>The TeXbook</em>. Addison-Wesley, 1984.</p>
-            <p>In-text: (Knuth, <em>The TeXbook</em> 3), (Knuth, &quot;Literate Programming&quot; 98), (CTAN)</p>
+            <p>In-text: (Knuth, <em>The TeXbook</em> 3), (&quot;Literate Programming&quot; 98), (CTAN)</p>
           </blockquote>
+          <p>
+            Three details above are <code>biblatex-mla</code>&apos;s rather than the handbook&apos;s.
+            It closes the page range with a period before the DOI, where MLA 9 uses a comma. It
+            puts the title of a whole website in quotation marks, where MLA 9 italicizes it;
+            entering the site as <code>@book</code> gives the italic form. And it drops the author
+            from the second in-text citation because the previous citation was the same author;
+            the full form is (Knuth, &quot;Literate Programming&quot; 98).
+          </p>
           <p>
             The source is the same three entries as APA. The only change in the LaTeX is the style
             line, <code>\usepackage[style=mla]&#123;biblatex&#125;</code>, which also adds the
@@ -248,7 +256,9 @@ export default async function BibliographyExamplesPage() {
             Chicago&apos;s humanities style has two parts: a footnote at the point of citation and
             a bibliography entry at the end. The note gives the first name first and wraps the
             publication details in parentheses; the bibliography entry inverts the name and uses
-            periods. Place of publication is kept.
+            periods. Place of publication is kept. The three-em dash for a repeated author is a
+            17th-edition rule, which is what <code>biblatex-chicago</code> implements; the 18th
+            edition (2024) repeats the name instead.
           </p>
           <blockquote>
             <p>
@@ -301,7 +311,7 @@ export default async function BibliographyExamplesPage() {
           <h3>IEEE bibliography example</h3>
           <p>
             Numbered in order of first citation, initials before the surname, article titles in
-            quotation marks with a lowercase first word after the first, the journal in italics,{' '}
+            sentence case inside quotation marks, the journal in italics,{' '}
             <em>vol.</em>, <em>no.</em>, <em>pp.</em>, and the year last. Conference papers start
             with &quot;in&quot; and the proceedings title.
           </p>
@@ -375,8 +385,8 @@ export default async function BibliographyExamplesPage() {
 \\begin{document}
 
 Knuth designed \\TeX{} for typesetting mathematics \\cite{knuth1984} and
-Lamport built \\LaTeX{} on top of it \\cite{lamport1994}; the DOI system
-is described in \\cite{knuth1984lp}.
+Lamport built \\LaTeX{} on top of it \\cite{lamport1994}; literate
+programming is introduced in \\cite{knuth1984lp}.
 
 \\begin{thebibliography}{9}
 
@@ -573,7 +583,9 @@ out of the same project \\parencite{knuth1984lp}; every package is archived onli
 
 \\end{document}`}</code></pre>
           <p>
-            This document produced the APA entries shown at the top of the page. The same{' '}
+            This document produced the APA entries shown at the top of the page, plus a fourth for
+            Lamport that shows how the style handles an edition: Lamport, L. (1994).{' '}
+            <em>LaTeX: A document preparation system</em> (2nd ed.). Addison-Wesley. The same{' '}
             <code>.bib</code> file gives the other styles by changing one line; each of these was
             compiled with the same body:
           </p>
