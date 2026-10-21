@@ -7,6 +7,7 @@ import configPromise from '@payload-config'
 import { getPayload } from 'payload'
 import React from 'react'
 import PageClient from './page.client'
+import { mergeOpenGraph } from '@/utilities/mergeOpenGraph'
 
 export const dynamic = 'force-static'
 export const revalidate = 600
@@ -62,12 +63,12 @@ export function generateMetadata(): Metadata {
     description:
       'Tips, tutorials, and updates on LaTeX editing, academic writing, and the Octree platform.',
     alternates: { canonical: '/blog' },
-    openGraph: {
+    openGraph: mergeOpenGraph({
       title: 'Octree Blog – LaTeX Tips, Tutorials & Guides',
       description:
         'Tips, tutorials, and updates on LaTeX editing, academic writing, and the Octree platform.',
       url: '/blog',
       type: 'website',
-    },
+    }),
   }
 }
