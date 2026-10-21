@@ -190,7 +190,7 @@ const learnTopics = [
   },
   {
     slug: 'sections',
-    title: 'Sections & Table of Contents',
+    title: 'Sections & Headings',
     description: 'The heading hierarchy per class, unnumbered sections that still appear in the TOC, secnumdepth and tocdepth, custom numbering, titlesec formatting, \\appendix and hyperref links.',
     color: 'from-lime-500/10 to-green-600/5',
   },
@@ -271,6 +271,12 @@ const learnTopics = [
     title: 'Approximately Equal Symbol (≈)',
     description: 'What ≈ means, ≈ vs ~ vs ≃ vs ≅ with Unicode code points, how to type it on Windows, Mac, iPhone, Android and in HTML, and \\approx, \\not\\approx, \\sim and the amssymb variants in LaTeX.',
     color: 'from-teal-500/10 to-emerald-600/5',
+  },
+  {
+    slug: 'table-of-contents',
+    title: 'Table of Contents in LaTeX',
+    description: 'A complete table of contents example, \\tableofcontents and the .toc file, tocdepth vs secnumdepth, unnumbered entries, hyperref links, renaming, tocloft styling, lists of figures and Beamer outlines.',
+    color: 'from-lime-500/10 to-green-600/5',
   },
 ]
 

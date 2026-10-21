@@ -511,6 +511,7 @@ Appendix pages continue the arabic sequence.
           <h2>Next Steps</h2>
           <p>Page numbers sorted? Keep working on the layout:</p>
           <ul>
+            <li><Link href="/learn/table-of-contents">Table of Contents in LaTeX</Link> &ndash; <code>\tableofcontents</code>, depth, roman-numbered contents pages and tocloft styling</li>
             <li><Link href="/learn/page-size-margins">Page Size &amp; Margins</Link> &ndash; Paper size, margins and <code>headheight</code> with the geometry package</li>
             <li><Link href="/learn/horizontal-lines">Horizontal Lines in LaTeX</Link> &ndash; Header and footer rules, <code>\hrule</code>, <code>\rule</code> and table rules</li>
             <li><Link href="/learn/footnotes">LaTeX Footnotes</Link> &ndash; Footnotes in tables, headings and captions</li>
