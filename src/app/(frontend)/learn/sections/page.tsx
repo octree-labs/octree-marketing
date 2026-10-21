@@ -231,7 +231,9 @@ export default async function LaTeXSectionsPage() {
             (chapters do this themselves). The <code>tocloft</code> package controls the
             typography of the contents, and <code>tocbibind</code> adds the bibliography and
             index to it. <code>\tableofcontents</code> can also be placed at the end of the
-            document; nothing requires it at the front.
+            document; nothing requires it at the front. The{' '}
+            <Link href="/learn/table-of-contents">table of contents guide</Link> has a complete
+            example and covers styling, renaming and Beamer outlines in detail.
           </p>
 
           <h3>Short titles for the contents and headers</h3>

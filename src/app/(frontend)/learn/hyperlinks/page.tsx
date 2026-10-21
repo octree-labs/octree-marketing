@@ -476,6 +476,7 @@ Thanks to everyone who reads the manual before asking.
           <h2>Next Steps</h2>
           <p>Links done? Keep polishing the document:</p>
           <ul>
+            <li><Link href="/learn/table-of-contents">Table of Contents in LaTeX</Link> &ndash; A clickable contents with <code>linktoc</code>, <code>\phantomsection</code> and <code>\texorpdfstring</code></li>
             <li><Link href="/learn/footnotes">LaTeX Footnotes</Link> &ndash; Footnotes in tables, headings and captions, including the <code>hyperfootnotes</code> option</li>
             <li><Link href="/learn/comments">LaTeX Comments</Link> &ndash; Single-line, multi-line and block comments, plus todo notes</li>
             <li><Link href="/learn/colors">Using Colors in LaTeX</Link> &ndash; Define the xcolor names you use for <code>linkcolor</code> and <code>urlcolor</code></li>
