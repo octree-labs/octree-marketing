@@ -20,7 +20,7 @@ const breadcrumbSchema = generateBreadcrumbSchema(breadcrumbs)
 const page = {
   slug: 'quotes',
   title: "LaTeX Quotation Marks and Quotes: `` '', csquotes and Block Quotes",
-  seoTitle: "LaTeX Quotation Marks: `` '' and csquotes",
+  seoTitle: "Quotes in LaTeX: Quotation Marks, `` '' and csquotes",
   description: 'How to write quotation marks in LaTeX: why "text" renders wrong, the ``double\'\' and `single\' convention, nested quotes, the csquotes package with \\enquote and autostyle, German and French quotes, the quote, quotation and verse environments, block quotes with attribution, epigraphs, quotes in Beamer, straight quotes in code and common errors.',
   keywords: 'latex quotes, latex quotation marks, quotation marks latex, latex double quotes, latex single quotes, latex quote environment, latex block quote, latex quotation, csquotes, latex enquote, beamer quotes, latex german quotes, latex guillemets, latex straight quotes, latex apostrophe, latex verse environment, latex epigraph',
 }
