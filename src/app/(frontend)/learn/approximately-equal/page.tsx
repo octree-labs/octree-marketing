@@ -39,7 +39,7 @@ const faq: FaqItem[] = [
   {
     question: 'How do I type the approximately equal symbol?',
     answer:
-      'On Windows hold Alt and type 247 on the numeric keypad, or type 2248 followed by Alt+X in Word. On a Mac press Option+X. On iPhone and Android open the number keyboard and long-press the = key. In HTML write &asymp; or &#8776;. In LaTeX write \\approx inside math mode. Or copy it from here: ≈',
+      'On Windows hold Alt and type 247 on the numeric keypad, or type 2248 followed by Alt+X in Word. On a Mac (U.S. layout) press Option+X. On iPhone tap 123, then #+=, and hold the = key. In HTML write &asymp; or &#8776;. In LaTeX write \\approx inside math mode. Or copy it from here: ≈',
   },
   {
     question: 'How do I write approximately equal in LaTeX?',
@@ -59,7 +59,7 @@ const faq: FaqItem[] = [
   {
     question: 'What is the Alt code for approximately equal?',
     answer:
-      'Alt+247. Hold the Alt key, type 2 4 7 on the numeric keypad with Num Lock on, and release Alt. It works on a US or Western European Windows layout because 247 is the position of ≈ in the old DOS code page 437. On a laptop without a keypad, use Win+. (the emoji panel) and open the Symbols tab, or type 2248 then Alt+X in Word.',
+      'Alt+247. Hold the Alt key, type 2 4 7 on the numeric keypad with Num Lock on, and release Alt. It works where Windows uses the US code page 437, in which 247 is ≈; on code page 850 (common in Western Europe) it gives ¸ instead. On a laptop without a keypad, use Win+. (the emoji panel) and open the Symbols tab, or type 2248 then Alt+X in Word.',
   },
 ]
 
@@ -134,8 +134,9 @@ export default async function ApproximatelyEqualPage() {
           <p>
             Mathematically ≈ has no fixed tolerance. How close is &quot;close enough&quot; depends
             on the context, which is why careful writing often states it: &quot;≈ 3.14 (to two
-            decimal places)&quot;. The symbol was introduced by Alfred Greenhill in 1892 and is now
-            universal across mathematics, physics, engineering and everyday notation.
+            decimal places)&quot;. The symbol is usually credited to Alfred Greenhill, who used an early
+            form of it in 1892, and it is now standard across mathematics, physics and
+            engineering.
           </p>
 
           {/* ───────────────────────────── Lookalikes ───────────────────────────── */}
@@ -257,7 +258,7 @@ export default async function ApproximatelyEqualPage() {
             <tbody>
               <tr>
                 <td>Windows (any app)</td>
-                <td>Hold <kbd>Alt</kbd> and type <kbd>247</kbd> on the numeric keypad with Num Lock on</td>
+                <td>Hold <kbd>Alt</kbd> and type <kbd>247</kbd> on the numeric keypad with Num Lock on (US code page 437)</td>
               </tr>
               <tr>
                 <td>Windows (Word, Outlook)</td>
@@ -268,7 +269,7 @@ export default async function ApproximatelyEqualPage() {
                 <td><kbd>Win</kbd>+<kbd>.</kbd>, open the Symbols tab, Math Symbols</td>
               </tr>
               <tr>
-                <td>Mac (US and UK layouts)</td>
+                <td>Mac (U.S. layout)</td>
                 <td><kbd>Option</kbd>+<kbd>X</kbd></td>
               </tr>
               <tr>
@@ -277,11 +278,11 @@ export default async function ApproximatelyEqualPage() {
               </tr>
               <tr>
                 <td>iPhone / iPad</td>
-                <td>Switch to the <kbd>123</kbd> keyboard and long-press <kbd>=</kbd>, then slide to ≈</td>
+                <td>Tap <kbd>123</kbd>, then <kbd>#+=</kbd>, hold <kbd>=</kbd> and slide to ≈</td>
               </tr>
               <tr>
                 <td>Android (Gboard)</td>
-                <td>Switch to <kbd>?123</kbd> and long-press <kbd>=</kbd>, then slide to ≈</td>
+                <td>Varies by keyboard: in Gboard look on the <kbd>?123</kbd> symbol pages or hold <kbd>=</kbd></td>
               </tr>
               <tr>
                 <td>Google Docs</td>
@@ -307,9 +308,10 @@ export default async function ApproximatelyEqualPage() {
           </table>
           <h3>Windows</h3>
           <p>
-            The Alt code is <kbd>Alt</kbd>+<kbd>247</kbd>. It works in every Windows program on a US
-            or Western European keyboard layout because 247 is where ≈ sits in code page 437, the
-            original IBM PC character set that Alt codes still use. It needs a real numeric keypad:
+            The Alt code is <kbd>Alt</kbd>+<kbd>247</kbd>, because 247 is where ≈ sits in code page
+            437, the original IBM PC character set that plain Alt codes still read from on US
+            Windows. On a PC set to code page 850 (common in Western Europe), 247 is a cedilla ¸
+            instead; use one of the other methods there. It needs a real numeric keypad:
             on a laptop, use the Fn-layer keypad if there is one, or open the emoji panel with{' '}
             <kbd>Win</kbd>+<kbd>.</kbd> and pick ≈ from the Symbols tab. In Word and Outlook you can
             also type the hexadecimal code point <kbd>2248</kbd> and press <kbd>Alt</kbd>+<kbd>X</kbd>,
@@ -317,22 +319,21 @@ export default async function ApproximatelyEqualPage() {
           </p>
           <h3>Mac</h3>
           <p>
-            <kbd>Option</kbd>+<kbd>X</kbd> gives ≈ on the US and British layouts. If your layout
-            differs, the Character Viewer
-            (<kbd>Control</kbd>+<kbd>Command</kbd>+<kbd>Space</kbd>) finds it under &quot;almost
-            equal&quot; or by pasting 2248 into the search field.
+            <kbd>Option</kbd>+<kbd>X</kbd> gives ≈ on the U.S. (and ABC) layout. On other layouts,
+            the Character Viewer (<kbd>Control</kbd>+<kbd>Command</kbd>+<kbd>Space</kbd>) finds it
+            under &quot;almost equal&quot;.
           </p>
           <h3>iPhone and Android</h3>
           <p>
-            Both stock keyboards hide ≈ behind the equals key. Switch to the numeric layer, hold{' '}
-            <kbd>=</kbd> until the pop-up appears, and slide to ≈ (the same pop-up has ≠). The
-            symbol is not under the tilde key, which is why people searching for it there never
-            find it.
+            On iPhone the equals key is on the second symbol page: tap <kbd>123</kbd>, then{' '}
+            <kbd>#+=</kbd>, hold <kbd>=</kbd> until the pop-up appears, and slide to ≈ (the same
+            pop-up has ≠). Android keyboards vary; in Gboard check the <kbd>?123</kbd> symbol
+            pages or hold <kbd>=</kbd>. If neither has it, copy ≈ from this page.
           </p>
           <h3>HTML and Unicode</h3>
           <p>
-            The named entity is <code>&amp;asymp;</code> (for &quot;asymptotic&quot;, an older name
-            for the symbol); the numeric forms are <code>&amp;#8776;</code> in decimal and{' '}
+            The named entity is <code>&amp;asymp;</code> (HTML 4 described it as &quot;almost equal to = asymptotic
+            to&quot;); the numeric forms are <code>&amp;#8776;</code> in decimal and{' '}
             <code>&amp;#x2248;</code> in hexadecimal. HTML5 also accepts <code>&amp;approx;</code>{' '}
             and <code>&amp;ap;</code>. In any UTF-8 document, including Markdown and source code,
             you can paste ≈ as is. The related entities are <code>&amp;sim;</code> for ∼,{' '}
@@ -362,7 +363,7 @@ Negated: $a \\not\\approx b$, $a \\not\\sim b$, $a \\not\\cong b$, $a \\neq b$.
 
 \\end{document}`}</code></pre>
           <p>
-            For a bolder &quot;not approximately equal&quot; and the other variants you need{' '}
+            The heavier and East Asian variants need{' '}
             <code>amssymb</code>. Note that <strong><code>\napprox</code> does not exist</strong>:
             amssymb defines <code>\nsim</code> and <code>\ncong</code> but no negated{' '}
             <code>\approx</code>, and the command stops pdfLaTeX with &quot;Undefined control
@@ -545,7 +546,7 @@ Typed directly: $x ≈ y$ and in text ≈ 3 cm.
               as a rounding statement.
             </li>
             <li>
-              <strong>Inequalities that are not strict:</strong> if the two sides are known to be
+              <strong>Values known to differ:</strong> if the two sides are known to be
               different, say so with ≠; see the{' '}
               <Link href="/blog/not-equal-sign-meaning-how-to-type">not equal sign</Link>. ≈ and ≠
               are not opposites: 3.14 ≠ π and 3.14 ≈ π are both true.
@@ -601,8 +602,8 @@ amssymb variants.
           <h3>How do I type the approximately equal symbol?</h3>
           <p>
             On Windows hold Alt and type 247 on the numeric keypad, or type 2248 followed by Alt+X
-            in Word. On a Mac press Option+X. On iPhone and Android open the number keyboard and
-            long-press the = key. In HTML write <code>&amp;asymp;</code> or{' '}
+            in Word. On a Mac (U.S. layout) press Option+X. On iPhone tap 123, then #+=, and hold
+            the = key. In HTML write <code>&amp;asymp;</code> or{' '}
             <code>&amp;#8776;</code>. In LaTeX write <code>\approx</code> inside math mode. Or copy
             it from here: ≈
           </p>
@@ -635,8 +636,8 @@ amssymb variants.
           <h3>What is the Alt code for approximately equal?</h3>
           <p>
             Alt+247. Hold the Alt key, type 2 4 7 on the numeric keypad with Num Lock on, and
-            release Alt. It works on a US or Western European Windows layout because 247 is the
-            position of ≈ in the old DOS code page 437. On a laptop without a keypad, use Win+.
+            release Alt. It works where Windows uses the US code page 437, in which 247 is ≈; on
+            code page 850 (common in Western Europe) it gives ¸ instead. On a laptop without a keypad, use Win+.
             (the emoji panel) and open the Symbols tab, or type 2248 then Alt+X in Word.
           </p>
 
