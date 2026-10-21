@@ -34,32 +34,32 @@ const faq: FaqItem[] = [
   {
     question: 'What does the ≈ symbol mean?',
     answer:
-      '≈ means "approximately equal to" or "almost equal to". It says the two sides are close enough for the purpose at hand but not exactly the same, usually because one side has been rounded or estimated: π ≈ 3.14, √2 ≈ 1.414. Its Unicode name is ALMOST EQUAL TO (U+2248).',
+      '≈ means "approximately equal to" or "almost equal to": the two sides are close enough for the purpose but not identical, usually because one is rounded or estimated, as in π ≈ 3.14. Its Unicode name is ALMOST EQUAL TO (U+2248).',
   },
   {
     question: 'How do I type the approximately equal symbol?',
     answer:
-      'On Windows hold Alt and type 247 on the numeric keypad, or type 2248 followed by Alt+X in Word. On a Mac (U.S. layout) press Option+X. On iPhone tap 123, then #+=, and hold the = key. In HTML write &asymp; or &#8776;. In LaTeX write \\approx inside math mode. Or copy it from here: ≈',
+      'On Windows hold Alt and type 247 on the numeric keypad, or in Word type 2248 then Alt+X. On a Mac (U.S. layout) press Option+X. On iPhone tap 123, then #+=, and hold the = key. In HTML write &asymp; or &#8776;; in LaTeX, \\approx in math mode. Or copy it: ≈',
   },
   {
     question: 'How do I write approximately equal in LaTeX?',
     answer:
-      'Use \\approx in math mode: $\\pi \\approx 3.1416$. It needs no package. The related commands are \\sim (~), \\simeq (≃), \\cong (≅) and \\doteq (≐); amssymb adds \\thickapprox, \\approxeq, \\lesssim and \\gtrsim. For "not approximately equal" write \\not\\approx; there is no \\napprox command. Outside math mode \\approx stops with "Missing $ inserted", so wrap it as $\\approx$.',
+      'Use \\approx in math mode: $\\pi \\approx 3.1416$. It needs no package. Its relatives are \\sim, \\simeq, \\cong and \\doteq; amssymb adds \\thickapprox, \\approxeq, \\lesssim and \\gtrsim. "Not approximately equal" is \\not\\approx (there is no \\napprox). Outside math mode \\approx stops with "Missing $ inserted".',
   },
   {
     question: 'What is the difference between ≈ and ~?',
     answer:
-      'The tilde ~ (U+007E on the keyboard, ∼ U+223C as the math operator) is a looser relation: "of the same order of magnitude", "asymptotic to" or, in statistics, "distributed as", and in everyday writing it marks a rough estimate (~10 minutes). The double tilde ≈ states a numeric approximation that is close in value, such as a rounded number. Use ≈ when the digits matter and ~ when only the scale does.',
+      'The tilde (~ on the keyboard, ∼ U+223C in math) is looser: "of the same order of magnitude", "asymptotic to" or "distributed as", and in everyday writing a rough estimate (~10 minutes). ≈ says the values are close, as with a rounded number. Use ≈ when the digits matter and ~ when only the scale does.',
   },
   {
     question: 'What is the difference between ≈ and ≅?',
     answer:
-      'They look alike and Unicode even names ≅ (U+2245) APPROXIMATELY EQUAL TO, but in practice ≅ means congruent (identical in shape and size in geometry) or isomorphic (in algebra), and ≈ means almost equal in value. For a rounded number use ≈, never ≅.',
+      'They look alike and Unicode even names ≅ (U+2245) APPROXIMATELY EQUAL TO, but in practice ≅ means congruent (geometry) or isomorphic (algebra), and ≈ means almost equal in value. For a rounded number use ≈, never ≅.',
   },
   {
     question: 'What is the Alt code for approximately equal?',
     answer:
-      'Alt+247. Hold the Alt key, type 2 4 7 on the numeric keypad with Num Lock on, and release Alt. It works where Windows uses the US code page 437, in which 247 is ≈; on code page 850 (common in Western Europe) it gives ¸ instead. On a laptop without a keypad, use Win+. (the emoji panel) and open the Symbols tab, or type 2248 then Alt+X in Word.',
+      'Alt+247: hold Alt, type 247 on the numeric keypad with Num Lock on, and release. That works where Windows uses the US code page 437; on code page 850 (common in Western Europe) it gives ¸ instead. Without a keypad, use Win+. and the Symbols tab, or type 2248 then Alt+X in Word.',
   },
 ]
 
@@ -90,62 +90,53 @@ export default async function ApproximatelyEqualPage() {
         <article className="prose prose-lg dark:prose-invert max-w-4xl mx-auto">
           <h1>Approximately Equal Symbol (≈): Meaning, How to Type It, and LaTeX</h1>
           <p className="lead">
-            The <strong>approximately equal symbol</strong> ≈ (two stacked tildes, Unicode U+2248,
-            officially named <em>Almost Equal To</em>) says that two quantities are close in value
-            but not exactly the same: π ≈ 3.14, √2 ≈ 1.414. This page covers what it means, how it
-            differs from the single tilde ~ and the lookalikes ≃ ≅ ≐ ≒, how to type it on every
-            platform, and how to write it in LaTeX with <code>\approx</code>, the negated form and
-            the amssymb variants. Every LaTeX example here was compiled on TeX Live 2025.
+            The <strong>approximately equal symbol</strong> ≈ (also called the approximate symbol;
+            Unicode U+2248, officially <em>Almost Equal To</em>) says that two quantities are close
+            in value but not identical: π ≈ 3.14, √2 ≈ 1.414. This guide covers what it means, how
+            it differs from ~ ≃ ≅ ≐ ≒, how to type it, and <code>\approx</code> in LaTeX. Every
+            LaTeX example here was compiled on TeX Live 2025.
           </p>
           <p>
-            Copy it from here if that is all you need: <strong>≈</strong>. For the single squiggle
-            and its many meanings see the post on the{' '}
+            Copy it from here: <strong>≈</strong>. For the single squiggle, see the{' '}
             <Link href="/blog/squiggly-line-tilde-symbol-meaning-how-to-type">
               tilde symbol ~
-            </Link>
-            ; this guide is about the double one.
+            </Link>{' '}
+            post.
           </p>
 
           {/* ───────────────────────────── Meaning ───────────────────────────── */}
           <h2>What ≈ Means</h2>
           <p>
-            <em>a</em> ≈ <em>b</em> is read &quot;a is approximately equal to b&quot; or &quot;a is
-            almost equal to b&quot;. It is used whenever an exact equality would be false but the
-            difference does not matter for the argument:
+            <em>a</em> ≈ <em>b</em> is read &quot;a is approximately (or almost) equal to b&quot;.
+            It is used where exact equality would be false but the difference does not matter:
           </p>
           <ul>
             <li>
-              <strong>Rounded values:</strong> π ≈ 3.1416, e ≈ 2.718, 1/3 ≈ 0.333. The right-hand
-              side is a decimal that has been cut short.
+              <strong>Rounded values:</strong> π ≈ 3.1416, e ≈ 2.718, 1/3 ≈ 0.333.
             </li>
             <li>
-              <strong>Measured or estimated values:</strong> g ≈ 9.81 m/s², the population of a
-              city ≈ 2 million.
+              <strong>Measured or estimated values:</strong> g ≈ 9.81 m/s², a city population ≈ 2 million.
             </li>
             <li>
-              <strong>Approximations in analysis:</strong> sin x ≈ x for small x, (1 + x)ⁿ ≈ 1 + nx
-              when x is small, a Taylor series truncated after a few terms.
+              <strong>Approximations in analysis:</strong> sin x ≈ x and (1 + x)ⁿ ≈ 1 + nx for
+              small x, or a truncated Taylor series.
             </li>
             <li>
-              <strong>Numerical results:</strong> the output of a solver or a simulation, where the
-              answer is correct to a stated number of digits.
+              <strong>Numerical results:</strong> solver or simulation output, correct to a stated
+              number of digits.
             </li>
           </ul>
           <p>
-            Mathematically ≈ has no fixed tolerance. How close is &quot;close enough&quot; depends
-            on the context, which is why careful writing often states it: &quot;≈ 3.14 (to two
-            decimal places)&quot;. The symbol is usually credited to Alfred Greenhill, who used an early
-            form of it in 1892, and it is now standard across mathematics, physics and
-            engineering.
+            ≈ has no fixed tolerance, which is why careful writing states one: &quot;≈ 3.14 (to
+            two decimal places)&quot;. The symbol is usually credited to Alfred Greenhill, who used
+            an early form of it in 1892.
           </p>
 
           {/* ───────────────────────────── Lookalikes ───────────────────────────── */}
           <h2 id="lookalikes">≈ vs ~ vs ≃ vs ≅ vs ≐ vs ≒</h2>
           <p>
-            There is a whole family of wavy equals signs, and each one has a settled meaning in
-            mathematics. The table lists the ones you are likely to meet, with the Unicode code
-            point, the character&apos;s official name (which is not always what mathematicians call
-            it) and the LaTeX command.
+            Each wavy equals sign has its own meaning. The table gives the code point, the official
+            Unicode name (not always what mathematicians call it) and the LaTeX command.
           </p>
           <table>
             <thead>
@@ -231,22 +222,20 @@ export default async function ApproximatelyEqualPage() {
             </tbody>
           </table>
           <p>
-            Three distinctions cover most of the confusion. <strong>≈ vs ~:</strong> the double
-            tilde says the values are close (π ≈ 3.14); the single tilde says only that they are of
-            the same size or scale (L ~ 10³ m) or that one quantity follows a distribution (X ~
-            N(0, 1)). <strong>≈ vs ≅:</strong> ≅ means congruent or isomorphic, not approximately
-            equal, whatever its Unicode name says; see the post on the{' '}
+            Three distinctions cover most of the confusion. <strong>≈ vs ~:</strong> ≈ says the
+            values are close (π ≈ 3.14); ~ says only that they share a scale (L ~ 10³ m) or that a
+            quantity follows a distribution (X ~ N(0, 1)). <strong>≈ vs ≅:</strong> ≅ means
+            congruent or isomorphic, whatever its Unicode name says; see the{' '}
             <Link href="/blog/congruent-symbol-meaning-how-to-type">congruent symbol ≅</Link>.{' '}
-            <strong>≈ vs ≃:</strong> ≃ is asymptotic equality (the ratio tends to 1) or homotopy
-            equivalence; some physicists use it where a mathematician would write ≈, but ≈ is the
-            safe choice for a rounded number.
+            <strong>≈ vs ≃:</strong> ≃ is asymptotic equality or homotopy equivalence; some
+            physicists use it for ≈, but ≈ is the safe choice for a rounded number.
           </p>
 
           {/* ───────────────────────────── How to type ───────────────────────────── */}
           <h2 id="how-to-type">How to Type the Approximately Equal Symbol</h2>
           <p>
-            Nothing on a standard keyboard produces ≈ directly, so every platform has a shortcut or
-            a picker. The quickest route is usually to copy the character: <strong>≈</strong>
+            No standard keyboard has a ≈ key, so each platform has a shortcut or a picker. Copying
+            is often quickest: <strong>≈</strong>
           </p>
           <table>
             <thead>
@@ -298,7 +287,7 @@ export default async function ApproximatelyEqualPage() {
               </tr>
               <tr>
                 <td>Markdown, plain text, code</td>
-                <td>Paste the Unicode character ≈ directly; UTF-8 handles it everywhere</td>
+                <td>Paste ≈ directly (UTF-8)</td>
               </tr>
               <tr>
                 <td>LaTeX</td>
@@ -308,14 +297,12 @@ export default async function ApproximatelyEqualPage() {
           </table>
           <h3>Windows</h3>
           <p>
-            The Alt code is <kbd>Alt</kbd>+<kbd>247</kbd>, because 247 is where ≈ sits in code page
-            437, the original IBM PC character set that plain Alt codes still read from on US
-            Windows. On a PC set to code page 850 (common in Western Europe), 247 is a cedilla ¸
-            instead; use one of the other methods there. It needs a real numeric keypad:
-            on a laptop, use the Fn-layer keypad if there is one, or open the emoji panel with{' '}
-            <kbd>Win</kbd>+<kbd>.</kbd> and pick ≈ from the Symbols tab. In Word and Outlook you can
-            also type the hexadecimal code point <kbd>2248</kbd> and press <kbd>Alt</kbd>+<kbd>X</kbd>,
-            which converts the four digits into the character.
+            <kbd>Alt</kbd>+<kbd>247</kbd> works because 247 is ≈ in code page 437, the original
+            IBM PC character set that plain Alt codes read from on US Windows. On a PC using code
+            page 850 (common in Western Europe), 247 is a cedilla ¸ instead. Alt codes need a
+            numeric keypad; without one, use <kbd>Win</kbd>+<kbd>.</kbd> and the Symbols tab, or in
+            Word and Outlook type <kbd>2248</kbd> and press <kbd>Alt</kbd>+<kbd>X</kbd> to convert the
+            hex code point into the character.
           </p>
           <h3>Mac</h3>
           <p>
@@ -325,30 +312,25 @@ export default async function ApproximatelyEqualPage() {
           </p>
           <h3>iPhone and Android</h3>
           <p>
-            On iPhone the equals key is on the second symbol page: tap <kbd>123</kbd>, then{' '}
-            <kbd>#+=</kbd>, hold <kbd>=</kbd> until the pop-up appears, and slide to ≈ (the same
-            pop-up has ≠). Android keyboards vary; in Gboard check the <kbd>?123</kbd> symbol
-            pages or hold <kbd>=</kbd>. If neither has it, copy ≈ from this page.
+            On iPhone tap <kbd>123</kbd>, then <kbd>#+=</kbd>, hold <kbd>=</kbd> and slide to ≈
+            (the same pop-up has ≠). Android keyboards vary; in Gboard check the{' '}
+            <kbd>?123</kbd> symbol pages or hold <kbd>=</kbd>. Failing that, copy it from this page.
           </p>
           <h3>HTML and Unicode</h3>
           <p>
-            The named entity is <code>&amp;asymp;</code> (HTML 4 described it as &quot;almost equal to = asymptotic
-            to&quot;); the numeric forms are <code>&amp;#8776;</code> in decimal and{' '}
-            <code>&amp;#x2248;</code> in hexadecimal. HTML5 also accepts <code>&amp;approx;</code>{' '}
-            and <code>&amp;ap;</code>. In any UTF-8 document, including Markdown and source code,
-            you can paste ≈ as is. The related entities are <code>&amp;sim;</code> for ∼,{' '}
-            <code>&amp;simeq;</code> for ≃, <code>&amp;cong;</code> for ≅ and{' '}
-            <code>&amp;ne;</code> for ≠.
+            The named entity is <code>&amp;asymp;</code> (HTML 4 described it as &quot;almost equal
+            to = asymptotic to&quot;); the numeric forms are <code>&amp;#8776;</code> and{' '}
+            <code>&amp;#x2248;</code>. HTML5 also accepts <code>&amp;approx;</code> and{' '}
+            <code>&amp;ap;</code>. Related entities: <code>&amp;sim;</code> ∼,{' '}
+            <code>&amp;simeq;</code> ≃, <code>&amp;cong;</code> ≅, <code>&amp;ne;</code> ≠.
           </p>
 
           {/* ───────────────────────────── LaTeX ───────────────────────────── */}
           <h2 id="latex">Approximately Equal in LaTeX: \approx</h2>
           <p>
-            The command is <code>\approx</code>. It is built into LaTeX, needs no package, and
-            works only in math mode, so wrap it in <code>$...$</code>, <code>\( ... \)</code> or a
-            display environment. It is a relation symbol (<code>\mathrel</code>), so LaTeX puts the
-            same medium space on both sides that it puts around <code>=</code>, whether or not you
-            type spaces in the source.
+            The command is <code>\approx</code>. It needs no package and works only in math mode
+            (<code>$...$</code>, <code>\( ... \)</code> or a display environment). As a relation
+            symbol it gets the same spacing as <code>=</code>, whatever spaces you type.
           </p>
           <pre><code>{`\\documentclass{article}
 \\begin{document}
@@ -363,12 +345,11 @@ Negated: $a \\not\\approx b$, $a \\not\\sim b$, $a \\not\\cong b$, $a \\neq b$.
 
 \\end{document}`}</code></pre>
           <p>
-            The heavier and East Asian variants need{' '}
-            <code>amssymb</code>. Note that <strong><code>\napprox</code> does not exist</strong>:
-            amssymb defines <code>\nsim</code> and <code>\ncong</code> but no negated{' '}
-            <code>\approx</code>, and the command stops pdfLaTeX with &quot;Undefined control
-            sequence&quot;. <code>\not\approx</code> is the standard way to write ≉, and it works
-            without any package.
+            The variants below need <code>amssymb</code>.{' '}
+            <strong><code>\napprox</code> does not exist</strong>: amssymb has <code>\nsim</code>{' '}
+            and <code>\ncong</code> but no negated <code>\approx</code>, so it stops with
+            &quot;Undefined control sequence&quot;. Write ≉ as <code>\not\approx</code>, which
+            needs no package.
           </p>
 
           <h3>The full set of commands</h3>
@@ -410,8 +391,8 @@ Negated: $a \\not\\approx b$, $a \\not\\sim b$, $a \\not\\cong b$, $a \\neq b$.
 
           <h3>A worked example in align</h3>
           <p>
-            Rounded constants line up neatly on the relation when you put the <code>&amp;</code>{' '}
-            before <code>\approx</code>, exactly as you would before <code>=</code>:
+            Put the <code>&amp;</code> before <code>\approx</code>, as you would before{' '}
+            <code>=</code>:
           </p>
           <pre><code>{`\\documentclass{article}
 \\usepackage{amsmath}
@@ -435,12 +416,11 @@ For small $x$,
 
           <h3>\sim for &quot;distributed as&quot; and order of magnitude</h3>
           <p>
-            In statistics the single tilde is the standard notation for &quot;has the
-            distribution&quot;: <code>$X \sim \mathcal&#123;N&#125;(\mu, \sigma^2)$</code> reads
+            In statistics <code>$X \sim \mathcal&#123;N&#125;(\mu, \sigma^2)$</code> reads
             &quot;X is normally distributed with mean μ and variance σ²&quot;. In physics and
-            asymptotics it means &quot;of the order of&quot; or &quot;asymptotically equivalent
-            to&quot;, as in Stirling&apos;s formula. Using <code>\approx</code> in either place is
-            wrong, and using <code>\sim</code> for a rounded number is equally wrong.
+            asymptotics ∼ means &quot;of the order of&quot; or &quot;asymptotically equivalent
+            to&quot;, as in Stirling&apos;s formula. <code>\approx</code> is wrong in both places,
+            and <code>\sim</code> is wrong for a rounded number.
           </p>
           <pre><code>{`\\usepackage{amsmath,amssymb}
 
@@ -478,10 +458,9 @@ Order of magnitude: $L \\sim 10^{3}\\,\\mathrm{m}$, \\quad bounds: $f(n) \\lesss
             </tbody>
           </table>
           <p>
-            Here is the first one reproduced. The line <code>The value is \approx 3.14.</code>{' '}
-            produces this in the log, and because TeX inserts a <code>$</code> and carries on, the
-            rest of the paragraph gets typeset in math italics before a second &quot;Missing
-            $&quot; appears at the end:
+            The first one, from the line <code>The value is \approx 3.14.</code> TeX inserts a{' '}
+            <code>$</code> and carries on, so the rest of the paragraph is set as math and a second
+            &quot;Missing $&quot; follows at its end:
           </p>
           <pre><code>{`./main.tex:3: Missing $ inserted.
 <inserted text>
@@ -493,15 +472,15 @@ you left one out. Proceed, with fingers crossed.`}</code></pre>
 
           <h3>≈ in text, and the typed character</h3>
           <p>
-            For a symbol in a sentence (&quot;≈ 3 cm&quot;) write <code>$\approx$</code>, or define
-            a shortcut that works in both modes with <code>\ensuremath</code>. In text, follow it
-            with <code>&#123;&#125;</code> (<code>\apx&#123;&#125; 3 cm</code>): a command name
-            swallows the space after it, so <code>\apx 3 cm</code> prints &quot;≈3 cm&quot;. A pasted ≈ only works
-            in pdfLaTeX after a <code>\DeclareUnicodeCharacter</code> line; with XeLaTeX or LuaLaTeX
-            and <code>unicode-math</code>, the character works in math mode out of the box. In text
-            mode under those engines it printed nothing in our test, because the default Latin
-            Modern text font has no ≈ glyph, so keep it inside <code>$...$</code> there too or
-            choose a text font that has it.
+            In a sentence write <code>$\approx$</code>, or define a shortcut with{' '}
+            <code>\ensuremath</code> that works in both modes. In text, follow it with{' '}
+            <code>&#123;&#125;</code>: a command name swallows the next space, so{' '}
+            <code>\apx 3 cm</code> prints &quot;≈3 cm&quot; and <code>\apx&#123;&#125; 3 cm</code>{' '}
+            prints &quot;≈ 3 cm&quot;. A pasted ≈ works in pdfLaTeX only after a{' '}
+            <code>\DeclareUnicodeCharacter</code> line. With XeLaTeX or LuaLaTeX and{' '}
+            <code>unicode-math</code> it works in math mode as is, but in text it printed nothing in
+            our test (the default Latin Modern text font has no ≈), so keep it in{' '}
+            <code>$...$</code> there too.
           </p>
           <pre><code>{`\\documentclass{article}
 \\DeclareUnicodeCharacter{2248}{\\ensuremath{\\approx}}  % pdfLaTeX: make a pasted ≈ work
@@ -518,36 +497,30 @@ Typed directly: $x ≈ y$ and in text ≈ 3 cm.
           <h2 id="conventions">When to Use ≈, When to Use ~ and ±, and When ≈ Is Wrong</h2>
           <ul>
             <li>
-              <strong>Rounding:</strong> ≈ is the right symbol when you have shortened a number, and
-              the number of digits shown is the implied precision: π ≈ 3.14, π ≈ 3.14159. If the
-              rounding is stated elsewhere (&quot;all values rounded to two decimals&quot;), many
-              journals prefer a plain <code>=</code> in the tables, since every entry is understood
-              to be rounded.
+              <strong>Rounding:</strong> ≈ is right for a shortened number, and the digits shown are
+              the implied precision. If a table states that all values are rounded, many journals
+              prefer a plain <code>=</code> in it.
             </li>
             <li>
               <strong>Order of magnitude:</strong> use ~ (<code>\sim</code>) when only the scale is
-              meant: a wavelength ~ 500 nm, N ~ 10²³ particles. Writing ≈ 10²³ would claim the
-              coefficient is close to 1, which is a stronger statement.
+              meant: N ~ 10²³ particles. ≈ 10²³ would claim the coefficient is close to 1.
             </li>
             <li>
-              <strong>Tolerances and uncertainty:</strong> a measured value with an error band is
-              written with ±, not ≈: 9.81 ± 0.02 m/s². The{' '}
+              <strong>Tolerances and uncertainty:</strong> write 9.81 ± 0.02 m/s², not ≈. The{' '}
               <Link href="/blog/plus-minus-symbol-meaning-how-to-type">plus-minus symbol</Link>{' '}
-              gives a range; ≈ gives no information about how far off the value could be.
+              gives a range; ≈ says nothing about how far off the value could be.
             </li>
             <li>
-              <strong>Definitions and identities:</strong> never write ≈ where the equality is
-              exact. 0.999… = 1, not ≈ 1; ∑ 1/n² = π²/6 exactly; a quantity defined by a formula uses{' '}
-              <code>=</code>, <code>:=</code> or <code>\triangleq</code>.
+              <strong>Definitions and identities:</strong> never write ≈ for an exact equality.
+              0.999… = 1, not ≈ 1; a definition uses <code>=</code>, <code>:=</code> or{' '}
+              <code>\triangleq</code>.
             </li>
             <li>
-              <strong>Congruence and isomorphism:</strong> use ≅ (<code>\cong</code>) for congruent
-              triangles and isomorphic groups, and ≡ for modular arithmetic. ≈ in those places reads
-              as a rounding statement.
+              <strong>Congruence and isomorphism:</strong> use ≅ (<code>\cong</code>), and ≡ for
+              modular arithmetic. ≈ there reads as a rounding statement.
             </li>
             <li>
-              <strong>Values known to differ:</strong> if the two sides are known to be
-              different, say so with ≠; see the{' '}
+              <strong>Values known to differ:</strong> use ≠; see the{' '}
               <Link href="/blog/not-equal-sign-meaning-how-to-type">not equal sign</Link>. ≈ and ≠
               are not opposites: 3.14 ≠ π and 3.14 ≈ π are both true.
             </li>
@@ -556,9 +529,8 @@ Typed directly: $x ≈ y$ and in text ≈ 3 cm.
           {/* ───────────────────────────── Full example ───────────────────────────── */}
           <h2>Complete Example</h2>
           <p>
-            One document that uses each relation in its proper place: ≈ for rounding, ∼ for a
-            distribution and an asymptotic law, ± for a measured tolerance, ≅ for congruence and
-            the amssymb bounds. Compiled with pdfLaTeX on TeX Live 2025.
+            Each relation in its proper place: ≈ for rounding, ∼ for a distribution and an
+            asymptotic law, ± for a tolerance, ≅ for congruence, and the amssymb bounds.
           </p>
           <pre><code>{`\\documentclass{article}
 \\usepackage{amsmath}
@@ -594,51 +566,45 @@ amssymb variants.
           <h2>Frequently Asked Questions</h2>
           <h3>What does the ≈ symbol mean?</h3>
           <p>
-            ≈ means &quot;approximately equal to&quot; or &quot;almost equal to&quot;. It says the
-            two sides are close enough for the purpose at hand but not exactly the same, usually
-            because one side has been rounded or estimated: π ≈ 3.14, √2 ≈ 1.414. Its Unicode name
-            is ALMOST EQUAL TO (U+2248).
+            ≈ means &quot;approximately equal to&quot; or &quot;almost equal to&quot;: the two sides
+            are close enough for the purpose but not identical, usually because one is rounded or
+            estimated, as in π ≈ 3.14. Its Unicode name is ALMOST EQUAL TO (U+2248).
           </p>
           <h3>How do I type the approximately equal symbol?</h3>
           <p>
-            On Windows hold Alt and type 247 on the numeric keypad, or type 2248 followed by Alt+X
-            in Word. On a Mac (U.S. layout) press Option+X. On iPhone tap 123, then #+=, and hold
-            the = key. In HTML write <code>&amp;asymp;</code> or{' '}
-            <code>&amp;#8776;</code>. In LaTeX write <code>\approx</code> inside math mode. Or copy
-            it from here: ≈
+            On Windows hold Alt and type 247 on the numeric keypad, or in Word type 2248 then Alt+X.
+            On a Mac (U.S. layout) press Option+X. On iPhone tap 123, then #+=, and hold the = key.
+            In HTML write <code>&amp;asymp;</code> or <code>&amp;#8776;</code>; in LaTeX,{' '}
+            <code>\approx</code> in math mode. Or copy it: ≈
           </p>
           <h3>How do I write approximately equal in LaTeX?</h3>
           <p>
             Use <code>\approx</code> in math mode: <code>$\pi \approx 3.1416$</code>. It needs no
-            package. The related commands are <code>\sim</code> (∼), <code>\simeq</code> (≃),{' '}
-            <code>\cong</code> (≅) and <code>\doteq</code> (≐); amssymb adds{' '}
-            <code>\thickapprox</code>, <code>\approxeq</code>, <code>\lesssim</code> and{' '}
-            <code>\gtrsim</code>. For &quot;not approximately equal&quot; write{' '}
-            <code>\not\approx</code>; there is no <code>\napprox</code> command. Outside math mode{' '}
-            <code>\approx</code> stops with &quot;Missing $ inserted&quot;, so wrap it as{' '}
-            <code>$\approx$</code>.
+            package. Its relatives are <code>\sim</code>, <code>\simeq</code>, <code>\cong</code>{' '}
+            and <code>\doteq</code>; amssymb adds <code>\thickapprox</code>, <code>\approxeq</code>,{' '}
+            <code>\lesssim</code> and <code>\gtrsim</code>. &quot;Not approximately equal&quot; is{' '}
+            <code>\not\approx</code> (there is no <code>\napprox</code>). Outside math mode{' '}
+            <code>\approx</code> stops with &quot;Missing $ inserted&quot;.
           </p>
           <h3>What is the difference between ≈ and ~?</h3>
           <p>
-            The tilde ~ (U+007E on the keyboard, ∼ U+223C as the math operator) is a looser
-            relation: &quot;of the same order of magnitude&quot;, &quot;asymptotic to&quot; or, in
-            statistics, &quot;distributed as&quot;, and in everyday writing it marks a rough
-            estimate (~10 minutes). The double tilde ≈ states a numeric approximation that is close
-            in value, such as a rounded number. Use ≈ when the digits matter and ~ when only the
-            scale does.
+            The tilde (~ on the keyboard, ∼ U+223C in math) is looser: &quot;of the same order of
+            magnitude&quot;, &quot;asymptotic to&quot; or &quot;distributed as&quot;, and in
+            everyday writing a rough estimate (~10 minutes). ≈ says the values are close, as with a
+            rounded number. Use ≈ when the digits matter and ~ when only the scale does.
           </p>
           <h3>What is the difference between ≈ and ≅?</h3>
           <p>
             They look alike and Unicode even names ≅ (U+2245) APPROXIMATELY EQUAL TO, but in
-            practice ≅ means congruent (identical in shape and size in geometry) or isomorphic (in
-            algebra), and ≈ means almost equal in value. For a rounded number use ≈, never ≅.
+            practice ≅ means congruent (geometry) or isomorphic (algebra), and ≈ means almost equal
+            in value. For a rounded number use ≈, never ≅.
           </p>
           <h3>What is the Alt code for approximately equal?</h3>
           <p>
-            Alt+247. Hold the Alt key, type 2 4 7 on the numeric keypad with Num Lock on, and
-            release Alt. It works where Windows uses the US code page 437, in which 247 is ≈; on
-            code page 850 (common in Western Europe) it gives ¸ instead. On a laptop without a keypad, use Win+.
-            (the emoji panel) and open the Symbols tab, or type 2248 then Alt+X in Word.
+            Alt+247: hold Alt, type 247 on the numeric keypad with Num Lock on, and release. That
+            works where Windows uses the US code page 437; on code page 850 (common in Western
+            Europe) it gives ¸ instead. Without a keypad, use Win+. and the Symbols tab, or type
+            2248 then Alt+X in Word.
           </p>
 
           {/* ───────────────────────────── Next Steps ───────────────────────────── */}
