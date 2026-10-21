@@ -19,14 +19,14 @@ const breadcrumbSchema = generateBreadcrumbSchema(breadcrumbs)
 
 const page = {
   slug: 'sections',
-  title: 'Sections and Subsections in LaTeX: Numbering, Unnumbered Sections, and the Table of Contents',
-  seoTitle: 'LaTeX Sections, Subsections and Table of Contents',
-  description: 'LaTeX heading levels, unnumbered sections in the TOC, secnumdepth and tocdepth, \\tableofcontents, custom numbering, titlesec formatting and \\appendix.',
-  keywords: 'latex subsection, latex section, latex subsubsection, latex unnumbered section, latex table of contents, latex section numbering, latex paragraph heading, latex chapter, latex section without number, latex tableofcontents, latex secnumdepth, latex tocdepth, latex addcontentsline, latex titlesec, latex appendix, latex section font size, latex heading levels, latex part, latex frontmatter mainmatter',
+  title: 'Sections, Subsections and Chapters in LaTeX: Heading Levels, Numbering and Unnumbered Sections',
+  seoTitle: 'Sections, Subsections and Headings in LaTeX',
+  description: 'LaTeX heading levels from \\part to \\subparagraph, unnumbered sections, secnumdepth and tocdepth, custom numbering, titlesec formatting and \\appendix.',
+  keywords: 'latex subsection, latex section, latex subsubsection, latex unnumbered section, latex section numbering, latex paragraph heading, latex chapter, latex section without number, latex secnumdepth, latex tocdepth, latex addcontentsline, latex titlesec, latex appendix, latex section font size, latex heading levels, latex part, latex frontmatter mainmatter',
 }
 
 /** Last content update, used for dateModified in the article schema. */
-const LAST_UPDATED = '2026-10-18'
+const LAST_UPDATED = '2026-10-21'
 
 const faq: FaqItem[] = [
   {
@@ -86,7 +86,7 @@ export default async function LaTeXSectionsPage() {
         </div>
 
         <article className="prose prose-lg dark:prose-invert max-w-4xl mx-auto">
-          <h1>Sections and Subsections in LaTeX: Numbering, Unnumbered Sections, and the Table of Contents</h1>
+          <h1>Sections, Subsections and Chapters in LaTeX: Heading Levels, Numbering and Unnumbered Sections</h1>
           <p className="lead">
             LaTeX headings are a hierarchy of commands, from <code>\part</code> down to{' '}
             <code>\subparagraph</code>, that number themselves, build the table of contents and
@@ -214,6 +214,11 @@ export default async function LaTeXSectionsPage() {
           {/* ── TOC ── */}
           <h2>The Table of Contents</h2>
           <p>
+            This section covers how headings reach the contents. For a complete example,
+            depth control, clickable entries, renaming, tocloft styling and Beamer outlines, see
+            the full <Link href="/learn/table-of-contents">table of contents in LaTeX</Link> guide.
+          </p>
+          <p>
             <code>\tableofcontents</code> prints the contents where it appears. Each heading
             command writes its title and page number to the <code>.toc</code> file during the
             run, and <code>\tableofcontents</code> reads that file. On the first compile the
@@ -231,9 +236,7 @@ export default async function LaTeXSectionsPage() {
             (chapters do this themselves). The <code>tocloft</code> package controls the
             typography of the contents, and <code>tocbibind</code> adds the bibliography and
             index to it. <code>\tableofcontents</code> can also be placed at the end of the
-            document; nothing requires it at the front. The{' '}
-            <Link href="/learn/table-of-contents">table of contents guide</Link> has a complete
-            example and covers styling, renaming and Beamer outlines in detail.
+            document; nothing requires it at the front.
           </p>
 
           <h3>Short titles for the contents and headers</h3>

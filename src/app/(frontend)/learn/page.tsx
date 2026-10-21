@@ -190,7 +190,7 @@ const learnTopics = [
   },
   {
     slug: 'sections',
-    title: 'Sections & Table of Contents',
+    title: 'Sections & Headings',
     description: 'The heading hierarchy per class, unnumbered sections that still appear in the TOC, secnumdepth and tocdepth, custom numbering, titlesec formatting, \\appendix and hyperref links.',
     color: 'from-lime-500/10 to-green-600/5',
   },
