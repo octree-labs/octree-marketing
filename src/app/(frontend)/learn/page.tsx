@@ -266,6 +266,12 @@ const learnTopics = [
     description: '\\mathbb{R} with amssymb, all 26 letters with their Unicode code points, lowercase letters and the indicator 1 with dsfont, bbm and bbold, \\symbb with unicode-math, bold vs blackboard bold, and the common mistakes.',
     color: 'from-indigo-500/10 to-indigo-600/5',
   },
+  {
+    slug: 'approximately-equal',
+    title: 'Approximately Equal Symbol (≈)',
+    description: 'What ≈ means, ≈ vs ~ vs ≃ vs ≅ with Unicode code points, how to type it on Windows, Mac, iPhone, Android and in HTML, and \\approx, \\not\\approx, \\sim and the amssymb variants in LaTeX.',
+    color: 'from-teal-500/10 to-emerald-600/5',
+  },
 ]
 
 export default function LearnPage() {
