@@ -493,7 +493,9 @@ you left one out. Proceed, with fingers crossed.`}</code></pre>
           <h3>≈ in text, and the typed character</h3>
           <p>
             For a symbol in a sentence (&quot;≈ 3 cm&quot;) write <code>$\approx$</code>, or define
-            a shortcut that works in both modes with <code>\ensuremath</code>. A pasted ≈ only works
+            a shortcut that works in both modes with <code>\ensuremath</code>. In text, follow it
+            with <code>&#123;&#125;</code> (<code>\apx&#123;&#125; 3 cm</code>): a command name
+            swallows the space after it, so <code>\apx 3 cm</code> prints &quot;≈3 cm&quot;. A pasted ≈ only works
             in pdfLaTeX after a <code>\DeclareUnicodeCharacter</code> line; with XeLaTeX or LuaLaTeX
             and <code>unicode-math</code>, the character works in math mode out of the box. In text
             mode under those engines it printed nothing in our test, because the default Latin
@@ -505,7 +507,7 @@ you left one out. Proceed, with fingers crossed.`}</code></pre>
 \\newcommand{\\apx}{\\ensuremath{\\approx}}              % works in text and in math
 \\begin{document}
 
-The length is \\apx 3 cm, and in math $L \\apx 3$.
+The length is \\apx{} 3 cm, and in math $L \\apx 3$.
 
 Typed directly: $x ≈ y$ and in text ≈ 3 cm.
 
@@ -582,7 +584,7 @@ and the runtime is bounded by $T(n) \\lesssim n \\log n$.
 
 \\section*{Not approximation}
 Triangles $ABC \\cong DEF$ are congruent, $7 \\equiv 1 \\pmod 3$, and $0.999\\ldots = 1$ exactly.
-In text the length is \\apx 3 cm; the heavier $a \\thickapprox b$ and $a \\approxeq b$ are
+In text the length is \\apx{} 3 cm; the heavier $a \\thickapprox b$ and $a \\approxeq b$ are
 amssymb variants.
 
 \\end{document}`}</code></pre>
