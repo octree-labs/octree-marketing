@@ -59,7 +59,7 @@ const faq: FaqItem[] = [
   {
     question: 'How do I add dots to the table of contents in LaTeX?',
     answer:
-      'Sections, subsections and lower levels already have dotted leaders in the standard classes; only chapter entries (and section entries in article) have none. Load tocloft and redefine the leader, for example \\renewcommand{\\cftsecleader}{\\cftdotfill{\\cftdotsep}} for sections in article, or \\cftchapleader for chapters in report and book.',
+      'Sections, subsections and lower levels already have dotted leaders in the standard classes; only the top level (parts, chapters, and sections in article) has none. Load tocloft and redefine the leader, for example \\renewcommand{\\cftsecleader}{\\cftdotfill{\\cftdotsep}} for sections in article, or \\cftchapleader for chapters in report and book.',
   },
 ]
 
@@ -118,7 +118,7 @@ And this one.
           <p>
             The result is a &ldquo;Contents&rdquo; heading followed by three entries: section 1 in
             bold with its page number, subsection 1.1 indented with a dotted leader, and section 2.
-            There is one catch that confuses almost everyone the first time:{' '}
+            There is one catch:{' '}
             <strong>you have to compile twice</strong>.
           </p>
           <p>
@@ -316,8 +316,11 @@ Bibliography                             5`}</code></pre>
           <ul>
             <li>
               <strong><code>\phantomsection</code></strong> matters only with hyperref. It drops
-              an invisible link target at the current spot; without it the contents entry links
-              to the last numbered heading before it, which is often the wrong page.
+              an invisible link target at the current spot. Current hyperref already gives{' '}
+              <code>\section*</code> and <code>\chapter*</code> a target of their own, but older
+              installations do not, and an <code>\addcontentsline</code> that is not right after
+              a heading never has one: the entry then links to the previous target, often on the
+              wrong page. Keeping <code>\phantomsection</code> costs nothing.
             </li>
             <li>
               <strong><code>\appendix</code></strong> switches chapter numbering to letters (or
@@ -328,16 +331,18 @@ Bibliography                             5`}</code></pre>
               <strong><code>tocbibind</code></strong> adds the bibliography, index, list of
               figures and list of tables. The <code>nottoc</code> option stops it from also
               listing the table of contents inside itself, which is almost never wanted. It works
-              with <code>thebibliography</code>, BibTeX and <code>\printbibliography</code>; with
-              biblatex you can also write{' '}
+              with <code>thebibliography</code> and BibTeX but not with biblatex, whose{' '}
+              <code>\printbibliography</code> ignores it; there, write{' '}
               <code>\printbibliography[heading=bibintoc]</code> instead.
             </li>
           </ul>
           <p>
             For a document with no section numbers at all, starring every heading is the wrong
-            tool. Set <code>{`\\setcounter{secnumdepth}{0}`}</code> (or <code>-2</code> to drop
-            the numbers on parts as well) and keep the normal commands: the numbers disappear but
-            every heading stays in the contents. The{' '}
+            tool. Keep the normal commands and lower <code>secnumdepth</code> instead:{' '}
+            <code>0</code> removes the section numbers in article, <code>-1</code> also removes
+            the chapter numbers in report and book, and{' '}
+            <code>{`\\setcounter{secnumdepth}{-2}`}</code> switches off every number, parts
+            included. The numbers disappear but every heading stays in the contents. The{' '}
             <Link href="/learn/sections">sections guide</Link> covers the heading commands
             themselves in more detail.
           </p>
@@ -678,13 +683,13 @@ Text.
               </tr>
               <tr>
                 <td>Contents link jumps to the wrong page</td>
-                <td><code>\addcontentsline</code> for an unnumbered heading without a link target</td>
+                <td><code>\addcontentsline</code> with no link target before it (older hyperref, or an entry not tied to a heading)</td>
                 <td><code>\phantomsection</code> right before <code>\addcontentsline</code></td>
               </tr>
               <tr>
                 <td><code>tocdepth</code> seems to be ignored</td>
-                <td>Set after <code>\tableofcontents</code> (too late), or the class has its own mechanism (memoir)</td>
-                <td>Move <code>\setcounter</code> to the preamble; in memoir use <code>{`\\settocdepth{section}`}</code></td>
+                <td>Set after <code>\tableofcontents</code>, which is too late for that table</td>
+                <td>Move <code>\setcounter</code> to the preamble, or use <code>\addtocontents</code> as shown above</td>
               </tr>
               <tr>
                 <td>Renamed or deleted headings still listed</td>
@@ -744,7 +749,7 @@ Text.
           <h3>How do I add dots to the table of contents in LaTeX?</h3>
           <p>
             Sections, subsections and lower levels already have dotted leaders in the standard
-            classes; only chapter entries (and section entries in article) have none. Load
+            classes; only the top level (parts, chapters, and sections in article) has none. Load
             tocloft and redefine the leader, for example{' '}
             <code>{`\\renewcommand{\\cftsecleader}{\\cftdotfill{\\cftdotsep}}`}</code> for sections
             in article, or <code>\cftchapleader</code> for chapters in report and book.
