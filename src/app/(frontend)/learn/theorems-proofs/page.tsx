@@ -1,6 +1,6 @@
 import type { Metadata } from 'next/types'
 
-import { learnMetadata } from '@/utilities/learnMetadata'
+import { learnMetadata, type FaqItem } from '@/utilities/learnMetadata'
 import Link from 'next/link'
 import { buttonVariants } from '@/components/ui/button'
 import React from 'react'
@@ -19,14 +19,27 @@ const breadcrumbSchema = generateBreadcrumbSchema(breadcrumbs)
 
 const page = {
   slug: 'theorems-proofs',
-  title: 'Theorems, Lemmas and Proofs in LaTeX: amsthm, \\newtheorem and the QED Symbol',
-  seoTitle: 'Theorems and Proofs in LaTeX: amsthm, \\newtheorem',
-  description: 'How to write theorems, lemmas, definitions and proofs in LaTeX with amsthm: \\newtheorem with numbering within sections and shared counters, theorem styles, the proof environment, placing the end-of-proof (QED) symbol with \\qedhere, changing it to a filled square, referencing theorems with \\ref and cleveref, boxed theorems with tcolorbox, and common errors.',
+  title: 'Theorems and Proofs in LaTeX: amsthm, \\newtheorem and the End of Proof Symbol (QED)',
+  seoTitle: 'End of Proof Symbol in LaTeX: QED, \\qedsymbol, amsthm',
+  description: 'The end of proof symbol (∎) in LaTeX: amsthm proofs, \\qedsymbol, a filled \\blacksquare, \\qedhere after equations, plus \\newtheorem and lemma numbering.',
   keywords: 'latex theorem, end of proof symbol latex, theorem definition latex, latex newtheorem, amsthm, latex proof environment, latex qed symbol, qedhere, latex lemma, latex theorem numbering, latex theoremstyle, latex blacksquare, latex proof box, latex corollary, latex definition environment, thmtools, tcolorbox theorem, latex reference theorem',
 }
 
 /** Last content update, used for dateModified in the article schema. */
-const LAST_UPDATED = '2026-10-17'
+const LAST_UPDATED = '2026-10-22'
+
+const faq: FaqItem[] = [
+  {
+    question: 'How do I put the QED symbol in LaTeX?',
+    answer:
+      'Load amsthm and write the proof inside \\begin{proof} ... \\end{proof}; the end of proof symbol (a hollow square) is added flush right on the last line automatically. For a filled square load amssymb and put \\renewcommand{\\qedsymbol}{$\\blacksquare$} in the preamble. Outside a proof environment, type \\qed (amsthm) or \\hfill$\\square$.',
+  },
+  {
+    question: 'Why does the QED box appear on the wrong line?',
+    answer:
+      'When a proof ends with a displayed equation, an align or a list, amsthm puts the symbol on a new line below it. Write \\qedhere at the end of the last equation line or list item to move the symbol up onto that line. Load amsmath before amsthm, or \\qedhere may not work in displays.',
+  },
+]
 
 export default async function LaTeXTheoremsProofsPage() {
   return (
@@ -40,6 +53,7 @@ export default async function LaTeXTheoremsProofsPage() {
         title={page.title}
         description={page.description}
         dateModified={LAST_UPDATED}
+        faq={faq}
       />
       <div className="container">
         <div className="mb-8 max-w-4xl mx-auto">
@@ -52,7 +66,7 @@ export default async function LaTeXTheoremsProofsPage() {
         </div>
 
         <article className="prose prose-lg dark:prose-invert max-w-4xl mx-auto">
-          <h1>Theorems, Lemmas and Proofs in LaTeX: amsthm, \newtheorem and the QED Symbol</h1>
+          <h1>Theorems and Proofs in LaTeX: amsthm, \newtheorem and the End of Proof Symbol (QED)</h1>
           <p className="lead">
             LaTeX has no built-in <code>theorem</code> environment. You create one with{' '}
             <code>\newtheorem</code>, and the <code>amsthm</code> package adds the styles, the{' '}
@@ -215,14 +229,10 @@ export default async function LaTeXTheoremsProofsPage() {
 \\newtheorem{claim}{Claim}`}</code></pre>
 
           {/* ── Proofs ── */}
-          <h2>The proof Environment and the QED Symbol</h2>
+          <h2>The proof Environment</h2>
           <p>
-            <code>proof</code> prints an italic <em>Proof.</em> heading and places the
-            end-of-proof symbol, by default a hollow box (<code>\openbox</code>), flush right on
-            the last line. The symbol is often called the QED symbol, tombstone or Halmos, after{' '}
-            <em>quod erat demonstrandum</em> and the mathematician who popularised the box.
-          </p>
-          <p>
+            <code>proof</code> prints an italic <em>Proof.</em> heading, sets the argument in
+            upright type and ends it with the end-of-proof symbol (covered in the next section).
             Change the heading for one proof with the optional argument. This is the standard way
             to prove a theorem stated earlier, or to split a proof into parts:
           </p>
@@ -237,11 +247,54 @@ export default async function LaTeXTheoremsProofsPage() {
 % The default word, for all proofs (e.g. for another language)
 \\renewcommand{\\proofname}{Beweis}`}</code></pre>
 
+          {/* ── End of proof symbol ── */}
+          <h2>End of Proof Symbol (∎, □): \qedsymbol, \blacksquare and \qedhere</h2>
+          <p>
+            The end of proof symbol is the small square that marks where a proof finishes. It is
+            also called the QED symbol (after <em>quod erat demonstrandum</em>), the tombstone, or
+            the Halmos, after the mathematician who popularised it. In amsthm it is stored in{' '}
+            <code>\qedsymbol</code>, and the <code>proof</code> environment prints it flush right on
+            the last line automatically. The default is a hollow square, <code>\openbox</code> (□).
+          </p>
+          <table>
+            <thead>
+              <tr>
+                <th>You want</th>
+                <th>Write</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>Hollow square □ (default)</td><td>nothing: <code>{`\\begin{proof} ... \\end{proof}`}</code></td></tr>
+              <tr><td>Filled square ■</td><td><code>{`\\renewcommand{\\qedsymbol}{$\\blacksquare$}`}</code> (amssymb)</td></tr>
+              <tr><td>The letters QED</td><td><code>{`\\renewcommand{\\qedsymbol}{QED}`}</code></td></tr>
+              <tr><td>Symbol on the last line of an equation or list</td><td><code>\qedhere</code> at the end of that line</td></tr>
+              <tr><td>Symbol outside a proof environment</td><td><code>\qed</code> (amsthm) or <code>{`\\hfill$\\square$`}</code></td></tr>
+            </tbody>
+          </table>
+
+          <h3>Changing the QED symbol to a filled square</h3>
+          <p>
+            Redefine <code>\qedsymbol</code> once in the preamble and every proof uses the new
+            symbol. A filled square from <code>amssymb</code> is the most common replacement:
+          </p>
+          <pre><code>{`\\usepackage{amssymb}
+
+\\renewcommand{\\qedsymbol}{$\\blacksquare$}        % filled square
+\\renewcommand{\\qedsymbol}{$\\square$}             % hollow square from amssymb
+\\renewcommand{\\qedsymbol}{\\rule{0.5em}{0.5em}}   % filled square, no package
+\\renewcommand{\\qedsymbol}{QED}                    % the letters
+\\renewcommand{\\qedsymbol}{}                       % no symbol at all`}</code></pre>
+          <p>
+            Use only one of these lines. The amsthm default, <code>\openbox</code>, and the
+            amssymb <code>\square</code> look almost the same; <code>\blacksquare</code> is the
+            filled version.
+          </p>
+
           <h3>\qedhere: the symbol after an equation or a list</h3>
           <p>
-            If a proof ends with a displayed equation, the box lands on its own line below the
-            equation, which looks wrong. Put <code>\qedhere</code> at the end of the last display
-            and amsthm moves the symbol onto that line instead:
+            If a proof ends with a displayed equation, an <code>align</code> or a list, the box
+            lands on its own line below it, which looks wrong. Put <code>\qedhere</code> at the
+            end of the last line and amsthm moves the symbol onto that line instead:
           </p>
           <pre><code>{`\\begin{proof}
   Expanding the square and collecting terms,
@@ -266,25 +319,29 @@ export default async function LaTeXTheoremsProofsPage() {
             appears automatically.
           </p>
 
-          <h3>Changing the QED symbol</h3>
+          <h3>The symbol without a proof environment</h3>
           <p>
-            The symbol is stored in <code>\qedsymbol</code>. Redefine it in the preamble; a filled
-            square from <code>amssymb</code> is the most common replacement:
+            With amsthm loaded, <code>\qed</code> prints <code>\qedsymbol</code> flush right at the
+            point where you type it, for example after a solution or a worked example. Without
+            amsthm there is no <code>\qedsymbol</code>; push a square to the right margin with{' '}
+            <code>\hfill</code> instead:
           </p>
-          <pre><code>{`\\usepackage{amssymb}
+          <pre><code>{`% amsthm loaded: same symbol as in proof environments
+\\noindent\\textit{Solution.} The answer is $x = 2$. \\qed
 
-\\renewcommand{\\qedsymbol}{$\\blacksquare$}        % filled square
-\\renewcommand{\\qedsymbol}{$\\square$}             % hollow square from amssymb
-\\renewcommand{\\qedsymbol}{\\rule{0.5em}{0.5em}}   % filled square, no package
-\\renewcommand{\\qedsymbol}{QED}                    % the letters
-\\renewcommand{\\qedsymbol}{}                       % no symbol at all`}</code></pre>
+% no amsthm: amssymb for \\square or \\blacksquare
+\\noindent\\textit{Proof.} Immediate from the definition. \\hfill$\\square$`}</code></pre>
+
+          <h3>The ∎ character, ntheorem and thmtools</h3>
           <p>
-            The amsthm default, <code>\openbox</code>, and the amssymb <code>\square</code> look
-            almost the same; <code>\blacksquare</code> is the filled version. In plain text or
-            Unicode-aware editors the dedicated character is ∎, U+220E &ldquo;End of Proof&rdquo;,
-            which you can use with XeLaTeX or LuaLaTeX and a font that contains it. To put the
-            symbol somewhere by hand, outside a <code>proof</code> environment, use the{' '}
-            <code>\qed</code> command.
+            In Unicode the end of proof symbol is ∎, U+220E &ldquo;END OF PROOF&rdquo;; the
+            hollow square □ is U+25A1 &ldquo;WHITE SQUARE&rdquo;. You can type either character
+            directly with XeLaTeX or LuaLaTeX and a font that contains it, but in pdfLaTeX use the
+            commands above. <code>thmtools</code> builds on amsthm, so <code>\qedsymbol</code>,{' '}
+            <code>\qed</code> and <code>\qedhere</code> work unchanged, and{' '}
+            <code>{`\\declaretheorem[qed=$\\blacksquare$]{example}`}</code> adds an end mark to other
+            environments. <code>ntheorem</code> with the <code>thmmarks</code> option places end
+            marks itself, set per environment with <code>{`\\theoremsymbol{$\\blacksquare$}`}</code>.
           </p>
 
           {/* ── Referencing ── */}
@@ -542,6 +599,26 @@ See Theorem~\\ref{thm:pyth}.   % the label is prefix:suffix`}</code></pre>
               <tr><td>List of theorems</td><td><code>\listoftheorems</code> (thmtools)</td></tr>
             </tbody>
           </table>
+
+          {/* ── FAQ ── */}
+          <h2>Frequently Asked Questions</h2>
+          <h3>How do I put the QED symbol in LaTeX?</h3>
+          <p>
+            Load <code>amsthm</code> and write the proof inside{' '}
+            <code>{`\\begin{proof} ... \\end{proof}`}</code>; the end of proof symbol (a hollow
+            square) is added flush right on the last line automatically. For a filled square load{' '}
+            <code>amssymb</code> and put <code>{`\\renewcommand{\\qedsymbol}{$\\blacksquare$}`}</code>{' '}
+            in the preamble. Outside a proof environment, type <code>\qed</code> (amsthm) or{' '}
+            <code>{`\\hfill$\\square$`}</code>.
+          </p>
+          <h3>Why does the QED box appear on the wrong line?</h3>
+          <p>
+            When a proof ends with a displayed equation, an <code>align</code> or a list, amsthm
+            puts the symbol on a new line below it. Write <code>\qedhere</code> at the end of the
+            last equation line or list item to move the symbol up onto that line. Load{' '}
+            <code>amsmath</code> before <code>amsthm</code>, or <code>\qedhere</code> may not
+            work in displays.
+          </p>
 
           {/* ── Next Steps ── */}
           <h2>Next Steps</h2>
