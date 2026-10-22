@@ -197,7 +197,7 @@ const learnTopics = [
   {
     slug: 'theorems-proofs',
     title: 'Theorems, Lemmas & Proofs',
-    description: 'Set up amsthm and \\newtheorem, share counters between theorems and lemmas, write proofs, place the QED symbol with \\qedhere, and reference theorems.',
+    description: 'Set up amsthm and \\newtheorem, share theorem and lemma counters, write proofs, and set the end of proof symbol (∎) with \\qedsymbol and \\qedhere.',
     color: 'from-emerald-500/10 to-teal-600/5',
   },
   {
