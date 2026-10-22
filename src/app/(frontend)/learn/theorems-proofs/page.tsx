@@ -32,7 +32,7 @@ const faq: FaqItem[] = [
   {
     question: 'How do I put the QED symbol in LaTeX?',
     answer:
-      'Load amsthm and write the proof inside \\begin{proof} ... \\end{proof}; the end of proof symbol (a hollow square) is added flush right on the last line automatically. For a filled square load amssymb and put \\renewcommand{\\qedsymbol}{$\\blacksquare$} in the preamble. Outside a proof environment, type \\qed (amsthm) or \\hfill$\\square$.',
+      'Load amsthm and write the proof inside \\begin{proof} ... \\end{proof}; the end of proof symbol (a hollow square) is added flush right on the last line automatically. For a filled square load amssymb and put \\renewcommand{\\qedsymbol}{$\\blacksquare$} in the preamble. Outside a proof environment, type \\qed (amsthm) or \\hfill$\\square$ (amssymb).',
   },
   {
     question: 'Why does the QED box appear on the wrong line?',
@@ -268,7 +268,7 @@ export default async function LaTeXTheoremsProofsPage() {
               <tr><td>Filled square ■</td><td><code>{`\\renewcommand{\\qedsymbol}{$\\blacksquare$}`}</code> (amssymb)</td></tr>
               <tr><td>The letters QED</td><td><code>{`\\renewcommand{\\qedsymbol}{QED}`}</code></td></tr>
               <tr><td>Symbol on the last line of an equation or list</td><td><code>\qedhere</code> at the end of that line</td></tr>
-              <tr><td>Symbol outside a proof environment</td><td><code>\qed</code> (amsthm) or <code>{`\\hfill$\\square$`}</code></td></tr>
+              <tr><td>Symbol outside a proof environment</td><td><code>\qed</code> (amsthm) or <code>{`\\hfill$\\square$`}</code> (amssymb)</td></tr>
             </tbody>
           </table>
 
@@ -314,9 +314,11 @@ export default async function LaTeXTheoremsProofsPage() {
           <p>
             <code>\qedhere</code> works in <code>equation</code>, <code>align</code>,{' '}
             <code>gather</code>, their starred forms, <code>{`\\[ ... \\]`}</code>, and in the last
-            item of a list. With a <em>numbered</em> equation the symbol is placed to the left of
-            the equation number. If the proof simply ends with text, you need nothing: the symbol
-            appears automatically.
+            item of a list. Numbered displays are the awkward case: in <code>equation</code> the
+            symbol drops below the equation number, and in a numbered <code>align</code> it takes
+            the place of the last line&rsquo;s number. If a proof ends with a numbered display, use
+            the starred form or close with a short sentence after it. If the proof simply ends
+            with text, you need nothing: the symbol appears automatically.
           </p>
 
           <h3>The symbol without a proof environment</h3>
@@ -609,7 +611,7 @@ See Theorem~\\ref{thm:pyth}.   % the label is prefix:suffix`}</code></pre>
             square) is added flush right on the last line automatically. For a filled square load{' '}
             <code>amssymb</code> and put <code>{`\\renewcommand{\\qedsymbol}{$\\blacksquare$}`}</code>{' '}
             in the preamble. Outside a proof environment, type <code>\qed</code> (amsthm) or{' '}
-            <code>{`\\hfill$\\square$`}</code>.
+            <code>{`\\hfill$\\square$`}</code> (amssymb).
           </p>
           <h3>Why does the QED box appear on the wrong line?</h3>
           <p>
