@@ -22,7 +22,7 @@ const page = {
   title: 'Footnotes in Beamer: \\footnote[frame], No Number, Size and Citations',
   seoTitle: 'Beamer Footnote: \\footnote[frame], Size, No Number',
   description:
-    'Add a footnote in Beamer: \\footnote on a frame, \\footnote[frame] in columns, footnotes without a number, smaller size, per-frame numbering, overlays and \\footcite.',
+    'Beamer footnotes: \\footnote on a frame, \\footnote[frame] in columns, footnotes without a number, smaller size, per-frame numbering, overlays and \\footcite.',
   keywords:
     'beamer footnote, footnote in beamer, footnote beamer, latex beamer footnote, beamer footnote without number, beamer footnote size, beamer footnote citation, beamer cite footnote, beamer footnote not showing, beamer footnote title page, beamer footnote columns, footnote frame beamer, beamer footnote pause, beamer footnote onslide, beamer footcite, beamer reset footnote counter, beamer footnote rule',
 }
@@ -351,9 +351,10 @@ GDP grew by 3\\%.\\blfootnote{Source: World Bank, 2024.}`}</code></pre>
           <h2>Footnotes in Tables and Figure Captions</h2>
           <p>
             A <code>\footnote</code> inside a <code>tabular</code> works in Beamer and the note
-            goes to the bottom of the frame. Captions are different: the caption text is moved
-            around internally, so split the footnote into a mark in the caption and the text after
-            the figure:
+            goes to the bottom of the frame. Captions are different: Beamer sets a caption that
+            is longer than one line twice (once to measure it), so a <code>\footnote</code>{' '}
+            inside it prints the note twice under two numbers. Split the footnote into a mark in
+            the caption and the text after the figure:
           </p>
           <pre><code>{`\\begin{frame}{Figure}
   \\begin{figure}
