@@ -278,6 +278,12 @@ const learnTopics = [
     description: 'A complete table of contents example, \\tableofcontents and the .toc file, tocdepth vs secnumdepth, unnumbered entries, hyperref links, renaming, tocloft styling, lists of figures and Beamer outlines.',
     color: 'from-lime-500/10 to-green-600/5',
   },
+  {
+    slug: 'beamer-footnote',
+    title: 'Footnotes in Beamer',
+    description: 'Footnotes on Beamer slides: \\footnote[frame] in columns, footnotes without a number, smaller size and color, per-frame numbering, overlays, title-page \\thanks and \\footcite.',
+    color: 'from-lime-500/10 to-lime-600/5',
+  },
 ]
 
 export default function LearnPage() {
