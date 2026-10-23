@@ -32,7 +32,7 @@ const faq: FaqItem[] = [
   {
     question: 'How do I make a table in Overleaf?',
     answer:
-      'Write a tabular environment inside a table float in main.tex, exactly as in any LaTeX document: declare the columns, separate cells with & and end rows with \\\\. Add \\usepackage{booktabs} to the preamble for \\toprule, \\midrule and \\bottomrule. Overleaf compiles with TeX Live, so booktabs, multirow, tabularx, longtable, xcolor and siunitx are already installed; you only load them. The editor toolbar also has an Insert table button that drops in an empty table skeleton.',
+      'Write a tabular environment inside a table float in main.tex, exactly as in any LaTeX document: declare the columns, separate cells with & and end rows with \\\\. Add \\usepackage{booktabs} to the preamble for \\toprule, \\midrule and \\bottomrule. Overleaf compiles with TeX Live, so booktabs, multirow, tabularx, longtable, xcolor and siunitx are already installed; you only load them. In Visual Editor, the toolbar also has a table button that inserts an empty table of the size you pick from a grid.',
   },
   {
     question: 'Why does \\toprule give "Undefined control sequence" in Overleaf?',
@@ -1234,11 +1234,12 @@ As shown in \\cref{tab:summary} ...         % table 1
 
           <h3>Inserting a table</h3>
           <p>
-            The Overleaf editor toolbar has an <em>Insert table</em> button that drops an empty
-            table skeleton of the size you pick at the cursor. It is quickest for a small table you
-            type by hand. For data that already lives in a spreadsheet, the generator in the
-            previous section is faster, and in either case you will usually want to swap{' '}
-            <code>\hline</code> for the <code>booktabs</code> rules shown above.
+            In Overleaf&apos;s Visual Editor, the toolbar has a table button: pick the number of
+            rows and columns from a grid and an empty table is inserted at the cursor. In Code
+            Editor you type or paste the <code>tabular</code> yourself. The toolbar is quickest for
+            a small table you fill in by hand; for data that already lives in a spreadsheet, the
+            generator in the previous section is faster. Either way, the <code>booktabs</code>{' '}
+            rules shown above usually look cleaner than <code>\hline</code> and vertical lines.
           </p>
 
           <h3>Keeping tables in separate files</h3>
@@ -1310,8 +1311,8 @@ Table~\\ref{tab:results} lists the results.
             <code>{`\\usepackage{booktabs}`}</code> to the preamble for <code>\toprule</code>,{' '}
             <code>\midrule</code> and <code>\bottomrule</code>. Overleaf compiles with TeX Live, so
             booktabs, multirow, tabularx, longtable, xcolor and siunitx are already installed; you
-            only load them. The editor toolbar also has an <em>Insert table</em> button that drops
-            in an empty table skeleton.
+            only load them. In Visual Editor, the toolbar also has a table button that inserts an
+            empty table of the size you pick from a grid.
           </p>
           <h3>Why does \toprule give &quot;Undefined control sequence&quot; in Overleaf?</h3>
           <p>
