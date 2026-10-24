@@ -924,6 +924,14 @@ We need
             or Roman numerals load enumitem and write{' '}
             <code>{`\\begin{enumerate}[label=(\\alph*)]`}</code> or <code>[label=\roman*.]</code>.
           </p>
+          <h3>How do I make an enumerate list with letters in LaTeX?</h3>
+          <p>
+            Load enumitem and write <code>{`\\begin{enumerate}[label=(\\alph*)]`}</code> for (a), (b),
+            (c), <code>[label=\alph*)]</code> for a), b), c) or <code>[label=\Alph*.]</code> for A.,
+            B., C. Without a package, put <code>{`\\renewcommand{\\theenumi}{\\alph{enumi}}`}</code> and{' '}
+            <code>{`\\renewcommand{\\labelenumi}{(\\theenumi)}`}</code> in the preamble. A nested{' '}
+            <code>enumerate</code> is lettered (a), (b), (c) by default.
+          </p>
           <h3>How do I remove the space between list items?</h3>
           <p>
             Load enumitem and add the <code>noitemsep</code> option to the list
