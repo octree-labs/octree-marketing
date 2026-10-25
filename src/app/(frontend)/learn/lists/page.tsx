@@ -22,11 +22,11 @@ const page = {
   title: 'Lists and Bullet Points in LaTeX: itemize, enumerate, description',
   seoTitle: 'Lists and Bullet Points in LaTeX',
   description: 'Bullet points and numbered lists in LaTeX: itemize, enumerate and description, custom bullets, enumitem labels and spacing, inline lists and Beamer.',
-  keywords: 'bullet points in latex, latex bullet points, latex list, latex itemize, latex enumerate, latex numbered list, latex description list, latex custom bullets, latex nested list, enumitem latex, latex list spacing, latex inline list, latex bullet symbol, latex checkmark bullet, latex change bullet style, latex resume list numbering, latex beamer itemize, something\'s wrong perhaps a missing item, too deeply nested latex, latex itemize enumerate description, latex star bullet, latex list indentation, latex leftmargin, latex multicolumn list',
+  keywords: 'bullet points in latex, latex bullet points, latex list, latex itemize, latex enumerate, latex numbered list, latex description list, latex enumerate letters, enumerate with letters latex, latex lettered list, latex custom bullets, latex nested list, enumitem latex, latex list spacing, latex inline list, latex bullet symbol, latex checkmark bullet, latex change bullet style, latex resume list numbering, latex beamer itemize, something\'s wrong perhaps a missing item, too deeply nested latex, latex itemize enumerate description, latex star bullet, latex list indentation, latex leftmargin, latex multicolumn list',
 }
 
 /** Last content update, used for dateModified in the article schema. */
-const LAST_UPDATED = '2026-10-18'
+const LAST_UPDATED = '2026-10-24'
 
 const faq: FaqItem[] = [
   {
@@ -43,6 +43,11 @@ const faq: FaqItem[] = [
     question: 'How do I make a numbered list in LaTeX?',
     answer:
       'Use enumerate instead of itemize: \\begin{enumerate} \\item First \\item Second \\end{enumerate}. For letters or Roman numerals load enumitem and write \\begin{enumerate}[label=(\\alph*)] or [label=\\roman*.].',
+  },
+  {
+    question: 'How do I make an enumerate list with letters in LaTeX?',
+    answer:
+      'Load enumitem and write \\begin{enumerate}[label=(\\alph*)] for (a), (b), (c), [label=\\alph*)] for a), b), c) or [label=\\Alph*.] for A., B., C. Without a package, put \\renewcommand{\\theenumi}{\\alph{enumi}} and \\renewcommand{\\labelenumi}{(\\theenumi)} in the preamble. A nested enumerate is lettered (a), (b), (c) by default.',
   },
   {
     question: 'How do I remove the space between list items?',
@@ -180,6 +185,81 @@ export default async function LaTeXListsPage() {
   \\item Add the eggs.
 \\end{enumerate}
 Go back to step~\\ref{step:dry} if the batter is lumpy.`}</code></pre>
+
+          <h3>Enumerate with Letters: (a), (b), (c)</h3>
+          <p>
+            To number a list with letters instead of numbers, load <code>enumitem</code> and
+            pass a <code>label</code> built from <code>\alph*</code> (lowercase) or{' '}
+            <code>\Alph*</code> (uppercase). The characters around it are printed as written, so
+            the same key gives (a), a) or A.:
+          </p>
+          <pre><code>{`\\usepackage{enumitem}   % in the preamble
+
+\\begin{enumerate}[label=(\\alph*)]   % (a), (b), (c)
+  \\item First item
+  \\item Second item
+\\end{enumerate}
+
+\\begin{enumerate}[label=\\alph*)]    % a), b), c)
+  \\item First item
+  \\item Second item
+\\end{enumerate}
+
+\\begin{enumerate}[label=\\Alph*.]    % A., B., C.
+  \\item First item
+  \\item Second item
+\\end{enumerate}`}</code></pre>
+          <p>
+            With the <code>shortlabels</code> option, <code>enumitem</code> also accepts the
+            shorter syntax of the old <code>enumerate</code> package, where the first a, A, i, I
+            or 1 in the argument stands for the counter:
+          </p>
+          <pre><code>{`\\usepackage[shortlabels]{enumitem}
+
+\\begin{enumerate}[(a)]     % (a), (b), (c)
+  \\item First item
+\\end{enumerate}
+
+\\begin{enumerate}[A.]      % A., B., C.
+  \\item First item
+\\end{enumerate}
+
+\\begin{enumerate}[i)]      % i), ii), iii)
+  \\item First item
+\\end{enumerate}`}</code></pre>
+          <p>
+            Without any package, redefine the counter format and the label for the first level.
+            Changing <code>\theenumi</code> as well as <code>\labelenumi</code> keeps{' '}
+            <code>\ref</code> in step with the letters:
+          </p>
+          <pre><code>{`\\renewcommand{\\theenumi}{\\alph{enumi}}     % the counter prints as a, b, c
+\\renewcommand{\\labelenumi}{(\\theenumi)}    % the label is (a), (b), (c)
+
+\\begin{enumerate}
+  \\item First item \\label{it:first}
+  \\item Second item
+\\end{enumerate}
+See item~(\\ref{it:first}).   % prints "(a)"`}</code></pre>
+          <p>
+            For lettered sub-parts, as in exam questions, you need nothing at all: a nested{' '}
+            <code>enumerate</code> is lettered (a), (b), (c) by default, and <code>\ref</code> to
+            a sub-item prints the parent number with the letter, such as 1a:
+          </p>
+          <pre><code>{`\\begin{enumerate}
+  \\item Answer all parts.
+  \\begin{enumerate}            % second level: (a), (b), (c) by default
+    \\item Define the term. \\label{q:1a}
+    \\item Give an example.
+  \\end{enumerate}
+  \\item Next question.
+\\end{enumerate}
+Part~\\ref{q:1a} is worth five marks.   % prints "1a"`}</code></pre>
+          <p>
+            Two details: with <code>enumitem</code>, <code>\ref</code> prints the whole label,
+            parentheses included, unless you add <code>ref=\alph*</code>; and letters stop at z,
+            so a 27th item stops the build with <em>LaTeX Error: Counter too large</em>. Switch to
+            numbers or split the list for anything longer.
+          </p>
 
           {/* ── Description Lists ── */}
           <h2>Description Lists</h2>
@@ -843,6 +923,14 @@ We need
             <code>{`\\begin{enumerate} \\item First \\item Second \\end{enumerate}`}</code>. For letters
             or Roman numerals load enumitem and write{' '}
             <code>{`\\begin{enumerate}[label=(\\alph*)]`}</code> or <code>[label=\roman*.]</code>.
+          </p>
+          <h3>How do I make an enumerate list with letters in LaTeX?</h3>
+          <p>
+            Load enumitem and write <code>{`\\begin{enumerate}[label=(\\alph*)]`}</code> for (a), (b),
+            (c), <code>[label=\alph*)]</code> for a), b), c) or <code>[label=\Alph*.]</code> for A.,
+            B., C. Without a package, put <code>{`\\renewcommand{\\theenumi}{\\alph{enumi}}`}</code> and{' '}
+            <code>{`\\renewcommand{\\labelenumi}{(\\theenumi)}`}</code> in the preamble. A nested{' '}
+            <code>enumerate</code> is lettered (a), (b), (c) by default.
           </p>
           <h3>How do I remove the space between list items?</h3>
           <p>
