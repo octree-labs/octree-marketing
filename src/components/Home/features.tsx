@@ -11,7 +11,7 @@ function FeatureVisual({ children, className }: { children: React.ReactNode; cla
         className,
       )}
       style={{
-        backgroundImage: "url('/api/media/file/bg-grid-pattern.svg')",
+        backgroundImage: "url('/images/bg-grid-pattern.svg')",
         backgroundSize: 'cover',
         backgroundPosition: 'center',
       }}

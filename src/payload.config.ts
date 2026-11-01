@@ -71,7 +71,10 @@ export default buildConfig({
     ...plugins,
     vercelBlobStorage({
       collections: {
-        media: true,
+        // Serve media straight from the public Blob store instead of through
+        // /api/media/file/*, which is a Postgres-backed function invocation
+        // per request and is not cached by Vercel's CDN.
+        media: { disablePayloadAccessControl: true },
       },
       token: process.env.BLOB_READ_WRITE_TOKEN || '',
     }),

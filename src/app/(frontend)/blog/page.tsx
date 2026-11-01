@@ -10,7 +10,7 @@ import PageClient from './page.client'
 import { mergeOpenGraph } from '@/utilities/mergeOpenGraph'
 
 export const dynamic = 'force-static'
-export const revalidate = 600
+export const revalidate = 86400
 
 export default async function Page() {
   const payload = await getPayload({ config: configPromise })
