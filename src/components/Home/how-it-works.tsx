@@ -28,7 +28,7 @@ function StepDemo({ children }: { children: React.ReactNode }) {
     <div
       className="w-full min-h-[250px] md:min-h-[320px] bg-primary rounded-2xl md:rounded-3xl relative flex-1 flex items-center justify-center"
       style={{
-        backgroundImage: "url('/api/media/file/bg-grid-light.svg')",
+        backgroundImage: "url('/images/bg-grid-light.svg')",
         backgroundSize: 'cover',
         backgroundPosition: 'center',
       }}

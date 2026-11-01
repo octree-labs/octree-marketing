@@ -8,15 +8,18 @@ import { getServerSideURL } from './getURL'
 export const DEFAULT_DESCRIPTION =
   'The open-source LaTeX editor that makes academic writing feel natural and effortless. Write faster with AI assistance, real-time collaboration, and beautiful templates.'
 
+const isAbsoluteURL = (url: string) => url.startsWith('http://') || url.startsWith('https://')
+
 export const getImageURL = (image?: Media | Config['db']['defaultIDType'] | null) => {
   const serverUrl = getServerSideURL()
 
   let url = serverUrl + '/website-template-OG.webp'
 
   if (image && typeof image === 'object' && 'url' in image) {
-    const ogUrl = image.sizes?.og?.url
+    const chosen = image.sizes?.og?.url || image.url
 
-    url = ogUrl ? serverUrl + ogUrl : serverUrl + image.url
+    // Media URLs are absolute Blob URLs; keep relative ones working too.
+    if (chosen) url = isAbsoluteURL(chosen) ? chosen : serverUrl + chosen
   }
 
   return url
