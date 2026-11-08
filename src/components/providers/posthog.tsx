@@ -5,6 +5,7 @@ import { usePathname, useSearchParams } from 'next/navigation'
 import posthog from 'posthog-js'
 
 import { BEFORE_NAVIGATION, EVENTS, track } from '@/lib/analytics'
+import { isGoogleAppStackOverflow } from '@/utilities/isGoogleAppStackOverflow'
 
 const POSTHOG_KEY = process.env.NEXT_PUBLIC_POSTHOG_KEY
 const POSTHOG_HOST = process.env.NEXT_PUBLIC_POSTHOG_HOST || 'https://us.i.posthog.com'
@@ -25,6 +26,17 @@ if (typeof window !== 'undefined' && POSTHOG_KEY && !posthog.__loaded) {
     persistence: 'localStorage+cookie',
     // The contact form collects emails: never record what is typed.
     session_recording: { maskAllInputs: true },
+    // The Google app on iOS injects a script that overflows its own stack on
+    // some pages; it is not our code, so keep it out of error tracking.
+    before_send: (event) => {
+      if (
+        event?.event === '$exception' &&
+        isGoogleAppStackOverflow(navigator.userAgent, event.properties?.$exception_list)
+      ) {
+        return null
+      }
+      return event
+    },
   })
 }
 

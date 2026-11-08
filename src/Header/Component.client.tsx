@@ -7,6 +7,7 @@ import React, { useEffect, useState } from 'react'
 import type { Header } from '@/payload-types'
 
 import { cn } from '@/utilities/ui'
+import { normalizePathname } from '@/utilities/normalizePathname'
 import { Logo } from '@/components/Logo/Logo'
 import { Cross, hatchStyle } from '@/components/grid'
 import { HeaderNav } from './Nav'
@@ -32,7 +33,10 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data, githubStars })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [headerTheme])
 
-  const hasRails = pathname === '/' || pathname === '/about'
+  // Normalized: the ISR-regenerated home page renders on the server with
+  // pathname `/index`, which dropped the rails there but not on the client (#418).
+  const railsPath = normalizePathname(pathname)
+  const hasRails = railsPath === '/' || railsPath === '/about'
 
   return (
     <header
