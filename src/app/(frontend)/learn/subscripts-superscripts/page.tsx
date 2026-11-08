@@ -57,7 +57,7 @@ const faq: FaqItem[] = [
   {
     question: 'How do I put a subscript and a superscript on the same symbol?',
     answer:
-      'Write both after the base in either order: $x_i^2$ and $x^2_i$ give the same result, with the two scripts stacked. For a prescript on the left, as in isotope notation, use ${}^{14}_{6}\\mathrm{C}$ or \\prescript{14}{6}{\\mathrm{C}} from mathtools.',
+      'Write both after the base in either order: $x_i^2$ and $x^2_i$ give the same result, with the two scripts stacked. For a prescript on the left, as in isotope notation, use ${}^{14}_{6}\\mathrm{C}$ or $\\prescript{14}{6}{\\mathrm{C}}$ from mathtools.',
   },
 ]
 
@@ -659,7 +659,8 @@ $\\psi_{nlm}$, $|n, l, m\\rangle$`}</code></pre>
 $A \\subseteq B$   % subset or equal
 $A \\supset B$     % A is a superset of B
 $A \\supseteq B$   % superset or equal
-$A \\not\\subset B$ % not a subset (or \\nsubseteq from amssymb)`}</code></pre>
+$A \\not\\subset B$ % not a proper subset
+$A \\nsubseteq B$  % not a subset or equal (amssymb)`}</code></pre>
 
           {/* ── amsmath ── */}
           <h2>The amsmath Package</h2>
@@ -927,7 +928,7 @@ $x^{}$         % empty group is allowed (rarely useful)`}</code></pre>
             Write both after the base in either order: <code>$x_i^2$</code> and <code>$x^2_i$</code>{' '}
             give the same result, with the two scripts stacked. For a prescript on the left, as in
             isotope notation, use <code>{`\${}^{14}_{6}\\mathrm{C}$`}</code> or{' '}
-            <code>{`\\prescript{14}{6}{\\mathrm{C}}`}</code> from mathtools.
+            <code>{`$\\prescript{14}{6}{\\mathrm{C}}$`}</code> from mathtools.
           </p>
 
           {/* ── Next Steps ── */}
