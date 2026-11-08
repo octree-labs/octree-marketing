@@ -313,7 +313,9 @@ for mathematical typesetting.
             To make every footnote slightly larger or smaller, redefine the size command:{' '}
             <code>{`\\renewcommand{\\footnotesize}{\\small}`}</code>. In Beamer, footnotes work in
             frames as normal; inside <code>columns</code> or a <code>minipage</code>, use{' '}
-            <code>{`\\footnote[frame]{...}`}</code> to put the note at the bottom of the frame.
+            <code>{`\\footnote[frame]{...}`}</code> to put the note at the bottom of the frame.{' '}
+            The <Link href="/learn/beamer-footnote">Beamer footnotes guide</Link> covers
+            footnotes without a number, overlays and citations on slides.
           </p>
 
           {/* ── hyperref ── */}
