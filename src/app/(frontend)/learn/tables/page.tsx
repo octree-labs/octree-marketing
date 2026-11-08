@@ -1,6 +1,6 @@
 import type { Metadata } from 'next/types'
 
-import { learnMetadata } from '@/utilities/learnMetadata'
+import { learnMetadata, type FaqItem } from '@/utilities/learnMetadata'
 import Link from 'next/link'
 import { buttonVariants } from '@/components/ui/button'
 import React from 'react'
@@ -19,13 +19,27 @@ const breadcrumbSchema = generateBreadcrumbSchema(breadcrumbs)
 
 const page = {
   slug: 'tables',
-  title: 'LaTeX Tables \u2013 Complete Guide 2026',
+  title: 'LaTeX Tables: How to Make a Table in LaTeX and Overleaf',
+  seoTitle: 'LaTeX Tables: Make a Table in LaTeX or Overleaf',
   description: 'How to make a table in LaTeX: the tabular environment and table float with caption and label, booktabs rules, multicolumn and multirow, column widths with p/m/b and tabularx, float placement, landscape and multi-page tables, colored rows, decimal alignment with siunitx, footnotes in tables, and fixes for common tabular errors.',
-  keywords: 'table in latex, tabular in latex, latex table, latex tabular, how to make a table in latex, latex booktabs, latex multicolumn, latex multirow, latex table generator, latex longtable, latex hline, latex table width, latex tabularx, create table in latex, latex table example, latex table formatting, latex colored table, latex landscape table, latex sidewaystable, latex table caption, latex table placement, latex siunitx table, misplaced noalign, extra alignment tab, latex table spacing, latex table row spacing, latex row height, latex table column spacing, latex arraystretch, latex tabcolsep, latex table padding, latex addlinespace, latex cell padding, latex table row column separation, latex table generator online, excel to latex table, latex table from excel, create latex tables easily',
+  keywords: 'table in latex, tabular in latex, latex table, latex tabular, how to make a table in latex, latex booktabs, latex multicolumn, latex multirow, latex table generator, latex longtable, latex hline, latex table width, latex tabularx, create table in latex, latex table example, latex table formatting, latex colored table, latex landscape table, latex sidewaystable, latex table caption, latex table placement, latex siunitx table, misplaced noalign, extra alignment tab, latex table spacing, latex table row spacing, latex row height, latex table column spacing, latex arraystretch, latex tabcolsep, latex table padding, latex addlinespace, latex cell padding, latex table row column separation, latex table generator online, excel to latex table, latex table from excel, create latex tables easily, overleaf table, overleaf tabular, table in overleaf, tables in overleaf, how to make a table in overleaf, overleaf insert table, latex table overleaf',
 }
 
 /** Last content update, used for dateModified in the article schema. */
-const LAST_UPDATED = '2026-10-18'
+const LAST_UPDATED = '2026-10-23'
+
+const faq: FaqItem[] = [
+  {
+    question: 'How do I make a table in Overleaf?',
+    answer:
+      'Write a tabular environment inside a table float in main.tex, exactly as in any LaTeX document: declare the columns, separate cells with & and end rows with \\\\. Add \\usepackage{booktabs} to the preamble for \\toprule, \\midrule and \\bottomrule. Overleaf compiles with TeX Live, so booktabs, multirow, tabularx, longtable, xcolor and siunitx are already installed; you only load them. In Visual Editor, the toolbar also has a table button that inserts an empty table of the size you pick from a grid.',
+  },
+  {
+    question: 'Why does \\toprule give "Undefined control sequence" in Overleaf?',
+    answer:
+      '\\toprule, \\midrule and \\bottomrule come from the booktabs package, and \\multirow from the multirow package. The error means the package is not loaded: add \\usepackage{booktabs} (or \\usepackage{multirow}) to the preamble of main.tex, before \\begin{document}, and recompile.',
+  },
+]
 
 export default async function TablesPage() {
   return (
@@ -39,6 +53,7 @@ export default async function TablesPage() {
         title={page.title}
         description={page.description}
         dateModified={LAST_UPDATED}
+        faq={faq}
       />
       <div className="container">
         <div className="mb-8 max-w-4xl mx-auto">
@@ -51,7 +66,7 @@ export default async function TablesPage() {
         </div>
 
         <article className="prose prose-lg dark:prose-invert max-w-4xl mx-auto">
-          <h1>LaTeX Tables</h1>
+          <h1>LaTeX Tables: How to Make a Table in LaTeX and Overleaf</h1>
           <p className="lead">
             A table in LaTeX is a <code>tabular</code> environment: you declare the columns, separate
             cells with <code>&amp;</code> and end rows with <code>\\</code>. Wrapping it in a{' '}
@@ -63,6 +78,9 @@ export default async function TablesPage() {
             decimal-aligned numbers. This guide starts with a complete table you can paste into any
             document and then covers each of those techniques, the float placement rules, landscape
             tables, footnotes inside tables, and the errors a <code>tabular</code> can throw.
+            Every example is standard LaTeX, so it works unchanged in Overleaf, Octree or a local
+            TeX installation; the <a href="#tables-in-overleaf">Tables in Overleaf</a> section
+            covers the Overleaf-specific details.
           </p>
 
           {/* ── Quick start ── */}
@@ -1202,6 +1220,109 @@ As shown in \\cref{tab:summary} ...         % table 1
               Open the Table to LaTeX converter &rarr;
             </Link>
           </div>
+
+          {/* ── Overleaf ── */}
+          <h2 id="tables-in-overleaf">Tables in Overleaf</h2>
+          <p>
+            A table in Overleaf is the same <code>tabular</code> code as everywhere else, and every
+            example on this page compiles there as-is. Overleaf builds projects with TeX Live, which
+            already contains <code>booktabs</code>, <code>multirow</code>, <code>tabularx</code>,{' '}
+            <code>longtable</code>, <code>xcolor</code> and <code>siunitx</code>, so there is nothing
+            to install: add the <code>\usepackage</code> lines to the preamble of{' '}
+            <code>main.tex</code> and use the commands.
+          </p>
+
+          <h3>Inserting a table</h3>
+          <p>
+            In Overleaf&apos;s Visual Editor, the toolbar has a table button: pick the number of
+            rows and columns from a grid and an empty table is inserted at the cursor. In Code
+            Editor you type or paste the <code>tabular</code> yourself. The toolbar is quickest for
+            a small table you fill in by hand; for data that already lives in a spreadsheet, the
+            generator in the previous section is faster. Either way, the <code>booktabs</code>{' '}
+            rules shown above usually look cleaner than <code>\hline</code> and vertical lines.
+          </p>
+
+          <h3>Keeping tables in separate files</h3>
+          <p>
+            Large projects are easier to manage with each table in its own file. In Overleaf,
+            create a <code>tables</code> folder, add <code>results.tex</code> to it, and pull it
+            into the float with <code>\input</code>. Paths are relative to the project root, and
+            the <code>.tex</code> extension can be left out:
+          </p>
+          <pre><code>{`% main.tex
+\\documentclass{article}
+\\usepackage{booktabs}
+\\begin{document}
+
+Table~\\ref{tab:results} lists the results.
+
+\\begin{table}[htbp]
+  \\centering
+  \\caption{Results on the test set.}
+  \\label{tab:results}
+  \\input{tables/results}
+\\end{table}
+
+\\end{document}`}</code></pre>
+          <pre><code>{`% tables/results.tex
+\\begin{tabular}{lcc}
+  \\toprule
+  Model    & Accuracy (\\%) & F1   \\\\
+  \\midrule
+  Baseline & 91.2          & 0.89 \\\\
+  Ours     & 95.3          & 0.94 \\\\
+  \\bottomrule
+\\end{tabular}`}</code></pre>
+          <p>
+            Keep <code>\caption</code> and <code>\label</code> in <code>main.tex</code> as shown,
+            so the table file holds only data and can be regenerated from a script or the table
+            generator without touching the surrounding text.
+          </p>
+
+          <h3>Common Overleaf table problems</h3>
+          <ul>
+            <li>
+              <strong>Undefined control sequence on <code>\toprule</code> or{' '}
+              <code>\multirow</code>.</strong> The package is not loaded. Add{' '}
+              <code>{`\\usepackage{booktabs}`}</code> or <code>{`\\usepackage{multirow}`}</code>{' '}
+              to the preamble, before <code>{`\\begin{document}`}</code>.
+            </li>
+            <li>
+              <strong>A PDF appears but the table looks wrong.</strong> Overleaf can still produce
+              a PDF after an error, so a half-rendered table often hides one. Open the logs, fix
+              the first error listed, and recompile; later errors are frequently knock-on effects
+              of the first.
+            </li>
+            <li>
+              <strong>The table runs into the margin.</strong> Use <code>tabularx</code> or
+              p-columns as described in <em>Table Width Control</em>, or scale the whole table
+              with <code>{`\\resizebox{\\linewidth}{!}{...}`}</code> from <code>graphicx</code>{' '}
+              as a last resort, since it also scales the font.
+            </li>
+          </ul>
+
+          {/* ── FAQ ── */}
+          <h2>Frequently Asked Questions</h2>
+          <h3>How do I make a table in Overleaf?</h3>
+          <p>
+            Write a <code>tabular</code> environment inside a <code>table</code> float in{' '}
+            <code>main.tex</code>, exactly as in any LaTeX document: declare the columns, separate
+            cells with <code>&amp;</code> and end rows with <code>\\</code>. Add{' '}
+            <code>{`\\usepackage{booktabs}`}</code> to the preamble for <code>\toprule</code>,{' '}
+            <code>\midrule</code> and <code>\bottomrule</code>. Overleaf compiles with TeX Live, so
+            booktabs, multirow, tabularx, longtable, xcolor and siunitx are already installed; you
+            only load them. In Visual Editor, the toolbar also has a table button that inserts an
+            empty table of the size you pick from a grid.
+          </p>
+          <h3>Why does \toprule give &quot;Undefined control sequence&quot; in Overleaf?</h3>
+          <p>
+            <code>\toprule</code>, <code>\midrule</code> and <code>\bottomrule</code> come from the{' '}
+            <code>booktabs</code> package, and <code>\multirow</code> from the{' '}
+            <code>multirow</code> package. The error means the package is not loaded: add{' '}
+            <code>{`\\usepackage{booktabs}`}</code> (or <code>{`\\usepackage{multirow}`}</code>) to
+            the preamble of <code>main.tex</code>, before <code>{`\\begin{document}`}</code>, and
+            recompile.
+          </p>
 
           <h2>Common Errors</h2>
           <p>

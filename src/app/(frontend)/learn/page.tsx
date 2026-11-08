@@ -101,7 +101,7 @@ const learnTopics = [
   {
     slug: 'tables',
     title: 'LaTeX Tables',
-    description: 'Create professional tables in LaTeX with booktabs, multicolumn, multirow, longtable, row and column spacing, colored tables and a table generator.',
+    description: 'Make tables in LaTeX and Overleaf with booktabs, multicolumn, multirow, longtable, row and column spacing, colored tables and a table generator.',
     color: 'from-sky-500/10 to-sky-600/5',
   },
   {
