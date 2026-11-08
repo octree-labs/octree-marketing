@@ -25,6 +25,8 @@ const redirects = async () => {
     { source: '/blog/overleaf-alternatives-research-writing-2025', destination: '/blog/overleaf-alternatives-research-writing-2026', permanent: true },
     { source: '/blog/latex-brackets-accolades-sizing-guide', destination: '/learn/brackets', permanent: true },
     { source: '/blog/latex-brackets-parentheses-printing-guide', destination: '/learn/brackets', permanent: true },
+    { source: '/blog/latex-subscripts-superscripts-complete-guide', destination: '/learn/subscripts-superscripts', permanent: true },
+    { source: '/blog/latex-table-generator', destination: '/learn/tables', permanent: true },
   ]
 
   const redirects = [internetExplorerRedirect, ...retiredBlogPosts]

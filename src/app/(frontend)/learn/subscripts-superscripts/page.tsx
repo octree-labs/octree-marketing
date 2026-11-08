@@ -19,25 +19,25 @@ const breadcrumbSchema = generateBreadcrumbSchema(breadcrumbs)
 
 const page = {
   slug: 'subscripts-superscripts',
-  title: 'Subscripts and Superscripts in LaTeX: ^, _, \\textsuperscript and Exponents',
-  seoTitle: 'LaTeX Subscript and Superscript: ^, _ and Exponents',
-  description: 'Subscripts and superscripts in LaTeX: ^ and _ in math, \\textsuperscript and \\textsubscript in text, squared and cubed, x^{10} vs x^10, \\limits and mhchem.',
-  keywords: 'latex subscript, latex superscript, subscript in latex, superscript in latex, how to do superscripts in latex, latex squared, latex exponent, latex power, latex x squared, latex underscore, latex caret, textsuperscript latex, textsubscript latex, latex ordinal, latex limits nolimits, latex prescript, latex chemistry formulas, mhchem, latex double superscript error, latex math notation',
+  title: 'Subscript and Superscript in LaTeX: _, ^, \\textsubscript and Exponents',
+  seoTitle: 'Subscript and Superscript in LaTeX (_ and ^)',
+  description: 'Subscript and superscript in LaTeX: _ and ^ in math, braces for x^{10}, \\textsubscript and \\textsuperscript for text, H2O, m^2 and double subscript errors.',
+  keywords: 'latex subscript, latex superscript, subscript in latex, superscript in latex, how to do superscripts in latex, latex squared, latex exponent, latex power, latex x squared, latex underscore, latex caret, textsuperscript latex, textsubscript latex, latex ordinal, latex limits nolimits, latex prescript, latex chemistry formulas, mhchem, latex double superscript error, latex double subscript error, superscript and subscript latex, latex transpose, latex math notation',
 }
 
 /** Last content update, used for dateModified in the article schema. */
-const LAST_UPDATED = '2026-10-18'
+const LAST_UPDATED = '2026-11-08'
 
 const faq: FaqItem[] = [
   {
-    question: 'How do you do superscripts in LaTeX?',
+    question: 'How do you write subscript and superscript in LaTeX?',
     answer:
-      'In math mode use the caret: $x^2$ gives x squared and $x^{10}$ gives x to the tenth. Wrap anything longer than one character in braces. In normal text use \\textsuperscript{...}, for example 1\\textsuperscript{st}.',
+      'In math mode, _ makes a subscript and ^ makes a superscript: $x_i$ is x sub i and $x^2$ is x squared. Wrap anything longer than one character in braces, as in $x_{i+1}$ and $x^{10}$. In normal text use \\textsubscript{...} and \\textsuperscript{...}, so water is H\\textsubscript{2}O and first is 1\\textsuperscript{st}. None of these needs a package.',
   },
   {
-    question: 'How do you write a subscript in LaTeX?',
+    question: 'Why do I get "Missing $ inserted" when I use _ or ^?',
     answer:
-      'Use the underscore in math mode: $x_i$ or, for more than one character, $x_{i+1}$. In running text use \\textsubscript{...}, so water is H\\textsubscript{2}O. Neither needs a package: \\textsuperscript has always been part of LaTeX 2e and \\textsubscript joined the kernel in 2015.',
+      'The _ and ^ operators only work in math mode. Typed in a normal sentence, or as a literal underscore in a file name or URL, they make LaTeX insert a $ and stop. Put the expression in $...$, use \\textsubscript or \\textsuperscript for text, or write \\_ for a literal underscore.',
   },
   {
     question: 'How do I write squared in LaTeX?',
@@ -86,7 +86,34 @@ export default async function SubscriptsSuperscriptsPage() {
         </div>
 
         <article className="prose prose-lg dark:prose-invert max-w-4xl mx-auto">
-          <h1>Subscripts and Superscripts in LaTeX: ^, _, \textsuperscript and Exponents</h1>
+          <h1>Subscript and Superscript in LaTeX: _, ^, \textsubscript and Exponents</h1>
+
+          <div className="not-prose my-6 p-6 rounded-lg border bg-muted/40">
+            <p className="text-sm font-semibold uppercase tracking-wide text-muted-foreground mb-3">Quick answer</p>
+            <ul className="space-y-2 text-base list-disc pl-5">
+              <li>
+                <strong>Subscript:</strong> <code>_</code> in math mode, <code>$x_i$</code>.{' '}
+                <strong>Superscript:</strong> <code>^</code> in math mode, <code>$x^2$</code>.
+              </li>
+              <li>
+                <strong>More than one character:</strong> use braces,{' '}
+                <code>{`$x_{i+1}$`}</code> and <code>{`$x^{10}$`}</code>; <code>$x^10$</code> raises only the 1.
+              </li>
+              <li>
+                <strong>Both at once:</strong> <code>$x_i^2$</code> (order does not matter).
+              </li>
+              <li>
+                <strong>In normal text:</strong> <code>{`H\\textsubscript{2}O`}</code> and{' '}
+                <code>{`1\\textsuperscript{st}`}</code>; <code>_</code> and <code>^</code> outside math
+                give <em>Missing $ inserted</em>.
+              </li>
+              <li>
+                <strong>Chemistry and units:</strong> <code>{`\\ce{H2O}`}</code>,{' '}
+                <code>{`\\ce{SO4^2-}`}</code> with mhchem; <code>{`$5\\,\\mathrm{m}^2$`}</code> or{' '}
+                <code>{`\\qty{5}{\\metre\\squared}`}</code> with siunitx.
+              </li>
+            </ul>
+          </div>
           <p className="lead">
             A superscript in LaTeX is <code>^</code> and a subscript is <code>_</code>, both in math
             mode: <code>$x^2$</code> is x squared and <code>$x_i$</code> is x sub i. Anything longer
@@ -591,6 +618,49 @@ $f^{\\prime 2}(x)$  % same thing, explicit`}</code></pre>
             superscript error, because LaTeX merges the prime into the following script.
           </p>
 
+          {/* ── Common superscript notation ── */}
+          <h2>Transpose, Inverse, Complement and Other Common Superscripts</h2>
+          <p>
+            A handful of superscripts come up in almost every maths or physics document. They are
+            ordinary <code>^</code> scripts, but there is usually a preferred form:
+          </p>
+          <pre><code>{`% Matrix transpose: \\top is a cleaner T than the letter
+$A^T$  or  $A^{\\top}$  or  $A^{\\mathsf{T}}$
+
+% Inverse matrix and inverse function: braces around the minus sign
+$A^{-1}$
+$f^{-1}(x)$
+
+% Conjugate transpose (Hermitian adjoint)
+$A^{*}$  or  $A^{\\dagger}$  or  $A^{\\mathsf{H}}$
+
+% Set complement
+$A^c$  or  $A^{\\complement}$  (amssymb)  or  $\\overline{A}$
+
+% nth derivative, in brackets so it is not read as a power
+$f^{(n)}(x)$
+
+% Mixed tensor indices: contravariant up, covariant down
+$T^{\\mu\\nu}$, $T_{\\mu\\nu}$, $T^{\\mu}{}_{\\nu}$
+
+% Quantum notation
+$\\psi_{nlm}$, $|n, l, m\\rangle$`}</code></pre>
+          <p>
+            Pick one transpose notation and use it throughout; <code>{`A^{\\top}`}</code> avoids
+            confusion when <code>T</code> is also a variable in the same document.
+          </p>
+
+          <h3>Superscript vs superset, subscript vs subset</h3>
+          <p>
+            The set symbols ⊂ and ⊃ are not scripts at all. They are relation symbols with their
+            own commands:
+          </p>
+          <pre><code>{`$A \\subset B$     % A is a subset of B
+$A \\subseteq B$   % subset or equal
+$A \\supset B$     % A is a superset of B
+$A \\supseteq B$   % superset or equal
+$A \\not\\subset B$ % not a subset (or \\nsubseteq from amssymb)`}</code></pre>
+
           {/* ── amsmath ── */}
           <h2>The amsmath Package</h2>
           <p>
@@ -814,20 +884,23 @@ $x^{}$         % empty group is allowed (rarely useful)`}</code></pre>
 
           {/* ── FAQ ── */}
           <h2>Frequently Asked Questions</h2>
-          <h3>How do you do superscripts in LaTeX?</h3>
+          <h3>How do you write subscript and superscript in LaTeX?</h3>
           <p>
-            In math mode use the caret: <code>$x^2$</code> gives x squared and{' '}
-            <code>{`$x^{10}$`}</code> gives x to the tenth. Wrap anything longer than one character
-            in braces. In normal text use <code>{`\\textsuperscript{...}`}</code>, for example{' '}
-            <code>{`1\\textsuperscript{st}`}</code>.
+            In math mode, <code>_</code> makes a subscript and <code>^</code> makes a superscript:{' '}
+            <code>$x_i$</code> is x sub i and <code>$x^2$</code> is x squared. Wrap anything longer
+            than one character in braces, as in <code>{`$x_{i+1}$`}</code> and{' '}
+            <code>{`$x^{10}$`}</code>. In normal text use <code>{`\\textsubscript{...}`}</code> and{' '}
+            <code>{`\\textsuperscript{...}`}</code>, so water is{' '}
+            <code>{`H\\textsubscript{2}O`}</code> and first is <code>{`1\\textsuperscript{st}`}</code>.
+            None of these needs a package.
           </p>
-          <h3>How do you write a subscript in LaTeX?</h3>
+          <h3>Why do I get &ldquo;Missing $ inserted&rdquo; when I use _ or ^?</h3>
           <p>
-            Use the underscore in math mode: <code>$x_i$</code> or, for more than one character,{' '}
-            <code>{`$x_{i+1}$`}</code>. In running text use <code>{`\\textsubscript{...}`}</code>,
-            so water is <code>{`H\\textsubscript{2}O`}</code>. Neither needs a package:{' '}
-            <code>\textsuperscript</code> has always been part of LaTeX 2e and{' '}
-            <code>\textsubscript</code> joined the kernel in 2015.
+            The <code>_</code> and <code>^</code> operators only work in math mode. Typed in a
+            normal sentence, or as a literal underscore in a file name or URL, they make LaTeX
+            insert a <code>$</code> and stop. Put the expression in <code>$...$</code>, use{' '}
+            <code>\textsubscript</code> or <code>\textsuperscript</code> for text, or write{' '}
+            <code>\_</code> for a literal underscore.
           </p>
           <h3>How do I write squared in LaTeX?</h3>
           <p>
@@ -867,6 +940,7 @@ $x^{}$         % empty group is allowed (rarely useful)`}</code></pre>
             <li><Link href="/learn/brackets">Brackets and Parentheses in LaTeX</Link> &mdash; <code>\left</code>, <code>\right</code> and sizing delimiters around powers</li>
             <li><Link href="/learn/footnotes">LaTeX Footnotes</Link> &mdash; Raised markers done properly with <code>\footnote</code></li>
             <li><Link href="https://www.useoctree.com/blog/squared-symbol-superscript-numbers-how-to-type">How to type the squared symbol and superscript numbers</Link> &mdash; Keyboard shortcuts outside LaTeX</li>
+            <li><Link href="https://www.useoctree.com/blog/subscript-superscript-complete-guide">Subscript and superscript in Word, Google Docs, Excel and HTML</Link> &mdash; Shortcuts and Unicode characters when you are not writing LaTeX</li>
           </ul>
 
           <h2>Free LaTeX Tools</h2>
