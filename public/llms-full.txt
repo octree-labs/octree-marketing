@@ -1,0 +1,99 @@
+# Octree LaTeX Compile API and MCP Server
+
+> Compile LaTeX to PDF from any AI agent or script. One API key, a REST API or an MCP server, and the same compiler (TeX Live, latexmk) that runs the Octree editor at https://app.useoctree.com.
+
+Human-readable docs: https://www.useoctree.com/developers
+Get an API key: https://app.useoctree.com/settings#api-keys
+OpenAPI: https://app.useoctree.com/api/v1/openapi.json
+
+## Authentication
+
+Every request sends `Authorization: Bearer oct_live_...`.
+Keys start with `oct_live_`, are shown once at creation, are stored hashed, and can be revoked in Settings. Up to 5 keys per account.
+
+## Limits
+
+- Free plan: 30 compiles per day.
+- Pro plan: 1,000 compiles per day.
+- REST and MCP share the same daily count.
+- Request size: up to 2 MB of source and 50 files.
+
+## REST: POST https://app.useoctree.com/api/v1/compile
+
+Request body (JSON), one of:
+
+    { "latex": "<complete single-file document>" }
+
+    {
+      "files": [ { "path": "main.tex", "content": "..." }, { "path": "refs.bib", "content": "..." } ],
+      "main": "main.tex",
+      "engine": "pdflatex"
+    }
+
+- `files[].content` is text in v1 (binary assets such as images are not supported yet).
+- `engine` is optional; `pdflatex` is the default. Other engines may be unsupported in v1.
+- `response`: `"json"` (default) or `"pdf"`. `"pdf"`, or the header `Accept: application/pdf`, returns the raw PDF bytes.
+
+Success (HTTP 200):
+
+    { "ok": true, "pdf_base64": "...", "pages": 1, "duration_ms": 1840, "warnings": [], "log_tail": "..." }
+
+`pages` may be absent.
+
+LaTeX error (still HTTP 200):
+
+    { "ok": false, "errors": [ { "file": "main.tex", "line": 7, "message": "Undefined control sequence.", "kind": "undefined_control_sequence" } ], "log_tail": "...", "suggestion": "...", "duration_ms": 960 }
+
+`suggestion` is optional. `kind` is one of: missing_package, undefined_control_sequence, missing_dollar, missing_brace, latex_error, timeout.
+
+Other status codes:
+
+- 401: missing, invalid or revoked API key.
+- 413: source over 2 MB or more than 50 files.
+- 429: daily quota used up. Body: { "error": "quota_exceeded", "limit", "used", "resets_at", "upgrade_url" }.
+- 503: compiler temporarily unavailable; retry with backoff.
+
+Example:
+
+    curl https://app.useoctree.com/api/v1/compile \
+      -H "Authorization: Bearer $OCTREE_API_KEY" \
+      -H "Content-Type: application/json" \
+      -d '{"latex":"\\documentclass{article}\\begin{document}Hello\\end{document}"}'
+
+## REST: GET https://app.useoctree.com/api/v1/me
+
+Returns { "user_id", "plan", "daily_limit", "used_today" }.
+
+## REST: GET https://app.useoctree.com/api/v1/openapi.json
+
+OpenAPI description of the API.
+
+## MCP server
+
+- Endpoint: https://app.useoctree.com/api/mcp
+- Transport: Streamable HTTP, stateless.
+- Auth: `Authorization: Bearer oct_live_...` header.
+
+Tools:
+
+- compile_latex: input `latex`, or `files` + `main`. Returns a short summary and the PDF as a resource.
+- check_latex: same input. Returns errors only (file, line, kind). Use it as the fast loop while fixing a document.
+- get_quota: no input. Returns plan, daily limit and compiles used today.
+
+Recommended agent loop: write the .tex files, call check_latex until it reports no errors, then call compile_latex once to get the PDF.
+
+Claude Code:
+
+    claude mcp add --transport http octree https://app.useoctree.com/api/mcp --header "Authorization: Bearer oct_live_..."
+
+Cursor, Windsurf and other MCP clients (mcpServers config):
+
+    {"mcpServers":{"octree":{"url":"https://app.useoctree.com/api/mcp","headers":{"Authorization":"Bearer oct_live_..."}}}}
+
+## Data retention
+
+On the API and MCP path, the LaTeX source and the PDF are not stored after the response is sent.
+
+## About Octree
+
+Octree is an AI-powered LaTeX editor: https://www.useoctree.com

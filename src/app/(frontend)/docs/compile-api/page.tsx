@@ -1,4 +1,5 @@
 import type { Metadata } from 'next/types'
+import Link from 'next/link'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { CheckCircle2, Zap, Server } from 'lucide-react'
 import { DocsSidebar } from './docs-sidebar'
@@ -31,6 +32,13 @@ export default function CompileApiDocsPage() {
 
         {/* Main Content */}
         <main className="flex-1 min-w-0 max-w-4xl prose dark:prose-invert">
+          <div className="not-prose mb-8 rounded-lg border border-primary/20 bg-primary/5 p-4 text-sm">
+            Compiling from a script or an AI agent? Use the{' '}
+            <Link href="/developers" className="font-medium text-primary underline">
+              Octree API and MCP server
+            </Link>{' '}
+            with an API key instead.
+          </div>
           <div className="mb-12">
             <h1 className="mb-4 text-4xl font-bold tracking-tight">Compile API</h1>
             <p className="text-xl text-muted-foreground mb-8">

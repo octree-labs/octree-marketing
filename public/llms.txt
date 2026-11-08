@@ -8,6 +8,18 @@ Octree is a modern, cloud-based LaTeX editor with built-in AI capabilities. It c
 
 Website: https://www.useoctree.com
 
+## For developers and AI agents
+
+Octree exposes its LaTeX compiler (full TeX Live, latexmk, pdfLaTeX by default) as a REST API and an MCP server. One API key works for both.
+
+- Docs: https://www.useoctree.com/developers
+- Full API and MCP reference as plain text: https://www.useoctree.com/llms-full.txt
+- Get an API key: https://app.useoctree.com/settings#api-keys
+- REST: POST https://app.useoctree.com/api/v1/compile with `Authorization: Bearer oct_live_...` and JSON `{"latex": "..."}` or `{"files": [{"path", "content"}], "main": "main.tex"}`; returns `{ok, pdf_base64, ...}` or `{ok: false, errors: [{file, line, message, kind}]}`. Add `"response": "pdf"` for raw PDF bytes.
+- MCP: https://app.useoctree.com/api/mcp (Streamable HTTP, stateless, bearer API key). Tools: compile_latex, check_latex, get_quota.
+- Claude Code: `claude mcp add --transport http octree https://app.useoctree.com/api/mcp --header "Authorization: Bearer oct_live_..."`
+- Limits: free 30 compiles/day, Pro 1,000/day.
+
 ## Features
 
 - **AI-Powered Editing Agent**: Edit documents with an AI agent built for academics. Refactor entire projects with simple commands.
@@ -47,6 +59,7 @@ Website: https://www.useoctree.com
 - Blog: https://www.useoctree.com/blog
 - Contact: https://www.useoctree.com/contact
 - Pricing: https://www.useoctree.com/pricing
+- Developers (LaTeX compile API & MCP server): https://www.useoctree.com/developers
 - Learn LaTeX: https://www.useoctree.com/learn/latex
 - Learn TikZ: https://www.useoctree.com/learn/tikz
 - Learn PGFPlots: https://www.useoctree.com/learn/pgfplots

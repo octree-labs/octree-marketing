@@ -26,7 +26,7 @@ type FooterLink = {
 
 const productLinks: FooterLink[] = [
   { title: 'Octree Editor', href: 'https://app.useoctree.com' },
-  { title: 'Compile API', href: '/docs/compile-api' },
+  { title: 'Developers: API & MCP', href: '/developers' },
   { title: 'Templates', href: 'https://tools.useoctree.com/templates' },
   { title: 'Symbols', href: 'https://tools.useoctree.com/symbols' },
 ]
