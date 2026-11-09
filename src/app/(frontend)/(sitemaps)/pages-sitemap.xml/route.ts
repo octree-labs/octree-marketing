@@ -227,6 +227,70 @@ const getPagesSitemap = unstable_cache(
         lastmod: dateFallback,
       },
       {
+        loc: `${SITE_URL}/learn/document-classes`,
+        lastmod: dateFallback,
+      },
+      {
+        loc: `${SITE_URL}/learn/title-page`,
+        lastmod: dateFallback,
+      },
+      {
+        loc: `${SITE_URL}/learn/fonts`,
+        lastmod: dateFallback,
+      },
+      {
+        loc: `${SITE_URL}/learn/paragraphs-indentation`,
+        lastmod: dateFallback,
+      },
+      {
+        loc: `${SITE_URL}/learn/environments`,
+        lastmod: dateFallback,
+      },
+      {
+        loc: `${SITE_URL}/learn/commands-macros`,
+        lastmod: dateFallback,
+      },
+      {
+        loc: `${SITE_URL}/learn/piecewise-functions`,
+        lastmod: dateFallback,
+      },
+      {
+        loc: `${SITE_URL}/learn/underbrace-overbrace`,
+        lastmod: dateFallback,
+      },
+      {
+        loc: `${SITE_URL}/learn/images`,
+        lastmod: dateFallback,
+      },
+      {
+        loc: `${SITE_URL}/learn/subfigures`,
+        lastmod: dateFallback,
+      },
+      {
+        loc: `${SITE_URL}/learn/multiple-columns`,
+        lastmod: dateFallback,
+      },
+      {
+        loc: `${SITE_URL}/learn/appendix`,
+        lastmod: dateFallback,
+      },
+      {
+        loc: `${SITE_URL}/learn/code-listings`,
+        lastmod: dateFallback,
+      },
+      {
+        loc: `${SITE_URL}/learn/algorithms`,
+        lastmod: dateFallback,
+      },
+      {
+        loc: `${SITE_URL}/learn/xelatex`,
+        lastmod: dateFallback,
+      },
+      {
+        loc: `${SITE_URL}/learn/languages`,
+        lastmod: dateFallback,
+      },
+      {
         loc: `${SITE_URL}/privacy`,
         lastmod: dateFallback,
       },

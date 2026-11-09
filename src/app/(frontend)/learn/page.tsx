@@ -63,6 +63,42 @@ const learnTopics = [
     color: 'from-teal-500/10 to-teal-600/5',
   },
   {
+    slug: 'document-classes',
+    title: 'LaTeX Document Classes: article, report, book and Options',
+    description: 'LaTeX document classes compared: article, report, book, KOMA-Script and memoir, and the options 12pt, a4paper, twoside, twocolumn, draft and landscape.',
+    color: 'from-blue-500/10 to-sky-600/5',
+  },
+  {
+    slug: 'title-page',
+    title: 'Title Page in LaTeX: \\maketitle, titlepage and Custom Designs',
+    description: 'Make a title page in LaTeX: \\title, \\author, \\date and \\maketitle, the titlepage environment for custom designs with a logo, a thesis example and fixes.',
+    color: 'from-fuchsia-500/10 to-pink-600/5',
+  },
+  {
+    slug: 'fonts',
+    title: 'Fonts in LaTeX: Families, Sans Serif, and Changing the Font',
+    description: 'Fonts in LaTeX: serif, sans serif and monospace families, \\textsf and \\sffamily, font packages like newtx and libertine, fontspec with XeLaTeX, and fixes.',
+    color: 'from-amber-500/10 to-yellow-600/5',
+  },
+  {
+    slug: 'paragraphs-indentation',
+    title: 'Indentation in LaTeX: \\indent, \\noindent, parindent and Tabs',
+    description: 'Indent in LaTeX: the default first-line indent, \\noindent, \\parindent and parskip, \\indent, hanging indents, indented blocks and tabs with \\hspace.',
+    color: 'from-stone-500/10 to-stone-600/5',
+  },
+  {
+    slug: 'environments',
+    title: 'Environments in LaTeX: \\begin, \\end and Defining Your Own',
+    description: 'LaTeX environments explained: \\begin and \\end, common environments, \\newenvironment, a numbered example environment with amsthm, arguments and fixes.',
+    color: 'from-teal-500/10 to-cyan-600/5',
+  },
+  {
+    slug: 'commands-macros',
+    title: 'LaTeX Commands and Macros: \\newcommand, \\renewcommand and \\def',
+    description: 'LaTeX commands and macros: define your own with \\newcommand, arguments and defaults, \\renewcommand, \\DeclareMathOperator, \\def, and 40 common LaTeX codes.',
+    color: 'from-violet-500/10 to-indigo-600/5',
+  },
+  {
     slug: 'greek-letters-math-symbols',
     title: 'Greek Letters in LaTeX',
     description: 'All 24 Greek letters in LaTeX with uppercase, variants and Unicode, \\epsilon vs \\varepsilon, lambda, bold and upright Greek, plus every common math symbol.',
@@ -87,6 +123,12 @@ const learnTopics = [
     color: 'from-violet-500/10 to-violet-600/5',
   },
   {
+    slug: 'piecewise-functions',
+    title: 'Piecewise Functions in LaTeX: the cases Environment',
+    description: 'Write piecewise functions in LaTeX with \\begin{cases} (amsmath): \\text{if} conditions, dcases for full-size fractions, right braces, numbering and fixes.',
+    color: 'from-orange-500/10 to-red-600/5',
+  },
+  {
     slug: 'integrals-sums-limits',
     title: 'Integrals, Sums & Limits',
     description: 'Typeset integrals, sums (\\sum), products and limits in LaTeX. From basic sigma notation to series, big operators and partial derivatives.',
@@ -103,6 +145,24 @@ const learnTopics = [
     title: 'LaTeX Tables',
     description: 'Make tables in LaTeX and Overleaf with booktabs, multicolumn, multirow, longtable, row and column spacing, colored tables and a table generator.',
     color: 'from-sky-500/10 to-sky-600/5',
+  },
+  {
+    slug: 'images',
+    title: 'Figures in LaTeX: \\includegraphics, Captions and References',
+    description: 'Figures in LaTeX: \\includegraphics with width and scale, the figure environment, [htbp] and [H] placement, captions, \\label and \\ref, wrapfig and errors.',
+    color: 'from-emerald-500/10 to-green-600/5',
+  },
+  {
+    slug: 'subfigures',
+    title: 'Subfigures in LaTeX: Side-by-Side Figures with subcaption',
+    description: 'LaTeX subfigures with the subcaption package: two figures side by side, a 2×2 grid, panel captions and labels, \\ref and \\subref, legacy subfig and fixes.',
+    color: 'from-green-500/10 to-emerald-600/5',
+  },
+  {
+    slug: 'multiple-columns',
+    title: 'Two Columns in LaTeX: twocolumn, multicol and \\multicolumn in Tables',
+    description: 'Two columns in LaTeX: the twocolumn option, the multicol package with \\columnbreak and \\columnsep, figure* across columns, and \\multicolumn in tables.',
+    color: 'from-sky-500/10 to-indigo-600/5',
   },
   {
     slug: 'footnotes',
@@ -183,6 +243,12 @@ const learnTopics = [
     color: 'from-cyan-500/10 to-sky-600/5',
   },
   {
+    slug: 'underbrace-overbrace',
+    title: 'Underbrace and Overbrace in LaTeX: \\underbrace, \\overbrace and Annotations',
+    description: 'Underbrace in LaTeX: \\underbrace{a+b}_{\\text{sum}}, \\overbrace with labels, nested and overlapping braces, \\underset, \\overset, \\underbracket and errors.',
+    color: 'from-cyan-500/10 to-blue-600/5',
+  },
+  {
     slug: 'multiline-equations',
     title: 'Multiline Equations in LaTeX',
     description: 'New lines in equations, align math with align and align*, split, multline, gather and cases, nest aligned blocks, add text between lines, allow page breaks, and retire eqnarray.',
@@ -193,6 +259,24 @@ const learnTopics = [
     title: 'Sections & Headings',
     description: 'The heading hierarchy per class, unnumbered sections that still appear in the TOC, secnumdepth and tocdepth, custom numbering, titlesec formatting, \\appendix and hyperref links.',
     color: 'from-lime-500/10 to-green-600/5',
+  },
+  {
+    slug: 'appendix',
+    title: 'Appendix in LaTeX: \\appendix, Numbering and the appendix Package',
+    description: 'Appendix in LaTeX: \\appendix for lettered sections and chapters, the appendix package, appendices in the table of contents, equation numbering and errors.',
+    color: 'from-lime-500/10 to-lime-600/5',
+  },
+  {
+    slug: 'code-listings',
+    title: 'Code Listings in LaTeX: listings, minted and verbatim',
+    description: 'Code in LaTeX: lstlisting with language=Python, \\lstinputlisting, \\lstset styling, minted and -shell-escape, verbatim, \\verb and \\lstinline, plus errors.',
+    color: 'from-slate-500/10 to-zinc-600/5',
+  },
+  {
+    slug: 'algorithms',
+    title: 'Algorithms in LaTeX: algorithm2e, algorithmic and algpseudocode',
+    description: 'Write pseudocode in LaTeX: algorithm with algpseudocode (\\State, \\If, \\For), algorithm2e, the old algorithmic, line numbers, captions and errors.',
+    color: 'from-purple-500/10 to-violet-600/5',
   },
   {
     slug: 'theorems-proofs',
@@ -295,6 +379,18 @@ const learnTopics = [
     title: 'Spacing in LaTeX',
     description: 'Horizontal and vertical spacing: \\hspace, \\vspace, \\quad, the math spaces \\, \\: \\; \\! with their widths, line spacing with setspace and paragraph spacing.',
     color: 'from-stone-500/10 to-zinc-600/5',
+  },
+  {
+    slug: 'xelatex',
+    title: 'XeLaTeX: Unicode, System Fonts and When to Use It',
+    description: 'XeLaTeX vs pdfLaTeX vs LuaLaTeX, system fonts with fontspec and \\setmainfont, Unicode input, polyglossia for RTL languages, xeCJK and common errors.',
+    color: 'from-rose-500/10 to-orange-600/5',
+  },
+  {
+    slug: 'languages',
+    title: 'Languages in LaTeX: babel, polyglossia, Spanish, Arabic and More',
+    description: 'LaTeX in any language: babel for pdfLaTeX, polyglossia for XeLaTeX, Spanish, French, German, Arabic and Hebrew, Chinese and Japanese, Russian, Greek.',
+    color: 'from-yellow-500/10 to-amber-600/5',
   },
 ]
 
