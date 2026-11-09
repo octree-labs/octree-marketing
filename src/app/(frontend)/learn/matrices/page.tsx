@@ -26,7 +26,7 @@ const page = {
 }
 
 /** Last content update, used for dateModified in the article schema. */
-const LAST_UPDATED = '2026-11-08'
+const LAST_UPDATED = '2026-11-09'
 
 const faq: FaqItem[] = [
   {
@@ -137,15 +137,95 @@ export default async function MatricesPage() {
             errors you will meet.
           </p>
 
-          {/* ── Comparison table ── */}
-          <h2>Matrix Brackets Compared</h2>
+          {/* ── Matrix brackets ── */}
+          <h2>Matrix Brackets: pmatrix, bmatrix, Bmatrix, vmatrix, Vmatrix</h2>
+          <p>
+            The matrix brackets come from the environment name, not from typing delimiters
+            yourself. <code>amsmath</code> has one environment per bracket type, and the content
+            inside is written the same way in all five; only the letter in front of{' '}
+            <code>matrix</code> changes:
+          </p>
+          <div className="overflow-x-auto">
+          <table>
+            <thead>
+              <tr>
+                <th>Environment</th>
+                <th>Bracket type</th>
+                <th>Looks like</th>
+                <th>Use it for</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>pmatrix</code></td>
+                <td>Parentheses ( )</td>
+                <td><span className="whitespace-nowrap">(a&nbsp;b<br />&nbsp;c&nbsp;d)</span></td>
+                <td>The default choice: vectors, transformation matrices, most textbooks</td>
+              </tr>
+              <tr>
+                <td><code>bmatrix</code></td>
+                <td>Square brackets [ ]</td>
+                <td><span className="whitespace-nowrap">[a&nbsp;b<br />&nbsp;c&nbsp;d]</span></td>
+                <td>Linear algebra, systems of equations, engineering texts</td>
+              </tr>
+              <tr>
+                <td><code>Bmatrix</code></td>
+                <td>Curly braces &#123; &#125;</td>
+                <td><span className="whitespace-nowrap">&#123;a&nbsp;b<br />&nbsp;c&nbsp;d&#125;</span></td>
+                <td>Rare: sets of vectors, some physics conventions</td>
+              </tr>
+              <tr>
+                <td><code>vmatrix</code></td>
+                <td>Single vertical bars | |</td>
+                <td><span className="whitespace-nowrap">|a&nbsp;b<br />&nbsp;c&nbsp;d|</span></td>
+                <td>Determinants</td>
+              </tr>
+              <tr>
+                <td><code>Vmatrix</code></td>
+                <td>Double vertical bars &#8214; &#8214;</td>
+                <td><span className="whitespace-nowrap">&#8214;a&nbsp;b<br />&nbsp;c&nbsp;d&#8214;</span></td>
+                <td>Matrix norms</td>
+              </tr>
+            </tbody>
+          </table>
+          </div>
+          <p>
+            Here are all five side by side, plus the bracket-less <code>matrix</code> for
+            comparison. The example compiles as it stands:
+          </p>
+          <pre><code>{`\\documentclass{article}
+\\usepackage{amsmath}
+\\begin{document}
+
+\\[
+\\begin{pmatrix} a & b \\\\ c & d \\end{pmatrix} \\quad
+\\begin{bmatrix} a & b \\\\ c & d \\end{bmatrix} \\quad
+\\begin{Bmatrix} a & b \\\\ c & d \\end{Bmatrix}
+\\]
+
+\\[
+\\begin{vmatrix} a & b \\\\ c & d \\end{vmatrix} \\quad
+\\begin{Vmatrix} a & b \\\\ c & d \\end{Vmatrix} \\quad
+\\begin{matrix} a & b \\\\ c & d \\end{matrix}
+\\]
+
+\\end{document}`}</code></pre>
+          <p>
+            All of them must sit inside math mode (<code>\[...\]</code>, <code>$...$</code>,{' '}
+            <code>equation</code>, <code>align</code>); on its own a matrix environment fails
+            with <em>Missing $ inserted</em>. For any other bracket, such as angle brackets or a
+            one-sided brace, wrap a plain <code>matrix</code> in <code>\left</code> and{' '}
+            <code>\right</code>: <code>{`\\left\\langle \\begin{matrix} a & b \\end{matrix} \\right\\rangle`}</code>.
+            The <Link href="/learn/brackets">brackets guide</Link> lists every delimiter.
+          </p>
+
+          <h3>Other matrix environments</h3>
           <div className="overflow-x-auto">
           <table>
             <thead>
               <tr>
                 <th>Environment</th>
                 <th>Brackets</th>
-                <th>Looks like</th>
                 <th>Use it for</th>
                 <th>Package</th>
               </tr>
@@ -154,90 +234,30 @@ export default async function MatricesPage() {
               <tr>
                 <td><code>matrix</code></td>
                 <td>none</td>
-                <td><span className="whitespace-nowrap">a&nbsp;b<br />c&nbsp;d</span></td>
                 <td>Bare grid; add your own delimiters with <code>\left</code> and <code>\right</code></td>
-                <td>amsmath</td>
-              </tr>
-              <tr>
-                <td><code>pmatrix</code></td>
-                <td>( )</td>
-                <td><span className="whitespace-nowrap">(a&nbsp;b<br />&nbsp;c&nbsp;d)</span></td>
-                <td>The default choice: vectors, transformation matrices, most textbooks</td>
-                <td>amsmath</td>
-              </tr>
-              <tr>
-                <td><code>bmatrix</code></td>
-                <td>[ ]</td>
-                <td><span className="whitespace-nowrap">[a&nbsp;b<br />&nbsp;c&nbsp;d]</span></td>
-                <td>Linear algebra, systems of equations, engineering texts</td>
-                <td>amsmath</td>
-              </tr>
-              <tr>
-                <td><code>Bmatrix</code></td>
-                <td>&#123; &#125;</td>
-                <td><span className="whitespace-nowrap">&#123;a&nbsp;b<br />&nbsp;c&nbsp;d&#125;</span></td>
-                <td>Rare: sets of vectors, some physics conventions</td>
-                <td>amsmath</td>
-              </tr>
-              <tr>
-                <td><code>vmatrix</code></td>
-                <td>| |</td>
-                <td><span className="whitespace-nowrap">|a&nbsp;b<br />&nbsp;c&nbsp;d|</span></td>
-                <td>Determinants</td>
-                <td>amsmath</td>
-              </tr>
-              <tr>
-                <td><code>Vmatrix</code></td>
-                <td>&#8214; &#8214;</td>
-                <td><span className="whitespace-nowrap">&#8214;a&nbsp;b<br />&nbsp;c&nbsp;d&#8214;</span></td>
-                <td>Matrix norms</td>
                 <td>amsmath</td>
               </tr>
               <tr>
                 <td><code>smallmatrix</code></td>
                 <td>none (add <code>\left(</code>)</td>
-                <td>small grid</td>
                 <td>Inline matrices in running text</td>
                 <td>amsmath</td>
               </tr>
               <tr>
                 <td><code>psmallmatrix</code>, <code>bsmallmatrix</code>, &hellip;</td>
                 <td>( ), [ ], &hellip;</td>
-                <td>small, with brackets</td>
                 <td>Inline matrices without typing <code>\left</code></td>
                 <td>mathtools</td>
               </tr>
               <tr>
                 <td><code>array</code></td>
                 <td>none (add <code>\left[</code>)</td>
-                <td>grid with optional lines</td>
                 <td>Augmented matrices, column alignment, internal rules</td>
                 <td>LaTeX kernel</td>
               </tr>
             </tbody>
           </table>
           </div>
-          <p>
-            All of them share the same internal syntax. The one thing to remember is that a
-            matrix environment must sit inside math mode (<code>\[...\]</code>,{' '}
-            <code>$...$</code>, <code>equation</code>, <code>align</code>); on its own it fails
-            with <em>Missing $ inserted</em>.
-          </p>
-
-          <pre><code>{`\\usepackage{amsmath}
-
-% All six matrix types with the same content
-\\[
-\\begin{matrix} a & b \\\\ c & d \\end{matrix} \\quad
-\\begin{pmatrix} a & b \\\\ c & d \\end{pmatrix} \\quad
-\\begin{bmatrix} a & b \\\\ c & d \\end{bmatrix}
-\\]
-
-\\[
-\\begin{Bmatrix} a & b \\\\ c & d \\end{Bmatrix} \\quad
-\\begin{vmatrix} a & b \\\\ c & d \\end{vmatrix} \\quad
-\\begin{Vmatrix} a & b \\\\ c & d \\end{Vmatrix}
-\\]`}</code></pre>
 
           {/* ── Basic ── */}
           <h2>Basic Matrix with amsmath</h2>

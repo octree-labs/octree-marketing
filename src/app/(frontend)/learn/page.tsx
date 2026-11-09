@@ -284,6 +284,18 @@ const learnTopics = [
     description: 'Footnotes on Beamer slides: \\footnote[frame] in columns, footnotes without a number, smaller size and color, per-frame numbering, overlays, title-page \\thanks and \\footcite.',
     color: 'from-lime-500/10 to-lime-600/5',
   },
+  {
+    slug: 'beamer',
+    title: 'Beamer Presentations',
+    description: 'Slides in LaTeX with Beamer: frames, themes and color themes, overlays with \\pause and \\only, columns and blocks, title page and sections, handouts and speaker notes.',
+    color: 'from-sky-500/10 to-blue-600/5',
+  },
+  {
+    slug: 'spacing',
+    title: 'Spacing in LaTeX',
+    description: 'Horizontal and vertical spacing: \\hspace, \\vspace, \\quad, the math spaces \\, \\: \\; \\! with their widths, line spacing with setspace and paragraph spacing.',
+    color: 'from-stone-500/10 to-zinc-600/5',
+  },
 ]
 
 export default function LearnPage() {
