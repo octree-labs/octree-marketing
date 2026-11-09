@@ -1,6 +1,6 @@
 import type { Metadata } from 'next/types'
 
-import { learnMetadata } from '@/utilities/learnMetadata'
+import { learnMetadata, type FaqItem } from '@/utilities/learnMetadata'
 import Link from 'next/link'
 import { buttonVariants } from '@/components/ui/button'
 import React from 'react'
@@ -14,19 +14,52 @@ import { LearnSchema } from '@/components/Learn/schema'
 export const dynamic = 'force-static'
 export const revalidate = 3600
 
-const breadcrumbs = getLearnBreadcrumbs('LaTeX Hyperlinks', 'hyperlinks')
+const breadcrumbs = getLearnBreadcrumbs('Links in LaTeX', 'hyperlinks')
 const breadcrumbSchema = generateBreadcrumbSchema(breadcrumbs)
 
 const page = {
   slug: 'hyperlinks',
-  title: 'LaTeX Hyperlinks: hyperref, \\url, \\href and Clickable Links',
-  seoTitle: 'LaTeX Hyperlinks: hyperref, \\url and \\href',
-  description: 'How to add hyperlinks in LaTeX with the hyperref package: \\url, \\href and \\nolinkurl, email links, internal links with \\autoref and \\nameref, removing the colored link boxes, link colors, PDF metadata, breaking long URLs, and fixing common hyperref errors.',
-  keywords: 'latex hyperlink, hyperref latex, latex url, latex link, latex href, latex clickable link, latex hyperlink color, latex remove link box, latex link to section, latex email link, hidelinks, colorlinks, hypersetup, latex autoref, latex nameref, latex break long url',
+  title: 'Links in LaTeX: hyperref, \\href, \\url and Clickable References',
+  seoTitle: 'Links in LaTeX: hyperref, \\href and \\url',
+  description: 'Links in LaTeX with hyperref: \\href{url}{text}, \\url, \\hyperref and \\autoref for internal links, link colours, \\urlstyle{same}, % and # in URLs, xurl.',
+  keywords: 'links latex, latex links, link latex, latex link, how to add link in latex, latex hyperlink, hyperref latex, latex url, latex link, latex href, latex clickable link, latex hyperlink color, latex remove link box, latex link to section, latex email link, hidelinks, colorlinks, hypersetup, latex autoref, latex nameref, latex break long url',
 }
 
 /** Last content update, used for dateModified in the article schema. */
-const LAST_UPDATED = '2026-10-17'
+const LAST_UPDATED = '2026-11-09'
+
+const faq: FaqItem[] = [
+  {
+    question: 'How do you add a link in LaTeX?',
+    answer:
+      'Load \\usepackage{hyperref} as the last package in the preamble. Then \\href{https://example.org}{link text} links any text to an address, and \\url{https://example.org} prints the address itself as a clickable link. With hyperref loaded, \\ref, \\cite and the table of contents become clickable too.',
+  },
+  {
+    question: 'What is the difference between \\url and \\href in LaTeX?',
+    answer:
+      '\\url{address} prints the address in a typewriter font and links it. \\href{address}{text} prints only the text you give and links that text to the address. Use \\url when readers of a printed copy need to see the address, and \\href when the link text should read as part of the sentence.',
+  },
+  {
+    question: 'How do I link to a section or figure in LaTeX?',
+    answer:
+      'Put \\label{sec:intro} after the \\section command (or after \\caption in a figure), load hyperref, and refer to it with \\ref{sec:intro}, \\autoref{sec:intro} for "section 1" with the word included in the link, or \\hyperref[sec:intro]{any text} to choose the link text yourself. Compile twice so the references resolve.',
+  },
+  {
+    question: 'How do I remove the red boxes around links in LaTeX?',
+    answer:
+      'Load hyperref with \\usepackage[hidelinks]{hyperref} for clickable links with no boxes and no colour, or set \\hypersetup{colorlinks=true, linkcolor=blue, urlcolor=blue} to colour the link text instead of drawing boxes. The boxes never appear in print either way; they only show in PDF viewers.',
+  },
+  {
+    question: 'Why does a URL with % or # break inside a footnote?',
+    answer:
+      'Inside the argument of another command, such as \\footnote, TeX reads % as the start of a comment and # as a macro parameter before \\url sees them, giving errors like "Illegal parameter number in definition of \\Hy@tempa" or "File ended while scanning use of \\@footnotetext". Escape the characters in \\href (\\%, \\#), or define the address in advance with \\urldef{\\mylink}\\url{...} and use \\mylink in the footnote.',
+  },
+  {
+    question: 'How do I break a long URL across lines in LaTeX?',
+    answer:
+      'Load the xurl package after hyperref, \\usepackage{xurl}, and URLs can break after any character. For a lighter touch, \\usepackage[hyphens]{url} before hyperref allows breaks at hyphens as well as at slashes and dots.',
+  },
+]
 
 export default async function LaTeXHyperlinksPage() {
   return (
@@ -40,6 +73,7 @@ export default async function LaTeXHyperlinksPage() {
         title={page.title}
         description={page.description}
         dateModified={LAST_UPDATED}
+        faq={faq}
       />
       <div className="container">
         <div className="mb-8 max-w-4xl mx-auto">
@@ -52,9 +86,38 @@ export default async function LaTeXHyperlinksPage() {
         </div>
 
         <article className="prose prose-lg dark:prose-invert max-w-4xl mx-auto">
-          <h1>LaTeX Hyperlinks: hyperref, \url, \href and Clickable Links</h1>
+          <h1>Links in LaTeX: hyperref, \href, \url and Clickable References</h1>
+
+          <div className="not-prose my-6 p-6 rounded-lg border bg-muted/40 break-words">
+            <p className="text-sm font-semibold uppercase tracking-wide text-muted-foreground mb-3">Quick answer</p>
+            <ul className="space-y-2 text-base list-disc pl-5">
+              <li>
+                <strong>Package:</strong> <code>{`\\usepackage{hyperref}`}</code>, loaded last in the
+                preamble.
+              </li>
+              <li>
+                <strong>Link with your own text:</strong>{' '}
+                <code>{`\\href{https://example.org}{link text}`}</code>. Show the address itself:{' '}
+                <code>{`\\url{https://example.org}`}</code>.
+              </li>
+              <li>
+                <strong>Link inside the document:</strong>{' '}
+                <code>{`\\hyperref[sec:intro]{link text}`}</code>, or{' '}
+                <code>{`\\autoref{sec:intro}`}</code> for &ldquo;section 1&rdquo;.
+              </li>
+              <li>
+                <strong>Colours instead of boxes:</strong>{' '}
+                <code>{`\\hypersetup{colorlinks=true, linkcolor=blue, urlcolor=blue}`}</code>; no
+                boxes and no colour: <code>{`\\usepackage[hidelinks]{hyperref}`}</code>.
+              </li>
+              <li>
+                <strong>URL font and line breaks:</strong> <code>{`\\urlstyle{same}`}</code> for the
+                text font, <code>{`\\usepackage{xurl}`}</code> after hyperref for long URLs.
+              </li>
+            </ul>
+          </div>
           <p className="lead">
-            Hyperlinks in LaTeX come from one package: <code>hyperref</code>. Load it and every{' '}
+            Links in LaTeX come from one package: <code>hyperref</code>. Load it and every{' '}
             <code>\ref</code>, <code>\cite</code> and table-of-contents entry becomes clickable,
             and you get <code>\url</code> and <code>\href</code> for links to the web. This guide
             covers loading the package correctly, the three URL commands, internal links, the
@@ -63,7 +126,7 @@ export default async function LaTeXHyperlinksPage() {
           </p>
 
           {/* ── Loading hyperref ── */}
-          <h2>Loading hyperref (Last)</h2>
+          <h2>Links in LaTeX Start with hyperref (Load It Last)</h2>
           <p>
             hyperref redefines commands from many other packages, so it has to see them first.
             The rule of thumb: <strong>load hyperref as the last package in the preamble</strong>.
@@ -91,7 +154,7 @@ export default async function LaTeXHyperlinksPage() {
           </p>
 
           {/* ── url / href / nolinkurl ── */}
-          <h2>\url, \href and \nolinkurl</h2>
+          <h2>LaTeX Links to Websites: \href, \url and \nolinkurl</h2>
           <p>The three commands for external links differ in what they print and whether it is clickable:</p>
           <pre><code>{`% Print the address and link it
 \\url{https://www.useoctree.com/learn}
@@ -165,7 +228,7 @@ export default async function LaTeXHyperlinksPage() {
 \\urlstyle{sf}    % sans-serif`}</code></pre>
 
           {/* ── Internal links ── */}
-          <h2>Internal Links: \ref, \autoref, \nameref and \hyperref</h2>
+          <h2>Link to a Section, Figure or Equation: \hyperref, \autoref and \nameref</h2>
           <p>
             With hyperref loaded, every <code>\ref</code> and <code>\pageref</code> becomes a link
             to the corresponding <code>\label</code>. hyperref adds three more commands, and{' '}
@@ -219,7 +282,7 @@ As noted \\hyperlink{data-note}{earlier}, the data are recent.`}</code></pre>
           <pre><code>{`\\hypersetup{linktoc=all}`}</code></pre>
 
           {/* ── Colors and boxes ── */}
-          <h2>Removing the Colored Boxes (or Coloring the Links)</h2>
+          <h2>Link Colours: colorlinks, hidelinks and Removing the Boxes</h2>
           <p>
             Out of the box hyperref draws a colored rectangle around every link: red for internal
             links, green for citations, cyan for URLs. The boxes are PDF annotations &ndash; they
@@ -313,7 +376,7 @@ As noted \\hyperlink{data-note}{earlier}, the data are recent.`}</code></pre>
 Details are online.\\footnote{\\url{https://example.org/details}}`}</code></pre>
 
           {/* ── Special chars ── */}
-          <h2>Special Characters in URLs</h2>
+          <h2 id="special-characters">Special Characters in URLs: % and #</h2>
           <p>
             Typed directly in the body of the document, <code>\url</code> and the first argument
             of <code>\href</code> both accept <code>%</code>, <code>#</code>, <code>~</code>,{' '}
@@ -355,7 +418,8 @@ Data at 100\\% quality.\\footnote{\\href{https://example.org/?x=1\\&y=2}{source}
           </p>
 
           {/* ── Errors ── */}
-          <h2>Common Errors and Warnings</h2>
+          <h2>Common Errors</h2>
+          <div className="overflow-x-auto">
           <table>
             <thead>
               <tr>
@@ -365,6 +429,31 @@ Data at 100\\% quality.\\footnote{\\href{https://example.org/?x=1\\&y=2}{source}
               </tr>
             </thead>
             <tbody>
+              <tr>
+                <td><em>Package cleveref Error: cleveref must be loaded after hyperref!</em></td>
+                <td>Load order: <code>cleveref</code> came first</td>
+                <td>Move <code>{`\\usepackage{cleveref}`}</code> below <code>{`\\usepackage{hyperref}`}</code></td>
+              </tr>
+              <tr>
+                <td>Links missing or <code>\autoref</code> names wrong after adding a package</td>
+                <td>A package loaded after hyperref redefined <code>\section</code>, <code>\caption</code> or <code>\footnote</code></td>
+                <td>Load hyperref last (except cleveref, glossaries, bookmark, hypcap, algorithm)</td>
+              </tr>
+              <tr>
+                <td><em>Illegal parameter number in definition of \Hy@tempa</em></td>
+                <td><code>#</code> in a <code>\url</code> inside <code>\footnote</code> or another command&apos;s argument</td>
+                <td>Use <code>{`\\href{...\\#...}{text}`}</code> or <code>\urldef</code> (see <a href="#special-characters">special characters</a>)</td>
+              </tr>
+              <tr>
+                <td><em>File ended while scanning use of \@footnotetext</em></td>
+                <td><code>%</code> in a URL inside a footnote starts a comment and swallows the closing brace</td>
+                <td>Escape it as <code>\%</code> in <code>\href</code>, or <code>\urldef</code> the address</td>
+              </tr>
+              <tr>
+                <td>Overfull <code>\hbox</code>, URL sticks into the margin</td>
+                <td>The URL has no allowed break point</td>
+                <td><code>{`\\usepackage{xurl}`}</code> after hyperref</td>
+              </tr>
               <tr>
                 <td><em>Token not allowed in a PDF string (Unicode): removing `math shift&apos;</em></td>
                 <td>Math or a command in a section title that goes into the bookmarks</td>
@@ -397,6 +486,7 @@ Data at 100\\% quality.\\footnote{\\href{https://example.org/?x=1\\&y=2}{source}
               </tr>
             </tbody>
           </table>
+          </div>
 
           {/* ── Complete example ── */}
           <h2>Complete Example</h2>
@@ -445,6 +535,7 @@ Thanks to everyone who reads the manual before asking.
 
           {/* ── Quick reference ── */}
           <h2>Quick Reference</h2>
+          <div className="overflow-x-auto">
           <table>
             <thead>
               <tr>
@@ -471,6 +562,61 @@ Thanks to everyone who reads the manual before asking.
               <tr><td>Math in a bookmarked title</td><td><code>{`\\texorpdfstring{$x$}{x}`}</code></td></tr>
             </tbody>
           </table>
+          </div>
+
+          {/* ── FAQ ── */}
+          <h2>Frequently Asked Questions</h2>
+          <h3>How do you add a link in LaTeX?</h3>
+          <p>
+            Load <code>{`\\usepackage{hyperref}`}</code> as the last package in the preamble. Then{' '}
+            <code>{`\\href{https://example.org}{link text}`}</code> links any text to an address,
+            and <code>{`\\url{https://example.org}`}</code> prints the address itself as a
+            clickable link. With hyperref loaded, <code>\ref</code>, <code>\cite</code> and the
+            table of contents become clickable too.
+          </p>
+          <h3>What is the difference between \url and \href in LaTeX?</h3>
+          <p>
+            <code>{`\\url{address}`}</code> prints the address in a typewriter font and links it.{' '}
+            <code>{`\\href{address}{text}`}</code> prints only the text you give and links that
+            text to the address. Use <code>\url</code> when readers of a printed copy need to see
+            the address, and <code>\href</code> when the link text should read as part of the
+            sentence.
+          </p>
+          <h3>How do I link to a section or figure in LaTeX?</h3>
+          <p>
+            Put <code>{`\\label{sec:intro}`}</code> after the <code>\section</code> command (or
+            after <code>\caption</code> in a figure), load hyperref, and refer to it with{' '}
+            <code>{`\\ref{sec:intro}`}</code>, <code>{`\\autoref{sec:intro}`}</code> for
+            &quot;section 1&quot; with the word included in the link, or{' '}
+            <code>{`\\hyperref[sec:intro]{any text}`}</code> to choose the link text yourself.
+            Compile twice so the references resolve.
+          </p>
+          <h3>How do I remove the red boxes around links in LaTeX?</h3>
+          <p>
+            Load hyperref with <code>{`\\usepackage[hidelinks]{hyperref}`}</code> for clickable
+            links with no boxes and no colour, or set{' '}
+            <code>{`\\hypersetup{colorlinks=true, linkcolor=blue, urlcolor=blue}`}</code> to colour
+            the link text instead of drawing boxes. The boxes never appear in print either way;
+            they only show in PDF viewers.
+          </p>
+          <h3>Why does a URL with % or # break inside a footnote?</h3>
+          <p>
+            Inside the argument of another command, such as <code>\footnote</code>, TeX reads{' '}
+            <code>%</code> as the start of a comment and <code>#</code> as a macro parameter before{' '}
+            <code>\url</code> sees them, giving errors like &quot;Illegal parameter number in
+            definition of \Hy@tempa&quot; or &quot;File ended while scanning use of
+            \@footnotetext&quot;. Escape the characters in <code>\href</code> (<code>\%</code>,{' '}
+            <code>\#</code>), or define the address in advance with{' '}
+            <code>{`\\urldef{\\mylink}\\url{...}`}</code> and use <code>\mylink</code> in the
+            footnote.
+          </p>
+          <h3>How do I break a long URL across lines in LaTeX?</h3>
+          <p>
+            Load the <code>xurl</code> package after hyperref, <code>{`\\usepackage{xurl}`}</code>,
+            and URLs can break after any character. For a lighter touch,{' '}
+            <code>{`\\usepackage[hyphens]{url}`}</code> before hyperref allows breaks at hyphens as
+            well as at slashes and dots.
+          </p>
 
           {/* ── Next Steps ── */}
           <h2>Next Steps</h2>

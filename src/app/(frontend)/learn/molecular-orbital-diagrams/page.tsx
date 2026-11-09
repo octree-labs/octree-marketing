@@ -19,18 +19,23 @@ const breadcrumbSchema = generateBreadcrumbSchema(breadcrumbs)
 
 const page = {
   slug: 'molecular-orbital-diagrams',
-  title: 'Molecular Orbital Diagrams in LaTeX: TikZ, chemfig and modiagram',
+  title: 'Molecular Orbital Diagrams in LaTeX (modiagram and TikZ)',
   seoTitle: 'Molecular Orbital Diagrams in LaTeX: modiagram',
   description:
-    'How to read and draw molecular orbital diagrams: bonding and antibonding orbitals, electron filling and bond order, worked H2, O2, N2 and CO diagrams, then the LaTeX: the modiagram package, a pure TikZ version, chemfig Lewis structures, mhchem formulas and common errors.',
+    'Molecular orbital diagrams in LaTeX: copy-paste modiagram and TikZ code for O2, N2, H2 and CO, how to read an MO diagram, bond order, and common errors.',
   keywords:
-    'molecular orbital diagram, mo diagram, molecular orbital diagram latex, o2 molecular orbital diagram, n2 molecular orbital diagram, h2 molecular orbital diagram, co molecular orbital diagram, modiagram package, bond order, bonding antibonding orbitals, tikz mo diagram, chemfig lewis structure, mhchem, latex chemistry',
+    'molecular orbital diagrams, molecular orbital diagram, molecular diagram, mo diagram, molecular orbital diagram latex, modiagram, molecular orbital diagram latex, o2 molecular orbital diagram, n2 molecular orbital diagram, h2 molecular orbital diagram, co molecular orbital diagram, modiagram package, bond order, bonding antibonding orbitals, tikz mo diagram, chemfig lewis structure, mhchem, latex chemistry',
 }
 
 /** Last content update, used for dateModified in the article schema. */
-const LAST_UPDATED = '2026-10-18'
+const LAST_UPDATED = '2026-11-09'
 
 const faq: FaqItem[] = [
+  {
+    question: 'How do I draw a molecular orbital diagram in LaTeX?',
+    answer:
+      'Load \\usepackage{modiagram} and describe the two atoms and the molecule inside a modiagram environment: \\atom[O]{left}{1s, 2s, 2p = {;pair,up,up}}, the same for the right atom, then \\molecule[O$_2$]{1sMO, 2sMO, 2pMO = {;pair,pair,pair,up,up}} and \\EnergyAxis. The package draws the levels, electrons and correlation lines. For orbitals it does not cover, such as d orbitals, draw the levels yourself in TikZ.',
+  },
   {
     question: 'How do you calculate bond order from a molecular orbital diagram?',
     answer:
@@ -83,7 +88,64 @@ export default async function MolecularOrbitalDiagramsPage() {
         </div>
 
         <article className="prose prose-lg dark:prose-invert max-w-4xl mx-auto">
-          <h1>Molecular Orbital Diagrams in LaTeX: TikZ, chemfig and modiagram</h1>
+          <h1>Molecular Orbital Diagrams in LaTeX (modiagram and TikZ)</h1>
+
+          <div className="not-prose my-6 p-6 rounded-lg border bg-muted/40 break-words">
+            <p className="text-sm font-semibold uppercase tracking-wide text-muted-foreground mb-3">Quick answer</p>
+            <ul className="space-y-2 text-base list-disc pl-5">
+              <li>
+                <strong>Package:</strong> <code>{`\\usepackage{modiagram}`}</code>, then a{' '}
+                <code>{`\\begin{modiagram}`}</code> environment (older documents call it{' '}
+                <code>MOdiagram</code>, which still works with a deprecation warning).
+              </li>
+              <li>
+                <strong>Atoms:</strong> <code>{`\\atom[O]{left}{1s, 2s, 2p = {;pair,up,up}}`}</code> and
+                the same with <code>right</code>. An empty energy before the <code>;</code> keeps
+                the default height.
+              </li>
+              <li>
+                <strong>Molecule:</strong> <code>{`\\molecule[O$_2$]{1sMO, 2sMO, 2pMO = {;pair,pair,pair,up,up}}`}</code>,
+                then <code>\EnergyAxis</code>.
+              </li>
+              <li>
+                <strong>Anything else</strong> (d orbitals, ligand fields, three fragments): draw
+                the levels as short TikZ lines with <code>$\uparrow\downarrow$</code> nodes.
+              </li>
+            </ul>
+            <pre className="mt-4 overflow-x-auto rounded-md bg-background p-4 text-sm"><code>{`\\documentclass{article}
+\\usepackage{modiagram}
+
+\\begin{document}
+\\begin{modiagram}[names, labels]
+  \\atom[O]{left}{1s, 2s, 2p = {;pair,up,up}}
+  \\atom[O]{right}{1s, 2s, 2p = {;pair,up,up}}
+  \\molecule[O$_2$]{1sMO, 2sMO, 2pMO = {;pair,pair,pair,up,up}}
+  \\EnergyAxis
+\\end{modiagram}
+\\end{document}`}</code></pre>
+            <p className="mt-4 text-base">Plain TikZ fallback (H<sub>2</sub>), no extra package:</p>
+            <pre className="mt-2 overflow-x-auto rounded-md bg-background p-4 text-sm"><code>{`\\documentclass{standalone}
+\\usepackage{tikz}
+
+\\begin{document}
+\\begin{tikzpicture}[lvl/.style={very thick}, corr/.style={gray, dashed}]
+  \\draw[->] (-0.6,0) -- (-0.6,3.4) node[above] {$E$};
+  % atomic orbitals
+  \\draw[lvl] (0,1.5) -- (0.8,1.5) node[midway, above] {$\\uparrow$};
+  \\draw[lvl] (4,1.5) -- (4.8,1.5) node[midway, above] {$\\uparrow$};
+  \\node[below] at (0.4,1.4) {H 1s};
+  \\node[below] at (4.4,1.4) {H 1s};
+  % molecular orbitals
+  \\draw[lvl] (2,0.6) -- (2.8,0.6) node[midway, above] {$\\uparrow\\downarrow$};
+  \\draw[lvl] (2,2.6) -- (2.8,2.6);
+  \\node[below] at (2.4,0.5) {$\\sigma_{1s}$};
+  \\node[above] at (2.4,2.7) {$\\sigma^*_{1s}$};
+  % correlation lines
+  \\draw[corr] (0.8,1.5) -- (2,0.6);  \\draw[corr] (4,1.5) -- (2.8,0.6);
+  \\draw[corr] (0.8,1.5) -- (2,2.6);  \\draw[corr] (4,1.5) -- (2.8,2.6);
+\\end{tikzpicture}
+\\end{document}`}</code></pre>
+          </div>
           <p className="lead">
             A molecular orbital (MO) diagram shows how the atomic orbitals of two atoms combine
             into the orbitals of a molecule, and where the electrons go. It predicts bond
@@ -195,6 +257,7 @@ He2+: (σ1s)² (σ*1s)¹   bond order = (2 − 1)/2 = ½,  observed as a weak io
             them in σ<sub>2p</sub>.
           </p>
 
+          <div className="overflow-x-auto">
           <table>
             <thead>
               <tr>
@@ -218,6 +281,7 @@ He2+: (σ1s)² (σ*1s)¹   bond order = (2 − 1)/2 = ½,  observed as a weak io
               <tr><td>Ne<sub>2</sub></td><td>16</td><td>&hellip;(π*2p)⁴(σ*2p)²</td><td>0</td><td>&ndash;</td></tr>
             </tbody>
           </table>
+          </div>
 
           {/* ── Heteronuclear ── */}
           <h2>Heteronuclear Diatomics: CO and NO</h2>
@@ -235,7 +299,7 @@ He2+: (σ1s)² (σ*1s)¹   bond order = (2 − 1)/2 = ½,  observed as a weak io
           </p>
 
           {/* ── modiagram ── */}
-          <h2>Drawing MO Diagrams with the modiagram Package</h2>
+          <h2>Drawing Molecular Orbital Diagrams with modiagram</h2>
           <p>
             <code>modiagram</code> (CTAN, by Clemens Niederberger) draws the whole diagram from
             a description of the orbitals. It loads TikZ, <code>expl3</code> and{' '}
@@ -329,6 +393,7 @@ He2+: (σ1s)² (σ*1s)¹   bond order = (2 − 1)/2 = ½,  observed as a weak io
 \\end{modiagram}`}</code></pre>
 
           <h3>Options worth knowing</h3>
+          <div className="overflow-x-auto">
           <table>
             <thead>
               <tr>
@@ -348,6 +413,7 @@ He2+: (σ1s)² (σ*1s)¹   bond order = (2 − 1)/2 = ½,  observed as a weak io
               <tr><td><code>\AO{'{s}{0;pair}'}</code>, <code>\connect{'{AO1 & 2piy}'}</code></td><td>Add an arbitrary orbital and draw a line between two named orbital nodes</td></tr>
             </tbody>
           </table>
+          </div>
           <p>
             The orbital node names used by <code>color</code> and <code>\connect</code> are{' '}
             <code>1sleft</code>, <code>2pzright</code>, <code>1sigma</code>, <code>1sigma*</code>,{' '}
@@ -485,7 +551,8 @@ He2+: (σ1s)² (σ*1s)¹   bond order = (2 − 1)/2 = ½,  observed as a weak io
           </p>
 
           {/* ── Errors ── */}
-          <h2>Common Errors and Fixes</h2>
+          <h2>Common Errors</h2>
+          <div className="overflow-x-auto">
           <table>
             <thead>
               <tr>
@@ -495,6 +562,16 @@ He2+: (σ1s)² (σ*1s)¹   bond order = (2 − 1)/2 = ½,  observed as a weak io
               </tr>
             </thead>
             <tbody>
+              <tr>
+                <td><em>LaTeX Error: File `modiagram.sty&apos; not found</em></td>
+                <td>The package is not installed (BasicTeX and minimal TeX Live installs leave it out)</td>
+                <td><code>tlmgr install modiagram</code>, or the MiKTeX package manager; online editors with full TeX Live already have it</td>
+              </tr>
+              <tr>
+                <td>Levels pile up on top of each other, 2p drawn at the 1s height</td>
+                <td>An explicit energy of <code>0</code> in <code>{`2p = {0;up,up,up}`}</code>; the number is a height, not an offset</td>
+                <td>Leave it empty, <code>{`2p = {;up,up,up}`}</code>, or give heights that increase: 1s 0, 2s 2, 2p 5</td>
+              </tr>
               <tr>
                 <td><em>Package modiagram Error: You need to specify the left and right atom first</em></td>
                 <td><code>\molecule</code> before both <code>\atom</code> commands</td>
@@ -542,9 +619,11 @@ He2+: (σ1s)² (σ*1s)¹   bond order = (2 − 1)/2 = ½,  observed as a weak io
               </tr>
             </tbody>
           </table>
+          </div>
 
           {/* ── Quick reference ── */}
           <h2>Quick Reference</h2>
+          <div className="overflow-x-auto">
           <table>
             <thead>
               <tr>
@@ -566,9 +645,20 @@ He2+: (σ1s)² (σ*1s)¹   bond order = (2 − 1)/2 = ½,  observed as a weak io
               <tr><td>Bond order</td><td>(bonding &minus; antibonding) / 2</td></tr>
             </tbody>
           </table>
+          </div>
 
           {/* ── FAQ ── */}
           <h2>Frequently Asked Questions</h2>
+          <h3>How do I draw a molecular orbital diagram in LaTeX?</h3>
+          <p>
+            Load <code>{`\\usepackage{modiagram}`}</code> and describe the two atoms and the
+            molecule inside a <code>modiagram</code> environment:{' '}
+            <code>{`\\atom[O]{left}{1s, 2s, 2p = {;pair,up,up}}`}</code>, the same for the right
+            atom, then <code>{`\\molecule[O$_2$]{1sMO, 2sMO, 2pMO = {;pair,pair,pair,up,up}}`}</code>{' '}
+            and <code>\EnergyAxis</code>. The package draws the levels, electrons and correlation
+            lines. For orbitals it does not cover, such as d orbitals, draw the levels yourself in
+            TikZ.
+          </p>
           <h3>How do you calculate bond order from a molecular orbital diagram?</h3>
           <p>
             Count the electrons in bonding orbitals, subtract the electrons in antibonding
