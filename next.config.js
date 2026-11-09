@@ -40,6 +40,16 @@ const nextConfig = {
   // posthog-js posts to paths with trailing slashes (/e/, /flags/); a 308 to
   // the slash-less path would drop the request body. See src/lib/posthogRelay.js.
   skipTrailingSlashRedirect: true,
+  // MCP Registry domain verification (mcp-publisher login http). The file has
+  // no extension, so name its type; the registry reads the body as plain text.
+  async headers() {
+    return [
+      {
+        source: '/.well-known/mcp-registry-auth',
+        headers: [{ key: 'Content-Type', value: 'text/plain; charset=utf-8' }],
+      },
+    ]
+  },
   async rewrites() {
     return posthogRelayRewrites(process.env.NEXT_PUBLIC_POSTHOG_HOST)
   },
