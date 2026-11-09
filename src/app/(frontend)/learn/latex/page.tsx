@@ -98,9 +98,9 @@ export default async function LearnLatexPage() {
                 PDF. Commands start with <code>\</code>; arguments go in <code>{`{...}`}</code>.
               </li>
               <li>
-                <strong>Every document</strong> is <code>{`\documentclass{article}`}</code>, a
+                <strong>Every document</strong> is <code>{`\\documentclass{article}`}</code>, a
                 preamble of <code>\usepackage</code> lines, then the text between{' '}
-                <code>{`\begin{document}`}</code> and <code>{`\end{document}`}</code>.
+                <code>{`\\begin{document}`}</code> and <code>{`\\end{document}`}</code>.
               </li>
               <li>
                 <strong>Math</strong> goes between <code>$...$</code>; a blank line starts a new
@@ -164,7 +164,7 @@ $e^{i\\pi} + 1 = 0$.
           <h2>Learning Path: Learn LaTeX in 12 Steps</h2>
           <p>
             Work through these in order. Each step is a short guide with examples that compile
-            as written; by step 8 you can write a full paper, and the rest add polish.
+            as written; by step 10 you can write a full paper with citations, and the rest add polish.
           </p>
           <ol>
             <li><a href="#your-first-document">Your first document</a> (below) &ndash; the document class, preamble and body</li>

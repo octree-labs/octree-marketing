@@ -225,7 +225,7 @@ $f(n) = \\Theta(n \\log n)$                     % algorithm complexity`}</code><
           <h2>Epsilon in LaTeX (\epsilon vs \varepsilon)</h2>
           <p>
             LaTeX has two lowercase epsilons. <code>\epsilon</code> is the lunate form ϵ, a
-            closed half-moon with a bar; <code>\varepsilon</code> is the open, curly form ε that
+            half-moon with a bar; <code>\varepsilon</code> is the open, curly form ε that
             you will see in most analysis and physics books. Both are built in.
           </p>
           <pre><code>{`$\\epsilon$      % ϵ  lunate epsilon (U+03F5)
@@ -288,8 +288,8 @@ $\\varLambda$                                 % italic capital lambda (amsmath)`
           {/* ───────────────────────────── Variants ───────────────────────────── */}
           <h2>Variant Greek Letters</h2>
           <p>
-            Six lowercase letters have a second shape, selected with a <code>\var</code>{' '}
-            prefix. Both forms are correct Greek; fields simply settle on one.
+            Seven lowercase letters have a second shape, selected with a <code>\var</code>{' '}
+            prefix (<code>\varkappa</code> needs <code>amssymb</code>). Both forms are correct Greek; fields simply settle on one.
           </p>
           <div className="overflow-x-auto">
             <table>
@@ -314,7 +314,8 @@ $\\varLambda$                                 % italic capital lambda (amsmath)`
           <p>
             amsmath also defines italic capitals, <code>\varGamma</code>,{' '}
             <code>\varDelta</code> up to <code>\varOmega</code>, for when an uppercase Greek
-            letter is a variable rather than an operator.
+            letter is a variable rather than an operator. <code>amssymb</code> also adds the
+            archaic <code>\digamma</code> (ϝ, U+03DD).
           </p>
           <pre><code>{`\\usepackage{amsmath, amssymb}
 
@@ -349,6 +350,7 @@ $5\\,\\upmu\\mathrm{m}$          % 5 μm with an upright micro sign`}</code></pr
             <code>\bm</code> from the <code>bm</code> package, which handles more cases:
           </p>
           <pre><code>{`\\usepackage{amsmath}   % \\boldsymbol
+\\usepackage{amssymb}   % \\mathbb
 \\usepackage{bm}        % \\bm (optional)
 
 $\\boldsymbol{\\alpha}$  $\\boldsymbol{\\Sigma}$  $\\bm{\\mu}$
@@ -698,10 +700,10 @@ $\\tilde{f}(\\xi) = \\int_{-\\infty}^{\\infty} f(x) e^{-2\\pi i \\xi x} \\, dx$ 
 
 \\section{Maxwell's Equations}
 \\begin{align}
-  \\nabla \\cdot \\vec{E} &= \\frac{\\rho}{\\epsilon_0} \\\\
+  \\nabla \\cdot \\vec{E} &= \\frac{\\rho}{\\varepsilon_0} \\\\
   \\nabla \\cdot \\vec{B} &= 0 \\\\
   \\nabla \\times \\vec{E} &= -\\frac{\\partial \\vec{B}}{\\partial t} \\\\
-  \\nabla \\times \\vec{B} &= \\mu_0 \\vec{J} + \\mu_0 \\epsilon_0 \\frac{\\partial \\vec{E}}{\\partial t}
+  \\nabla \\times \\vec{B} &= \\mu_0 \\vec{J} + \\mu_0 \\varepsilon_0 \\frac{\\partial \\vec{E}}{\\partial t}
 \\end{align}
 
 \\section{Schrödinger Equation}
