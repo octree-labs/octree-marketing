@@ -31,8 +31,16 @@ const redirects = async () => {
     { source: '/blog/latex-table-generator', destination: '/learn/tables', permanent: true },
   ]
 
+  // The old Compile API page documented a raw compile host and an API key that
+  // never existed; the public API and MCP server are documented on /developers.
+  // /docs/compile-api/ is first stripped by trailingSlashRedirect, then lands
+  // here: two hops, no loop.
+  const retiredPages = [
+    { source: '/docs/compile-api', destination: '/developers', permanent: true },
+  ]
+
   // trailingSlashRedirect first: see src/lib/posthogRelay.js.
-  const redirects = [trailingSlashRedirect, internetExplorerRedirect, ...retiredBlogPosts]
+  const redirects = [trailingSlashRedirect, internetExplorerRedirect, ...retiredBlogPosts, ...retiredPages]
 
   return redirects
 }

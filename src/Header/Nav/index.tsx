@@ -36,7 +36,7 @@ export const HeaderNav: React.FC<{ data: HeaderType; githubStars: number | null 
           </Link>
         </Button>
         <Button asChild variant="link" size="clear" className="text-base">
-          <Link href="/docs/compile-api">Docs</Link>
+          <Link href="/developers">Developers</Link>
         </Button>
         {contactItems.map(({ link }, i) => {
           return <CMSLink key={i} {...link} appearance="link" className="text-base" />
@@ -98,7 +98,7 @@ export const HeaderNav: React.FC<{ data: HeaderType; githubStars: number | null 
               </Link>
             </Button>
             <Button asChild variant="link" size="clear" className="text-lg">
-              <Link href="/docs/compile-api">Docs</Link>
+              <Link href="/developers">Developers</Link>
             </Button>
             {contactItems.map(({ link }, i) => {
               return <CMSLink key={i} {...link} appearance="link" className="text-lg" />
