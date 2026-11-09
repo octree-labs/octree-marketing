@@ -37,7 +37,7 @@ const faq: FaqItem[] = [
   {
     question: 'Which is better, algorithm2e or algpseudocode?',
     answer:
-      'Both are widely used. algpseudocode (part of algorithmicx) has one command per line, ends each block with \\EndIf or \\EndFor, and is easy to extend. algorithm2e is a single package with its own algorithm float, braces for blocks, \\; at line ends and built-in options for vertical lines and keyword styles. Pick one and do not load both, since they define the same environment.',
+      'Both are widely used. algpseudocode (part of algorithmicx) has one command per line, ends each block with \\EndIf or \\EndFor, and is easy to extend. algorithm2e is a single package with its own algorithm float, braces for blocks, \\; at line ends and built-in options for vertical lines and keyword styles. Pick one and do not load both: they define the same commands, such as \\If, \\For and \\Return.',
   },
   {
     question: 'What is the difference between algorithmic and algpseudocode?',
@@ -448,8 +448,8 @@ shifts larger elements to the right.
             ends each block with <code>\EndIf</code> or <code>\EndFor</code>, and is easy to
             extend. algorithm2e is a single package with its own algorithm float, braces for
             blocks, <code>\;</code> at line ends and built-in options for vertical lines and
-            keyword styles. Pick one and do not load both, since they define the same
-            environment.
+            keyword styles. Pick one and do not load both: they define the same commands, such
+            as <code>\If</code>, <code>\For</code> and <code>\Return</code>.
           </p>
           <h3>What is the difference between algorithmic and algpseudocode?</h3>
           <p>

@@ -128,9 +128,9 @@ This first paragraph is indented by 2em.
 
 \\noindent This paragraph starts at the margin.
 
-\\hspace*{4em}A manual gap, like pressing Tab twice.
+\\noindent\\hspace*{4em}A manual gap of exactly 4em.
 
-\\hangindent=2em \\hangafter=1
+\\noindent\\hangindent=2em \\hangafter=1
 A hanging indent: the first line is flush left and every following line
 is indented by 2em, as in a reference list or a glossary entry.
 \\end{document}`}</code></pre>
@@ -334,7 +334,7 @@ The \\textbackslash par before the closing brace is required.\\par}
           </p>
           <pre><code>{`\\documentclass{article}
 \\begin{document}
-\\hspace*{2em}Indented by 2em, like a tab at the start of a line.
+\\noindent\\hspace*{2em}Indented by 2em, like a tab at the start of a line.
 
 Name:\\quad Ada \\qquad Year:\\quad 1843 \\hfill right margin
 
@@ -346,7 +346,7 @@ Wed \\> 14:00 \\> Lab \\\\
 \\end{tabbing}
 \\end{document}`}</code></pre>
           <p>
-            <code>tabbing</code> cannot break across columns nicely and does not draw rules; for
+            <code>tabbing</code> does not wrap long text inside a column and draws no rules; for
             real columns, a <Link href="/learn/tables">table</Link> is usually the better choice.
           </p>
 

@@ -254,7 +254,7 @@ Terms used in the book.
               </thead>
               <tbody>
                 <tr><td>Margins</td><td>Same on every page</td><td>Inner margin narrower, outer wider, mirrored on odd and even pages</td></tr>
-                <tr><td>Running headers (<code>\pagestyle&#123;headings&#125;</code>)</td><td>Same on every page</td><td>Left pages: chapter; right pages: section</td></tr>
+                <tr><td>Running headers (<code>\pagestyle&#123;headings&#125;</code>)</td><td>Same on every page</td><td>Left pages: chapter; right pages: section (article: section and subsection)</td></tr>
                 <tr><td>Page numbers</td><td>Same position</td><td>Can go on the outer edge</td></tr>
                 <tr><td><code>\cleardoublepage</code></td><td>Same as <code>\clearpage</code></td><td>Continues on the next odd page, inserting a blank page if needed</td></tr>
                 <tr><td>Use for</td><td>Reading on screen, single-sided printing</td><td>Printed and bound theses and books</td></tr>

@@ -339,7 +339,7 @@ print(top_words("the cat and the hat and the bat"))
                 <tr><td><code>firstnumber=10</code></td><td>Start numbering at 10</td></tr>
                 <tr><td><code>frame=single</code></td><td>Box around the code; <code>lines</code>, <code>tb</code>, <code>leftline</code> are lighter</td></tr>
                 <tr><td><code>breaklines=true</code></td><td>Wrap long lines instead of running into the margin</td></tr>
-                <tr><td><code>showstringspaces=false</code></td><td>Hide the &blank; marks inside strings</td></tr>
+                <tr><td><code>showstringspaces=false</code></td><td>Hide the &#9251; marks inside strings</td></tr>
                 <tr><td><code>tabsize=4</code></td><td>Width of a tab character</td></tr>
                 <tr><td><code>escapeinside=&#123;(*&#125;&#123;*)&#125;</code></td><td>Run LaTeX inside <code>(* ... *)</code> in the code, e.g. math</td></tr>
                 <tr><td><code>morekeywords=&#123;self&#125;</code></td><td>Highlight extra words as keywords</td></tr>
@@ -450,7 +450,7 @@ Plain monospace without verbatim: \\texttt{x\\_max = 10\\%}.
                   <td>Add <code>extendedchars=true</code> plus a <code>literate</code> mapping (below), or compile with XeLaTeX/LuaLaTeX, or use minted</td>
                 </tr>
                 <tr>
-                  <td><em>LaTeX Error: \verb illegal in argument</em>, or <em>Missing $ inserted</em> from code in a footnote</td>
+                  <td><em>LaTeX Error: \verb illegal in command argument</em>, or <em>Missing $ inserted</em> from code in a footnote</td>
                   <td><code>\verb</code> or a listing inside <code>\section</code>, <code>\footnote</code>, <code>\caption</code> or a macro argument</td>
                   <td>Use <code>\texttt</code> with escaped characters there, or <code>\lstinline</code> outside the argument</td>
                 </tr>
@@ -460,7 +460,7 @@ Plain monospace without verbatim: \\texttt{x\\_max = 10\\%}.
                   <td><code>breaklines=true</code> in <code>\lstset</code> (or <code>breaklines</code> for minted)</td>
                 </tr>
                 <tr>
-                  <td>Odd &blank; symbols in strings</td>
+                  <td>Odd &#9251; symbols in strings</td>
                   <td>listings marks spaces inside strings</td>
                   <td><code>showstringspaces=false</code></td>
                 </tr>
@@ -481,7 +481,7 @@ Plain monospace without verbatim: \\texttt{x\\_max = 10\\%}.
 \\usepackage{listings}
 \\lstset{
   extendedchars=true,
-  literate={á}{{\\'a}}1 {é}{{\\'e}}1 {ü}{{\\"u}}1 {ö}{{\\"o}}1 {ñ}{{\\~n}}1
+  literate={á}{{\\'a}}1 {é}{{\\'e}}1 {ü}{{\\"u}}1 {ö}{{\\"o}}1 {ñ}{{\\~n}}1 {ú}{{\\'u}}1
 }
 
 \\begin{document}
@@ -490,8 +490,8 @@ nombre = "José Núñez"   # señal, über, schön
 \\end{lstlisting}
 \\end{document}`}</code></pre>
           <p>
-            Only the characters listed are mapped, so add every one your code contains (here{' '}
-            <code>ú</code> and <code>Ñ</code> would still need entries under pdfLaTeX). With
+            Only the characters listed are mapped, so add every one your code contains (an <code>Ñ</code> or{' '}
+            <code>ç</code> here would still need its own entry under pdfLaTeX). With
             XeLaTeX or LuaLaTeX, or with minted, no mapping is needed.
           </p>
 
