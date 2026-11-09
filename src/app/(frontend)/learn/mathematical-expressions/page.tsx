@@ -14,25 +14,25 @@ import { LearnSchema } from '@/components/Learn/schema'
 export const dynamic = 'force-static'
 export const revalidate = 3600
 
-const breadcrumbs = getLearnBreadcrumbs('Mathematical Expressions', 'mathematical-expressions')
+const breadcrumbs = getLearnBreadcrumbs('Inline and Display Math', 'mathematical-expressions')
 const breadcrumbSchema = generateBreadcrumbSchema(breadcrumbs)
 
 const page = {
   slug: 'mathematical-expressions',
-  title: 'Mathematical Expressions in LaTeX: Equations, Fractions, Roots and Cases',
-  seoTitle: 'Mathematical Expressions in LaTeX: Math Mode Guide',
-  description: 'Write math in LaTeX: inline vs display math, fractions, nth roots, piecewise functions with cases and dcases, brackets, align, numbering and errors.',
-  keywords: 'latex math, latex equation, latex math mode, latex inline math, latex display math, latex fraction, latex square root, latex nth root, latex brackets, latex align, latex equation numbering, latex amsmath, latex cases, piecewise function latex, latex dcases, latex rcases, latex mathstrut, latex displaystyle, how to write equations in latex, latex math errors',
+  title: 'Inline and Display Math in LaTeX: $…$, \\[…\\] and equation',
+  seoTitle: 'Inline and Display Math in LaTeX: $…$ and \\[…\\]',
+  description: 'LaTeX inline math with $…$ or \\(…\\), display math with \\[…\\] and equation, why $$ is discouraged, math syntax basics, \\text in math and common errors.',
+  keywords: 'latex inline, latex in line, latex inline math, inline math latex, latex inline equation, latex maths, latex math syntax, latex display math, latex equation vs equation*, latex displaymath, latex double dollar, latex displaystyle inline, latex text in math, latex math, latex equation, latex math mode, latex fraction, latex square root, latex nth root, latex brackets, latex align, latex equation numbering, latex amsmath, latex cases, piecewise function latex, latex dcases, latex rcases, latex mathstrut, latex displaystyle, how to write equations in latex, latex math errors',
 }
 
 /** Last content update, used for dateModified in the article schema. */
-const LAST_UPDATED = '2026-10-18'
+const LAST_UPDATED = '2026-11-09'
 
 const faq: FaqItem[] = [
   {
-    question: 'How do I write a piecewise function in LaTeX?',
+    question: 'How do you write inline math in LaTeX?',
     answer:
-      'Use the cases environment from amsmath inside display math: f(x) = \\begin{cases} x^2 & \\text{if } x \\geq 0 \\\\ -x^2 & \\text{if } x < 0 \\end{cases}. The & separates the value from its condition and \\\\ starts a new case. If the cases contain fractions, use dcases from mathtools so they are set at full size.',
+      'Put the formula between single dollar signs, $a^2 + b^2 = c^2$, or between \\( and \\), as in \\(a^2 + b^2 = c^2\\). Both keep the math in line with the text at text size. No package is needed.',
   },
   {
     question: 'What is the difference between $...$ and \\[...\\]?',
@@ -42,22 +42,22 @@ const faq: FaqItem[] = [
   {
     question: 'Should I use $$...$$ in LaTeX?',
     answer:
-      'No. $$...$$ is plain TeX syntax. In LaTeX it ignores the fleqn class option and is not understood by amsmath, so \\tag and \\qedhere do not work inside it. Use \\[...\\] for an unnumbered display and equation for a numbered one.',
+      'No. $$...$$ is plain TeX syntax. In LaTeX it ignores the fleqn class option and is not understood by amsmath, so \\tag does not work inside it. Use \\[...\\] for an unnumbered display and equation for a numbered one.',
   },
   {
-    question: 'How do I write an nth root in LaTeX?',
+    question: 'What is the difference between equation and equation*?',
     answer:
-      'Give \\sqrt an optional argument: \\sqrt[3]{x} is the cube root and \\sqrt[n]{x} the nth root. If the index sits too far from the radical, amsmath lets you nudge it with \\sqrt[\\leftroot{-2}\\uproot{2}n]{x}.',
+      'equation prints a number next to the display and accepts a \\label for \\ref and \\eqref. equation* (from amsmath) is the same display without a number, equivalent to \\[...\\]. Both hold a single line; use align for several lines.',
   },
   {
-    question: 'Why do my fractions look tiny inside a sentence?',
+    question: 'How do I write text inside a LaTeX equation?',
     answer:
-      'Inline math uses text style, which shrinks fractions, sums and integrals to fit the line. Use \\dfrac{a}{b} or \\displaystyle for a full-size fraction inline, or write a/b, which is usually more readable in running text anyway.',
+      'Load amsmath and wrap the words in \\text{...}, as in $f(x) = 0 \\text{ for all } x$. Put spaces inside the braces, because spaces in math mode are ignored. Without \\text the letters are set as italic variables run together.',
   },
   {
-    question: 'What does "Missing $ inserted" mean?',
+    question: 'What does “Missing $ inserted” mean?',
     answer:
-      'LaTeX met a math-only command or character (such as ^, _, \\frac or \\alpha) outside math mode, or an opening $ was never closed. Wrap the expression in $...$ or \\[...\\], and check that every $ has a partner.',
+      'LaTeX met a math-only command or character (such as ^, _, \\frac or \\alpha) outside math mode, an opening $ was never closed, or a display contains a blank line. Wrap the expression in $...$ or \\[...\\], check that every $ has a partner, and remove blank lines inside displays.',
   },
 ]
 
@@ -86,81 +86,185 @@ export default async function MathematicalExpressionsPage() {
         </div>
 
         <article className="prose prose-lg dark:prose-invert max-w-4xl mx-auto">
-          <h1>Mathematical Expressions in LaTeX: Equations, Fractions, Roots and Cases</h1>
+          <h1>Inline and Display Math in LaTeX: $…$, \[…\] and equation</h1>
+
+          <div className="not-prose my-6 p-6 rounded-lg border bg-muted/40 break-words">
+            <p className="text-sm font-semibold uppercase tracking-wide text-muted-foreground mb-3">Quick answer</p>
+            <ul className="space-y-2 text-base list-disc pl-5">
+              <li>
+                <strong>Inline math (in line with the text):</strong> <code>{`$a^2 + b^2 = c^2$`}</code>{' '}
+                or <code>{`\\(a^2 + b^2 = c^2\\)`}</code>.
+              </li>
+              <li>
+                <strong>Display math, unnumbered:</strong> <code>{`\\[ E = mc^2 \\]`}</code>, on its own
+                centred line.
+              </li>
+              <li>
+                <strong>Display math, numbered:</strong>{' '}
+                <code>{`\\begin{equation} E = mc^2 \\end{equation}`}</code>; <code>equation*</code>{' '}
+                (amsmath) for no number.
+              </li>
+              <li>
+                <strong>Do not use</strong> <code>{`$$ ... $$`}</code>: it is plain TeX and breaks{' '}
+                <code>fleqn</code>, <code>\tag</code> and amsmath spacing.
+              </li>
+              <li>
+                <strong>Words inside math:</strong> <code>{`\\text{if } x > 0`}</code> (amsmath).
+              </li>
+              <li>
+                <strong>Full-size fraction inline:</strong> <code>{`$\\displaystyle\\frac{1}{2}$`}</code>{' '}
+                or <code>{`$\\dfrac{1}{2}$`}</code>.
+              </li>
+            </ul>
+          </div>
           <p className="lead">
-            LaTeX is the gold standard for typesetting mathematical expressions. Whether you&apos;re
-            writing a simple equation or a multi-page derivation, LaTeX gives you precise control
-            over how your math looks. This guide covers everything from inline and display math,
-            fractions and nth roots, piecewise functions with <code>cases</code>, brackets,
-            aligned multi-line equations and equation numbering, to spacing, text inside math,
-            the essential amsmath package, and the errors you will meet along the way.
+            LaTeX has two math modes. Inline math sits inside a sentence and is written between{' '}
+            <code>$...$</code> or <code>\(...\)</code>; display math stands on its own line and is
+            written with <code>\[...\]</code> or, when it needs a number, the <code>equation</code>{' '}
+            environment. This guide covers both modes and the basic LaTeX math syntax, then
+            fractions, roots, piecewise functions, brackets, aligned equations, numbering, spacing,
+            text inside math, and the errors you will meet along the way.
           </p>
 
           {/* ------------------------------------------------------------------ */}
-          <h2>Inline vs Display Math</h2>
+          <h2>Inline Math in LaTeX</h2>
           <p>
-            LaTeX provides two primary ways to include mathematics in your document:
-            <strong>inline math</strong> and <strong>display math</strong>. Choosing the right
-            mode is important because it affects both the appearance of the formula and the flow
-            of your text.
+            To put math in line with your text, wrap it in single dollar signs,{' '}
+            <code>$...$</code>, or in <code>\(...\)</code>. The formula is set at text size inside
+            the paragraph and the line breaks around it like any other word:
+          </p>
+          <pre><code>{`\\documentclass{article}
+\\begin{document}
+
+The Pythagorean theorem states that $a^2 + b^2 = c^2$.
+
+% The same thing with \\( ... \\)
+The Pythagorean theorem states that \\(a^2 + b^2 = c^2\\).
+
+Let $f(x) = x^2$ and $n \\geq 1$; then $f(n) \\geq n$.
+
+\\end{document}`}</code></pre>
+          <p>
+            The two forms produce identical output. <code>\(...\)</code> has one practical
+            advantage: the opening and closing commands differ, so a forgotten <code>\)</code> is
+            caught at the next <code>\(</code> with <em>Bad math environment delimiter</em>. A
+            forgotten <code>$</code> silently pairs with the next <code>$</code>, and the error
+            shows up lines later. Most people still type <code>$</code> because it is shorter;
+            either is correct.
+          </p>
+          <p>
+            Inline math is set in <em>text style</em>: fractions shrink, and limits on sums and
+            integrals move to the side so the formula fits the line height. That is why{' '}
+            <code>{`$\\frac{1}{2}$`}</code> and <code>{`$\\sum_{i=1}^n i$`}</code> look smaller in a
+            sentence than in a display.
           </p>
 
-          <h3>Inline Math: $...$ and \(...\)</h3>
+          <h3>\displaystyle inline</h3>
           <p>
-            Inline math is placed directly within a line of text using dollar signs
-            (<code>$...$</code>) or <code>\(...\)</code>. It keeps the formula compact so it
-            doesn&apos;t break the paragraph flow.
+            To force full-size pieces inside a sentence, start the formula with{' '}
+            <code>\displaystyle</code>, or use <code>\dfrac</code> for a single fraction. The
+            reverse, <code>\textstyle</code> and <code>\tfrac</code>, shrinks pieces inside a
+            display:
           </p>
-          <pre><code>{`The Pythagorean theorem states that $a^2 + b^2 = c^2$.
+          <pre><code>{`\\documentclass{article}
+\\usepackage{amsmath}   % for \\dfrac and \\tfrac
+\\begin{document}
 
-% Equivalent using \\(...\\)
-The Pythagorean theorem states that \\(a^2 + b^2 = c^2\\).`}</code></pre>
-          <p>
-            The two forms are equivalent. <code>\(...\)</code> has one practical advantage:
-            because the opening and closing commands differ, a forgotten <code>\)</code> is caught
-            at the next <code>\(</code> (<em>Bad math environment delimiter</em>), whereas a
-            forgotten <code>$</code> silently pairs with the next <code>$</code> and the error
-            surfaces somewhere else. Inline mode automatically reduces the size of large operators,
-            fractions, and limits so the formula fits within the line height. For instance, a
-            fraction like <code>$\frac&#123;1&#125;&#123;2&#125;$</code> will appear smaller than
-            in display mode.
-          </p>
+The series $\\displaystyle\\sum_{n=1}^{\\infty} \\frac{1}{n^2}$ converges.
 
-          <h3>Display Math: \[...\] and equation</h3>
-          <p>
-            Display math places the expression on its own line, centred and with generous
-            vertical spacing. Use <code>\[...\]</code> for an unnumbered display and the{' '}
-            <code>equation</code> environment when you need a number.
-          </p>
-          <pre><code>{`\\[
-  E = mc^2
+The ratio $\\dfrac{a}{b}$ is large; the exponent $2^{\\tfrac{n}{2}}$ is small.
+
+\\[
+  \\textstyle\\frac{1}{2} \\qquad \\textstyle\\sum_{i=1}^{n} \\qquad \\textstyle\\int_0^1
 \\]
 
-\\begin{equation}
-  E = mc^2        % numbered (1)
-\\end{equation}
-
-\\begin{equation*}
-  E = mc^2        % unnumbered, same as \\[...\\] with amsmath
-\\end{equation*}`}</code></pre>
+\\end{document}`}</code></pre>
           <p>
-            Display mode renders fractions, sums, and integrals at full size, making them
-            easier to read. Use it for any expression you want the reader to focus on. Do not
-            leave a blank line between the text and the display: a display belongs to the
-            paragraph before it, and a blank line adds an unwanted paragraph break and extra
-            space.
+            Use <code>\displaystyle</code> inline sparingly: it makes the line taller and pushes
+            the lines around it apart. If an inline formula needs display style, it usually wants
+            to be a display.
           </p>
 
-          <h3>Why not $$...$$</h3>
+          {/* ------------------------------------------------------------------ */}
+          <h2>Display Math in LaTeX: \[...\], equation and displaymath</h2>
           <p>
-            You will see <code>$$...$$</code> in older documents and on the web. It is plain TeX
-            syntax, and in LaTeX it misbehaves in three ways: it ignores the <code>fleqn</code>{' '}
-            class option, so the display stays centred while every <code>\[...\]</code> moves
-            to the left margin; amsmath does not know about it, so <code>\tag</code> stops with{' '}
-            <em>\tag not allowed here</em> and <code>\qedhere</code> puts the QED box in the wrong
-            place; and it is unchecked, so a stray <code>$$</code> inside other math goes
-            unnoticed where <code>\[</code> would report <em>Bad math environment delimiter</em>.
-            Use <code>\[...\]</code> instead; it costs the same number of keystrokes.
+            Display math puts the formula on its own line, centred, with space above and below.
+            Fractions, sums and integrals are set at full size. There are four ways to write it:
+          </p>
+
+          <div className="overflow-x-auto">
+          <table>
+            <thead>
+              <tr>
+                <th>Syntax</th>
+                <th>Numbered</th>
+                <th>Needs</th>
+                <th>Use it for</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td><code>{`\\[ ... \\]`}</code></td><td>No</td><td>nothing</td><td>Most unnumbered displays</td></tr>
+              <tr><td><code>{`\\begin{displaymath} ... \\end{displaymath}`}</code></td><td>No</td><td>nothing</td><td>Same as <code>\[...\]</code>, long form</td></tr>
+              <tr><td><code>{`\\begin{equation} ... \\end{equation}`}</code></td><td>Yes</td><td>nothing</td><td>Equations you will refer back to</td></tr>
+              <tr><td><code>{`\\begin{equation*} ... \\end{equation*}`}</code></td><td>No</td><td><code>amsmath</code></td><td>An unnumbered <code>equation</code>, e.g. while drafting</td></tr>
+              <tr><td><code>{`$$ ... $$`}</code></td><td>No</td><td>nothing</td><td>Nothing: plain TeX, avoid in LaTeX</td></tr>
+            </tbody>
+          </table>
+          </div>
+
+          <pre><code>{`\\documentclass{article}
+\\usepackage{amsmath}
+\\begin{document}
+
+An unnumbered display:
+\\[
+  E = mc^2
+\\]
+and the same with the long form:
+\\begin{displaymath}
+  E = mc^2
+\\end{displaymath}
+
+A numbered display:
+\\begin{equation}
+  E = mc^2 \\label{eq:energy}
+\\end{equation}
+As \\eqref{eq:energy} shows, mass and energy are equivalent.
+
+\\begin{equation*}
+  E = mc^2   % no number, amsmath
+\\end{equation*}
+
+\\end{document}`}</code></pre>
+          <p>
+            Do not leave a blank line before or inside a display. A display belongs to the
+            paragraph around it, so a blank line before <code>\[</code> adds an unwanted paragraph
+            break and extra space, and a blank line inside it stops the compile with{' '}
+            <em>Missing $ inserted</em>.
+          </p>
+
+          <h3>equation vs equation*</h3>
+          <p>
+            <code>equation</code> numbers the display, (1), (2) and so on, and lets you attach a{' '}
+            <code>\label</code> for <code>\ref</code> or <code>\eqref</code>.{' '}
+            <code>equation*</code> is the same environment without the number; it comes from
+            amsmath and gives the same result as <code>\[...\]</code>. Switching between the two is
+            a one-character change, which makes <code>equation*</code> handy for equations whose
+            number you may need later. Both hold exactly one line; for several lines use{' '}
+            <code>align</code> or <code>split</code> (see{' '}
+            <Link href="/learn/multiline-equations">multiline equations</Link>).
+          </p>
+
+          <h3>Why $$...$$ is discouraged</h3>
+          <p>
+            You will see <code>$$...$$</code> in older documents and on the web, and it does
+            compile. It is plain TeX syntax, though, and in LaTeX it misbehaves in three ways: it
+            ignores the <code>fleqn</code> class option, so that display stays centred while every{' '}
+            <code>\[...\]</code> moves to the left margin; amsmath does not know about it, so{' '}
+            <code>\tag</code> stops with <em>\tag not allowed here</em> and the spacing above the
+            display can come out wrong; and it is unchecked, so a stray <code>$$</code> goes
+            unnoticed where <code>\[</code> would report an error. Use <code>\[...\]</code>; it is
+            the same number of keystrokes.
           </p>
           <pre><code>{`% Avoid
 $$ E = mc^2 $$
@@ -168,28 +272,71 @@ $$ E = mc^2 $$
 % Prefer
 \\[ E = mc^2 \\]`}</code></pre>
 
-          <h3>\displaystyle, \textstyle and spacing differences</h3>
-          <p>
-            Inline math is set in <em>text style</em> and display math in <em>display style</em>.
-            The difference is more than size: in display style fractions use full-size numerators
-            and denominators, big operators grow and put their limits above and below, and the
-            spacing around relations is wider. You can switch styles by hand when the default
-            is wrong for the context:
-          </p>
-          <pre><code>{`% Full-size pieces inside a sentence
-The series $\\displaystyle\\sum_{n=1}^{\\infty} \\frac{1}{n^2}$ converges.
+          <h3>When to use each</h3>
+          <ul>
+            <li><strong>Inline math</strong>: short expressions in running text, such as &ldquo;where <code>$n$</code> is a positive integer&rdquo;.</li>
+            <li><strong>Display math</strong>: important equations, long formulas, or anything the reader should study.</li>
+            <li><strong>Numbered display</strong> (<code>equation</code>, <code>align</code>): anything you will refer back to.</li>
+          </ul>
 
-% Inline-size pieces inside a display
+          {/* ------------------------------------------------------------------ */}
+          <h2>LaTeX Math Syntax Basics</h2>
+          <p>
+            Inside either math mode the same rules apply. These cover most of what you type in
+            LaTeX maths:
+          </p>
+          <ul>
+            <li><strong>Superscripts and subscripts:</strong> <code>x^2</code>, <code>a_i</code>. Braces group more than one character: <code>{`x^{10}`}</code>, <code>{`a_{ij}`}</code>.</li>
+            <li><strong>Commands start with a backslash:</strong> <code>\alpha</code>, <code>\infty</code>, <code>\leq</code>, <code>\sin</code>. Arguments go in braces: <code>{`\\frac{a}{b}`}</code>, <code>{`\\sqrt{x}`}</code>.</li>
+            <li><strong>Spaces are ignored:</strong> <code>$a+b$</code> and <code>$a + b$</code> are identical. LaTeX spaces operators and relations itself; use <code>\,</code> or <code>\quad</code> to add space.</li>
+            <li><strong>Letters are variables:</strong> each letter is set in italic as a separate symbol, so words need <code>\text</code> and function names need <code>\sin</code>, <code>\log</code> or <code>\operatorname</code>.</li>
+            <li><strong>Reserved characters:</strong> <code>{`{ }`}</code> group, <code>&amp;</code> aligns, <code>%</code> starts a comment. Write <code>{`\\{ \\}`}</code>, <code>\&amp;</code>, <code>\%</code> to print them.</li>
+          </ul>
+          <pre><code>{`\\documentclass{article}
+\\usepackage{amsmath}
+\\begin{document}
+
+Scripts: $x^2$, $x^{10}$, $a_{ij}$, $e^{-x^2}$, $x_1^2$.
+
+Commands: $\\alpha + \\beta \\leq \\infty$, $\\sin x$, $\\frac{a}{b}$, $\\sqrt{2}$.
+
+Spacing is automatic: $a+b=c$ and $a + b = c$ look the same.
+
+Text in math: $f(x) = 0 \\text{ for all } x$.
+
+Literal characters: $\\{1, 2, 3\\}$, $50\\%$.
+
+\\end{document}`}</code></pre>
+
+          <h3>Text inside math: \text&#123;&#125;</h3>
+          <p>
+            Typed words inside <code>$...$</code> come out as italic variables run together
+            (<em>forall</em> instead of &ldquo;for all&rdquo;). Wrap them in <code>\text</code>{' '}
+            from amsmath, which uses the surrounding text font and scales correctly in sub- and
+            superscripts. Put the spaces inside the braces, because spaces in math are ignored:
+          </p>
+          <pre><code>{`\\documentclass{article}
+\\usepackage{amsmath}
+\\begin{document}
+
 \\[
-  \\textstyle\\frac{1}{2} \\qquad \\textstyle\\sum_{i=1}^{n} \\qquad \\textstyle\\int_0^1
+  f(x) = x^2 \\quad \\text{for all } x \\geq 0
 \\]
 
-% \\dfrac and \\tfrac are shortcuts for a single fraction
-The ratio $\\dfrac{a}{b}$ is large; the exponent $2^{\\tfrac{n}{2}}$ is small.`}</code></pre>
+% \\text inside a subscript scales down with it
+\\[
+  v_{\\text{max}} = 3 \\text{ m/s}
+\\]
+
+% Math inside \\text goes back in $...$
+\\[
+  g(n) = 1 \\quad \\text{if $n$ is prime}
+\\]
+
+\\end{document}`}</code></pre>
           <p>
-            Use <code>\displaystyle</code> inline with care: it makes the line taller and pushes
-            the lines around it apart. If an inline formula needs display style, it probably
-            wants to be a display.
+            <code>\mathrm</code> and <code>\mbox</code> are alternatives, covered under Text
+            Inside Math further down.
           </p>
 
           <h3>Keeping heights consistent with \mathstrut</h3>
@@ -204,13 +351,6 @@ The ratio $\\dfrac{a}{b}$ is large; the exponent $2^{\\tfrac{n}{2}}$ is small.`}
   \\qquad
   \\sqrt{\\mathstrut a} + \\sqrt{\\mathstrut b} + \\sqrt{\\mathstrut y}   % even
 \\]`}</code></pre>
-
-          <h3>When to Use Each</h3>
-          <ul>
-            <li><strong>Inline math</strong> – short expressions referenced in running text, e.g. &quot;where <code>$n$</code> is a positive integer.&quot;</li>
-            <li><strong>Display math</strong> – important equations, long formulas, or anything you want the reader to study carefully.</li>
-            <li><strong>Numbered display</strong> (<code>equation</code>, <code>align</code>) – anything you will refer back to.</li>
-          </ul>
 
           {/* ------------------------------------------------------------------ */}
           <h2>Fractions</h2>
@@ -651,6 +791,7 @@ As shown in Equation~\\ref{eq:einstein}, energy and mass are equivalent.`}</code
             manual adjustments. Here are the spacing commands available in math mode, from
             thinnest to widest:
           </p>
+          <div className="overflow-x-auto">
           <table>
             <thead>
               <tr>
@@ -692,6 +833,7 @@ As shown in Equation~\\ref{eq:einstein}, energy and mass are equivalent.`}</code
               </tr>
             </tbody>
           </table>
+          </div>
 
           <pre><code>{`\\[
   \\int_0^1 f(x) \\, dx            % thin space before dx
@@ -749,6 +891,7 @@ As shown in Equation~\\ref{eq:einstein}, energy and mass are equivalent.`}</code
           <p>
             Here is a quick-reference table of frequently used LaTeX math commands:
           </p>
+          <div className="overflow-x-auto">
           <table>
             <thead>
               <tr>
@@ -863,6 +1006,7 @@ As shown in Equation~\\ref{eq:einstein}, energy and mass are equivalent.`}</code
               </tr>
             </tbody>
           </table>
+          </div>
 
           {/* ------------------------------------------------------------------ */}
           <h2>The amsmath Package</h2>
@@ -898,6 +1042,11 @@ As shown in Equation~\\ref{eq:einstein}, energy and mass are equivalent.`}</code
 
           {/* ------------------------------------------------------------------ */}
           <h2>Common Errors</h2>
+          <p>
+            Most math errors come from a <code>$</code> that is missing, extra or in the wrong
+            place. The message, the cause and the fix:
+          </p>
+          <div className="overflow-x-auto">
           <table>
             <thead>
               <tr>
@@ -914,8 +1063,18 @@ As shown in Equation~\\ref{eq:einstein}, energy and mass are equivalent.`}</code
               </tr>
               <tr>
                 <td><em>Display math should end with $$</em></td>
-                <td>A <code>$</code> closes a display opened with <code>\[</code> or <code>$$</code></td>
-                <td>Close <code>\[</code> with <code>\]</code></td>
+                <td>A single <code>$</code> inside a display opened with <code>\[</code> or <code>$$</code>, often a stray <code>$</code> pasted into an equation</td>
+                <td>Remove the inner <code>$</code>; close <code>\[</code> with <code>\]</code> and <code>$$</code> with <code>$$</code> (better: switch to <code>\[...\]</code>)</td>
+              </tr>
+              <tr>
+                <td><em>Missing $ inserted</em> inside <code>equation</code> or <code>\[...\]</code></td>
+                <td>A blank line inside the display ends the paragraph, and math cannot span paragraphs</td>
+                <td>Delete the blank line, or put a <code>%</code> on it to keep the source readable</td>
+              </tr>
+              <tr>
+                <td><em>\tag not allowed here</em></td>
+                <td><code>\tag</code> inside <code>$$...$$</code></td>
+                <td>Use <code>equation</code> or <code>\[...\]</code></td>
               </tr>
               <tr>
                 <td><em>Bad math environment delimiter</em></td>
@@ -944,8 +1103,8 @@ As shown in Equation~\\ref{eq:einstein}, energy and mass are equivalent.`}</code
               </tr>
               <tr>
                 <td><em>Extra alignment tab has been changed to \cr</em></td>
-                <td>Too many <code>&amp;</code> in an <code>align</code> or <code>cases</code> row</td>
-                <td>One <code>&amp;</code> per alignment point; use <code>alignat</code> or <code>aligned</code> for more columns</td>
+                <td>Too many <code>&amp;</code> in a <code>cases</code> or <code>split</code> row, any <code>&amp;</code> in <code>gather</code>, or more columns than a matrix or <code>array</code> declares</td>
+                <td>One <code>&amp;</code> per row in <code>cases</code> and <code>split</code>; use <code>align</code> or <code>alignat</code> for several alignment columns</td>
               </tr>
               <tr>
                 <td><em>Misplaced alignment tab character &amp;</em></td>
@@ -974,16 +1133,16 @@ As shown in Equation~\\ref{eq:einstein}, energy and mass are equivalent.`}</code
               </tr>
             </tbody>
           </table>
+          </div>
 
           {/* ------------------------------------------------------------------ */}
           <h2>Frequently Asked Questions</h2>
-          <h3>How do I write a piecewise function in LaTeX?</h3>
+          <h3>How do you write inline math in LaTeX?</h3>
           <p>
-            Use the <code>cases</code> environment from amsmath inside display math:{' '}
-            <code>{`f(x) = \\begin{cases} x^2 & \\text{if } x \\geq 0 \\\\ -x^2 & \\text{if } x < 0 \\end{cases}`}</code>.
-            The <code>&amp;</code> separates the value from its condition and <code>\\</code>{' '}
-            starts a new case. If the cases contain fractions, use <code>dcases</code> from
-            mathtools so they are set at full size.
+            Put the formula between single dollar signs, <code>{`$a^2 + b^2 = c^2$`}</code>, or
+            between <code>\(</code> and <code>\)</code>, as in{' '}
+            <code>{`\\(a^2 + b^2 = c^2\\)`}</code>. Both keep the math in line with the text at text
+            size. No package is needed.
           </p>
           <h3>What is the difference between $...$ and \[...\]?</h3>
           <p>
@@ -996,30 +1155,31 @@ As shown in Equation~\\ref{eq:einstein}, energy and mass are equivalent.`}</code
           <p>
             No. <code>$$...$$</code> is plain TeX syntax. In LaTeX it ignores the{' '}
             <code>fleqn</code> class option and is not understood by amsmath, so{' '}
-            <code>\tag</code> and <code>\qedhere</code> do not work inside it. Use{' '}
-            <code>\[...\]</code> for an unnumbered display and{' '}
-            <code>equation</code> for a numbered one.
+            <code>\tag</code> does not work inside it. Use <code>\[...\]</code> for an unnumbered
+            display and <code>equation</code> for a numbered one.
           </p>
-          <h3>How do I write an nth root in LaTeX?</h3>
+          <h3>What is the difference between equation and equation*?</h3>
           <p>
-            Give <code>\sqrt</code> an optional argument: <code>{`\\sqrt[3]{x}`}</code> is the cube
-            root and <code>{`\\sqrt[n]{x}`}</code> the nth root. If the index sits too far from the
-            radical, amsmath lets you nudge it with{' '}
-            <code>{`\\sqrt[\\leftroot{-2}\\uproot{2}n]{x}`}</code>.
+            <code>equation</code> prints a number next to the display and accepts a{' '}
+            <code>\label</code> for <code>\ref</code> and <code>\eqref</code>.{' '}
+            <code>equation*</code> (from amsmath) is the same display without a number, equivalent
+            to <code>\[...\]</code>. Both hold a single line; use <code>align</code> for several
+            lines.
           </p>
-          <h3>Why do my fractions look tiny inside a sentence?</h3>
+          <h3>How do I write text inside a LaTeX equation?</h3>
           <p>
-            Inline math uses text style, which shrinks fractions, sums and integrals to fit the
-            line. Use <code>{`\\dfrac{a}{b}`}</code> or <code>\displaystyle</code> for a full-size
-            fraction inline, or write <code>a/b</code>, which is usually more readable in running
-            text anyway.
+            Load amsmath and wrap the words in <code>{`\\text{...}`}</code>, as in{' '}
+            <code>{`$f(x) = 0 \\text{ for all } x$`}</code>. Put spaces inside the braces, because
+            spaces in math mode are ignored. Without <code>\text</code> the letters are set as
+            italic variables run together.
           </p>
           <h3>What does &ldquo;Missing $ inserted&rdquo; mean?</h3>
           <p>
             LaTeX met a math-only command or character (such as <code>^</code>, <code>_</code>,{' '}
-            <code>\frac</code> or <code>\alpha</code>) outside math mode, or an opening{' '}
-            <code>$</code> was never closed. Wrap the expression in <code>$...$</code> or{' '}
-            <code>\[...\]</code>, and check that every <code>$</code> has a partner.
+            <code>\frac</code> or <code>\alpha</code>) outside math mode, an opening{' '}
+            <code>$</code> was never closed, or a display contains a blank line. Wrap the
+            expression in <code>$...$</code> or <code>\[...\]</code>, check that every{' '}
+            <code>$</code> has a partner, and remove blank lines inside displays.
           </p>
 
           {/* ------------------------------------------------------------------ */}

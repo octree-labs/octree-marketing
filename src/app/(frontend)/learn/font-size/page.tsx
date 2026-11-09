@@ -1,6 +1,6 @@
 import type { Metadata } from 'next/types'
 
-import { learnMetadata } from '@/utilities/learnMetadata'
+import { learnMetadata, type FaqItem } from '@/utilities/learnMetadata'
 import Link from 'next/link'
 import { buttonVariants } from '@/components/ui/button'
 import React from 'react'
@@ -14,19 +14,66 @@ import { LearnSchema } from '@/components/Learn/schema'
 export const dynamic = 'force-static'
 export const revalidate = 3600
 
-const breadcrumbs = getLearnBreadcrumbs('LaTeX Font Size', 'font-size')
+const breadcrumbs = getLearnBreadcrumbs('Font Size in LaTeX', 'font-size')
 const breadcrumbSchema = generateBreadcrumbSchema(breadcrumbs)
 
 const page = {
   slug: 'font-size',
-  title: 'LaTeX Font Size: Commands, Document Options and \\fontsize',
-  seoTitle: 'LaTeX Font Size: Commands, Options and \\fontsize',
-  description: 'How to change font size in LaTeX: the ten size commands from \\tiny to \\Huge with their point sizes, the 10pt/11pt/12pt class options and extsizes, exact sizes with \\fontsize and \\selectfont, sizing captions, footnotes, headers and section titles, font size in math and Beamer, and fixing "font shape not available" warnings.',
-  keywords: 'latex font size, fontsize latex, latex text sizes, latex font size command, latex change font size, latex tiny, latex huge, latex large, latex small, latex fontsize selectfont, latex 14pt, extsizes, extarticle, latex caption font size, latex footnote size, latex section font size, latex math font size, beamer font size, relsize, latex font shape not available',
+  title: 'Font Size in LaTeX: \\tiny to \\Huge, Document Size and Custom Sizes',
+  seoTitle: 'Font Size in LaTeX: \\tiny to \\Huge and \\fontsize',
+  description: 'Change font size in LaTeX: \\documentclass[12pt], ten commands from \\tiny to \\Huge with point sizes, \\fontsize{}{}\\selectfont, and 14pt+ with extarticle.',
+  keywords: 'latex font size, font size latex, text size latex, latex text size, size latex font, latex font size commands, latex change font size, latex tiny, latex huge, latex large, latex small, latex normalsize, latex fontsize selectfont, fontsize latex, latex 12pt, latex 14pt, extsizes, extarticle, scrartcl fontsize, latex caption font size, latex footnote size, latex section font size, latex math font size, beamer font size, relsize, latex font shape not available',
 }
 
 /** Last content update, used for dateModified in the article schema. */
-const LAST_UPDATED = '2026-10-17'
+const LAST_UPDATED = '2026-11-09'
+
+/** The ten size commands: point size and baseline skip at 10pt, 11pt and 12pt. */
+const sizes: { cmd: string; pt10: string; pt11: string; pt12: string; render: number }[] = [
+  { cmd: '\\tiny', pt10: '5 / 6', pt11: '6 / 7', pt12: '6 / 7', render: 5 },
+  { cmd: '\\scriptsize', pt10: '7 / 8', pt11: '8 / 9.5', pt12: '8 / 9.5', render: 7 },
+  { cmd: '\\footnotesize', pt10: '8 / 9.5', pt11: '9 / 11', pt12: '10 / 12', render: 8 },
+  { cmd: '\\small', pt10: '9 / 11', pt11: '10 / 12', pt12: '10.95 / 13.6', render: 9 },
+  { cmd: '\\normalsize', pt10: '10 / 12', pt11: '10.95 / 13.6', pt12: '12 / 14.5', render: 10 },
+  { cmd: '\\large', pt10: '12 / 14', pt11: '12 / 14', pt12: '14.4 / 18', render: 12 },
+  { cmd: '\\Large', pt10: '14.4 / 18', pt11: '14.4 / 18', pt12: '17.28 / 22', render: 14.4 },
+  { cmd: '\\LARGE', pt10: '17.28 / 22', pt11: '17.28 / 22', pt12: '20.74 / 25', render: 17.28 },
+  { cmd: '\\huge', pt10: '20.74 / 25', pt11: '20.74 / 25', pt12: '24.88 / 30', render: 20.74 },
+  { cmd: '\\Huge', pt10: '24.88 / 30', pt11: '24.88 / 30', pt12: '24.88 / 30', render: 24.88 },
+]
+
+const faq: FaqItem[] = [
+  {
+    question: 'How do you change the font size in LaTeX?',
+    answer:
+      'For the whole document, set the class option: \\documentclass[12pt]{article} (the standard classes accept 10pt, 11pt and 12pt). For a passage, use one of the ten size commands inside braces, such as {\\large text} or {\\small text}. For an exact size, write {\\fontsize{14}{17}\\selectfont text}.',
+  },
+  {
+    question: 'What are the font sizes in LaTeX?',
+    answer:
+      'From smallest to largest: \\tiny, \\scriptsize, \\footnotesize, \\small, \\normalsize, \\large, \\Large, \\LARGE, \\huge and \\Huge. In a 10pt document they are 5, 7, 8, 9, 10, 12, 14.4, 17.28, 20.74 and 24.88pt. They are relative to the body size, so in a 12pt document each one is larger.',
+  },
+  {
+    question: 'How do I get 14pt or larger text in LaTeX?',
+    answer:
+      'The standard classes ignore 14pt. Use \\documentclass[14pt]{extarticle} from the extsizes bundle (8pt to 20pt), or a KOMA-Script class with any size: \\documentclass[fontsize=14pt]{scrartcl}. For a single passage, {\\fontsize{14}{17}\\selectfont text} works in any class.',
+  },
+  {
+    question: 'What does \\fontsize{}{}\\selectfont do?',
+    answer:
+      '\\fontsize{size}{baselineskip} sets the font size and the distance between lines, and \\selectfont applies it. Without \\selectfont nothing changes. A baseline skip about 1.2 times the size matches LaTeX defaults, e.g. \\fontsize{14}{17}. Load lmodern so every size is available.',
+  },
+  {
+    question: 'Why does \\large{text} make the rest of my paragraph large?',
+    answer:
+      'The size commands are declarations and take no argument. In \\large{text} the command sits outside the braces, so it stays active until the end of the enclosing group. Put it inside: {\\large text}. End a resized paragraph with \\par inside the braces so the line spacing matches.',
+  },
+  {
+    question: 'How do I change font size in math mode?',
+    answer:
+      'Text size commands are not allowed inside math and give "Command \\small invalid in math mode". Put the command outside: {\\small $x^2$}. To change the style of the math itself, use \\displaystyle, \\textstyle, \\scriptstyle or \\scriptscriptstyle.',
+  },
+]
 
 export default async function LaTeXFontSizePage() {
   return (
@@ -40,6 +87,7 @@ export default async function LaTeXFontSizePage() {
         title={page.title}
         description={page.description}
         dateModified={LAST_UPDATED}
+        faq={faq}
       />
       <div className="container">
         <div className="mb-8 max-w-4xl mx-auto">
@@ -52,24 +100,49 @@ export default async function LaTeXFontSizePage() {
         </div>
 
         <article className="prose prose-lg dark:prose-invert max-w-4xl mx-auto">
-          <h1>LaTeX Font Size: Commands, Document Options and \fontsize</h1>
+          <h1>Font Size in LaTeX: \tiny to \Huge, Document Size and Custom Sizes</h1>
+
+          <div className="not-prose my-6 p-6 rounded-lg border bg-muted/40 break-words">
+            <p className="text-sm font-semibold uppercase tracking-wide text-muted-foreground mb-3">Quick answer</p>
+            <ul className="space-y-2 text-base list-disc pl-5">
+              <li>
+                <strong>Whole document:</strong> <code>{`\\documentclass[12pt]{article}`}</code>{' '}
+                (standard classes: 10pt, 11pt or 12pt).
+              </li>
+              <li>
+                <strong>A passage:</strong> <code>{`{\\large text}`}</code>, with the command inside
+                the braces. The ten sizes are <code>\tiny</code>, <code>\scriptsize</code>,{' '}
+                <code>\footnotesize</code>, <code>\small</code>, <code>\normalsize</code>,{' '}
+                <code>\large</code>, <code>\Large</code>, <code>\LARGE</code>, <code>\huge</code>,{' '}
+                <code>\Huge</code>.
+              </li>
+              <li>
+                <strong>An exact size:</strong> <code>{`{\\fontsize{14}{17}\\selectfont text}`}</code>{' '}
+                with <code>{`\\usepackage{lmodern}`}</code>.
+              </li>
+              <li>
+                <strong>14pt and up:</strong> <code>{`\\documentclass[14pt]{extarticle}`}</code>{' '}
+                (8&ndash;20pt), or <code>{`\\documentclass[fontsize=13pt]{scrartcl}`}</code> for any size.
+              </li>
+            </ul>
+          </div>
           <p className="lead">
-            LaTeX controls font size at two levels. The document class option (
-            <code>10pt</code>, <code>11pt</code>, <code>12pt</code>) sets the base size for the
-            whole document, and ten relative commands from <code>\tiny</code> to{' '}
-            <code>\Huge</code> scale individual passages up or down from that base. When neither is
-            enough, <code>\fontsize</code> sets an exact point size. This guide covers all three,
-            the actual point values behind each command, how to size captions, footnotes, headers
-            and section titles, font size in math mode and in Beamer, and the errors that come up
-            when a size is not available.
+            LaTeX font size works at two levels. The class option (<code>10pt</code>,{' '}
+            <code>11pt</code>, <code>12pt</code>) sets the body size for the whole document, and
+            ten commands from <code>\tiny</code> to <code>\Huge</code> scale a passage up or down
+            from that body size. For anything off that scale, <code>\fontsize</code> sets an exact
+            size. This guide gives the point value of every command, shows how to size captions,
+            footnotes, headers, section titles, math and Beamer slides, and fixes the errors you
+            will hit along the way.
           </p>
 
           {/* ── Size commands ── */}
-          <h2>The Ten Font Size Commands</h2>
+          <h2>Text Size in LaTeX: The Ten Size Commands</h2>
           <p>
-            Every standard class defines the same ten size commands. They are <em>declarations</em>:
-            each one switches the size for everything that follows until the end of the current
-            group or environment. The usual way to apply one is inside braces:
+            To change text size in LaTeX, use one of the ten size commands. They are{' '}
+            <em>declarations</em>, not commands with an argument: each one switches the size for
+            everything that follows until the end of the current group, so you put the command
+            inside braces together with the text.
           </p>
           <pre><code>{`\\documentclass{article}
 \\begin{document}
@@ -80,60 +153,65 @@ export default async function LaTeXFontSizePage() {
 
 \\end{document}`}</code></pre>
           <p>
-            The commands are relative, not absolute. <code>\large</code> means &ldquo;one step
-            above the body size&rdquo;, so the point size it produces depends on the class option.
-            The table below gives the exact values for the standard classes (<code>article</code>,{' '}
-            <code>report</code>, <code>book</code>); the second number in each cell is the
-            baseline skip, the distance between lines.
+            The commands are relative: <code>\large</code> means one step above the body size, so
+            its point size depends on the class option. The table shows each size rendered at its
+            10pt value, then the exact numbers for the standard classes (<code>article</code>,{' '}
+            <code>report</code>, <code>book</code>). The second number in each cell is the baseline
+            skip, the distance from one line to the next.
           </p>
+          <div className="overflow-x-auto">
           <table>
             <thead>
               <tr>
                 <th>Command</th>
+                <th>Rendered (10pt document)</th>
                 <th>10pt (default)</th>
                 <th>11pt</th>
                 <th>12pt</th>
               </tr>
             </thead>
             <tbody>
-              <tr><td><code>\tiny</code></td><td>5 / 6</td><td>6 / 7</td><td>6 / 7</td></tr>
-              <tr><td><code>\scriptsize</code></td><td>7 / 8</td><td>8 / 9.5</td><td>8 / 9.5</td></tr>
-              <tr><td><code>\footnotesize</code></td><td>8 / 9.5</td><td>9 / 11</td><td>10 / 12</td></tr>
-              <tr><td><code>\small</code></td><td>9 / 11</td><td>10 / 12</td><td>10.95 / 13.6</td></tr>
-              <tr><td><code>\normalsize</code></td><td>10 / 12</td><td>10.95 / 13.6</td><td>12 / 14.5</td></tr>
-              <tr><td><code>\large</code></td><td>12 / 14</td><td>12 / 14</td><td>14.4 / 18</td></tr>
-              <tr><td><code>\Large</code></td><td>14.4 / 18</td><td>14.4 / 18</td><td>17.28 / 22</td></tr>
-              <tr><td><code>\LARGE</code></td><td>17.28 / 22</td><td>17.28 / 22</td><td>20.74 / 25</td></tr>
-              <tr><td><code>\huge</code></td><td>20.74 / 25</td><td>20.74 / 25</td><td>24.88 / 30</td></tr>
-              <tr><td><code>\Huge</code></td><td>24.88 / 30</td><td>24.88 / 30</td><td>24.88 / 30</td></tr>
+              {sizes.map((row) => (
+                <tr key={row.cmd}>
+                  <td><code>{row.cmd}</code></td>
+                  <td style={{ fontSize: `${row.render}pt`, lineHeight: 1.2, whiteSpace: 'nowrap' }}>Sample text</td>
+                  <td>{row.pt10}</td>
+                  <td>{row.pt11}</td>
+                  <td>{row.pt12}</td>
+                </tr>
+              ))}
             </tbody>
           </table>
+          </div>
           <p>
             The odd-looking numbers (10.95, 14.4, 17.28, 20.74, 24.88) are powers of 1.2 times
-            10pt. They are the sizes Donald Knuth prepared for Computer Modern, and the standard
+            10pt (10.95 is the half step, 1.2<sup>0.5</sup>). They are the sizes Donald Knuth prepared for Computer Modern, and the standard
             classes stick to them so that every size has a real font behind it. Note that at
             12pt, <code>\huge</code> and <code>\Huge</code> are the same size: the scale tops out
             at 24.88pt.
           </p>
 
           {/* ── Class options ── */}
-          <h2>Setting the Base Size: Document Class Options</h2>
+          <h2>LaTeX Font Size for the Whole Document: Class Options</h2>
           <p>
-            The body text size is a class option. The standard classes accept <code>10pt</code>{' '}
-            (the default), <code>11pt</code> and <code>12pt</code>:
+            The document font size is a class option. The standard classes accept{' '}
+            <code>10pt</code> (the default), <code>11pt</code> and <code>12pt</code>:
           </p>
           <pre><code>{`\\documentclass[12pt]{article}
-\\documentclass[11pt, a4paper]{report}
-\\documentclass[10pt, twocolumn]{book}`}</code></pre>
+% or: \\documentclass[11pt, a4paper]{report}
+% or: \\documentclass[10pt, twocolumn]{book}
+\\begin{document}
+Body text is 12pt; headings and footnotes scale with it.
+\\end{document}`}</code></pre>
           <p>
             Changing this one option rescales everything at once: body text, headings, footnotes,
             captions and the relative size commands. For most documents this is the only
             font-size setting that needs to change. Anything other than those three values is
-            silently ignored by the standard classes, which is the source of many &ldquo;why is my
+            ignored by the standard classes with only an <em>Unused global option(s)</em> warning, which is the source of many &ldquo;why is my
             14pt option not working&rdquo; questions.
           </p>
 
-          <h3>Sizes from 8pt to 20pt with extsizes</h3>
+          <h2>Font Size Above 12pt: extarticle and scrartcl</h2>
           <p>
             For a base size outside 10&ndash;12pt, the <code>extsizes</code> bundle provides
             drop-in replacements for the standard classes: <code>extarticle</code>,{' '}
@@ -147,14 +225,21 @@ Body text is now 14pt, and \\large, \\Large and friends scale with it.
 \\end{document}`}</code></pre>
           <p>
             The KOMA-Script classes (<code>scrartcl</code>, <code>scrreprt</code>,{' '}
-            <code>scrbook</code>) go further and accept any size, e.g.{' '}
-            <code>{`\\documentclass[fontsize=13pt]{scrartcl}`}</code>. The <code>memoir</code>{' '}
-            class accepts 9pt to 60pt through its own options. If you are already using one of
-            these classes, prefer its option over <code>extsizes</code>.
+            <code>scrbook</code>) accept any size through the <code>fontsize=</code> option, not
+            just fixed steps:
+          </p>
+          <pre><code>{`\\documentclass[fontsize=13pt]{scrartcl}
+\\usepackage{lmodern}
+\\begin{document}
+Body text is 13pt. KOMA computes \\small, \\large and the rest from it.
+\\end{document}`}</code></pre>
+          <p>
+            The <code>memoir</code> class accepts 9pt to 60pt through its own options. If you
+            already use KOMA-Script or memoir, prefer their option over <code>extsizes</code>.
           </p>
 
           {/* ── Scoping ── */}
-          <h2>Scoping a Size Change: Braces vs. Environments</h2>
+          <h2>Scoping a Size Change: Braces vs Environments</h2>
           <p>
             Because the size commands are declarations, how far they reach depends on where you put
             them. There are three patterns:
@@ -197,7 +282,7 @@ The environment form needs the blank line too.
 \\end{Large}`}</code></pre>
 
           {/* ── fontsize ── */}
-          <h2>Exact Sizes with \fontsize and \selectfont</h2>
+          <h2>Custom Size of the LaTeX Font: \fontsize and \selectfont</h2>
           <p>
             When you need a size that is not on the ten-step scale, use{' '}
             <code>{`\\fontsize{size}{baselineskip}\\selectfont`}</code>. The first argument is the
@@ -228,10 +313,11 @@ baseline, and it wraps correctly across lines.\\par}
           <p>
             <code>\fontsize</code> sets the baseline skip directly, while{' '}
             <code>{`\\linespread{factor}`}</code> multiplies whatever baseline skip the current size
-            defines. <code>{`\\linespread{1.5}`}</code> in the preamble gives roughly one-and-a-half
-            spacing throughout, without touching the font size. Like <code>\fontsize</code>, it
+            defines. <code>{`\\linespread{1.25}`}</code> in the preamble gives roughly one-and-a-half
+            spacing throughout (<code>{`\\linespread{1.6}`}</code> is about double), without
+            touching the font size. Like <code>\fontsize</code>, it
             only takes effect at the next <code>\selectfont</code> or size command, which is why
-            in the body you write <code>{`\\linespread{1.5}\\selectfont`}</code>. For the usual
+            in the body you write <code>{`\\linespread{1.25}\\selectfont`}</code>. For the usual
             double-spacing requirement, the <code>setspace</code> package is more precise:{' '}
             <code>\onehalfspacing</code>, <code>\doublespacing</code> and the{' '}
             <code>spacing</code> environment handle footnotes and floats correctly, which a bare{' '}
@@ -419,7 +505,8 @@ $\\scriptstyle x + y$                % script-size math`}</code></pre>
           </ol>
 
           {/* ── Errors ── */}
-          <h2>Common Errors and Warnings</h2>
+          <h2>Common Errors</h2>
+          <div className="overflow-x-auto">
           <table>
             <thead>
               <tr>
@@ -466,6 +553,7 @@ $\\scriptstyle x + y$                % script-size math`}</code></pre>
               </tr>
             </tbody>
           </table>
+          </div>
 
           {/* ── Complete example ── */}
           <h2>Complete Example</h2>
@@ -534,6 +622,7 @@ $\\displaystyle \\sum_{k=1}^{n} k = \\frac{n(n+1)}{2}$ with display-size limits.
 
           {/* ── Quick reference ── */}
           <h2>Quick Reference</h2>
+          <div className="overflow-x-auto">
           <table>
             <thead>
               <tr>
@@ -560,15 +649,66 @@ $\\displaystyle \\sum_{k=1}^{n} k = \\frac{n(n+1)}{2}$ with display-size limits.
               <tr><td>Beamer base size</td><td><code>{`\\documentclass[14pt]{beamer}`}</code></td></tr>
             </tbody>
           </table>
+          </div>
+
+          {/* ── FAQ ── */}
+          <h2>Frequently Asked Questions</h2>
+          <h3>How do you change the font size in LaTeX?</h3>
+          <p>
+            For the whole document, set the class option:{' '}
+            <code>{`\\documentclass[12pt]{article}`}</code> (the standard classes accept 10pt, 11pt
+            and 12pt). For a passage, use one of the ten size commands inside braces, such as{' '}
+            <code>{`{\\large text}`}</code> or <code>{`{\\small text}`}</code>. For an exact size,
+            write <code>{`{\\fontsize{14}{17}\\selectfont text}`}</code>.
+          </p>
+          <h3>What are the font sizes in LaTeX?</h3>
+          <p>
+            From smallest to largest: <code>\tiny</code>, <code>\scriptsize</code>,{' '}
+            <code>\footnotesize</code>, <code>\small</code>, <code>\normalsize</code>,{' '}
+            <code>\large</code>, <code>\Large</code>, <code>\LARGE</code>, <code>\huge</code> and{' '}
+            <code>\Huge</code>. In a 10pt document they are 5, 7, 8, 9, 10, 12, 14.4, 17.28, 20.74
+            and 24.88pt. They are relative to the body size, so in a 12pt document each one is
+            larger.
+          </p>
+          <h3>How do I get 14pt or larger text in LaTeX?</h3>
+          <p>
+            The standard classes ignore 14pt. Use <code>{`\\documentclass[14pt]{extarticle}`}</code>{' '}
+            from the extsizes bundle (8pt to 20pt), or a KOMA-Script class with any size:{' '}
+            <code>{`\\documentclass[fontsize=14pt]{scrartcl}`}</code>. For a single passage,{' '}
+            <code>{`{\\fontsize{14}{17}\\selectfont text}`}</code> works in any class.
+          </p>
+          <h3>What does \fontsize&#123;&#125;&#123;&#125;\selectfont do?</h3>
+          <p>
+            <code>{`\\fontsize{size}{baselineskip}`}</code> sets the font size and the distance
+            between lines, and <code>\selectfont</code> applies it. Without{' '}
+            <code>\selectfont</code> nothing changes. A baseline skip about 1.2 times the size
+            matches LaTeX defaults, e.g. <code>{`\\fontsize{14}{17}`}</code>. Load{' '}
+            <code>lmodern</code> so every size is available.
+          </p>
+          <h3>Why does \large&#123;text&#125; make the rest of my paragraph large?</h3>
+          <p>
+            The size commands are declarations and take no argument. In{' '}
+            <code>{`\\large{text}`}</code> the command sits outside the braces, so it stays active
+            until the end of the enclosing group. Put it inside: <code>{`{\\large text}`}</code>. End
+            a resized paragraph with <code>\par</code> inside the braces so the line spacing
+            matches.
+          </p>
+          <h3>How do I change font size in math mode?</h3>
+          <p>
+            Text size commands are not allowed inside math and give &quot;Command \small invalid
+            in math mode&quot;. Put the command outside: <code>{`{\\small $x^2$}`}</code>. To change
+            the style of the math itself, use <code>\displaystyle</code>, <code>\textstyle</code>,{' '}
+            <code>\scriptstyle</code> or <code>\scriptscriptstyle</code>.
+          </p>
 
           {/* ── Next Steps ── */}
           <h2>Next Steps</h2>
-          <p>Sizes sorted? The rest of the typography is next:</p>
+          <p>With the size settled, the rest of the typography is next:</p>
           <ul>
             <li><Link href="/learn/bold-italics-underline">Bold, Italics &amp; Underline</Link> &ndash; Font weight and shape commands that combine with the size commands</li>
             <li><Link href="/learn/page-size-margins">Page Size &amp; Margins</Link> &ndash; Paper size and margins with the geometry package</li>
             <li><Link href="/learn/footnotes">LaTeX Footnotes</Link> &ndash; Footnote numbering, placement and spacing</li>
-            <li><Link href="/learn/mathematical-expressions">Mathematical Expressions</Link> &ndash; Display math, fractions and the amsmath environments</li>
+            <li><Link href="/learn/mathematical-expressions">Inline and Display Math</Link> &ndash; Math mode, display styles and the equation environment</li>
             <li><Link href="/learn/colors">Using Colors in LaTeX</Link> &ndash; Colored text with xcolor</li>
             <li><Link href="/learn/latex">Learn LaTeX</Link> &ndash; Complete beginner tutorial covering all the basics</li>
           </ul>

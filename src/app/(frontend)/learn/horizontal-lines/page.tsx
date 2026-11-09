@@ -1,6 +1,6 @@
 import type { Metadata } from 'next/types'
 
-import { learnMetadata } from '@/utilities/learnMetadata'
+import { learnMetadata, type FaqItem } from '@/utilities/learnMetadata'
 import Link from 'next/link'
 import { buttonVariants } from '@/components/ui/button'
 import React from 'react'
@@ -14,19 +14,52 @@ import { LearnSchema } from '@/components/Learn/schema'
 export const dynamic = 'force-static'
 export const revalidate = 3600
 
-const breadcrumbs = getLearnBreadcrumbs('Horizontal Lines in LaTeX', 'horizontal-lines')
+const breadcrumbs = getLearnBreadcrumbs('Horizontal Line in LaTeX', 'horizontal-lines')
 const breadcrumbSchema = generateBreadcrumbSchema(breadcrumbs)
 
 const page = {
   slug: 'horizontal-lines',
-  title: 'Horizontal Lines in LaTeX: \\hrule, \\rule, \\hrulefill and Table Rules',
-  seoTitle: 'Horizontal Lines in LaTeX: \\hrule, \\rule, \\hline',
-  description: 'How to draw a horizontal line in LaTeX: \\hrule vs \\rule{\\linewidth}{0.4pt}, \\hrulefill and \\dotfill, partial and centred lines, colored and dashed rules, \\hline and booktabs rules in tables, header and footer rules with fancyhdr, rules under section titles, signature lines and the Misplaced \\noalign error.',
-  keywords: 'horizontal line latex, latex horizontal line, latex horizontal line in text, latex horizontal rule, latex hrule, latex rule, latex hrulefill, latex line across page, latex draw line, latex dashed line, latex colored line, latex hline, booktabs toprule midrule bottomrule, latex signature line, latex headrulewidth, misplaced noalign, latex vertical line',
+  title: 'Horizontal Line in LaTeX: \\hrule, \\rule, \\hrulefill and \\noindent',
+  seoTitle: 'Horizontal Line in LaTeX: \\hrule, \\rule, \\hrulefill',
+  description: 'Draw a horizontal line in LaTeX with \\noindent\\rule{\\linewidth}{0.4pt}, \\hrule or \\hrulefill, a line inside text, and \\hline or \\midrule in tables.',
+  keywords: 'horizontal line latex, latex horizontal line, horizontal line in latex, horizontal line in text latex, latex horizontal line in text, latex line in text, latex noindent rule, latex rule linewidth, latex horizontal rule, latex hrule, latex rule, latex hrulefill, latex line across page, latex draw line, latex dashed line, latex colored line, latex hline, booktabs toprule midrule bottomrule, latex signature line, latex headrulewidth, misplaced noalign, latex vertical line',
 }
 
 /** Last content update, used for dateModified in the article schema. */
-const LAST_UPDATED = '2026-10-17'
+const LAST_UPDATED = '2026-11-09'
+
+const faq: FaqItem[] = [
+  {
+    question: 'How do you draw a horizontal line in LaTeX?',
+    answer:
+      'Put \\noindent\\rule{\\linewidth}{0.4pt} on its own line between two paragraphs. It draws a 0.4pt line across the full text width and needs no package. \\hrule does the same in one word, and \\hrulefill fills only the rest of the current line.',
+  },
+  {
+    question: 'How do I put a horizontal line in text, in the middle of a sentence?',
+    answer:
+      'Use \\rule{3cm}{0.4pt} for a line of fixed length or \\hrulefill for a line that stretches to the end of the line, as in Name: \\hrulefill. Both stay inside the paragraph. Do not use \\hrule there: it ends the paragraph and puts the line on a line of its own.',
+  },
+  {
+    question: 'Why do I need \\noindent before \\rule?',
+    answer:
+      'A new paragraph starts with an indent, usually 15pt. \\rule{\\linewidth}{0.4pt} is already as wide as the line, so the indent pushes it past the right margin and LaTeX reports an Overfull \\hbox. \\noindent removes the indent so the line starts at the left margin.',
+  },
+  {
+    question: 'What is the difference between \\hrule, \\rule and \\hrulefill?',
+    answer:
+      '\\hrule is a TeX primitive that only works between paragraphs and always spans the full width unless you give it a width. \\rule{width}{thickness} is a box that behaves like a word, so it can be centred, colored or placed inline. \\hrulefill is stretchable space drawn as a line that fills whatever room is left on the current line.',
+  },
+  {
+    question: 'How do I make a thicker horizontal line in LaTeX?',
+    answer:
+      'Change the second argument of \\rule: \\noindent\\rule{\\linewidth}{1pt} draws a 1pt line. With \\hrule write \\hrule height 1pt. In tables, \\setlength{\\arrayrulewidth}{1pt} thickens every \\hline, and booktabs takes a thickness in brackets, as in \\midrule[1pt].',
+  },
+  {
+    question: 'How do I add a horizontal line in a LaTeX table?',
+    answer:
+      'Write \\hline at the start of a row for a line across the whole table and \\cline{2-3} for a line under columns 2 to 3. For publication tables load booktabs and use \\toprule, \\midrule and \\bottomrule, which add padding around the line. A rule placed in the middle of a row causes the Misplaced \\noalign error.',
+  },
+]
 
 export default async function LaTeXHorizontalLinesPage() {
   return (
@@ -40,6 +73,7 @@ export default async function LaTeXHorizontalLinesPage() {
         title={page.title}
         description={page.description}
         dateModified={LAST_UPDATED}
+        faq={faq}
       />
       <div className="container">
         <div className="mb-8 max-w-4xl mx-auto">
@@ -52,20 +86,70 @@ export default async function LaTeXHorizontalLinesPage() {
         </div>
 
         <article className="prose prose-lg dark:prose-invert max-w-4xl mx-auto">
-          <h1>Horizontal Lines in LaTeX: \hrule, \rule, \hrulefill and Table Rules</h1>
+          <h1>Horizontal Line in LaTeX: \hrule, \rule, \hrulefill and \noindent</h1>
+
+          <div className="not-prose my-6 p-6 rounded-lg border bg-muted/40 break-words">
+            <p className="text-sm font-semibold uppercase tracking-wide text-muted-foreground mb-3">Quick answer</p>
+            <ul className="space-y-2 text-base list-disc pl-5">
+              <li>
+                <strong>Full-width line:</strong> <code>{`\\noindent\\rule{\\linewidth}{0.4pt}`}</code>{' '}
+                on its own line between paragraphs. No package needed.
+              </li>
+              <li>
+                <strong>Quickest divider:</strong> <code>\hrule</code>, a TeX primitive that only works
+                between paragraphs.
+              </li>
+              <li>
+                <strong>Line in text:</strong> <code>{`\\rule{3cm}{0.4pt}`}</code> for a fixed length, or{' '}
+                <code>\hrulefill</code> (<code>\dotfill</code> for dots) to fill the rest of the line.
+              </li>
+              <li>
+                <strong>Tables:</strong> <code>\hline</code> and <code>{`\\cline{2-3}`}</code>, or{' '}
+                <code>\toprule</code>, <code>\midrule</code>, <code>\bottomrule</code> with{' '}
+                <code>{`\\usepackage{booktabs}`}</code>.
+              </li>
+              <li>
+                <strong>Why <code>\noindent</code>:</strong> without it the paragraph indent pushes a
+                full-width rule into the right margin (<em>Overfull \hbox</em>).
+              </li>
+            </ul>
+          </div>
+
           <p className="lead">
-            A horizontal line in LaTeX is drawn with one of three commands, and which one you
-            need depends on where the line goes. <code>\hrule</code> is the TeX primitive for a
-            line between paragraphs, <code>\rule</code> draws a line of any width and thickness
-            inside text, and <code>\hrulefill</code> stretches a line to fill the rest of a line.
-            This guide covers all three, plus partial and centred lines, colored and dashed lines,
-            rules in tables with <code>booktabs</code>, header and footer rules with{' '}
-            <code>fancyhdr</code>, rules under section titles, signature lines and the{' '}
-            <em>Misplaced \noalign</em> error.
+            To draw a horizontal line in LaTeX, write{' '}
+            <code>{`\\noindent\\rule{\\linewidth}{0.4pt}`}</code> between two paragraphs.
+            Which command fits best depends on where the line goes: <code>\hrule</code> is a
+            line between paragraphs, <code>\rule</code> is a line of any width and thickness
+            that can also sit inside text, and <code>\hrulefill</code> stretches to fill the rest
+            of a line. This guide covers all three, a horizontal line in text, partial, centred,
+            colored and dashed lines, <code>\hline</code> and <code>booktabs</code> rules in
+            tables, header and footer rules, rules under section titles, signature lines and the
+            errors you are likely to meet.
           </p>
 
           {/* ── Three commands ── */}
-          <h2>The Three Line Commands</h2>
+          <h2>LaTeX Horizontal Line: \hrule, \rule and \hrulefill</h2>
+          <p>
+            Every horizontal line in LaTeX comes from one of these three commands. They differ in
+            where they are allowed and in what decides their length:
+          </p>
+          <div className="overflow-x-auto">
+          <table>
+            <thead>
+              <tr>
+                <th>Command</th>
+                <th>Where it works</th>
+                <th>Length</th>
+                <th>Thickness</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td><code>\hrule</code></td><td>Between paragraphs only</td><td>Full width, or <code>width 5cm</code></td><td><code>height 1pt</code> (default 0.4pt)</td></tr>
+              <tr><td><code>{`\\rule{w}{t}`}</code></td><td>Anywhere, like a word</td><td>First argument</td><td>Second argument</td></tr>
+              <tr><td><code>\hrulefill</code></td><td>Inside a line of text</td><td>Whatever space is left</td><td>Fixed at 0.4pt</td></tr>
+            </tbody>
+          </table>
+          </div>
 
           <h3>\hrule: a line between paragraphs</h3>
           <p>
@@ -126,7 +210,71 @@ Chapter One \\dotfill 1
           </p>
           <pre><code>{`\\newcommand{\\thickhrulefill}{%
   \\leavevmode\\leaders\\hrule height 1pt\\hfill\\kern0pt
-}`}</code></pre>
+}
+
+Total: \\thickhrulefill`}</code></pre>
+
+          {/* ── noindent ── */}
+          <h2>\noindent and Full-Width Lines</h2>
+          <p>
+            A full-width rule is exactly as wide as the line, so any indent makes it too wide.
+            Every new paragraph is indented by <code>\parindent</code> (about 15pt in the
+            standard classes), which is why a bare <code>{`\\rule{\\linewidth}{0.4pt}`}</code>{' '}
+            ends up shifted right and overflowing the margin. <code>\noindent</code> at the start
+            of the paragraph cancels the indent:
+          </p>
+          <pre><code>{`\\documentclass{article}
+\\begin{document}
+
+Text before.
+
+\\rule{\\linewidth}{0.4pt}            % wrong: indented, runs into the margin
+
+\\noindent\\rule{\\linewidth}{0.4pt}   % right: starts at the left margin
+
+\\begin{itemize}
+  \\item An item with a line that respects the list indent:\\par
+  \\noindent\\rule{\\linewidth}{0.4pt}
+\\end{itemize}
+
+\\end{document}`}</code></pre>
+          <p>
+            Use <code>\linewidth</code> rather than <code>\textwidth</code> for the width.
+            Inside a list, quote or minipage, <code>\linewidth</code> shrinks to the current
+            line while <code>\textwidth</code> stays at the full text block, so a{' '}
+            <code>\textwidth</code> rule pokes out on the right. <code>\hrule</code> is not affected by the indent,
+            but <code>\hrulefill</code> at the start of a paragraph begins after it, so a
+            full-width fill also needs <code>\noindent</code>.
+          </p>
+
+          {/* ── In text ── */}
+          <h2>Horizontal Line in Text</h2>
+          <p>
+            For a horizontal line in text, inside a sentence rather than between paragraphs, use{' '}
+            <code>\rule</code> or <code>\hrulefill</code>. Both stay in the paragraph. The
+            optional first argument of <code>\rule</code> raises it from the baseline, which is
+            how you draw a line at the height of a dash or through the middle of the letters:
+          </p>
+          <pre><code>{`\\documentclass{article}
+\\begin{document}
+
+Fill in the blank: the capital of France is \\rule{3cm}{0.4pt}.
+
+A line at mid-height \\rule[0.5ex]{2cm}{0.4pt} between two words.
+
+Name: \\hrulefill
+
+Total \\dotfill 42
+
+% a line that fills a fixed-width gap
+Answer: \\makebox[4cm]{\\hrulefill} (in words)
+
+\\end{document}`}</code></pre>
+          <p>
+            Do not use <code>\hrule</code> here. It is a vertical-mode command, so TeX ends the
+            current paragraph, draws the line on its own and starts a new paragraph after it.
+            That is the usual cause of a &ldquo;line that jumps to the next line&rdquo;.
+          </p>
 
           {/* ── Partial / centred ── */}
           <h2>Partial-Width and Centred Lines</h2>
@@ -153,7 +301,11 @@ Chapter One \\dotfill 1
           </p>
           <pre><code>{`\\newcommand{\\scenebreak}{%
   \\par\\medskip\\centerline{\\rule{0.3\\linewidth}{0.4pt}}\\medskip
-}`}</code></pre>
+}
+
+The door closed behind her.
+\\scenebreak
+Three weeks later, the letter arrived.`}</code></pre>
 
           {/* ── Spacing ── */}
           <h2>Space Above and Below a Line</h2>
@@ -211,7 +363,7 @@ Total: {\\color{red}\\hrulefill}        % \\hrulefill takes the color too`}</cod
 \\noindent\\tikz\\draw[dash pattern=on 6pt off 2pt, line width=0.8pt] (0,0) -- (\\linewidth,0);`}</code></pre>
 
           {/* ── Tables ── */}
-          <h2>Lines in Tables</h2>
+          <h2>Horizontal Lines in Tables: \hline and \midrule</h2>
           <p>
             Inside <code>tabular</code>, horizontal lines are not drawn with <code>\rule</code>{' '}
             but with dedicated row commands. The standard ones are <code>\hline</code> for a
@@ -350,7 +502,8 @@ left \\rule[-0.4cm]{0.4pt}{1cm} right  % lowered so it straddles the baseline
 \\end{tabular}`}</code></pre>
 
           {/* ── Errors ── */}
-          <h2>Common Errors and Fixes</h2>
+          <h2>Common Errors</h2>
+          <div className="overflow-x-auto">
           <table>
             <thead>
               <tr>
@@ -397,6 +550,7 @@ left \\rule[-0.4cm]{0.4pt}{1cm} right  % lowered so it straddles the baseline
               </tr>
             </tbody>
           </table>
+          </div>
 
           {/* ── Complete example ── */}
           <h2>Complete Example</h2>
@@ -460,6 +614,7 @@ A colored dashed rule:
 
           {/* ── Quick reference ── */}
           <h2>Quick Reference</h2>
+          <div className="overflow-x-auto">
           <table>
             <thead>
               <tr>
@@ -486,6 +641,56 @@ A colored dashed rule:
               <tr><td>Vertical bar</td><td><code>\vrule</code> or <code>{`\\rule{0.4pt}{1cm}`}</code></td></tr>
             </tbody>
           </table>
+          </div>
+
+          {/* ── FAQ ── */}
+          <h2>Frequently Asked Questions</h2>
+          <h3>How do you draw a horizontal line in LaTeX?</h3>
+          <p>
+            Put <code>{`\\noindent\\rule{\\linewidth}{0.4pt}`}</code> on its own line between
+            two paragraphs. It draws a 0.4pt line across the full text width and needs no
+            package. <code>\hrule</code> does the same in one word, and <code>\hrulefill</code>{' '}
+            fills only the rest of the current line.
+          </p>
+          <h3>How do I put a horizontal line in text, in the middle of a sentence?</h3>
+          <p>
+            Use <code>{`\\rule{3cm}{0.4pt}`}</code> for a line of fixed length or{' '}
+            <code>\hrulefill</code> for a line that stretches to the end of the line, as in{' '}
+            <code>Name: \hrulefill</code>. Both stay inside the paragraph. Do not use{' '}
+            <code>\hrule</code> there: it ends the paragraph and puts the line on a line of its
+            own.
+          </p>
+          <h3>Why do I need \noindent before \rule?</h3>
+          <p>
+            A new paragraph starts with an indent, usually 15pt.{' '}
+            <code>{`\\rule{\\linewidth}{0.4pt}`}</code> is already as wide as the line, so the
+            indent pushes it past the right margin and LaTeX reports an Overfull \hbox.{' '}
+            <code>\noindent</code> removes the indent so the line starts at the left margin.
+          </p>
+          <h3>What is the difference between \hrule, \rule and \hrulefill?</h3>
+          <p>
+            <code>\hrule</code> is a TeX primitive that only works between paragraphs and always
+            spans the full width unless you give it a width. <code>{`\\rule{width}{thickness}`}</code>{' '}
+            is a box that behaves like a word, so it can be centred, colored or placed inline.{' '}
+            <code>\hrulefill</code> is stretchable space drawn as a line that fills whatever room
+            is left on the current line.
+          </p>
+          <h3>How do I make a thicker horizontal line in LaTeX?</h3>
+          <p>
+            Change the second argument of <code>\rule</code>:{' '}
+            <code>{`\\noindent\\rule{\\linewidth}{1pt}`}</code> draws a 1pt line. With{' '}
+            <code>\hrule</code> write <code>\hrule height 1pt</code>. In tables,{' '}
+            <code>{`\\setlength{\\arrayrulewidth}{1pt}`}</code> thickens every <code>\hline</code>,
+            and booktabs takes a thickness in brackets, as in <code>\midrule[1pt]</code>.
+          </p>
+          <h3>How do I add a horizontal line in a LaTeX table?</h3>
+          <p>
+            Write <code>\hline</code> at the start of a row for a line across the whole table and{' '}
+            <code>{`\\cline{2-3}`}</code> for a line under columns 2 to 3. For publication tables
+            load booktabs and use <code>\toprule</code>, <code>\midrule</code> and{' '}
+            <code>\bottomrule</code>, which add padding around the line. A rule placed in the
+            middle of a row causes the Misplaced \noalign error.
+          </p>
 
           {/* ── Next Steps ── */}
           <h2>Next Steps</h2>

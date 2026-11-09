@@ -549,7 +549,7 @@ Product and chain rule, $f(x) = x^2 \\sin(3x)$:
             <li><Link href="/learn/integrals-sums-limits">Integrals, Sums and Limits</Link> – The limit in the definition, partial derivatives and upright differentials</li>
             <li><Link href="/learn/math-functions">Math Functions in LaTeX</Link> – \sin, \ln, \exp and \DeclareMathOperator for arcsec and friends</li>
             <li><Link href="/learn/equation-numbering">Equation Numbering and Referencing</Link> – Number the chain rule and cite it from the text with \eqref</li>
-            <li><Link href="/learn/multiline-equations">Multi-line Equations</Link> – align, split and gather for step-by-step derivations like the worked examples</li>
+            <li><Link href="/learn/multiline-equations">Multiline Equations in LaTeX</Link> – align, split and gather for step-by-step derivations like the worked examples</li>
             <li><Link href="/learn/laplace-transform-table">Laplace Transform Table</Link> – The transform that turns derivatives into multiplication by <em>s</em></li>
           </ul>
 

@@ -768,7 +768,7 @@ $M = \\begin{psmallmatrix} 1 & 2 \\\\ 3 & 4 \\end{psmallmatrix}$ inline.`}</code
           <ul>
             <li><Link href="/learn/matrices">Matrices in LaTeX</Link> &ndash; Alignment, dots, block matrices, determinants and inline matrices</li>
             <li><Link href="/learn/mathematical-expressions">Mathematical Expressions</Link> &ndash; Fractions, roots, operators and the amsmath environments</li>
-            <li><Link href="/learn/multiline-equations">Multi-line Equations</Link> &ndash; align, split, multline and gather, including brackets across lines</li>
+            <li><Link href="/learn/multiline-equations">Multiline Equations in LaTeX</Link> &ndash; align, split, multline and gather, including brackets across lines</li>
             <li><Link href="/learn/special-characters">Special Characters in LaTeX</Link> &ndash; Braces, pipes, less-than and greater-than in text</li>
             <li><Link href="/learn/integrals-sums-limits">Integrals, Sums and Limits</Link> &ndash; Limits placement, which affects bracket sizing around sums</li>
             <li><Link href="/learn/latex">Learn LaTeX</Link> &ndash; Complete beginner tutorial covering all the basics</li>

@@ -14,25 +14,25 @@ import { LearnSchema } from '@/components/Learn/schema'
 export const dynamic = 'force-static'
 export const revalidate = 3600
 
-const breadcrumbs = getLearnBreadcrumbs('Multi-line Equations in LaTeX', 'multiline-equations')
+const breadcrumbs = getLearnBreadcrumbs('Multiline Equations in LaTeX', 'multiline-equations')
 const breadcrumbSchema = generateBreadcrumbSchema(breadcrumbs)
 
 const page = {
   slug: 'multiline-equations',
-  title: 'Multi-line Equations in LaTeX: align, split, multline, gather',
-  seoTitle: 'Multi-line Equations in LaTeX: align, split, gather',
-  description: 'Break and align equations over several lines with align, split, multline and gather, nest aligned blocks, add text between lines and allow page breaks.',
-  keywords: 'latex new line in equation, latex multiline equation, latex align equations, latex break long equation, latex equation array, latex split equation, latex gather, latex align environment, latex multline, latex aligned, latex alignat, latex intertext, latex equation line break, latex eqnarray, latex allowdisplaybreaks, latex nonumber, latex cases, latex system of equations',
+  title: 'Multiline Equations in LaTeX: align, split, multline and New Lines',
+  seoTitle: 'New Line in Equation LaTeX: align, split, multline',
+  description: 'Start a new line in a LaTeX equation and align math with align, align*, split, multline and gather; \\notag, cases, and fixes for Misplaced & errors.',
+  keywords: 'latex new line in equation, new line in equation latex, align math, align in math, latex align, align latex, latex align*, latex align math, latex multiline equation, latex align equations, latex break long equation, latex equation array, latex split equation, latex gather, latex align environment, latex multline, latex aligned, latex alignat, latex intertext, latex equation line break, latex eqnarray, latex allowdisplaybreaks, latex nonumber, latex cases, latex system of equations',
 }
 
 /** Last content update, used for dateModified in the article schema. */
-const LAST_UPDATED = '2026-10-18'
+const LAST_UPDATED = '2026-11-09'
 
 const faq: FaqItem[] = [
   {
-    question: 'How do I start a new line inside an equation in LaTeX?',
+    question: 'How do I start a new line in an equation in LaTeX?',
     answer:
-      'The equation environment is single-line. Use an amsmath environment that allows \\\\: align or align* for several aligned equations, split inside equation for one equation with one number, or multline for one long equation with no alignment point.',
+      'The equation environment holds one line, and \\\\ inside it is silently ignored. Load amsmath and use an environment that accepts \\\\: align or align* for several equations aligned with &, split inside equation for one long equation with a single number, multline for a long expression with no alignment point, or gather for centred lines.',
   },
   {
     question: 'What is the difference between align and split?',
@@ -45,9 +45,9 @@ const faq: FaqItem[] = [
       'Use multline. Its first line is set flush left, its last line flush right, and any lines between are centred, with one equation number on the last line. Break before an operator (+, -, =) so the next line starts with it.',
   },
   {
-    question: 'Why does align give me "Misplaced alignment tab character &"?',
+    question: 'Why does align give me “Misplaced alignment tab character &”?',
     answer:
-      'That message means an & was found where no alignment is active, usually in a plain equation or \\[ ... \\] environment. Switch to align, or wrap the lines in split. Inside gather, which has no alignment points, the same mistake reports "Extra alignment tab has been changed to \\cr".',
+      'That message means an & was found where no alignment is active, usually in a plain equation or \\[ ... \\] environment. Switch to align, or wrap the lines in split. Inside gather, which has no alignment points, the same mistake reports “Extra alignment tab has been changed to \\cr”.',
   },
   {
     question: 'Should I use eqnarray?',
@@ -55,9 +55,9 @@ const faq: FaqItem[] = [
       'No. eqnarray is a pre-amsmath environment with wrong spacing around the = column, no way to stop long lines from overprinting the equation number, and inconsistent handling of \\nonumber. amsmath\'s align does the same job correctly and every modern document should use it.',
   },
   {
-    question: 'How do I allow a page break inside a long align?',
+    question: 'How do I align math on the equals sign in LaTeX?',
     answer:
-      'amsmath forbids page breaks inside displays by default. Put \\allowdisplaybreaks in the preamble to allow them in align, gather, alignat and multline, and use \\\\* on a specific line to forbid a break after it. aligned, gathered and split are single boxes and never break.',
+      'Use align (numbered) or align* (unnumbered) from amsmath. Put & just before each = and end every line except the last with \\\\, as in a &= b + c \\\\ &= d. The equals signs line up in one column, and \\notag on a line removes its number.',
   },
 ]
 
@@ -86,7 +86,39 @@ export default async function LaTeXMultilineEquationsPage() {
         </div>
 
         <article className="prose prose-lg dark:prose-invert max-w-4xl mx-auto">
-          <h1>Multi-line Equations in LaTeX: align, split, multline, gather</h1>
+          <h1>Multiline Equations in LaTeX: align, split, multline and New Lines</h1>
+
+          <div className="not-prose my-6 p-6 rounded-lg border bg-muted/40 break-words">
+            <p className="text-sm font-semibold uppercase tracking-wide text-muted-foreground mb-3">Quick answer</p>
+            <ul className="space-y-2 text-base list-disc pl-5">
+              <li>
+                <strong>New line in an equation:</strong> <code>\\</code> does nothing inside{' '}
+                <code>equation</code>. Load <code>{`\\usepackage{amsmath}`}</code> and use one of
+                the environments below.
+              </li>
+              <li>
+                <strong>Align math on =:</strong>{' '}
+                <code>{`\\begin{align} a &= b \\\\ &= c \\end{align}`}</code>. Put{' '}
+                <code>&amp;</code> before each <code>=</code>; <code>align*</code> drops the numbers.
+              </li>
+              <li>
+                <strong>One long equation, one number:</strong> <code>split</code> inside{' '}
+                <code>equation</code>.
+              </li>
+              <li>
+                <strong>Long expression, nothing to align:</strong> <code>multline</code>; centred
+                lines: <code>gather</code>.
+              </li>
+              <li>
+                <strong>Hide one line&apos;s number:</strong> <code>\notag</code> or{' '}
+                <code>\nonumber</code> before the <code>\\</code>.
+              </li>
+              <li>
+                <strong>Piecewise function:</strong> <code>{`\\begin{cases} ... \\end{cases}`}</code>.
+              </li>
+            </ul>
+          </div>
+
           <p className="lead">
             The <code>equation</code> environment holds exactly one line. The moment a
             derivation needs a second line, or a formula runs past the margin, you need one of
@@ -107,8 +139,50 @@ export default async function LaTeXMultilineEquationsPage() {
             <Link href="/learn/equation-numbering">equation numbering guide</Link>.
           </p>
 
+          {/* ── New line ── */}
+          <h2>New Line in an Equation</h2>
+          <p>
+            A new line in a LaTeX equation is written with <code>\\</code>, but only inside an
+            environment that is built for several lines. In <code>equation</code>,{' '}
+            <code>\[ ... \]</code> and <code>$$ ... $$</code> the <code>\\</code> is silently
+            ignored: the document compiles and both parts stay on one line. Switch to an
+            amsmath environment instead:
+          </p>
+          <pre><code>{`\\documentclass{article}
+\\usepackage{amsmath}
+\\begin{document}
+
+% Wrong: \\\\ is ignored, everything stays on one line
+\\begin{equation}
+  a = b + c \\\\
+  d = e
+\\end{equation}
+
+% Right: two lines, aligned on =, one number each
+\\begin{align}
+  a &= b + c \\\\
+  d &= e
+\\end{align}
+
+% Right: two lines, one number for the whole equation
+\\begin{equation}
+  \\begin{split}
+    a &= b + c \\\\
+      &= e
+  \\end{split}
+\\end{equation}
+
+\\end{document}`}</code></pre>
+          <p>
+            Inside a single line you can still add space with <code>\quad</code> or{' '}
+            <code>\qquad</code>, but you cannot break it. Inline math (<code>$...$</code>)
+            breaks only after a relation or operator at TeX&apos;s choice; see the{' '}
+            <Link href="/learn/mathematical-expressions">inline and display math guide</Link>.
+          </p>
+
           {/* ── Which one ── */}
           <h2>Which Environment Do I Need?</h2>
+          <div className="overflow-x-auto">
           <table>
             <thead>
               <tr>
@@ -127,6 +201,7 @@ export default async function LaTeXMultilineEquationsPage() {
               <tr><td>Piecewise definition</td><td><code>cases</code> inside <code>equation</code></td><td>One</td></tr>
             </tbody>
           </table>
+          </div>
           <p>
             The display environments have starred forms (<code>align*</code>,{' '}
             <code>gather*</code>, <code>multline*</code>, <code>alignat*</code>,{' '}
@@ -136,11 +211,12 @@ export default async function LaTeXMultilineEquationsPage() {
           </p>
 
           {/* ── align ── */}
-          <h2>align: Equations Aligned on a Symbol</h2>
+          <h2>Align Math with align and align*</h2>
           <p>
-            <code>&amp;</code> marks the alignment point on each line, usually just before the
-            relation symbol, and <code>\\</code> ends a line. Every line gets its own number
-            unless you suppress it:
+            To align math in LaTeX, use <code>align</code>. <code>&amp;</code> marks the alignment
+            point on each line, usually just before the relation symbol, and <code>\\</code>{' '}
+            ends a line. <code>align</code> numbers every line; <code>align*</code> is identical
+            but prints no numbers:
           </p>
           <pre><code>{`\\begin{align}
   f(x) &= (x + 1)^2 \\\\
@@ -159,11 +235,11 @@ export default async function LaTeXMultilineEquationsPage() {
             empty extra line that still receives an equation number.
           </p>
 
-          <h3>Removing the number from some lines</h3>
+          <h3>\nonumber and \notag: Removing the Number From Some Lines</h3>
           <p>
-            <code>\notag</code> (or the older <code>\nonumber</code>) before the <code>\\</code>{' '}
-            suppresses the number on that line only. The usual pattern numbers just the final
-            result:
+            <code>\notag</code> (amsmath) or <code>\nonumber</code> (the original LaTeX name)
+            before the <code>\\</code> suppresses the number on that line only. In amsmath they
+            do the same thing. The usual pattern numbers just the final result:
           </p>
           <pre><code>{`\\begin{align}
   a &= b + c \\notag \\\\
@@ -171,7 +247,7 @@ export default async function LaTeXMultilineEquationsPage() {
     &= f \\label{eq:result}
 \\end{align}`}</code></pre>
 
-          <h3>Several equations side by side</h3>
+          <h3>Align in Math With Several Columns</h3>
           <p>
             Each extra pair of <code>&amp;</code> adds a column. Odd-numbered ampersands align;
             even-numbered ones separate the columns, and amsmath spreads the columns evenly
@@ -451,7 +527,8 @@ See \\eqref{eq:a}.`}</code></pre>
 \\end{align}`}</code></pre>
 
           {/* ── Errors ── */}
-          <h2>Common Errors and Fixes</h2>
+          <h2>Common Errors</h2>
+          <div className="overflow-x-auto">
           <table>
             <thead>
               <tr>
@@ -465,6 +542,11 @@ See \\eqref{eq:a}.`}</code></pre>
                 <td><em>Misplaced alignment tab character &amp;</em></td>
                 <td><code>&amp;</code> inside <code>equation</code> or <code>\[ ... \]</code>, which have no alignment</td>
                 <td>Use <code>align</code>, or wrap the lines in <code>split</code></td>
+              </tr>
+              <tr>
+                <td><code>\\</code> in <code>equation</code> does nothing; still one line</td>
+                <td><code>equation</code>, <code>\[ ... \]</code> and <code>$$</code> are single-line</td>
+                <td>Use <code>align</code>, <code>split</code>, <code>multline</code> or <code>gather</code></td>
               </tr>
               <tr>
                 <td><em>Extra alignment tab has been changed to \cr</em></td>
@@ -521,8 +603,14 @@ See \\eqref{eq:a}.`}</code></pre>
                 <td>Nothing follows the symbol in its cell, so TeX inserts no space there (amsmath already handles the usual <code>&amp;=</code> case)</td>
                 <td>Write <code>{'&{}={}&'}</code></td>
               </tr>
+              <tr>
+                <td>Too much space around <code>=</code> compared with other equations</td>
+                <td><code>eqnarray</code> puts column space around the middle column</td>
+                <td>Replace with <code>align</code> and <code>&amp;=</code></td>
+              </tr>
             </tbody>
           </table>
+          </div>
 
           {/* ── Complete example ── */}
           <h2>Complete Example</h2>
@@ -578,6 +666,7 @@ Equations \\eqref{eq:binomial} and \\eqref{eq:integral} are referenced here.
 
           {/* ── Quick reference ── */}
           <h2>Quick Reference</h2>
+          <div className="overflow-x-auto">
           <table>
             <thead>
               <tr>
@@ -603,15 +692,18 @@ Equations \\eqref{eq:binomial} and \\eqref{eq:integral} are referenced here.
               <tr><td>Automatic breaking</td><td><code>dmath</code> from <code>breqn</code></td></tr>
             </tbody>
           </table>
+          </div>
 
           {/* ── FAQ ── */}
           <h2>Frequently Asked Questions</h2>
-          <h3>How do I start a new line inside an equation in LaTeX?</h3>
+          <h3>How do I start a new line in an equation in LaTeX?</h3>
           <p>
-            The <code>equation</code> environment is single-line. Use an amsmath environment that
-            allows <code>\\</code>: <code>align</code> or <code>align*</code> for several aligned
-            equations, <code>split</code> inside <code>equation</code> for one equation with one
-            number, or <code>multline</code> for one long equation with no alignment point.
+            The <code>equation</code> environment holds one line, and <code>\\</code> inside it is
+            silently ignored. Load amsmath and use an environment that accepts <code>\\</code>:{' '}
+            <code>align</code> or <code>align*</code> for several equations aligned with{' '}
+            <code>&amp;</code>, <code>split</code> inside <code>equation</code> for one long
+            equation with a single number, <code>multline</code> for a long expression with no
+            alignment point, or <code>gather</code> for centred lines.
           </p>
           <h3>What is the difference between align and split?</h3>
           <p>
@@ -643,13 +735,12 @@ Equations \\eqref{eq:binomial} and \\eqref{eq:integral} are referenced here.
             <code>align</code> does the same job correctly and every modern document should use
             it.
           </p>
-          <h3>How do I allow a page break inside a long align?</h3>
+          <h3>How do I align math on the equals sign in LaTeX?</h3>
           <p>
-            amsmath forbids page breaks inside displays by default. Put{' '}
-            <code>\allowdisplaybreaks</code> in the preamble to allow them in <code>align</code>,{' '}
-            <code>gather</code>, <code>alignat</code> and <code>multline</code>, and use{' '}
-            <code>\\*</code> on a specific line to forbid a break after it. <code>aligned</code>,{' '}
-            <code>gathered</code> and <code>split</code> are single boxes and never break.
+            Use <code>align</code> (numbered) or <code>align*</code> (unnumbered) from amsmath.
+            Put <code>&amp;</code> just before each <code>=</code> and end every line except the
+            last with <code>\\</code>, as in <code>{`a &= b + c \\\\ &= d`}</code>. The equals
+            signs line up in one column, and <code>\notag</code> on a line removes its number.
           </p>
 
           {/* ── Next Steps ── */}
