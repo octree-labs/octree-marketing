@@ -14,6 +14,8 @@ import { defaultLatexDocument } from '@/utilities/wrapLatexDocument'
 import { PostHero } from '@/heros/PostHero'
 import { generateMeta } from '@/utilities/generateMeta'
 import { generateArticleSchema } from '@/utilities/generateArticleSchema'
+import { extractFaqFromLexical } from '@/utilities/extractFaqFromLexical'
+import { generateFaqSchema } from '@/utilities/learnMetadata'
 import { LivePreviewListener } from '@/components/LivePreviewListener'
 import {
   generateBreadcrumbSchema,
@@ -68,6 +70,9 @@ export default async function Post({ params: paramsPromise }: Args) {
   )
   const breadcrumbSchema = generateBreadcrumbSchema(breadcrumbs)
   const articleSchema = generateArticleSchema(post)
+  // FAQPage rich results for posts whose body has an FAQ H2 with H3 questions.
+  const faq = extractFaqFromLexical(post.content)
+  const faqSchema = faq.length >= 2 ? generateFaqSchema(faq) : null
 
   // "Open in Octree" boxes: one under the first LaTeX code block (rendered by
   // RichText) and one closing the post, unless that block already ends the post.
@@ -86,6 +91,12 @@ export default async function Post({ params: paramsPromise }: Args) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }}
       />
+      {faqSchema && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+        />
+      )}
       {/* Allows redirects for valid pages too */}
       <PayloadRedirects disableNotFound url={url} />
 
