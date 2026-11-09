@@ -19,16 +19,16 @@ const breadcrumbSchema = generateBreadcrumbSchema(breadcrumbs)
 
 const page = {
   slug: 'math-functions',
-  title: 'Math Functions in LaTeX: log, ln, exp, argmax, floor, ceiling, absolute value and norm',
-  seoTitle: 'LaTeX Math Functions: log, exp, argmax, abs, norm',
+  title: 'Math Functions in LaTeX: \\log, \\ln, \\sin, \\exp and \\operatorname',
+  seoTitle: 'LaTeX Math Functions: \\log, \\ln, \\sin, \\exp',
   description:
-    'How to typeset functions in LaTeX: \\log, \\ln, \\exp and the other predefined operators, argmax with \\DeclareMathOperator*, floor and ceiling, absolute value with \\lvert \\rvert, norms with \\lVert \\rVert, mathtools \\DeclarePairedDelimiter, roots, fractions, function notation, piecewise functions and common errors.',
+    'Log and math functions in LaTeX: \\log, \\log_2, \\ln, \\sin, \\exp, \\lim, \\max, custom operators with \\operatorname and \\DeclareMathOperator, and fixes.',
   keywords:
-    'latex log, latex ln, latex exp, logarithms in latex, latex argmax, latex argmin, latex floor, latex ceiling, latex absolute value, absolute value bars latex, latex norm, latex sin cos, latex limit, latex function notation, DeclareMathOperator, operatorname, DeclarePairedDelimiter, lvert rvert, lfloor rfloor, latex piecewise function, latex mapsto',
+    'log latex, logarithm latex, logarithms in latex, latex log base, latex log2, latex log, latex ln, latex exp, logarithms in latex, latex argmax, latex argmin, latex floor, latex ceiling, latex absolute value, absolute value bars latex, latex norm, latex sin cos, latex limit, latex function notation, DeclareMathOperator, operatorname, DeclarePairedDelimiter, lvert rvert, lfloor rfloor, latex piecewise function, latex mapsto',
 }
 
 /** Last content update, used for dateModified in the article schema. */
-const LAST_UPDATED = '2026-10-18'
+const LAST_UPDATED = '2026-11-09'
 
 const faq: FaqItem[] = [
   {
@@ -44,7 +44,7 @@ const faq: FaqItem[] = [
   {
     question: 'How do I write argmax with the argument underneath?',
     answer:
-      'Load amsmath and define the operator with the starred form, \\DeclareMathOperator*{\\argmax}{arg\\,max}. The star makes subscripts go below the operator in display math, like \\lim and \\max, so \\argmax_{\\theta} f(\\theta) puts \\theta underneath. In inline math the subscript stays to the right unless you add \\limits.',
+      'Load amsmath and define the operator with the starred form, \\DeclareMathOperator*{\\argmax}{arg\\,max}. The star makes subscripts go below the operator in display math, like \\lim and \\max, so \\argmax_{\\theta} f(\\theta) puts θ underneath. In inline math the subscript stays to the right unless you add \\limits.',
   },
   {
     question: 'What is the difference between |x|, \\lvert x \\rvert and \\left| x \\right|?',
@@ -57,9 +57,9 @@ const faq: FaqItem[] = [
       'Use \\lVert x \\rVert, or \\| x \\| for a quick fixed-size version. Subscripts for the type of norm go after the closing delimiter, \\lVert x \\rVert_2, \\lVert x \\rVert_\\infty, \\lVert A \\rVert_F. With mathtools, \\DeclarePairedDelimiter{\\norm}{\\lVert}{\\rVert} lets you write \\norm{x}_2 and \\norm*{...} for automatic sizing.',
   },
   {
-    question: 'Should I use \\frac or \\dfrac?',
+    question: 'How do you write log in LaTeX?',
     answer:
-      '\\frac picks the style for you: full-size in display math and small in inline math. \\dfrac forces the display size and \\tfrac the small text size regardless of context. Use \\dfrac sparingly in inline text, as it stretches the line spacing; it is most useful inside a matrix or a cases environment where \\frac would be reduced.',
+      'Use \\log in math mode: $\\log x$ or $\\log(x+1)$. Typing log without the backslash gives the italic product of the variables l, o and g. Put the base in a subscript, $\\log_2 n$ or $\\log_{10} x$, and use $\\ln x$ for the natural logarithm. No package is needed.',
   },
 ]
 
@@ -88,7 +88,30 @@ export default async function LaTeXMathFunctionsPage() {
         </div>
 
         <article className="prose prose-lg dark:prose-invert max-w-4xl mx-auto">
-          <h1>Math Functions in LaTeX: log, ln, exp, argmax, floor, ceiling, absolute value and norm</h1>
+          <h1>Math Functions in LaTeX: \log, \ln, \sin, \exp and \operatorname</h1>
+          <div className="not-prose my-6 p-6 rounded-lg border bg-muted/40 break-words">
+            <p className="text-sm font-semibold uppercase tracking-wide text-muted-foreground mb-3">Quick answer</p>
+            <ul className="space-y-2 text-base list-disc pl-5">
+              <li>
+                <strong>Logarithm:</strong> <code>{`$\\log x$`}</code>, never <code>{`$log x$`}</code> (which sets italic l·o·g).
+              </li>
+              <li>
+                <strong>Log base:</strong> <code>{`$\\log_2 x$`}</code>, <code>{`$\\log_{10} x$`}</code>; braces when the base has more than one character.
+              </li>
+              <li>
+                <strong>Natural log:</strong> <code>{`$\\ln x$`}</code>; <code>{`\\lg`}</code> also exists, <code>{`\\lb`}</code> does not.
+              </li>
+              <li>
+                <strong>Trig and exponential:</strong> <code>{`\\sin`}</code>, <code>{`\\cos`}</code>, <code>{`\\tan`}</code>, <code>{`\\exp`}</code>, all upright with the right spacing.
+              </li>
+              <li>
+                <strong>Limits and extrema:</strong> <code>{`$\\lim_{x \\to 0}$`}</code>, <code>{`$\\max_i$`}</code>, <code>{`$\\min$`}</code>; the subscript goes underneath in display math.
+              </li>
+              <li>
+                <strong>Anything else:</strong> <code>{`\\operatorname{sgn}`}</code>(x) once, or <code>{`\\DeclareMathOperator{\\sgn}{sgn}`}</code> in the preamble.
+              </li>
+            </ul>
+          </div>
           <p className="lead">
             Function names in mathematics are set upright, not in italics, and with a small
             space before their argument: log <em>x</em>, not <em>log x</em>. LaTeX gets this
@@ -100,7 +123,7 @@ export default async function LaTeXMathFunctionsPage() {
           </p>
 
           {/* ── Why \log ── */}
-          <h2>Why \log and Not log</h2>
+          <h2>Log in LaTeX: Why \log and Not log</h2>
           <p>
             In math mode every letter is a variable, so <code>$log(x)$</code> is typeset as the
             product <em>l</em>&middot;<em>o</em>&middot;<em>g</em> in italics, with no spacing
@@ -119,14 +142,60 @@ $\\log_2 x$  $\\log_{10} x$  $\\ln x$  $\\lg x$`}</code></pre>
             there is any chance of confusion with <code>\log x^2</code>.
           </p>
 
+          {/* ── logarithms ── */}
+          <h2>Logarithms in LaTeX: \log, \log_2, \ln and \lg</h2>
+          <p>
+            Every logarithm is written with an operator command and, if it has one, the base as a
+            subscript. The command keeps the name upright; the subscript sits slightly below the
+            baseline as the notation requires:
+          </p>
+          <div className="overflow-x-auto">
+          <table>
+            <thead>
+              <tr>
+                <th>You want</th>
+                <th>LaTeX</th>
+                <th>Notes</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>log <em>x</em></td><td><code>{`\\log x`}</code></td><td>Base left implicit (10 in engineering, <em>e</em> in pure math, 2 in computer science)</td></tr>
+              <tr><td>log<sub>2</sub> <em>n</em></td><td><code>{`\\log_2 n`}</code></td><td>Binary logarithm</td></tr>
+              <tr><td>log<sub>10</sub> <em>x</em></td><td><code>{`\\log_{10} x`}</code></td><td>Braces are required for a multi-digit base</td></tr>
+              <tr><td>log<sub><em>b</em></sub> <em>x</em></td><td><code>{`\\log_b x`}</code></td><td>General base</td></tr>
+              <tr><td>ln <em>x</em></td><td><code>{`\\ln x`}</code></td><td>Natural logarithm, base <em>e</em></td></tr>
+              <tr><td>lg <em>x</em></td><td><code>{`\\lg x`}</code></td><td>Base 10 in ISO 80000-2; base 2 in some CS texts</td></tr>
+              <tr><td>log(<em>x</em> + 1)</td><td><code>{`\\log(x + 1)`}</code></td><td>No space before a parenthesis</td></tr>
+              <tr><td>log<sup>2</sup> <em>x</em></td><td><code>{`\\log^2 x`}</code></td><td>Square of the logarithm</td></tr>
+              <tr><td>log log <em>n</em></td><td><code>{`\\log\\log n`}</code></td><td>Spacing between the two operators is automatic</td></tr>
+            </tbody>
+          </table>
+          </div>
+          <pre><code>{`\\documentclass{article}
+\\usepackage{amsmath}
+\\begin{document}
+The change-of-base rule is
+\\[ \\log_b x = \\frac{\\ln x}{\\ln b}, \\qquad
+   \\log_2 n = \\frac{\\log_{10} n}{\\log_{10} 2}, \\qquad
+   \\ln e^{x} = x . \\]
+Binary search takes $O(\\log n)$ steps.
+\\end{document}`}</code></pre>
+          <p>
+            For a logarithm whose argument is a fraction, scale the parentheses:{' '}
+            <code>{`\\log\\left(\\frac{a}{b}\\right)`}</code>. In big-O notation, write{' '}
+            <code>{`O(n \\log n)`}</code>; the operator supplies the space between <em>n</em> and
+            log.
+          </p>
+
           {/* ── predefined ── */}
-          <h2>All Predefined Function Operators</h2>
+          <h2>Built-in Operators: \sin, \cos, \exp, \lim, \max and More</h2>
           <p>
             All of these are built into LaTeX itself except the <code>\var...</code>,{' '}
             <code>\injlim</code> and <code>\projlim</code> variants, which need amsmath.
             Operators marked with limits take their subscript underneath in display math, like{' '}
             <code>\lim_{'{x \\to 0}'}</code>:
           </p>
+          <div className="overflow-x-auto">
           <table>
             <thead>
               <tr>
@@ -144,6 +213,7 @@ $\\log_2 x$  $\\log_{10} x$  $\\ln x$  $\\lg x$`}</code></pre>
               <tr><td>Algebra</td><td><code>\det \dim \ker \deg \gcd \hom \arg \Pr</code> (<code>\det</code>, <code>\gcd</code> and <code>\Pr</code> take limits below)</td></tr>
             </tbody>
           </table>
+          </div>
           <pre><code>{`\\[ \\lim_{x \\to 0} \\frac{\\sin x}{x} = 1, \\qquad
    \\max_{i} a_i, \\qquad \\gcd(a, b), \\qquad \\Pr(X \\le x), \\qquad \\det A \\]`}</code></pre>
           <p>
@@ -169,7 +239,7 @@ $\\log_2 x$  $\\log_{10} x$  $\\ln x$  $\\lg x$`}</code></pre>
           </p>
 
           {/* ── Custom operators ── */}
-          <h2>Defining Your Own: argmax, sgn, tr and operatorname</h2>
+          <h2>Custom Functions: \operatorname and \DeclareMathOperator</h2>
           <p>
             argmax, argmin, sgn, tr, rank, Var, softmax and the like have no command. For a
             one-off use <code>\operatorname{'{...}'}</code>; for anything you use more than
@@ -347,6 +417,7 @@ $\\log_2 x$  $\\log_{10} x$  $\\ln x$  $\\lg x$`}</code></pre>
 
           {/* ── Errors ── */}
           <h2>Common Errors and Fixes</h2>
+          <div className="overflow-x-auto">
           <table>
             <thead>
               <tr>
@@ -403,6 +474,7 @@ $\\log_2 x$  $\\log_{10} x$  $\\ln x$  $\\lg x$`}</code></pre>
               </tr>
             </tbody>
           </table>
+          </div>
 
           {/* ── Complete example ── */}
           <h2>Complete Example</h2>
@@ -440,6 +512,7 @@ The sign function is piecewise:
 
           {/* ── Quick reference ── */}
           <h2>Quick Reference</h2>
+          <div className="overflow-x-auto">
           <table>
             <thead>
               <tr>
@@ -466,6 +539,7 @@ The sign function is piecewise:
               <tr><td>Piecewise</td><td><code>\begin{'{cases}'} ... \end{'{cases}'}</code></td></tr>
             </tbody>
           </table>
+          </div>
 
           {/* ── FAQ ── */}
           <h2>Frequently Asked Questions</h2>
@@ -517,13 +591,9 @@ The sign function is piecewise:
             <code>{`\\DeclarePairedDelimiter{\\norm}{\\lVert}{\\rVert}`}</code> lets you write{' '}
             <code>\norm{'{x}'}_2</code> and <code>\norm*{'{...}'}</code> for automatic sizing.
           </p>
-          <h3>Should I use \frac or \dfrac?</h3>
+          <h3>How do you write log in LaTeX?</h3>
           <p>
-            <code>\frac</code> picks the style for you: full-size in display math and small in
-            inline math. <code>\dfrac</code> forces the display size and <code>\tfrac</code>{' '}
-            the small text size regardless of context. Use <code>\dfrac</code> sparingly in
-            inline text, as it stretches the line spacing; it is most useful inside a matrix or
-            a <code>cases</code> environment where <code>\frac</code> would be reduced.
+            Use <code>{`\\log`}</code> in math mode: <code>{`$\\log x$`}</code> or <code>{`$\\log(x+1)$`}</code>. Typing log without the backslash gives the italic product of the variables l, o and g. Put the base in a subscript, <code>{`$\\log_2 n$`}</code> or <code>{`$\\log_{10} x$`}</code>, and use <code>{`$\\ln x$`}</code> for the natural logarithm. No package is needed.
           </p>
 
           {/* ── Next Steps ── */}
