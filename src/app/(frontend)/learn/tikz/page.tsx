@@ -231,7 +231,7 @@ export default async function LearnTikzPage() {
 
 \\begin{tikzpicture}
   \\draw (0,0) circle (1);                       % circle, radius 1 cm
-  \\draw[fill=orange!30] (3,0) circle [radius=0.6];
+  \\draw[fill=orange!30] (3,0) circle [radius=0.6];   % current key syntax, same result
   \\draw (6,0) ellipse (1.2 and 0.6);             % x radius and y radius
   \\draw (9,-0.5) arc (0:180:1);                  % start angle : end angle : radius
 
@@ -255,7 +255,7 @@ export default async function LearnTikzPage() {
                 <tr><td>Polyline / polygon</td><td><code>{`\\draw (0,0) -- (2,0) -- (1,2) -- cycle;`}</code></td></tr>
                 <tr><td>Rectangle</td><td><code>{`\\draw (0,0) rectangle (3,2);`}</code></td></tr>
                 <tr><td>Square of side 2</td><td><code>{`\\draw (0,0) rectangle ++(2,2);`}</code></td></tr>
-                <tr><td>Circle</td><td><code>{`\\draw (0,0) circle (1);`}</code></td></tr>
+                <tr><td>Circle</td><td><code>{`\\draw (0,0) circle [radius=1];`}</code> (or the older, still valid <code>{`circle (1)`}</code>)</td></tr>
                 <tr><td>Ellipse</td><td><code>{`\\draw (0,0) ellipse (2 and 1);`}</code></td></tr>
                 <tr><td>Arc</td><td><code>{`\\draw (1,0) arc (0:90:1);`}</code></td></tr>
                 <tr><td>Grid</td><td><code>{`\\draw[step=1] (0,0) grid (4,3);`}</code></td></tr>

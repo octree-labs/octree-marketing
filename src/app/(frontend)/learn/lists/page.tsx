@@ -414,6 +414,7 @@ Some text that interrupts the list.
             types in total). You can mix different list types freely. Each itemize level has its
             own bullet, and each enumerate level its own numbering:
           </p>
+          <div className="overflow-x-auto">
           <table>
             <thead>
               <tr>
@@ -431,6 +432,7 @@ Some text that interrupts the list.
               <tr><td>4</td><td>&middot; <code>\textperiodcentered</code></td><td><code>\labelitemiv</code></td><td>A., B., C.</td><td><code>\labelenumiv</code></td></tr>
             </tbody>
           </table>
+          </div>
 
           <h3>Nested itemize</h3>
           <pre><code>{`\\begin{itemize}
@@ -598,6 +600,7 @@ Some text that interrupts the list.
 \\end{enumerate}
 See item~\\ref{it:first}.   % prints "i", not "(i)"`}</code></pre>
 
+          <div className="overflow-x-auto">
           <table>
             <thead>
               <tr>
@@ -614,6 +617,7 @@ See item~\\ref{it:first}.   % prints "i", not "(i)"`}</code></pre>
               <tr><td><code>\Roman*</code></td><td>I, II, III</td><td><code>label=\Roman*.</code></td></tr>
             </tbody>
           </table>
+          </div>
 
           <p>
             The same key sets the bullet for an itemize list, so you do not need to repeat{' '}
@@ -855,6 +859,7 @@ We need
 
           {/* ── Cheat sheet ── */}
           <h2>Cheat Sheet</h2>
+          <div className="overflow-x-auto">
           <table>
             <thead>
               <tr>
@@ -887,9 +892,11 @@ We need
               <tr><td>More than 4 nesting levels</td><td><code>{`\\setlistdepth{9}`}</code> + <code>{`\\renewlist{itemize}{itemize}{9}`}</code></td><td>enumitem</td></tr>
             </tbody>
           </table>
+          </div>
 
           {/* ── Errors ── */}
           <h2>Common Errors and Fixes</h2>
+          <div className="overflow-x-auto">
           <table>
             <thead>
               <tr>
@@ -946,9 +953,11 @@ We need
               </tr>
             </tbody>
           </table>
+          </div>
 
           {/* ── Quick Reference Table ── */}
           <h2>Environment Reference</h2>
+          <div className="overflow-x-auto">
           <table>
             <thead>
               <tr>
@@ -985,9 +994,11 @@ We need
               </tr>
             </tbody>
           </table>
+          </div>
 
           {/* ── Common Packages ── */}
           <h2>Common Packages</h2>
+          <div className="overflow-x-auto">
           <table>
             <thead>
               <tr>
@@ -1018,6 +1029,7 @@ We need
               </tr>
             </tbody>
           </table>
+          </div>
 
           {/* ── FAQ ── */}
           <h2>Frequently Asked Questions</h2>

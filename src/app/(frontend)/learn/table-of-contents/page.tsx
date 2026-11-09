@@ -20,7 +20,7 @@ const breadcrumbSchema = generateBreadcrumbSchema(breadcrumbs)
 const page = {
   slug: 'table-of-contents',
   title: 'Table of Contents in LaTeX: \\tableofcontents, Depth and Styling',
-  seoTitle: 'Table of Contents in LaTeX: Depth, Links and Styling',
+  seoTitle: 'Table of Contents in LaTeX: Depth, Links, Styling',
   description:
     'Table of contents in LaTeX: \\tableofcontents, compiling twice, tocdepth, unnumbered sections, lists of figures, hyperref links, tocloft styling and errors.',
   keywords:
@@ -262,6 +262,7 @@ Report sets tocdepth to 2, so this level is left out.
             Each heading command has a level number. The counter <code>tocdepth</code> decides the
             deepest level that appears in the contents:
           </p>
+          <div className="overflow-x-auto">
           <table>
             <thead>
               <tr>
@@ -280,6 +281,7 @@ Report sets tocdepth to 2, so this level is left out.
               <tr><td><code>\subparagraph</code></td><td>5</td><td>all</td></tr>
             </tbody>
           </table>
+          </div>
           <p>
             The defaults are <code>tocdepth</code> 3 in article (down to subsubsections) and 2 in
             report and book (down to subsections). A second counter, <code>secnumdepth</code>,

@@ -20,7 +20,7 @@ const breadcrumbSchema = generateBreadcrumbSchema(breadcrumbs)
 const page = {
   slug: 'languages',
   title: 'Languages in LaTeX: babel, polyglossia, Spanish, Arabic and More',
-  seoTitle: 'Languages in LaTeX: babel, polyglossia, Spanish, Arabic',
+  seoTitle: 'Languages in LaTeX: babel, polyglossia, Spanish',
   description: 'LaTeX in any language: babel for pdfLaTeX, polyglossia for XeLaTeX, Spanish, French, German, Arabic and Hebrew, Chinese and Japanese, Russian, Greek.',
   keywords: 'latex languages, latex language, language latex, babel latex, latex babel, polyglossia, latex polyglossia, latex spanish, latex in spanish, spanish latex, babel spanish, latex arabic, arabic latex, latex arabic text, latex hebrew, latex right to left, latex rtl, latex french, latex german, latex chinese, xecjk, ctex, cjkutf8, latex japanese, latex russian, t2a fontenc, latex greek, lgr, selectlanguage, foreignlanguage, otherlanguage, latex hyphenation language, unknown option babel, babel es-tabla, multilingual latex',
 }
@@ -464,12 +464,12 @@ English, then \\foreignlanguage{greek}{Καλημέρα κόσμε}.
               </thead>
               <tbody>
                 <tr>
-                  <td><em>Package babel Error: Unknown option &apos;spansh&apos;. Either you misspelled it or the language definition file spansh.ldf was not found</em></td>
+                  <td><em>Package babel Error: Unknown option &apos;spansh&apos;. Suggested actions: Make sure you haven&apos;t misspelled it</em></td>
                   <td>Misspelled language name, or a name babel does not know</td>
                   <td>Check the spelling: <code>spanish</code>, <code>ngerman</code>, <code>french</code>, <code>russian</code>; for newer languages use <code>{`\\babelprovide`}</code></td>
                 </tr>
                 <tr>
-                  <td><em>Package inputenc Error: Unicode character П (U+041F) not set up for use with LaTeX</em></td>
+                  <td><em>LaTeX Error: Unicode character П (U+041F) not set up for use with LaTeX</em></td>
                   <td>Cyrillic or Greek letters under pdfLaTeX without the font encoding</td>
                   <td><code>{`\\usepackage[T2A,T1]{fontenc}`}</code> (or <code>LGR</code> for Greek), or switch to XeLaTeX</td>
                 </tr>
@@ -479,7 +479,7 @@ English, then \\foreignlanguage{greek}{Καλημέρα κόσμε}.
                   <td>Set a font that has them: <code>\arabicfont</code>, <code>\setCJKmainfont</code>, <code>\setmainfont</code></td>
                 </tr>
                 <tr>
-                  <td><em>Package polyglossia Error: The current latin font does not contain the &quot;Arabic&quot; script!</em></td>
+                  <td><em>Package polyglossia Error: The current main roman font, lmroman10-regular, does not contain the &quot;Arabic&quot; script!</em></td>
                   <td>No <code>\arabicfont</code> defined</td>
                   <td><code>{`\\newfontfamily\\arabicfont[Script=Arabic]{Amiri}`}</code></td>
                 </tr>
