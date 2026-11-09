@@ -19,18 +19,18 @@ const breadcrumbSchema = generateBreadcrumbSchema(breadcrumbs)
 
 const page = {
   slug: 'integrals-sums-limits',
-  title: 'Integrals, Sums and Limits in LaTeX: \\int, \\sum, \\lim and \\partial',
-  seoTitle: 'Integrals, Sums and Limits in LaTeX',
-  description: 'Integrals, sums and limits in LaTeX: the sum symbol Σ with \\sum, \\int and multiple integrals, \\lim and \\limits, partial derivatives with \\partial and ∇.',
+  title: 'Sums, Integrals and Limits in LaTeX: \\sum, \\int, \\lim and \\partial',
+  seoTitle: 'Summation in LaTeX (\\sum), Integrals and Limits',
+  description: 'Summation in LaTeX with \\sum_{i=1}^{n}, integrals \\int_a^b, \\iint and \\oint, limits \\lim_{x\\to\\infty}, \\limits vs \\displaystyle, \\prod and common errors.',
   keywords: 'latex integral, latex sum, sum symbol, sigma notation latex, latex sigma, latex summation, latex limit, latex product, latex double integral, latex triple integral, latex contour integral, latex partial derivative, partial symbol, latex partial, latex nabla, latex gradient, latex lim, latex infty, latex series, latex big operators, latex limits nolimits, latex substack, latex mathop, latex dx upright, sum latex, summation latex, latex sum symbol, latex sum notation, integral latex, latex integral symbol, latex definite integral, latex indefinite integral, limit latex, latex limsup liminf, integrals sums and limits latex, latex fundamental theorem of calculus, latex derivative d dx',
 }
 
 /** Last content update, used for dateModified in the article schema. */
-const LAST_UPDATED = '2026-10-18'
+const LAST_UPDATED = '2026-11-08'
 
 const faq: FaqItem[] = [
   {
-    question: 'How do I write the sum symbol Σ in LaTeX?',
+    question: 'How do I write a summation (the sum symbol Σ) in LaTeX?',
     answer:
       'Use \\sum in math mode, with the index and bounds as subscript and superscript: $\\sum_{i=1}^{n} a_i$. Do not use \\Sigma, which is the plain Greek capital letter and does not take limits above and below.',
   },
@@ -86,7 +86,32 @@ export default async function IntegralsSumsLimitsPage() {
         </div>
 
         <article className="prose prose-lg dark:prose-invert max-w-4xl mx-auto">
-          <h1>Integrals, Sums and Limits in LaTeX: \int, \sum, \lim and \partial</h1>
+          <h1>Sums, Integrals and Limits in LaTeX: \sum, \int, \lim and \partial</h1>
+
+          <div className="not-prose my-6 p-6 rounded-lg border bg-muted/40">
+            <p className="text-sm font-semibold uppercase tracking-wide text-muted-foreground mb-3">Quick answer</p>
+            <ul className="space-y-2 text-base list-disc pl-5">
+              <li>
+                <strong>Summation:</strong> <code>{`$\\sum_{i=1}^{n} a_i$`}</code>; the subscript is the
+                lower bound, the superscript the upper. Use <code>\sum</code>, not <code>\Sigma</code>.
+              </li>
+              <li>
+                <strong>Integral:</strong> <code>{`$\\int_a^b f(x)\\,dx$`}</code>; double, triple and
+                contour: <code>\iint</code>, <code>\iiint</code> (amsmath), <code>\oint</code>.
+              </li>
+              <li>
+                <strong>Limit:</strong> <code>{`$\\lim_{x \\to \\infty} f(x)$`}</code>.
+              </li>
+              <li>
+                <strong>Product:</strong> <code>{`$\\prod_{k=1}^{n} k$`}</code>.
+              </li>
+              <li>
+                <strong>Bounds above and below in inline text:</strong>{' '}
+                <code>{`$\\sum\\limits_{i=1}^{n}$`}</code> or <code>{`$\\displaystyle\\sum_{i=1}^{n}$`}</code>;{' '}
+                <code>\nolimits</code> does the opposite in display math.
+              </li>
+            </ul>
+          </div>
           <p className="lead">
             The integral sign is <code>\int</code>, the sum symbol Σ is <code>\sum</code>, a
             limit is <code>\lim</code>, and the partial symbol ∂ is <code>\partial</code>. Bounds
@@ -117,7 +142,7 @@ export default async function IntegralsSumsLimitsPage() {
           </table>
 
           {/* ---- Sum symbol ---- */}
-          <h2>Sum Symbol Σ: Meaning and LaTeX</h2>
+          <h2>Summation in LaTeX (\sum)</h2>
           <p>
             The capital Greek letter sigma, Σ, stands for &ldquo;sum&rdquo;. In sigma notation
             the small expression under the symbol names an index variable and its starting
@@ -800,8 +825,8 @@ $\\displaystyle \\sum_{i=1}^{n} a_i$
   \\oint_C f(z) \\, dz = 2\\pi i \\sum_{k=1}^{n} \\operatorname{Res}(f, z_k)
 \\]`}</code></pre>
 
-          {/* ---- Common Mistakes ---- */}
-          <h2>Common Mistakes</h2>
+          {/* ---- Common Errors ---- */}
+          <h2>Common Errors</h2>
           <p>
             Here are frequent errors when typesetting integrals, sums, and limits in LaTeX,
             along with corrected versions.
@@ -889,7 +914,7 @@ $\\sum_{\\substack{i=1 \\\\ i \\ne j}}$`}</code></pre>
 
           {/* ---- FAQ ---- */}
           <h2>Frequently Asked Questions</h2>
-          <h3>How do I write the sum symbol Σ in LaTeX?</h3>
+          <h3>How do I write a summation (the sum symbol Σ) in LaTeX?</h3>
           <p>
             Use <code>\sum</code> in math mode, with the index and bounds as subscript and
             superscript: <code>{`$\\sum_{i=1}^{n} a_i$`}</code>. Do not use <code>\Sigma</code>,

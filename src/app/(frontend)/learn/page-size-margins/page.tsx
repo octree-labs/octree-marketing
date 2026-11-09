@@ -1,6 +1,6 @@
 import type { Metadata } from 'next/types'
 
-import { learnMetadata } from '@/utilities/learnMetadata'
+import { learnMetadata, type FaqItem } from '@/utilities/learnMetadata'
 import Link from 'next/link'
 import { buttonVariants } from '@/components/ui/button'
 import React from 'react'
@@ -19,13 +19,42 @@ const breadcrumbSchema = generateBreadcrumbSchema(breadcrumbs)
 
 const page = {
   slug: 'page-size-margins',
-  title: 'Page Size and Margins in LaTeX – Guide 2026',
-  description: 'Learn how to set page size and margins in LaTeX using the geometry package. Complete guide covering A4, letter, custom sizes, margin settings, landscape mode, and layout options.',
-  keywords: 'latex page size, latex margins, latex geometry package, latex a4 paper, latex letter size, latex page layout, latex margin settings, latex landscape, latex page dimensions, set margins in latex, latex paper size',
+  title: 'LaTeX Margins and Page Size with the geometry Package',
+  seoTitle: 'LaTeX Margins and Page Size (geometry Package)',
+  description: 'Set margins in LaTeX with the geometry package: a4paper or letterpaper, per-side margins, landscape, \\newgeometry for one page, and the headheight warning.',
+  keywords: 'latex margins, margins latex, geometry package latex, latex geometry, latex 1 inch margins, latex change margins, latex newgeometry, latex headheight too small, latex default margins, latex page size, latex margins, latex geometry package, latex a4 paper, latex letter size, latex page layout, latex margin settings, latex landscape, latex page dimensions, set margins in latex, latex paper size',
 }
 
 /** Last content update, used for dateModified in the article schema. */
-const LAST_UPDATED = '2026-10-17'
+const LAST_UPDATED = '2026-11-08'
+
+const faq: FaqItem[] = [
+  {
+    question: 'How do I change the margins in LaTeX?',
+    answer:
+      'Load the geometry package in the preamble with the paper size and the margin you want: \\usepackage[a4paper, margin=2.5cm]{geometry}. For different margins on each side, use left, right, top and bottom, as in \\usepackage[left=3cm, right=2cm, top=2.5cm, bottom=2.5cm]{geometry}.',
+  },
+  {
+    question: 'What are the default margins in LaTeX?',
+    answer:
+      'Without geometry, a 10pt article on US Letter paper has about 1.875 inches (4.7 cm) of margin on the left and right. The standard classes size the text block for readable line length, not to fill the page, which is why the default margins look wide.',
+  },
+  {
+    question: 'How do I set 1-inch margins in LaTeX?',
+    answer:
+      'Add \\usepackage[letterpaper, margin=1in]{geometry} to the preamble. On A4 paper use \\usepackage[a4paper, margin=1in]{geometry}; margin sets all four sides at once.',
+  },
+  {
+    question: 'How do I change the margins for one page in LaTeX?',
+    answer:
+      'Put \\newgeometry{margin=1.5cm} where the page should start and \\restoregeometry where the original margins should come back. Both commands start a new page, so place them at a page break.',
+  },
+  {
+    question: 'How do I fix "\\headheight is too small"?',
+    answer:
+      'The warning comes from fancyhdr when the header is taller than the space reserved for it. Add the value it suggests, rounded up, to the geometry options, as in \\usepackage[a4paper, margin=2.5cm, headheight=15pt]{geometry}, or write \\setlength{\\headheight}{15pt} in the preamble.',
+  },
+]
 
 export default async function PageSizeMarginsPage() {
   return (
@@ -39,6 +68,7 @@ export default async function PageSizeMarginsPage() {
         title={page.title}
         description={page.description}
         dateModified={LAST_UPDATED}
+        faq={faq}
       />
       <div className="container">
         <div className="mb-8 max-w-4xl mx-auto">
@@ -51,12 +81,37 @@ export default async function PageSizeMarginsPage() {
         </div>
 
         <article className="prose prose-lg dark:prose-invert max-w-4xl mx-auto">
-          <h1>Page Size and Margins in LaTeX</h1>
+          <h1>LaTeX Margins and Page Size with the geometry Package</h1>
+
+          <div className="not-prose my-6 p-6 rounded-lg border bg-muted/40">
+            <p className="text-sm font-semibold uppercase tracking-wide text-muted-foreground mb-3">Quick answer</p>
+            <ul className="space-y-2 text-base list-disc pl-5">
+              <li>
+                <strong>All margins:</strong> <code>{`\\usepackage[a4paper, margin=2.5cm]{geometry}`}</code>{' '}
+                in the preamble.
+              </li>
+              <li>
+                <strong>Per side:</strong> <code>{`\\usepackage[left=3cm, right=2cm, top=2.5cm, bottom=2.5cm]{geometry}`}</code>.
+              </li>
+              <li>
+                <strong>US Letter, 1 inch:</strong> <code>{`\\usepackage[letterpaper, margin=1in]{geometry}`}</code>.
+              </li>
+              <li>
+                <strong>Landscape:</strong> add <code>landscape</code> to the options.
+              </li>
+              <li>
+                <strong>One page only:</strong> <code>{`\\newgeometry{margin=1.5cm}`}</code> ...{' '}
+                <code>\restoregeometry</code>.
+              </li>
+            </ul>
+          </div>
           <p className="lead">
-            Controlling page layout is essential for academic papers, theses, dissertations, books,
-            and any professionally typeset document. LaTeX gives you precise control over page
-            dimensions, margins, headers, footers, and more &mdash; primarily through the powerful
-            <code>geometry</code> package.
+            To set margins in LaTeX, load the <code>geometry</code> package with the paper size and
+            margins you want, for example{' '}
+            <code>{`\\usepackage[a4paper, margin=2.5cm]{geometry}`}</code>. This guide covers
+            per-side and two-sided margins, A4 versus US Letter, custom page sizes, landscape pages,
+            changing margins mid-document with <code>\newgeometry</code>, header spacing and the{' '}
+            <code>\headheight</code> warning, and the errors that come up along the way.
           </p>
 
           <h2>Default Page Layout</h2>
@@ -76,14 +131,23 @@ export default async function PageSizeMarginsPage() {
             </li>
           </ul>
           <p>
-            LaTeX&apos;s built-in margin defaults are intentionally wide &mdash; roughly 1.5 inches
-            on each side for a letter-sized document &mdash; because they are optimised for
-            readability with a line length of about 66 characters. While this produces pleasant
+            LaTeX&apos;s built-in margin defaults are intentionally wide &mdash; about 1.875 inches
+            (4.7&nbsp;cm) on the left and right of a 10pt <code>article</code> on letter paper
+            &mdash; because the text width is chosen for a line length of about 66 characters,
+            not to fill the page. While this produces pleasant
             body text, most authors need tighter control for submission requirements, institutional
             guidelines, or personal preference.
           </p>
 
-          <h2>The geometry Package</h2>
+          {/* ── Margins ── */}
+          <h2>Set Margins in LaTeX with the geometry Package</h2>
+          <p>
+            The <code>geometry</code> package is the standard way to set margins in LaTeX. One
+            line in the preamble sets the paper size and all four margins, and geometry
+            recalculates <code>\textwidth</code>, <code>\textheight</code>,{' '}
+            <code>\oddsidemargin</code> and the other internal lengths for you, so you never edit
+            them by hand.
+          </p>
           <p>
             The <code>geometry</code> package is the standard tool for setting page size and margins
             in LaTeX. It provides a clean, declarative interface that replaces the manual adjustment
@@ -92,7 +156,7 @@ export default async function PageSizeMarginsPage() {
           </p>
           <p>Basic usage is straightforward:</p>
 
-          <pre><code>{`\\usepackage[a4paper, margin=1in]{geometry}`}</code></pre>
+          <pre><code>{`\\usepackage[a4paper, margin=2.5cm]{geometry}`}</code></pre>
 
           <p>
             You can also pass options on a separate line for better readability:
@@ -110,6 +174,229 @@ export default async function PageSizeMarginsPage() {
           <p>
             Both approaches are equivalent. Use whichever style you find easier to maintain.
           </p>
+
+          <p>
+            Margins can be set individually or all at once. The <code>geometry</code> package
+            accepts both metric and imperial units (<code>mm</code>, <code>cm</code>,{' '}
+            <code>in</code>, <code>pt</code>).
+          </p>
+
+          <h3>Per-Side Margins</h3>
+          <pre><code>{`\\usepackage{geometry}
+\\geometry{
+  a4paper,
+  left=30mm,
+  right=25mm,
+  top=25mm,
+  bottom=25mm
+}`}</code></pre>
+
+          <h3>Uniform Margins</h3>
+          <p>
+            Use the <code>margin</code> key to set all four margins to the same value:
+          </p>
+          <pre><code>{`\\usepackage[a4paper, margin=1in]{geometry}`}</code></pre>
+
+          <h3>Horizontal and Vertical Shortcuts</h3>
+          <pre><code>{`\\usepackage{geometry}
+\\geometry{
+  a4paper,
+  hmargin=25mm,   % sets left and right
+  vmargin=30mm    % sets top and bottom
+}`}</code></pre>
+
+          <h3>Two-sided Documents (inner/outer)</h3>
+          <p>
+            For documents printed on both sides (books, theses), use <code>inner</code> and
+            <code>outer</code> instead of <code>left</code> and <code>right</code>. The inner
+            margin is the one closest to the binding:
+          </p>
+          <pre><code>{`\\documentclass[twoside]{book}
+\\usepackage{geometry}
+\\geometry{
+  a4paper,
+  inner=30mm,    % binding side
+  outer=20mm,    % outside edge
+  top=25mm,
+  bottom=25mm
+}`}</code></pre>
+
+          <h3>a4paper vs letterpaper</h3>
+          <p>
+            Always name the paper size next to the margins. Without it, <code>geometry</code> uses
+            the class default, which is US Letter for the standard classes in most distributions,
+            so a document you meant for A4 comes out 6&nbsp;mm narrower and 18&nbsp;mm taller
+            than expected. You can give the size to the class or to geometry; geometry picks up
+            the class option:
+          </p>
+          <pre><code>{`% Either of these gives A4 with 2.5 cm margins
+\\documentclass[a4paper]{article}
+\\usepackage[margin=2.5cm]{geometry}
+
+\\documentclass{article}
+\\usepackage[a4paper, margin=2.5cm]{geometry}
+
+% US Letter with 1-inch margins
+\\documentclass{article}
+\\usepackage[letterpaper, margin=1in]{geometry}`}</code></pre>
+          <p>
+            With pdfLaTeX, XeLaTeX and LuaLaTeX, geometry also sets the PDF page size, so the PDF
+            viewer shows the paper size you asked for.
+          </p>
+
+          <h3>Landscape</h3>
+          <p>
+            There are several ways to use landscape orientation in LaTeX, depending on whether
+            you want the entire document or just selected pages in landscape.
+          </p>
+
+          <h4>Entire Document in Landscape</h4>
+          <p>
+            Pass the <code>landscape</code> option to <code>geometry</code>:
+          </p>
+          <pre><code>{`\\usepackage[a4paper, landscape, margin=1in]{geometry}`}</code></pre>
+
+          <h4>Individual Landscape Pages</h4>
+          <p>
+            Use the <code>lscape</code> package (or <code>pdflscape</code> for PDF output that
+            rotates the view in PDF readers) to insert landscape pages within a portrait document:
+          </p>
+          <pre><code>{`\\usepackage{pdflscape}
+
+% ... portrait content ...
+
+\\begin{landscape}
+  % This content appears on a landscape page
+  \\begin{table}[ht]
+    \\centering
+    \\caption{A wide table that needs landscape orientation}
+    \\begin{tabular}{lcccccccc}
+      \\toprule
+      Item & Jan & Feb & Mar & Apr & May & Jun & Jul & Aug \\\\
+      \\midrule
+      Sales & 120 & 135 & 150 & 142 & 160 & 175 & 180 & 190 \\\\
+      \\bottomrule
+    \\end{tabular}
+  \\end{table}
+\\end{landscape}
+
+% ... portrait content continues ...`}</code></pre>
+
+          <h4>Landscape with Adjusted Margins</h4>
+          <p>
+            If you need different margins on landscape pages, combine <code>pdflscape</code> with{' '}
+            <code>\newgeometry</code>. Call <code>\newgeometry</code> before the landscape
+            environment and <code>\restoregeometry</code> after it, not inside:
+          </p>
+          <pre><code>{`\\documentclass{article}
+\\usepackage[a4paper, margin=1in]{geometry}
+\\usepackage{pdflscape}
+\\begin{document}
+
+Portrait text.
+
+\\newgeometry{margin=15mm}
+\\begin{landscape}
+  Wide content here.
+\\end{landscape}
+\\restoregeometry
+
+Portrait again, with the original margins.
+
+\\end{document}`}</code></pre>
+
+          <h3>Change Margins Mid-Document with \newgeometry</h3>
+          <p>
+            Sometimes you need different margins for different sections of your document &mdash;
+            for example, wider margins for an appendix with large figures, or narrower margins
+            for a title page. The <code>geometry</code> package provides two commands for this:
+          </p>
+
+          <pre><code>{`\\documentclass{article}
+\\usepackage{geometry}
+\\geometry{a4paper, margin=1in}
+
+\\begin{document}
+
+\\section{Normal Section}
+This text uses the default 1-inch margins.
+
+% Switch to new margins
+\\newgeometry{left=15mm, right=15mm, top=20mm, bottom=20mm}
+
+\\section{Wide Section}
+This section has narrower margins for more content space.
+Perfect for wide tables or figures.
+
+% Restore original margins
+\\restoregeometry
+
+\\section{Back to Normal}
+Margins are back to the original 1-inch setting.
+
+\\end{document}`}</code></pre>
+
+          <p>
+            <strong>Important notes about <code>\newgeometry</code>:</strong>
+          </p>
+          <ul>
+            <li>
+              It always triggers a page break, so place it at natural section boundaries.
+            </li>
+            <li>
+              <code>\restoregeometry</code> returns to whatever was set in the preamble
+              <code>\geometry&#123;...&#125;</code> call.
+            </li>
+            <li>
+              You can call <code>\newgeometry</code> multiple times with different settings
+              throughout the document.
+            </li>
+          </ul>
+
+          <h3>Header Height and the fancyhdr Warning</h3>
+          <p>
+            When using packages like <code>fancyhdr</code> for custom headers and footers, you
+            often need to adjust spacing to prevent overlaps. The <code>geometry</code> package
+            provides dedicated options for this:
+          </p>
+
+          <pre><code>{`\\usepackage{geometry}
+\\geometry{
+  a4paper,
+  margin=1in,
+  headheight=14pt,   % height of the header area
+  headsep=10mm,      % space between header and body text
+  footskip=12mm      % space between body text and footer
+}`}</code></pre>
+
+          <p>
+            With an 11pt or 12pt document and a <code>fancy</code> page style, the log shows{' '}
+            <em>Package fancyhdr Warning: \headheight is too small (12.0pt): Make it at least
+            14.49998pt</em>. The header is taller than the space reserved for it, so it pushes
+            the body down by a different amount on different pages. Give geometry the number
+            from the warning, rounded up:
+          </p>
+
+          <pre><code>{`\\usepackage[a4paper, margin=2.5cm, headheight=15pt]{geometry}
+
+% or, after geometry has been loaded
+\\geometry{headheight=15pt}`}</code></pre>
+
+          <h4>Including Header and Footer in Margins</h4>
+          <p>
+            By default, <code>geometry</code> places headers and footers inside the margin area.
+            You can change this behaviour with the <code>includeheadfoot</code> option, which
+            counts the header and footer as part of the text body:
+          </p>
+          <pre><code>{`\\usepackage{geometry}
+\\geometry{
+  a4paper,
+  margin=1in,
+  includeheadfoot,
+  headheight=14pt,
+  headsep=10mm,
+  footskip=12mm
+}`}</code></pre>
 
           <h2>Setting Page Size</h2>
           <p>
@@ -178,53 +465,6 @@ export default async function PageSizeMarginsPage() {
             </tbody>
           </table>
 
-          <h2>Setting Margins</h2>
-          <p>
-            Margins can be set individually or all at once. The <code>geometry</code> package
-            accepts both metric and imperial units (<code>mm</code>, <code>cm</code>,
-            <code>in</code>, <code>pt</code>).
-          </p>
-
-          <h3>Individual Margins</h3>
-          <pre><code>{`\\usepackage{geometry}
-\\geometry{
-  a4paper,
-  left=30mm,
-  right=25mm,
-  top=25mm,
-  bottom=25mm
-}`}</code></pre>
-
-          <h3>Uniform Margins</h3>
-          <p>
-            Use the <code>margin</code> key to set all four margins to the same value:
-          </p>
-          <pre><code>{`\\usepackage[a4paper, margin=1in]{geometry}`}</code></pre>
-
-          <h3>Horizontal and Vertical Shortcuts</h3>
-          <pre><code>{`\\usepackage{geometry}
-\\geometry{
-  a4paper,
-  hmargin=25mm,   % sets left and right
-  vmargin=30mm    % sets top and bottom
-}`}</code></pre>
-
-          <h3>Two-sided Documents (inner/outer)</h3>
-          <p>
-            For documents printed on both sides (books, theses), use <code>inner</code> and
-            <code>outer</code> instead of <code>left</code> and <code>right</code>. The inner
-            margin is the one closest to the binding:
-          </p>
-          <pre><code>{`\\documentclass[twoside]{book}
-\\usepackage{geometry}
-\\geometry{
-  a4paper,
-  inner=30mm,    % binding side
-  outer=20mm,    % outside edge
-  top=25mm,
-  bottom=25mm
-}`}</code></pre>
-
           <h2>Common Margin Presets</h2>
           <p>
             Here are ready-to-use configurations for the most frequent scenarios:
@@ -270,146 +510,6 @@ export default async function PageSizeMarginsPage() {
   headheight=14pt,
   headsep=12mm
 }`}</code></pre>
-
-          <h2>Landscape Mode</h2>
-          <p>
-            There are several ways to use landscape orientation in LaTeX, depending on whether
-            you want the entire document or just selected pages in landscape.
-          </p>
-
-          <h3>Entire Document in Landscape</h3>
-          <p>
-            Pass the <code>landscape</code> option to <code>geometry</code>:
-          </p>
-          <pre><code>{`\\usepackage[a4paper, landscape, margin=1in]{geometry}`}</code></pre>
-
-          <h3>Individual Landscape Pages</h3>
-          <p>
-            Use the <code>lscape</code> package (or <code>pdflscape</code> for PDF output that
-            rotates the view in PDF readers) to insert landscape pages within a portrait document:
-          </p>
-          <pre><code>{`\\usepackage{pdflscape}
-
-% ... portrait content ...
-
-\\begin{landscape}
-  % This content appears on a landscape page
-  \\begin{table}[ht]
-    \\centering
-    \\caption{A wide table that needs landscape orientation}
-    \\begin{tabular}{lcccccccc}
-      \\toprule
-      Item & Jan & Feb & Mar & Apr & May & Jun & Jul & Aug \\\\
-      \\midrule
-      Sales & 120 & 135 & 150 & 142 & 160 & 175 & 180 & 190 \\\\
-      \\bottomrule
-    \\end{tabular}
-  \\end{table}
-\\end{landscape}
-
-% ... portrait content continues ...`}</code></pre>
-
-          <h3>Landscape with Adjusted Margins</h3>
-          <p>
-            If you need different margins on landscape pages, combine <code>pdflscape</code> with
-            <code>\newgeometry</code>:
-          </p>
-          <pre><code>{`\\usepackage{pdflscape}
-\\usepackage{geometry}
-\\geometry{a4paper, margin=1in}
-
-\\begin{landscape}
-\\newgeometry{margin=15mm}
-  % wide content here
-\\restoregeometry
-\\end{landscape}`}</code></pre>
-
-          <h2>Header and Footer Spacing</h2>
-          <p>
-            When using packages like <code>fancyhdr</code> for custom headers and footers, you
-            often need to adjust spacing to prevent overlaps. The <code>geometry</code> package
-            provides dedicated options for this:
-          </p>
-
-          <pre><code>{`\\usepackage{geometry}
-\\geometry{
-  a4paper,
-  margin=1in,
-  headheight=14pt,   % height of the header area
-  headsep=10mm,      % space between header and body text
-  footskip=12mm      % space between body text and footer
-}`}</code></pre>
-
-          <p>
-            If you see the <code>fancyhdr</code> warning &quot;Make it at least 14.49998pt&quot;,
-            increase <code>headheight</code> accordingly:
-          </p>
-
-          <pre><code>{`\\geometry{headheight=15pt}`}</code></pre>
-
-          <h3>Including Header and Footer in Margins</h3>
-          <p>
-            By default, <code>geometry</code> places headers and footers inside the margin area.
-            You can change this behaviour with the <code>includeheadfoot</code> option, which
-            counts the header and footer as part of the text body:
-          </p>
-          <pre><code>{`\\usepackage{geometry}
-\\geometry{
-  a4paper,
-  margin=1in,
-  includeheadfoot,
-  headheight=14pt,
-  headsep=10mm,
-  footskip=12mm
-}`}</code></pre>
-
-          <h2>Changing Layout Mid-Document</h2>
-          <p>
-            Sometimes you need different margins for different sections of your document &mdash;
-            for example, wider margins for an appendix with large figures, or narrower margins
-            for a title page. The <code>geometry</code> package provides two commands for this:
-          </p>
-
-          <pre><code>{`\\documentclass{article}
-\\usepackage{geometry}
-\\geometry{a4paper, margin=1in}
-
-\\begin{document}
-
-\\section{Normal Section}
-This text uses the default 1-inch margins.
-
-% Switch to new margins
-\\newgeometry{left=15mm, right=15mm, top=20mm, bottom=20mm}
-
-\\section{Wide Section}
-This section has narrower margins for more content space.
-Perfect for wide tables or figures.
-
-% Restore original margins
-\\restoregeometry
-
-\\section{Back to Normal}
-Margins are back to the original 1-inch setting.
-
-\\end{document}`}</code></pre>
-
-          <p>
-            <strong>Important notes about <code>\newgeometry</code>:</strong>
-          </p>
-          <ul>
-            <li>
-              It always triggers a page break, so place it at natural section boundaries.
-            </li>
-            <li>
-              <code>\restoregeometry</code> returns to whatever was set in the preamble
-              <code>\geometry&#123;...&#125;</code> call.
-            </li>
-            <li>
-              You can call <code>\newgeometry</code> multiple times with different settings
-              throughout the document.
-            </li>
-          </ul>
 
           <h2>Quick Reference</h2>
           <p>
@@ -565,6 +665,85 @@ Margins are back to the original 1-inch setting.
               </tr>
             </tbody>
           </table>
+
+          {/* ── Common errors ── */}
+          <h2>Common Errors</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>Symptom</th>
+                <th>Cause</th>
+                <th>Fix</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><em>LaTeX Error: Option clash for package geometry</em></td>
+                <td>geometry is loaded twice with different options, often once by a template</td>
+                <td>Load it once; change settings later with <code>{`\\geometry{...}`}</code></td>
+              </tr>
+              <tr>
+                <td><em>\headheight is too small (12.0pt): Make it at least 14.49998pt</em></td>
+                <td>fancyhdr header taller than the reserved space</td>
+                <td><code>headheight=15pt</code> in the geometry options</td>
+              </tr>
+              <tr>
+                <td>Margins look different from what you set</td>
+                <td>Paper size not given, so letter paper is used</td>
+                <td>Add <code>a4paper</code> or <code>letterpaper</code></td>
+              </tr>
+              <tr>
+                <td>Margins change after <code>\usepackage&#123;geometry&#125;</code> with no options</td>
+                <td>geometry applies its own default layout</td>
+                <td>Always pass <code>margin</code> or per-side values</td>
+              </tr>
+              <tr>
+                <td>Unexpected blank page or page break</td>
+                <td><code>\newgeometry</code> and <code>\restoregeometry</code> always start a new page</td>
+                <td>Call them only at a page or chapter boundary</td>
+              </tr>
+              <tr>
+                <td>Margins ignored in a Beamer or KOMA-Script document</td>
+                <td>The class manages its own layout</td>
+                <td>Use the class&apos;s own options (e.g. <code>typearea</code> in KOMA-Script)</td>
+              </tr>
+            </tbody>
+          </table>
+
+          {/* ── FAQ ── */}
+          <h2>Frequently Asked Questions</h2>
+          <h3>How do I change the margins in LaTeX?</h3>
+          <p>
+            Load the geometry package in the preamble with the paper size and the margin you want:{' '}
+            <code>{`\\usepackage[a4paper, margin=2.5cm]{geometry}`}</code>. For different margins on
+            each side, use <code>left</code>, <code>right</code>, <code>top</code> and{' '}
+            <code>bottom</code>, as in <code>{`\\usepackage[left=3cm, right=2cm, top=2.5cm, bottom=2.5cm]{geometry}`}</code>.
+          </p>
+          <h3>What are the default margins in LaTeX?</h3>
+          <p>
+            Without geometry, a 10pt article on US Letter paper has about 1.875 inches (4.7 cm) of
+            margin on the left and right. The standard classes size the text block for readable
+            line length, not to fill the page, which is why the default margins look wide.
+          </p>
+          <h3>How do I set 1-inch margins in LaTeX?</h3>
+          <p>
+            Add <code>{`\\usepackage[letterpaper, margin=1in]{geometry}`}</code> to the preamble. On
+            A4 paper use <code>{`\\usepackage[a4paper, margin=1in]{geometry}`}</code>; margin sets
+            all four sides at once.
+          </p>
+          <h3>How do I change the margins for one page in LaTeX?</h3>
+          <p>
+            Put <code>{`\\newgeometry{margin=1.5cm}`}</code> where the page should start and{' '}
+            <code>\restoregeometry</code> where the original margins should come back. Both commands
+            start a new page, so place them at a page break.
+          </p>
+          <h3>How do I fix &ldquo;\headheight is too small&rdquo;?</h3>
+          <p>
+            The warning comes from fancyhdr when the header is taller than the space reserved for
+            it. Add the value it suggests, rounded up, to the geometry options, as in{' '}
+            <code>{`\\usepackage[a4paper, margin=2.5cm, headheight=15pt]{geometry}`}</code>, or write{' '}
+            <code>{`\\setlength{\\headheight}{15pt}`}</code> in the preamble.
+          </p>
 
           <h2>Next Steps</h2>
           <p>Now that you can control page layout, explore more LaTeX topics:</p>

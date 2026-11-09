@@ -1,6 +1,6 @@
 import type { Metadata } from 'next/types'
 
-import { learnMetadata } from '@/utilities/learnMetadata'
+import { learnMetadata, type FaqItem } from '@/utilities/learnMetadata'
 import Link from 'next/link'
 import { buttonVariants } from '@/components/ui/button'
 import React from 'react'
@@ -19,13 +19,42 @@ const breadcrumbSchema = generateBreadcrumbSchema(breadcrumbs)
 
 const page = {
   slug: 'colors',
-  title: 'Using Colors in LaTeX – xcolor Package Guide 2026',
-  description: 'Learn how to use colors in LaTeX with the xcolor package. Guide covers text color, background color, custom colors, color mixing, colored tables, and the dvipsnames palette.',
-  keywords: 'latex color, latex text color, xcolor latex, latex textcolor, latex definecolor, latex color names, latex background color, latex colorbox, latex color mixing, latex dvipsnames, latex colored text, latex rgb color, latex highlight text',
+  title: 'Colors in LaTeX: \\colorbox, \\textcolor and xcolor',
+  seoTitle: 'LaTeX Colors: colorbox, textcolor and xcolor',
+  description: 'LaTeX colours with xcolor: \\colorbox and \\fcolorbox, \\textcolor, \\definecolor (RGB, HTML), dvipsnames and svgnames, \\rowcolor tables and common errors.',
+  keywords: 'colorbox latex, latex colorbox, colorbox colors latex, fcolorbox latex, latex colours, latex colors, latex color names, latex svgnames, latex pagecolor, latex rowcolor, latex cellcolor, undefined color latex, option clash for package xcolor, latex color, latex text color, xcolor latex, latex textcolor, latex definecolor, latex color names, latex background color, latex colorbox, latex color mixing, latex dvipsnames, latex colored text, latex rgb color, latex highlight text',
 }
 
 /** Last content update, used for dateModified in the article schema. */
-const LAST_UPDATED = '2026-10-17'
+const LAST_UPDATED = '2026-11-08'
+
+const faq: FaqItem[] = [
+  {
+    question: 'How do I use \\colorbox in LaTeX?',
+    answer:
+      'Load \\usepackage{xcolor} and write \\colorbox{yellow}{text} for a coloured background. \\fcolorbox{red}{white}{text} adds a red frame around a white box. The colour can be a name, a mix such as yellow!30, or a value: \\colorbox[HTML]{FFE08A}{text}. A colorbox does not break across lines, so wrap long text in a \\parbox or use \\hl from soul.',
+  },
+  {
+    question: 'How do I change the text colour in LaTeX?',
+    answer:
+      'Load xcolor and write \\textcolor{red}{text} for a few words, or {\\color{blue} ...} to colour everything up to the closing brace. Both take any colour name, a mix such as red!70!black, or a colour you defined with \\definecolor.',
+  },
+  {
+    question: 'What colours are available in LaTeX?',
+    answer:
+      'xcolor always defines 19 base colours: red, green, blue, cyan, magenta, yellow, black, white, gray, darkgray, lightgray, brown, lime, olive, orange, pink, purple, teal and violet. The dvipsnames option adds 68 more (ForestGreen, RoyalBlue, Maroon), svgnames adds 151 (SteelBlue, Crimson, DarkOrange) and x11names adds 317. Names are case-sensitive.',
+  },
+  {
+    question: 'How do I use a hex colour code in LaTeX?',
+    answer:
+      'Define it once in the preamble with the HTML model and no # sign: \\definecolor{brand}{HTML}{1A73E8}. Then use the name anywhere, as in \\textcolor{brand}{text} or \\colorbox{brand!15}{text}. For a one-off colour, \\textcolor[HTML]{1A73E8}{text} also works.',
+  },
+  {
+    question: 'How do I colour a table row or cell in LaTeX?',
+    answer:
+      'Load \\usepackage[table]{xcolor}, which loads colortbl. Then start a row with \\rowcolor{gray!20}, colour one cell with \\cellcolor{green!30}, colour a column with >{\\columncolor{blue!10}}l in the column spec, or alternate rows with \\rowcolors{2}{gray!15}{white} before the tabular.',
+  },
+]
 
 export default async function LearnColorsPage() {
   return (
@@ -39,6 +68,7 @@ export default async function LearnColorsPage() {
         title={page.title}
         description={page.description}
         dateModified={LAST_UPDATED}
+        faq={faq}
       />
       <div className="container">
         <div className="mb-8 max-w-4xl mx-auto">
@@ -51,13 +81,141 @@ export default async function LearnColorsPage() {
         </div>
 
         <article className="prose prose-lg dark:prose-invert max-w-4xl mx-auto">
-          <h1>Using Colors in LaTeX</h1>
+          <h1>Colors in LaTeX: \colorbox, \textcolor and xcolor</h1>
+
+          <div className="not-prose my-6 p-6 rounded-lg border bg-muted/40">
+            <p className="text-sm font-semibold uppercase tracking-wide text-muted-foreground mb-3">Quick answer</p>
+            <ul className="space-y-2 text-base list-disc pl-5">
+              <li>
+                <strong>Load:</strong> <code>{`\\usepackage{xcolor}`}</code>; add{' '}
+                <code>{`[dvipsnames,svgnames,table]`}</code> for more names and table colours.
+              </li>
+              <li>
+                <strong>Coloured background:</strong> <code>{`\\colorbox{yellow}{text}`}</code>; with a
+                frame, <code>{`\\fcolorbox{red}{white}{text}`}</code>.
+              </li>
+              <li>
+                <strong>Text colour:</strong> <code>{`\\textcolor{blue}{text}`}</code> or{' '}
+                <code>{`{\\color{blue} ...}`}</code>.
+              </li>
+              <li>
+                <strong>Custom colour:</strong> <code>{`\\definecolor{brand}{HTML}{1A73E8}`}</code> (also{' '}
+                <code>RGB</code>, <code>rgb</code>, <code>gray</code>, <code>cmyk</code>); mix with{' '}
+                <code>red!30</code> or <code>blue!50!black</code>.
+              </li>
+              <li>
+                <strong>Page and tables:</strong> <code>{`\\pagecolor{yellow!5}`}</code>,{' '}
+                <code>{`\\rowcolor{gray!20}`}</code>, <code>{`\\cellcolor{green!30}`}</code>.
+              </li>
+            </ul>
+          </div>
           <p className="lead">
-            Colors can improve readability, highlight important information, and create
-            visual hierarchy in your LaTeX documents. Whether you need colored text,
-            backgrounds, or tables, LaTeX&apos;s <code>xcolor</code> package provides
-            everything you need.
+            Colours in LaTeX come from the <code>xcolor</code> package: <code>\textcolor</code>{' '}
+            colours text, <code>\colorbox</code> and <code>\fcolorbox</code> put a coloured
+            background (and frame) behind it, <code>\definecolor</code> creates your own colours
+            from RGB, HTML hex or gray values, and <code>\pagecolor</code> colours the whole page.
+            This guide covers all of them, the <code>dvipsnames</code> and <code>svgnames</code>{' '}
+            colour names, colour mixing, coloured tables with <code>\rowcolor</code> and{' '}
+            <code>\cellcolor</code>, and the errors (&ldquo;Undefined color&rdquo;, &ldquo;Option
+            clash for package xcolor&rdquo;) that stop a compile.
           </p>
+
+          {/* ── Colorbox ── */}
+          <h2>Colorbox in LaTeX</h2>
+          <p>
+            <code>\colorbox&#123;color&#125;&#123;text&#125;</code> sets <em>text</em> on a box filled
+            with <em>color</em>. <code>\fcolorbox&#123;frame&#125;&#123;background&#125;&#123;text&#125;</code>{' '}
+            does the same with a frame drawn in a second colour. Both come with{' '}
+            <code>xcolor</code> and accept any colour name, mix or value:
+          </p>
+          <pre><code>{`\\documentclass{article}
+\\usepackage[dvipsnames]{xcolor}
+\\begin{document}
+
+\\colorbox{yellow}{Highlighted text}
+
+\\colorbox{yellow!30}{Softer highlight: 30\\% yellow, 70\\% white}
+
+\\colorbox{ForestGreen!20}{A dvipsnames colour, tinted}
+
+% Colour values without defining a name first
+\\colorbox[HTML]{FFE08A}{Hex background}
+\\colorbox[rgb]{0.85,0.93,1}{rgb background}
+
+% Frame colour, then background colour
+\\fcolorbox{red}{white}{Red frame on white}
+
+% White text on a dark box
+\\colorbox{black}{\\textcolor{white}{White on black}}
+
+\\end{document}`}</code></pre>
+
+          <h3>Padding and Frame Width</h3>
+          <p>
+            The space between the text and the edge of the box is <code>\fboxsep</code> (3pt by
+            default) and the frame thickness of <code>\fcolorbox</code> is <code>\fboxrule</code>{' '}
+            (0.4pt). Change them inside a group so other boxes keep the defaults:
+          </p>
+          <pre><code>{`\\documentclass{article}
+\\usepackage[dvipsnames]{xcolor}
+\\begin{document}
+
+{\\setlength{\\fboxsep}{6pt}%
+ \\setlength{\\fboxrule}{1.5pt}%
+ \\fcolorbox{RoyalBlue}{RoyalBlue!10}{More padding, thicker frame}}
+
+\\end{document}`}</code></pre>
+
+          <h3>Colorbox Across Several Lines</h3>
+          <p>
+            Like <code>\mbox</code>, a colorbox never breaks across lines: long text runs into the
+            margin. For a coloured paragraph, put a <code>\parbox</code> or <code>minipage</code>{' '}
+            inside the box. To highlight text that should wrap normally, use <code>\hl</code> from
+            the <code>soul</code> package instead:
+          </p>
+          <pre><code>{`\\documentclass{article}
+\\usepackage{xcolor}
+\\usepackage{soul}
+\\begin{document}
+
+% A full-width grey paragraph
+\\noindent\\colorbox{gray!15}{%
+  \\parbox{\\dimexpr\\linewidth-2\\fboxsep}{%
+    This paragraph has a light grey background and wraps across
+    lines like normal text, because the parbox does the line breaking.}}
+
+% Highlighting that breaks across lines
+\\sethlcolor{yellow}
+\\hl{This highlighted sentence wraps onto the next line when it
+reaches the margin, which a colorbox cannot do.}
+
+\\end{document}`}</code></pre>
+          <p>
+            For boxes with titles, rounded corners, shadows or page breaks, use{' '}
+            <code>tcolorbox</code>; see the <Link href="#colored-boxes-and-frames">tcolorbox example below</Link>{' '}
+            and the full{' '}
+            <Link href="https://www.useoctree.com/blog/colored-boxes-latex-tcolorbox-guide">
+              tcolorbox guide
+            </Link>.
+          </p>
+
+          <h3>Colorbox in Math Mode</h3>
+          <p>
+            <code>\colorbox</code> switches to text mode, so put the formula back in{' '}
+            <code>$...$</code> inside it, adding <code>\displaystyle</code> in display math to
+            keep fractions full size:
+          </p>
+          <pre><code>{`\\documentclass{article}
+\\usepackage{xcolor}
+\\begin{document}
+
+The term $\\colorbox{yellow}{$x^2$}$ is highlighted.
+
+\\[
+  a + \\colorbox{yellow}{$\\displaystyle\\frac{b}{c}$} = d
+\\]
+
+\\end{document}`}</code></pre>
 
           <h2>The xcolor Package</h2>
           <p>
@@ -83,10 +241,21 @@ export default async function LearnColorsPage() {
 \\usepackage[dvipsnames, svgnames, x11names]{xcolor}`}</code></pre>
           <p>
             The <code>dvipsnames</code> option is the most commonly used and provides
-            popular colors like <code>ForestGreen</code>, <code>RoyalBlue</code>, and
-            <code>Maroon</code>. The <code>svgnames</code> and <code>x11names</code> options
-            add even more named colors based on SVG and X11 color standards.
+            popular colors like <code>ForestGreen</code>, <code>RoyalBlue</code>, and{' '}
+            <code>Maroon</code>. The <code>svgnames</code> option adds the 151 web (CSS/SVG)
+            colour names, such as <code>SteelBlue</code>, <code>Crimson</code>,{' '}
+            <code>DarkOrange</code> and <code>Teal</code>, and <code>x11names</code> adds X11
+            variants such as <code>Firebrick3</code>. Colour names are case-sensitive:{' '}
+            <code>forestgreen</code> is an undefined colour.
           </p>
+          <pre><code>{`\\documentclass{article}
+\\usepackage[dvipsnames,svgnames]{xcolor}
+\\begin{document}
+
+\\textcolor{ForestGreen}{dvipsnames} and \\textcolor{SteelBlue}{svgnames}
+\\colorbox{Crimson!15}{a tinted svgnames background}
+
+\\end{document}`}</code></pre>
 
           <h2>Predefined Colors</h2>
           <p>
@@ -213,37 +382,6 @@ Normal text, {\\color{green} green text here}, back to normal.
             to limit its scope.
           </p>
 
-          <h2>Background Colors</h2>
-          <p>
-            You can add background colors to text using <code>\colorbox</code> and
-            <code>\fcolorbox</code>:
-          </p>
-          <pre><code>{`% Colored background
-\\colorbox{yellow}{Highlighted text}
-
-% Colored background with a border
-\\fcolorbox{red}{white}{Text with red border on white background}
-
-% Nested: colored text on colored background
-\\colorbox{black}{\\textcolor{white}{White text on black}}
-
-% Light highlight effect
-\\colorbox{yellow!30}{Softly highlighted text}
-
-% Multi-line colored box (use minipage)
-\\colorbox{blue!10}{%
-  \\begin{minipage}{0.8\\textwidth}
-    This is a longer block of text with a
-    light blue background that spans
-    multiple lines.
-  \\end{minipage}
-}`}</code></pre>
-          <p>
-            <code>\colorbox&#123;bg-color&#125;&#123;text&#125;</code> sets the background color.
-            <code>\fcolorbox&#123;border-color&#125;&#123;bg-color&#125;&#123;text&#125;</code> adds
-            a colored frame (border) around the box as well.
-          </p>
-
           <h2>Defining Custom Colors</h2>
           <p>
             You can define your own colors using <code>\definecolor</code> with various
@@ -344,7 +482,7 @@ Normal text, {\\color{green} green text here}, back to normal.
             of a formula.
           </p>
 
-          <h2>Colored Boxes and Frames</h2>
+          <h2 id="colored-boxes-and-frames">Colored Boxes and Frames</h2>
           <p>
             For more advanced colored boxes, the <code>tcolorbox</code> package provides
             beautiful, customizable boxes:
@@ -395,6 +533,11 @@ Normal text, {\\color{green} green text here}, back to normal.
             The <code>tcolorbox</code> package is extremely versatile. The
             <code>colback</code> option sets the background color, <code>colframe</code> sets
             the border color, and you can add titles, rounded corners, shadows, and more.
+            The{' '}
+            <Link href="https://www.useoctree.com/blog/colored-boxes-latex-tcolorbox-guide">
+              tcolorbox guide
+            </Link>{' '}
+            covers styles, theorem boxes and breakable boxes in detail.
           </p>
 
           <h2>Page and Section Colors</h2>
@@ -625,10 +768,107 @@ Normal text, {\\color{green} green text here}, back to normal.
             0–255 range.
           </p>
 
+          {/* ── Common errors ── */}
+          <h2>Common Errors</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>Error</th>
+                <th>Cause</th>
+                <th>Fix</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><em>Undefined control sequence</em> on <code>\textcolor</code> or <code>\colorbox</code></td>
+                <td>xcolor is not loaded</td>
+                <td><code>{`\\usepackage{xcolor}`}</code></td>
+              </tr>
+              <tr>
+                <td><em>Package xcolor Error: Undefined color `ForestGreen&apos;</em></td>
+                <td>The name comes from an option you did not load, or its case is wrong</td>
+                <td><code>{`\\usepackage[dvipsnames]{xcolor}`}</code>; check spelling and capitals</td>
+              </tr>
+              <tr>
+                <td><em>LaTeX Error: Option clash for package xcolor</em></td>
+                <td>Another package (tikz, pgfplots, a template) loaded xcolor before you passed options</td>
+                <td>Put <code>{`\\PassOptionsToPackage{dvipsnames,table}{xcolor}`}</code> before <code>\documentclass</code>; in Beamer use <code>{`\\documentclass[xcolor={dvipsnames,table}]{beamer}`}</code></td>
+              </tr>
+              <tr>
+                <td><em>Undefined control sequence</em> on <code>\rowcolor</code> or <code>\cellcolor</code></td>
+                <td>Table colours need colortbl</td>
+                <td><code>{`\\usepackage[table]{xcolor}`}</code></td>
+              </tr>
+              <tr>
+                <td><em>Illegal parameter number in definition</em> after <code>\definecolor</code></td>
+                <td>A <code>#</code> in the hex code</td>
+                <td><code>{`\\definecolor{brand}{HTML}{1A73E8}`}</code>, no <code>#</code></td>
+              </tr>
+              <tr>
+                <td>Coloured box runs into the margin</td>
+                <td><code>\colorbox</code> does not break lines</td>
+                <td>A <code>\parbox</code> inside it, <code>\hl</code> from soul, or tcolorbox</td>
+              </tr>
+            </tbody>
+          </table>
+          <pre><code>{`% Option clash: tikz has already loaded xcolor without options
+\\documentclass{article}
+\\usepackage{tikz}
+\\usepackage[dvipsnames]{xcolor}   % ! Option clash for package xcolor
+
+% Fix: pass the options before anything loads xcolor
+\\PassOptionsToPackage{dvipsnames,table}{xcolor}
+\\documentclass{article}
+\\usepackage{tikz}
+\\usepackage{xcolor}`}</code></pre>
+
+          {/* ── FAQ ── */}
+          <h2>Frequently Asked Questions</h2>
+          <h3>How do I use \colorbox in LaTeX?</h3>
+          <p>
+            Load <code>{`\\usepackage{xcolor}`}</code> and write <code>{`\\colorbox{yellow}{text}`}</code>{' '}
+            for a coloured background. <code>{`\\fcolorbox{red}{white}{text}`}</code> adds a red frame
+            around a white box. The colour can be a name, a mix such as <code>yellow!30</code>, or a
+            value: <code>{`\\colorbox[HTML]{FFE08A}{text}`}</code>. A colorbox does not break across
+            lines, so wrap long text in a <code>\parbox</code> or use <code>\hl</code> from soul.
+          </p>
+          <h3>How do I change the text colour in LaTeX?</h3>
+          <p>
+            Load xcolor and write <code>{`\\textcolor{red}{text}`}</code> for a few words, or{' '}
+            <code>{`{\\color{blue} ...}`}</code> to colour everything up to the closing brace. Both
+            take any colour name, a mix such as <code>red!70!black</code>, or a colour you defined
+            with <code>\definecolor</code>.
+          </p>
+          <h3>What colours are available in LaTeX?</h3>
+          <p>
+            xcolor always defines 19 base colours: red, green, blue, cyan, magenta, yellow, black,
+            white, gray, darkgray, lightgray, brown, lime, olive, orange, pink, purple, teal and
+            violet. The <code>dvipsnames</code> option adds 68 more (ForestGreen, RoyalBlue,
+            Maroon), <code>svgnames</code> adds 151 (SteelBlue, Crimson, DarkOrange) and{' '}
+            <code>x11names</code> adds 317. Names are case-sensitive.
+          </p>
+          <h3>How do I use a hex colour code in LaTeX?</h3>
+          <p>
+            Define it once in the preamble with the HTML model and no # sign:{' '}
+            <code>{`\\definecolor{brand}{HTML}{1A73E8}`}</code>. Then use the name anywhere, as in{' '}
+            <code>{`\\textcolor{brand}{text}`}</code> or <code>{`\\colorbox{brand!15}{text}`}</code>.
+            For a one-off colour, <code>{`\\textcolor[HTML]{1A73E8}{text}`}</code> also works.
+          </p>
+          <h3>How do I colour a table row or cell in LaTeX?</h3>
+          <p>
+            Load <code>{`\\usepackage[table]{xcolor}`}</code>, which loads colortbl. Then start a row
+            with <code>{`\\rowcolor{gray!20}`}</code>, colour one cell with{' '}
+            <code>{`\\cellcolor{green!30}`}</code>, colour a column with{' '}
+            <code>{`>{\\columncolor{blue!10}}l`}</code> in the column spec, or alternate rows with{' '}
+            <code>{`\\rowcolors{2}{gray!15}{white}`}</code> before the tabular.
+          </p>
+
           <h2>Next Steps</h2>
           <ul>
             <li><Link href="/learn/bold-italics-underline">Bold, Italics &amp; Underline</Link> – Learn text formatting in LaTeX</li>
             <li><Link href="/learn/tables">Tables in LaTeX</Link> – Create tables with colored rows and cells</li>
+            <li><Link href="https://www.useoctree.com/blog/colored-boxes-latex-tcolorbox-guide">Colored Boxes with tcolorbox</Link> – Titled, rounded and breakable boxes</li>
+            <li><Link href="/learn/framebox">Framed Boxes in LaTeX</Link> – \fbox, \framebox and boxes without colour</li>
             <li><Link href="/learn/latex">Learn LaTeX Basics</Link> – Review fundamentals</li>
             <li><Link href="/learn/tikz">Learn TikZ</Link> – Create diagrams with colorful graphics</li>
           </ul>

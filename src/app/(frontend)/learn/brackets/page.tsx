@@ -19,16 +19,21 @@ const breadcrumbSchema = generateBreadcrumbSchema(breadcrumbs)
 
 const page = {
   slug: 'brackets',
-  title: 'Brackets and Parentheses in LaTeX: Sizing, \\left \\right, and Matrix Brackets',
+  title: 'Brackets in LaTeX: Parentheses, Angle Brackets and \\left \\right Sizing',
   seoTitle: 'Brackets in LaTeX: \\left \\right, Sizes, Matrices',
   description: 'LaTeX brackets: ( ) [ ] { }, angle brackets, bars, floor and ceiling, sizing with \\left \\right and \\big to \\Bigg, matrix brackets, cases, \\abs and \\norm.',
   keywords: 'latex brackets, brackets in latex, latex angle brackets, angular brackets latex, latex matrix brackets, latex curly braces, latex big brackets, latex left right, latex absolute value bars, latex norm, latex floor ceiling, latex langle rangle, latex parentheses size, latex bracket sizes, latex square brackets, latex pmatrix bmatrix, latex cases bracket, latex underbrace, latex missing right inserted, latex accolades, accolades latex, latex curly brackets, latex braces, latex print curly braces, latex parentheses, latex brackets in text, latex escape braces, latex interval notation, latex set builder notation, latex inner product, latex textbraceleft, latex bracket types, latex brackets and parentheses printing',
 }
 
 /** Last content update, used for dateModified in the article schema. */
-const LAST_UPDATED = '2026-10-18'
+const LAST_UPDATED = '2026-11-08'
 
 const faq: FaqItem[] = [
+  {
+    question: 'How do I write parentheses and brackets in LaTeX?',
+    answer:
+      'Type ( ) and [ ] directly; they work in text and math. Curly braces must be escaped as \\{ and \\}, angle brackets are \\langle and \\rangle, and absolute-value bars are \\lvert and \\rvert. To make any of them grow with the content, put \\left before the opening bracket and \\right before the closing one.',
+  },
   {
     question: 'How do I write angle brackets in LaTeX?',
     answer:
@@ -86,7 +91,33 @@ export default async function LaTeXBracketsPage() {
         </div>
 
         <article className="prose prose-lg dark:prose-invert max-w-4xl mx-auto">
-          <h1>Brackets and Parentheses in LaTeX: Sizing, \left \right, and Matrix Brackets</h1>
+          <h1>Brackets in LaTeX: Parentheses, Angle Brackets and \left \right Sizing</h1>
+
+          <div className="not-prose my-6 p-6 rounded-lg border bg-muted/40">
+            <p className="text-sm font-semibold uppercase tracking-wide text-muted-foreground mb-3">Quick answer</p>
+            <ul className="space-y-2 text-base list-disc pl-5">
+              <li>
+                <strong>Parentheses and square brackets:</strong> type <code>( )</code> and{' '}
+                <code>[ ]</code> directly.
+              </li>
+              <li>
+                <strong>Curly braces:</strong> escape them, <code>{`\\{ \\}`}</code>; bare braces only group.
+              </li>
+              <li>
+                <strong>Angle brackets:</strong> <code>\langle x \rangle</code>, never{' '}
+                <code>&lt; &gt;</code>.
+              </li>
+              <li>
+                <strong>Bars, floor, ceiling:</strong> <code>\lvert x \rvert</code>,{' '}
+                <code>\lfloor x \rfloor</code>, <code>\lceil x \rceil</code>.
+              </li>
+              <li>
+                <strong>Brackets that grow:</strong> <code>{`\\left( \\frac{a}{b} \\right)`}</code>; fixed
+                sizes <code>\bigl( \Bigl( \biggl( \Biggl(</code>; <code>\left.</code> is an invisible
+                partner.
+              </li>
+            </ul>
+          </div>
           <p className="lead">
             Parentheses and square brackets are typed as they are. Curly braces need a backslash,
             angle brackets need <code>\langle</code> and <code>\rangle</code>, and anything
@@ -135,17 +166,6 @@ $\\lfloor g \\rfloor$ $\\lceil h \\rceil$`}</code></pre>
             <Link href="https://tools.useoctree.com/symbols/brackets" target="_blank" rel="noopener noreferrer">brackets symbol reference</Link>.
           </p>
 
-          <h3>Why &lt; and &gt; are the wrong angle brackets</h3>
-          <p>
-            <code>$&lt;x, y&gt;$</code> compiles, but it is wrong twice over. The characters are
-            the less-than and greater-than <em>relations</em>, so TeX surrounds them with the
-            wide spacing it puts around <code>=</code>, and their glyphs are shorter and more
-            open than real angle brackets. <code>\langle</code> and <code>\rangle</code> are
-            proper opening and closing delimiters with the right shape, the right spacing, and
-            the ability to grow with <code>\left</code> and <code>\right</code>. Outside math,{' '}
-            <code>\textlangle</code> and <code>\textrangle</code> give the text-mode versions.
-          </p>
-
           <h3>Bars: | versus \lvert, \mid and \|</h3>
           <p>
             A plain <code>|</code> is an ordinary symbol, so TeX does not know whether it opens
@@ -155,6 +175,46 @@ $\\lfloor g \\rfloor$ $\\lceil h \\rceil$`}</code></pre>
             or conditional probability, use <code>\mid</code> instead, which gets relation
             spacing on both sides. <code>\|</code> and <code>\lVert ... \rVert</code> are the
             double-bar equivalents for norms.
+          </p>
+
+          {/* ── Angle brackets ── */}
+          <h2>Angle Brackets in LaTeX (\langle, \rangle)</h2>
+          <p>
+            Angle brackets are <code>\langle</code> and <code>\rangle</code> in math mode. They are
+            the brackets of inner products, expectation values, bra-ket notation and generated
+            groups, and like the other delimiters they can be sized:
+          </p>
+          <pre><code>{`\\documentclass{article}
+\\usepackage{amsmath}
+\\usepackage{mathtools}
+\\DeclarePairedDelimiter{\\ip}{\\langle}{\\rangle}
+\\begin{document}
+
+$\\langle x, y \\rangle$              % inner product
+$\\langle u \\mid v \\rangle$           % bra-ket with a relation bar
+
+\\[
+  \\left\\langle \\frac{a}{b}, c \\right\\rangle   % automatic size
+  \\qquad
+  \\bigl\\langle f, g \\bigr\\rangle             % manual size
+\\]
+
+\\[ \\ip{x, y} \\qquad \\ip*{\\frac{a}{b}, c} \\]   % mathtools: \\ip* grows
+
+Angle brackets in text: \\textlangle tag\\textrangle
+
+\\end{document}`}</code></pre>
+          <h3>Why &lt; and &gt; are the wrong angle brackets</h3>
+          <p>
+            <code>$&lt;x, y&gt;$</code> compiles, but it is wrong twice over. The characters are
+            the less-than and greater-than <em>relations</em>, so TeX surrounds them with the
+            wide spacing it puts around <code>=</code>, and their glyphs are shorter and more
+            open than real angle brackets. <code>\langle</code> and <code>\rangle</code> are
+            proper opening and closing delimiters with the right shape, the right spacing, and
+            the ability to grow with <code>\left</code> and <code>\right</code>. Outside math,{' '}
+            <code>\textlangle</code> and <code>\textrangle</code> give the text-mode versions.
+            The Unicode characters ⟨ ⟩ only work under XeLaTeX or LuaLaTeX with a font that has
+            them; under pdfLaTeX they stop the compile.
           </p>
 
           {/* ── Braces in text ── */}
@@ -630,6 +690,15 @@ $M = \\begin{psmallmatrix} 1 & 2 \\\\ 3 & 4 \\end{psmallmatrix}$ inline.`}</code
 
           {/* ── FAQ ── */}
           <h2>Frequently Asked Questions</h2>
+          <h3>How do I write parentheses and brackets in LaTeX?</h3>
+          <p>
+            Type <code>( )</code> and <code>[ ]</code> directly; they work in text and math. Curly
+            braces must be escaped as <code>{`\\{`}</code> and <code>{`\\}`}</code>, angle
+            brackets are <code>\langle</code> and <code>\rangle</code>, and absolute-value bars are{' '}
+            <code>\lvert</code> and <code>\rvert</code>. To make any of them grow with the content,
+            put <code>\left</code> before the opening bracket and <code>\right</code> before the
+            closing one.
+          </p>
           <h3>How do I write angle brackets in LaTeX?</h3>
           <p>
             Use <code>\langle</code> and <code>\rangle</code> in math mode:{' '}

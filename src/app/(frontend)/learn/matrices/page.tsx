@@ -26,7 +26,7 @@ const page = {
 }
 
 /** Last content update, used for dateModified in the article schema. */
-const LAST_UPDATED = '2026-10-18'
+const LAST_UPDATED = '2026-11-08'
 
 const faq: FaqItem[] = [
   {
@@ -97,6 +97,34 @@ export default async function MatricesPage() {
 
         <article className="prose prose-lg dark:prose-invert max-w-4xl mx-auto">
           <h1>Matrices in LaTeX: pmatrix, bmatrix, Matrix Brackets and Determinants</h1>
+
+          <div className="not-prose my-6 p-6 rounded-lg border bg-muted/40">
+            <p className="text-sm font-semibold uppercase tracking-wide text-muted-foreground mb-3">Quick answer</p>
+            <ul className="space-y-2 text-base list-disc pl-5">
+              <li>
+                <strong>Load amsmath:</strong> <code>{`\\usepackage{amsmath}`}</code>, otherwise you get{' '}
+                <em>Environment pmatrix undefined</em>.
+              </li>
+              <li>
+                <strong>2×2 matrix:</strong>{' '}
+                <code>{`\\[ \\begin{pmatrix} a & b \\\\ c & d \\end{pmatrix} \\]`}</code>; <code>&amp;</code>{' '}
+                separates columns, <code>\\</code> ends a row.
+              </li>
+              <li>
+                <strong>Brackets:</strong> <code>pmatrix</code> ( ), <code>bmatrix</code> [ ],{' '}
+                <code>Bmatrix</code> &#123; &#125;, <code>vmatrix</code> | | (determinant),{' '}
+                <code>Vmatrix</code> ‖ ‖, <code>matrix</code> none.
+              </li>
+              <li>
+                <strong>Dots:</strong> <code>\cdots</code> across, <code>\vdots</code> down,{' '}
+                <code>\ddots</code> diagonal.
+              </li>
+              <li>
+                <strong>Inline:</strong> <code>smallmatrix</code>; <strong>augmented:</strong>{' '}
+                <code>{`\\left[\\begin{array}{cc|c} ... \\end{array}\\right]`}</code>.
+              </li>
+            </ul>
+          </div>
           <p className="lead">
             Matrices in LaTeX come from the <code>amsmath</code> package: write the entries with{' '}
             <code>&amp;</code> between columns and <code>\\</code> between rows, and pick the
