@@ -284,7 +284,7 @@ She said \`\`the word \`quote' is overused.''   % nested`}</code></pre>
           <p>
             If you would rather type the characters directly, that works too: with UTF-8 input
             and T1 encoding, <code>&bdquo;</code>, <code>&ldquo;</code>, <code>&laquo;</code>,{' '}
-            <code>&raquo;</code>, <code>&ldquo;</code> and <code>&rdquo;</code> typed into the
+            <code>&raquo;</code>, <code>&lsquo;</code> and <code>&rdquo;</code> typed into the
             source are mapped to the right glyphs by <code>inputenc</code> (loaded automatically
             since LaTeX 2018). XeLaTeX and LuaLaTeX accept them natively.
           </p>
@@ -396,7 +396,7 @@ She said \`\`the word \`quote' is overused.''   % nested`}</code></pre>
             <code>`</code> into curly marks in some fonts. The <code>upquote</code> package fixes
             that so that quotes in verbatim and <code>\verb</code> are always straight:
           </p>
-          <pre><code>{`\\usepackage{upquote}   % straight ' and \` in verbatim, \\verb and listings`}</code></pre>
+          <pre><code>{`\\usepackage{upquote}   % straight ' and \` in verbatim and \\verb (listings: upquote=true)`}</code></pre>
 
           {/* ── Math ── */}
           <h2>Apostrophes vs Primes in Math</h2>

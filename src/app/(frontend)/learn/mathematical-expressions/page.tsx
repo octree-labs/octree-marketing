@@ -1103,8 +1103,8 @@ As shown in Equation~\\ref{eq:einstein}, energy and mass are equivalent.`}</code
               </tr>
               <tr>
                 <td><em>Extra alignment tab has been changed to \cr</em></td>
-                <td>Too many <code>&amp;</code> in an <code>align</code> or <code>cases</code> row</td>
-                <td>One <code>&amp;</code> per alignment point; use <code>alignat</code> or <code>aligned</code> for more columns</td>
+                <td>Too many <code>&amp;</code> in a <code>cases</code> or <code>split</code> row, any <code>&amp;</code> in <code>gather</code>, or more columns than a matrix or <code>array</code> declares</td>
+                <td>One <code>&amp;</code> per row in <code>cases</code> and <code>split</code>; use <code>align</code> or <code>alignat</code> for several alignment columns</td>
               </tr>
               <tr>
                 <td><em>Misplaced alignment tab character &amp;</em></td>

@@ -242,9 +242,9 @@ Text before.
             Use <code>\linewidth</code> rather than <code>\textwidth</code> for the width.
             Inside a list, quote or minipage, <code>\linewidth</code> shrinks to the current
             line while <code>\textwidth</code> stays at the full text block, so a{' '}
-            <code>\textwidth</code> rule pokes out on the right. <code>\hrule</code> and{' '}
-            <code>\hrulefill</code> are not affected by the indent, so they never need{' '}
-            <code>\noindent</code>.
+            <code>\textwidth</code> rule pokes out on the right. <code>\hrule</code> is not affected by the indent,
+            but <code>\hrulefill</code> at the start of a paragraph begins after it, so a
+            full-width fill also needs <code>\noindent</code>.
           </p>
 
           {/* ── In text ── */}

@@ -185,7 +185,7 @@ export default async function LaTeXFontSizePage() {
           </div>
           <p>
             The odd-looking numbers (10.95, 14.4, 17.28, 20.74, 24.88) are powers of 1.2 times
-            10pt. They are the sizes Donald Knuth prepared for Computer Modern, and the standard
+            10pt (10.95 is the half step, 1.2<sup>0.5</sup>). They are the sizes Donald Knuth prepared for Computer Modern, and the standard
             classes stick to them so that every size has a real font behind it. Note that at
             12pt, <code>\huge</code> and <code>\Huge</code> are the same size: the scale tops out
             at 24.88pt.
@@ -207,7 +207,7 @@ Body text is 12pt; headings and footnotes scale with it.
             Changing this one option rescales everything at once: body text, headings, footnotes,
             captions and the relative size commands. For most documents this is the only
             font-size setting that needs to change. Anything other than those three values is
-            silently ignored by the standard classes, which is the source of many &ldquo;why is my
+            ignored by the standard classes with only an <em>Unused global option(s)</em> warning, which is the source of many &ldquo;why is my
             14pt option not working&rdquo; questions.
           </p>
 
@@ -313,10 +313,11 @@ baseline, and it wraps correctly across lines.\\par}
           <p>
             <code>\fontsize</code> sets the baseline skip directly, while{' '}
             <code>{`\\linespread{factor}`}</code> multiplies whatever baseline skip the current size
-            defines. <code>{`\\linespread{1.5}`}</code> in the preamble gives roughly one-and-a-half
-            spacing throughout, without touching the font size. Like <code>\fontsize</code>, it
+            defines. <code>{`\\linespread{1.25}`}</code> in the preamble gives roughly one-and-a-half
+            spacing throughout (<code>{`\\linespread{1.6}`}</code> is about double), without
+            touching the font size. Like <code>\fontsize</code>, it
             only takes effect at the next <code>\selectfont</code> or size command, which is why
-            in the body you write <code>{`\\linespread{1.5}\\selectfont`}</code>. For the usual
+            in the body you write <code>{`\\linespread{1.25}\\selectfont`}</code>. For the usual
             double-spacing requirement, the <code>setspace</code> package is more precise:{' '}
             <code>\onehalfspacing</code>, <code>\doublespacing</code> and the{' '}
             <code>spacing</code> environment handle footnotes and floats correctly, which a bare{' '}
