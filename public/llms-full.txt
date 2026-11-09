@@ -31,7 +31,7 @@ Request body (JSON), one of:
 
 - `files[].content` is text in v1 (binary assets such as images are not supported yet).
 - `latex` must contain `\documentclass` and is compiled as main.tex. With `files` (at most 50, relative forward-slash paths), `main` is optional: it defaults to main.tex if present, else the first .tex file containing `\documentclass`. The main file must contain `\documentclass`, otherwise the request is a 400.
-- There is no engine option: documents compile with pdfLaTeX, and the compiler switches to XeLaTeX or LuaLaTeX automatically when the document needs it (for example when it loads fontspec).
+- There is no engine option: documents compile with pdfLaTeX, and the compiler switches to XeLaTeX or LuaLaTeX automatically when the document needs it (for example when it loads fontspec). Shell escape is disabled (no minted or \write18).
 - `response`: `"json"` (default) or `"pdf"`. `"pdf"`, or the header `Accept: application/pdf`, returns the raw PDF bytes.
 
 Success (HTTP 200):

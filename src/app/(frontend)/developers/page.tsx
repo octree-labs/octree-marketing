@@ -37,7 +37,7 @@ const faq: FaqItem[] = [
   {
     question: 'Which LaTeX packages are installed?',
     answer:
-      'The API runs the same compiler as the Octree editor at app.useoctree.com: a full TeX Live installation driven by latexmk, so packages such as amsmath, TikZ, pgfplots, biblatex, beamer and the common thesis and resume classes are already there. Documents compile with pdfLaTeX by default; when a document needs XeLaTeX or LuaLaTeX (for example it loads fontspec), the compiler switches automatically.',
+      'The API runs the same compiler as the Octree editor at app.useoctree.com: a full TeX Live installation driven by latexmk, so packages such as amsmath, TikZ, pgfplots, biblatex, beamer and the common thesis and resume classes are already there. Documents compile with pdfLaTeX by default; when a document needs XeLaTeX or LuaLaTeX (for example it loads fontspec), the compiler switches automatically. Shell escape is disabled, so packages that need it, such as minted, do not run.',
   },
   {
     question: 'Can I compile multi-file projects and images?',
