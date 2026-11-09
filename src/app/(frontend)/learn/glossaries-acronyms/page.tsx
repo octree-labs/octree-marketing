@@ -49,7 +49,7 @@ const faq: FaqItem[] = [
   {
     question: 'Should hyperref be loaded before or after glossaries?',
     answer:
-      'Before. glossaries detects hyperref at load time and turns every \\gls into a link to the glossary entry; if hyperref is loaded afterwards the links are silently missing, with no warning to tell you why. The same order (hyperref first) applies to glossaries-extra and nomencl; the acronym package also hyperlinks when hyperref is already loaded.',
+      'Before. glossaries detects hyperref at load time and turns every \\gls into a link to the glossary entry; if hyperref is loaded afterwards the entries are not linked. The same order (hyperref first) applies to glossaries-extra; the acronym package also hyperlinks when hyperref is already loaded.',
   },
   {
     question: 'How do I sort glossary entries in order of definition or first use instead of alphabetically?',
@@ -357,7 +357,7 @@ Energy $E = \\gls{hbar}\\omega$ and $E = m\\gls{c}^2$.
 
 \\begin{document}
 The \\gls{cpu} and the \\gls{api}; again the \\gls{cpu} and \\gls{api}.
-\\printabbreviations   % \\printglossaries would print the same list
+\\printabbreviations   % the list of abbreviations
 \\end{document}`}</code></pre>
           <p>
             Other styles include <code>short-long</code>, <code>long-short-sc</code> (small-caps
@@ -425,7 +425,7 @@ Plural: \\acp{cpu}. \\acused{lstm} Now \\ac{lstm} is treated as used.
 The energy $E = mc^2$ where $m$ is the mass.
 \\nomenclature{$c$}{Speed of light in vacuum}
 \\nomenclature{$m$}{Mass of the particle}
-\\nomenclature[A]{$E$}{Energy}
+\\nomenclature{$E$}{Energy}
 \\printnomenclature
 \\end{document}`}</code></pre>
           <p>
@@ -443,9 +443,9 @@ sub makenlo2nls {
 }`}</code></pre>
           <p>
             The optional argument of <code>\nomenclature</code> is a sort prefix: entries are
-            sorted by prefix first, then by symbol, so <code>[A]</code> puts a symbol before
-            everything without a prefix and prefixes such as <code>[G]</code> for Greek letters
-            and <code>[S]</code> for subscripts let you group the list. Redefine{' '}
+            sorted by prefix first, then by symbol (entries without one get the default prefix{' '}
+            <code>a</code>), so prefixes such as <code>[G]</code> for Greek letters and{' '}
+            <code>[S]</code> for subscripts let you group the list. Redefine{' '}
             <code>\nomgroup</code> to print a heading for each prefix. <code>intoc</code> adds
             the list to the contents, and <code>\printnomenclature[2cm]</code> sets the width of
             the symbol column.
@@ -515,7 +515,7 @@ sub makenlo2nls {
               </tr>
               <tr>
                 <td><code>\gls</code> does not link to the glossary</td>
-                <td>hyperref loaded after glossaries (no warning is given)</td>
+                <td>hyperref loaded after glossaries</td>
                 <td>Load hyperref first</td>
               </tr>
               <tr>
@@ -601,11 +601,9 @@ sub makenlo2nls {
           <h3>Should hyperref be loaded before or after glossaries?</h3>
           <p>
             Before. glossaries detects hyperref at load time and turns every <code>\gls</code>{' '}
-            into a link to the glossary entry; if hyperref is loaded afterwards the links are
-            silently missing, with no warning to tell you why. The same order (hyperref first)
-            applies to
-            glossaries-extra and nomencl; the acronym package also hyperlinks when hyperref is
-            already loaded.
+            into a link to the glossary entry; if hyperref is loaded afterwards the entries are
+            not linked. The same order (hyperref first) applies to glossaries-extra; the acronym
+            package also hyperlinks when hyperref is already loaded.
           </p>
           <h3>How do I sort glossary entries in order of definition or first use instead of alphabetically?</h3>
           <p>

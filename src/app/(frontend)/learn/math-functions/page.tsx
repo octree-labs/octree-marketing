@@ -314,8 +314,9 @@ Binary search takes $O(\\log n)$ steps.
 \\[ \\|x\\|, \\qquad \\lVert x \\rVert_2, \\qquad \\lVert x \\rVert_\\infty,
    \\qquad \\lVert A \\rVert_F, \\qquad \\left\\lVert \\frac{x}{\\|x\\|} \\right\\rVert \\]`}</code></pre>
           <p>
-            Never write <code>||x||</code> with two single bars: LaTeX sets a space between
-            them and the result looks like four separate strokes.
+            Avoid <code>||x||</code> with two single bars: the two bars of each side sit farther
+            apart than the double-bar glyph of <code>\|</code>, and neither side is treated as
+            an opening or closing delimiter.
           </p>
 
           {/* ── mathtools ── */}

@@ -23,7 +23,7 @@ const page = {
   seoTitle: 'Greek Alphabet: All 24 Letters, Symbols and Uses',
   description:
     'The Greek alphabet: all 24 letters with uppercase and lowercase symbols, names, pronunciation and uses, plus beta, epsilon, theta and pi with Unicode.',
-  keywords: 'greek alphabet, beta symbol, symbol of epsilon, epsilon symbol, theta symbol, lambda symbol, mu symbol, pi symbol, rho symbol, tau symbol, chi symbol, psi symbol, greek letter symbols, greek alphabet in order, greek letters, greek alphabet symbols, greek alphabet lowercase, greek alphabet uppercase, greek letters in order, greek alphabet latex, how many letters in the greek alphabet, greek letters math, greek alphabet pronunciation, greek letters unicode, alpha beta gamma delta, last letter of greek alphabet',
+  keywords: 'greek alphabet, beta symbol, symbol of epsilon, epsilon symbol, theta symbol, lambda symbol, mu symbol, pi symbol, rho symbol, tau symbol, chi symbol, psi symbol, greek letter symbols, greek alphabet in order, greek letters, greek alphabet symbols, greek alphabet lowercase, greek alphabet uppercase, greek letters in order, how many letters in the greek alphabet, greek alphabet pronunciation, greek letters unicode, alpha beta gamma delta, last letter of greek alphabet',
 }
 
 /** Last content update, used for dateModified in the article schema. */
@@ -145,7 +145,7 @@ export default async function GreekAlphabetPage() {
               <tr><td>2</td><td>&Beta;</td><td>&beta;</td><td>Beta</td><td>b — &quot;BAY-tuh&quot; (US), &quot;BEE-tuh&quot; (UK)</td><td>Regression coefficients, beta decay</td><td><code>\beta</code> / <code>B</code></td><td>—</td></tr>
               <tr><td>3</td><td>&Gamma;</td><td>&gamma;</td><td>Gamma</td><td>g — &quot;GAM-uh&quot;</td><td>Lorentz factor; &Gamma; gamma function</td><td><code>\gamma</code> / <code>\Gamma</code></td><td>—</td></tr>
               <tr><td>4</td><td>&Delta;</td><td>&delta;</td><td>Delta</td><td>d — &quot;DEL-tuh&quot;</td><td>Small change; &Delta; difference</td><td><code>\delta</code> / <code>\Delta</code></td><td>—</td></tr>
-              <tr><td>5</td><td>&Epsilon;</td><td>&epsilon;</td><td>Epsilon</td><td>e (short) — &quot;EP-sih-lon&quot;</td><td>Small positive number, permittivity</td><td><code>\epsilon</code> / <code>E</code></td><td><code>\varepsilon</code> &#949;</td></tr>
+              <tr><td>5</td><td>&Epsilon;</td><td>&epsilon;</td><td>Epsilon</td><td>e (short) — &quot;EP-sih-lon&quot;</td><td>Small positive number, permittivity</td><td><code>\varepsilon</code> / <code>E</code></td><td><code>\epsilon</code> &#1013;</td></tr>
               <tr><td>6</td><td>&Zeta;</td><td>&zeta;</td><td>Zeta</td><td>z — &quot;ZAY-tuh&quot;</td><td>Riemann zeta function, damping ratio</td><td><code>\zeta</code> / <code>Z</code></td><td>—</td></tr>
               <tr><td>7</td><td>&Eta;</td><td>&eta;</td><td>Eta</td><td>&#275; (long e) — &quot;AY-tuh&quot;</td><td>Efficiency, viscosity</td><td><code>\eta</code> / <code>H</code></td><td>—</td></tr>
               <tr><td>8</td><td>&Theta;</td><td>&theta;</td><td>Theta</td><td>th — &quot;THAY-tuh&quot;</td><td>Angles, unknown parameter</td><td><code>\theta</code> / <code>\Theta</code></td><td><code>\vartheta</code> &#977;</td></tr>
@@ -161,7 +161,7 @@ export default async function GreekAlphabetPage() {
               <tr><td>18</td><td>&Sigma;</td><td>&sigma; / &sigmaf;</td><td>Sigma</td><td>s — &quot;SIG-muh&quot;</td><td>Standard deviation; &Sigma; sum</td><td><code>\sigma</code> / <code>\Sigma</code></td><td><code>\varsigma</code> &#962; (word-final)</td></tr>
               <tr><td>19</td><td>&Tau;</td><td>&tau;</td><td>Tau</td><td>t — &quot;TAW&quot; or &quot;TOW&quot;</td><td>Torque, time constant</td><td><code>\tau</code> / <code>T</code></td><td>—</td></tr>
               <tr><td>20</td><td>&Upsilon;</td><td>&upsilon;</td><td>Upsilon</td><td>u / y — &quot;OOP-sih-lon&quot;</td><td>Rare</td><td><code>\upsilon</code> / <code>\Upsilon</code></td><td>—</td></tr>
-              <tr><td>21</td><td>&Phi;</td><td>&phi;</td><td>Phi</td><td>ph (f) — &quot;FYE&quot; or &quot;FEE&quot;</td><td>Golden ratio, angles; &Phi; flux</td><td><code>\phi</code> / <code>\Phi</code></td><td><code>\varphi</code> &#966;</td></tr>
+              <tr><td>21</td><td>&Phi;</td><td>&phi;</td><td>Phi</td><td>ph (f) — &quot;FYE&quot; or &quot;FEE&quot;</td><td>Golden ratio, angles; &Phi; flux</td><td><code>\varphi</code> / <code>\Phi</code></td><td><code>\phi</code> &#981;</td></tr>
               <tr><td>22</td><td>&Chi;</td><td>&chi;</td><td>Chi</td><td>ch (kh) — &quot;KYE&quot;</td><td>Chi-squared distribution</td><td><code>\chi</code> / <code>X</code></td><td>—</td></tr>
               <tr><td>23</td><td>&Psi;</td><td>&psi;</td><td>Psi</td><td>ps — &quot;SIGH&quot; or &quot;PSEE&quot;</td><td>Wave function</td><td><code>\psi</code> / <code>\Psi</code></td><td>—</td></tr>
               <tr><td>24</td><td>&Omega;</td><td>&omega;</td><td>Omega</td><td>&#333; (long o) — &quot;oh-MAY-guh&quot;</td><td>Angular frequency; &Omega; ohm</td><td><code>\omega</code> / <code>\Omega</code></td><td>—</td></tr>
@@ -407,7 +407,7 @@ phi     chi     psi     omega`}</code></pre>
           </ul>
 
           {/* ───────────────────────────── Greek Letters in LaTeX ───────────────────────────── */}
-          <h2>Greek Letters in LaTeX</h2>
+          <h2>Typing the Greek Alphabet in LaTeX</h2>
           <p>
             Greek letter commands only work in <strong>math mode</strong>: wrap them in{' '}
             <code>$...$</code> for inline math or <code>\[...\]</code> for a displayed
@@ -425,16 +425,14 @@ $\\epsilon$ vs $\\varepsilon$,  $\\phi$ vs $\\varphi$,  $\\theta$ vs $\\vartheta
 % Uppercase letters that match Latin letters have no command
 $A, B, E, Z, H, I, K, M, N, O, P, T, X$`}</code></pre>
 
-          <h3>Upright Greek with upgreek</h3>
           <p>
-            Lowercase Greek letters are italic by default, which is correct for variables.
-            Units and constants (&micro;m, the &pi; in &quot;&pi; meson&quot;) should be upright.
-            The <code>upgreek</code> package adds <code>\up</code> versions of every letter:
+            Upright Greek for units and constants (<code>upgreek</code>, <code>\upmu</code>),
+            bold Greek vectors (<code>\boldsymbol</code>, <code>\bm</code>), the{' '}
+            <code>\epsilon</code>/<code>\varepsilon</code> variants and every other command are
+            covered in{' '}
+            <Link href="/learn/greek-letters-math-symbols">Greek letters in LaTeX</Link>; this page
+            sticks to the alphabet itself.
           </p>
-          <pre><code>{`\\usepackage{upgreek}
-
-$\\upalpha, \\upbeta, \\upgamma, \\uppi, \\upmu$   % upright lowercase
-$\\Upgamma, \\Updelta, \\Upomega$              % upright uppercase`}</code></pre>
 
           <h3>Greek in Text Mode</h3>
           <p>
