@@ -14,11 +14,10 @@ import { defaultLatexDocument } from '@/utilities/wrapLatexDocument'
 import { PostHero } from '@/heros/PostHero'
 import { generateMeta } from '@/utilities/generateMeta'
 import { generateArticleSchema } from '@/utilities/generateArticleSchema'
+import { extractFaqFromLexical } from '@/utilities/extractFaqFromLexical'
+import { generateFaqSchema } from '@/utilities/learnMetadata'
 import { LivePreviewListener } from '@/components/LivePreviewListener'
-import {
-  generateBreadcrumbSchema,
-  getBlogBreadcrumbs,
-} from '@/utilities/generateBreadcrumbs'
+import { generateBreadcrumbSchema, getBlogBreadcrumbs } from '@/utilities/generateBreadcrumbs'
 
 export async function generateStaticParams() {
   const payload = await getPayload({ config: configPromise })
@@ -64,10 +63,13 @@ export default async function Post({ params: paramsPromise }: Args) {
     post.title,
     post.slug || '',
     firstCategory?.title || undefined,
-    firstCategory?.slug || undefined
+    firstCategory?.slug || undefined,
   )
   const breadcrumbSchema = generateBreadcrumbSchema(breadcrumbs)
   const articleSchema = generateArticleSchema(post)
+  // FAQPage rich results for posts whose body has an FAQ H2 with H3 questions.
+  const faq = extractFaqFromLexical(post.content)
+  const faqSchema = faq.length >= 2 ? generateFaqSchema(faq) : null
 
   // "Open in Octree" boxes: one under the first LaTeX code block (rendered by
   // RichText) and one closing the post, unless that block already ends the post.
@@ -86,6 +88,13 @@ export default async function Post({ params: paramsPromise }: Args) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }}
       />
+      {faqSchema && (
+        <script
+          type="application/ld+json"
+          // Answers are post body text: escape "<" so a "</script>" in it cannot end the tag.
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema).replace(/</g, '\\u003c') }}
+        />
+      )}
       {/* Allows redirects for valid pages too */}
       <PayloadRedirects disableNotFound url={url} />
 
