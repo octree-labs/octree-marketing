@@ -167,7 +167,7 @@ $e^{i\\pi} + 1 = 0$.
             as written; by step 10 you can write a full paper with citations, and the rest add polish.
           </p>
           <ol>
-            <li><a href="#your-first-document">Your first document</a> (below) &ndash; the document class, preamble and body</li>
+            <li><a href="#your-first-document">Your first document</a> (below) &ndash; the <Link href="/learn/document-classes">document class</Link>, preamble and body</li>
             <li><Link href="/learn/special-characters">Special characters</Link> &ndash; escaping <code>&amp; % $ # _</code> so they print</li>
             <li><Link href="/learn/bold-italics-underline">Bold, italics and underline</Link> &ndash; <code>\textbf</code>, <code>\emph</code> and friends</li>
             <li><Link href="/learn/sections">Sections and headings</Link>, then the <Link href="/learn/table-of-contents">table of contents</Link></li>
@@ -491,7 +491,9 @@ See Figure~\\ref{fig:plot}.`}</code></pre>
             <li><code>width=0.8\textwidth</code> scales the image to 80% of the text width; <code>scale=0.5</code> and <code>height=5cm</code> also work.</li>
             <li>PDF, PNG and JPEG are accepted by pdfLaTeX; an EPS file is converted to PDF on the fly (graphicx loads <code>epstopdf</code> for you), and SVG needs the <code>svg</code> package or a manual export to PDF.</li>
             <li>Put images in a folder and point to it once: <code>\graphicspath&#123;&#123;figures/&#125;&#125;</code>.</li>
-            <li>Side-by-side images use the <code>subcaption</code> package.</li>
+            <li>Side-by-side images use the <code>subcaption</code> package; see{' '}
+              <Link href="/learn/subfigures">subfigures</Link>. The{' '}
+              <Link href="/learn/images">figures guide</Link> covers placement, scaling and errors in depth.</li>
           </ul>
 
           {/* ── Citations ── */}
@@ -624,8 +626,14 @@ l.42 \\textbol
           <h3>Document structure and text</h3>
           <ul>
             <li><Link href="/learn/sections">Sections and Headings</Link> – \section, \subsection, numbering and the table of contents</li>
+            <li><Link href="/learn/document-classes">Document Classes</Link> – article, report, book, KOMA-Script and class options</li>
+            <li><Link href="/learn/title-page">Title Page</Link> – \maketitle, the titlepage environment and custom designs</li>
+            <li><Link href="/learn/appendix">Appendix</Link> – \appendix, lettered sections and the appendix package</li>
+            <li><Link href="/learn/environments">Environments</Link> – \begin, \end and \newenvironment</li>
+            <li><Link href="/learn/commands-macros">Commands and Macros</Link> – \newcommand, \renewcommand and \def</li>
             <li><Link href="/learn/bold-italics-underline">Bold, Italics &amp; Underline</Link> – Text formatting commands and packages</li>
             <li><Link href="/learn/font-size">Font Size</Link> – \tiny to \Huge, class options and \fontsize</li>
+            <li><Link href="/learn/fonts">Fonts</Link> – Serif, sans serif and monospace families and font packages</li>
             <li><Link href="/learn/lists">Lists and Bullet Points</Link> – itemize, enumerate, description and enumitem</li>
             <li><Link href="/learn/special-characters">Special Characters</Link> – Escaping &amp;, %, $, # and typing accents and symbols</li>
             <li><Link href="/learn/quotes">Quotation Marks and Quotes</Link> – Correct quotes and block quotations</li>
@@ -638,12 +646,16 @@ l.42 \\textbol
             <li><Link href="/learn/table-of-contents">Table of Contents</Link> – \tableofcontents, depth, links and styling</li>
             <li><Link href="/learn/framebox">Framebox and Boxed Text</Link> – \fbox, \framebox, boxed equations and colored frames</li>
             <li><Link href="/learn/spacing">Spacing</Link> – \hspace, \vspace, math spaces, line and paragraph spacing</li>
+            <li><Link href="/learn/paragraphs-indentation">Paragraphs and Indentation</Link> – \noindent, \parindent, parskip and hanging indents</li>
+            <li><Link href="/learn/code-listings">Code Listings</Link> – listings, minted and verbatim</li>
+            <li><Link href="/learn/algorithms">Algorithms and Pseudocode</Link> – algpseudocode, algorithm2e and algorithmic</li>
           </ul>
           <h3>Page layout</h3>
           <ul>
             <li><Link href="/learn/page-size-margins">Page Size &amp; Margins</Link> – The geometry package and landscape pages</li>
             <li><Link href="/learn/page-numbering">Page Numbering</Link> – Roman and arabic numbers, fancyhdr and &ldquo;Page X of Y&rdquo;</li>
             <li><Link href="/learn/horizontal-lines">Horizontal Lines</Link> – \hrule, \rule and table rules</li>
+            <li><Link href="/learn/multiple-columns">Two Columns</Link> – twocolumn, multicol and \multicolumn in tables</li>
           </ul>
           <h3>Citations and academic formats</h3>
           <ul>
@@ -657,8 +669,10 @@ l.42 \\textbol
           <h3>Mathematics</h3>
           <ul>
             <li><Link href="/learn/mathematical-expressions">Mathematical Expressions</Link> – Inline and display math, fractions, roots, cases and amsmath</li>
+            <li><Link href="/learn/piecewise-functions">Piecewise Functions</Link> – The cases environment, conditions and dcases</li>
             <li><Link href="/learn/subscripts-superscripts">Subscripts &amp; Superscripts</Link> – ^, _, exponents and text-mode scripts</li>
             <li><Link href="/learn/brackets">Brackets and Parentheses</Link> – \left, \right and every delimiter</li>
+            <li><Link href="/learn/underbrace-overbrace">Underbrace and Overbrace</Link> – Annotated braces, \underset and \overset</li>
             <li><Link href="/learn/integrals-sums-limits">Integrals, Sums &amp; Limits</Link> – \int, \sum, \lim and partial derivatives</li>
             <li><Link href="/learn/multiline-equations">Multiline Equations</Link> – align, split, multline and breaking long equations</li>
             <li><Link href="/learn/equation-numbering">Equation Numbering &amp; Referencing</Link> – \label, \eqref, cleveref and custom tags</li>
@@ -675,11 +689,18 @@ l.42 \\textbol
           <h3>Tables, graphics and science</h3>
           <ul>
             <li><Link href="/learn/tables">Tables</Link> – booktabs, multicolumn, multirow, longtable and colour</li>
+            <li><Link href="/learn/images">Figures and Images</Link> – \includegraphics, captions, placement and \ref</li>
+            <li><Link href="/learn/subfigures">Subfigures</Link> – Side-by-side figures and grids with subcaption</li>
             <li><Link href="/learn/tikz">TikZ</Link> – Diagrams and drawings in LaTeX</li>
             <li><Link href="/learn/pgfplots">PGFPlots</Link> – Publication-quality plots from data</li>
             <li><Link href="/learn/molecular-orbital-diagrams">Molecular Orbital Diagrams</Link> – MO diagrams with TikZ and the modiagram package</li>
             <li><Link href="/learn/beamer">Beamer Presentations</Link> – Frames, themes, overlays and handouts</li>
             <li><Link href="/learn/beamer-footnote">Footnotes in Beamer</Link> – Footnotes on slides</li>
+          </ul>
+          <h3>Engines and languages</h3>
+          <ul>
+            <li><Link href="/learn/xelatex">XeLaTeX</Link> – Unicode input, system fonts with fontspec and when to use it</li>
+            <li><Link href="/learn/languages">Languages</Link> – babel, polyglossia, Spanish, Arabic, Chinese and more</li>
           </ul>
 
           {/* ── FAQ ── */}
