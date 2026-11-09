@@ -1,9 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import {
-  extractFaqFromLexical,
-  MAX_FAQ_ANSWER_LENGTH,
-} from '@/utilities/extractFaqFromLexical'
+import { extractFaqFromLexical, MAX_FAQ_ANSWER_LENGTH } from '@/utilities/extractFaqFromLexical'
 
 // Trimmed copies of live post bodies (first paragraph + the nodes from just
 // before the FAQ heading to the end), fetched from /api/blogs on 2026-11-08.
@@ -63,7 +60,11 @@ describe('extractFaqFromLexical', () => {
   it('returns [] for posts without an FAQ section', () => {
     expect(
       extractFaqFromLexical(
-        doc(heading('h2', 'Introduction'), heading('h3', 'Is this a question?'), paragraph(text('No.'))),
+        doc(
+          heading('h2', 'Introduction'),
+          heading('h3', 'Is this a question?'),
+          paragraph(text('No.')),
+        ),
       ),
     ).toEqual([])
     expect(extractFaqFromLexical(null)).toEqual([])
@@ -126,7 +127,57 @@ describe('extractFaqFromLexical', () => {
 
   it('does not match words that merely contain "faq"', () => {
     expect(
-      extractFaqFromLexical(doc(heading('h2', 'Faqir notes'), heading('h3', 'Q?'), paragraph(text('A.')))),
+      extractFaqFromLexical(
+        doc(heading('h2', 'Faqir notes'), heading('h3', 'Q?'), paragraph(text('A.'))),
+      ),
     ).toEqual([])
+  })
+
+  it('keeps answers that mention useoctree.com and only drops the closing CTA paragraph', () => {
+    const faq = extractFaqFromLexical(
+      doc(
+        heading('h2', 'FAQ'),
+        heading('h3', 'Can I convert a screenshot?'),
+        paragraph(text('Yes.')),
+        paragraph(
+          text('Use https://tools.useoctree.com/tools/image-to-latex and paste the result.'),
+        ),
+        heading('h3', 'Is there a web editor?'),
+        paragraph(text('Yes.')),
+        paragraph(text('Octree runs at https://www.useoctree.com in any browser.')),
+        heading('h3', 'Last question?'),
+        paragraph(text('Last answer.')),
+        { type: 'block', fields: { blockType: 'banner' } },
+        paragraph(
+          text(
+            'Write your next document in Octree, the AI LaTeX editor: https://www.useoctree.com',
+          ),
+        ),
+      ),
+    )
+    expect(faq).toEqual([
+      {
+        question: 'Can I convert a screenshot?',
+        answer: 'Yes. Use https://tools.useoctree.com/tools/image-to-latex and paste the result.',
+      },
+      {
+        question: 'Is there a web editor?',
+        answer: 'Yes. Octree runs at https://www.useoctree.com in any browser.',
+      },
+      { question: 'Last question?', answer: 'Last answer.' },
+    ])
+  })
+
+  it('separates a nested list from its parent item text', () => {
+    const [item] = extractFaqFromLexical(
+      doc(heading('h2', 'FAQ'), heading('h3', 'Nested?'), {
+        type: 'list',
+        children: [
+          { type: 'listitem', children: [text('outer'), list('ul', 'inner one', 'inner two')] },
+          { type: 'listitem', children: [text('second')] },
+        ],
+      }),
+    )
+    expect(item.answer).toBe('outer inner one inner two second')
   })
 })

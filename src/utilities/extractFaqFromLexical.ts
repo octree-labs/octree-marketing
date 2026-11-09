@@ -15,10 +15,15 @@ type LexicalState = { root?: { children?: LexicalNode[] | null } | null } | null
 export const MAX_FAQ_ANSWER_LENGTH = 600
 
 const FAQ_HEADING = /\bFAQ\b|frequently asked/i
-const SITE_LINK = /useoctree\.com/i
+/**
+ * The closing call-to-action paragraph the posts end with, e.g. "Write your next
+ * document in Octree, the AI LaTeX editor ...: https://www.useoctree.com". It
+ * mentions Octree and ends with the bare site URL (not a tools.useoctree.com
+ * link or a URL inside a sentence), so a real answer is never mistaken for it.
+ */
+const CLOSING_CTA = /\bOctree\b.*:\s*https?:\/\/(?:www\.)?useoctree\.com\/?$/i
 
-const isHeading = (node: LexicalNode, tag: string) =>
-  node.type === 'heading' && node.tag === tag
+const isHeading = (node: LexicalNode, tag: string) => node.type === 'heading' && node.tag === tag
 
 /** Plain text of a node: text and inline code as-is, links as their text, line breaks as spaces. */
 const plainText = (node: LexicalNode): string => {
@@ -26,7 +31,10 @@ const plainText = (node: LexicalNode): string => {
   if (typeof node.text === 'string') return node.text
   const children = node.children ?? []
   if (node.type === 'list') return children.map(plainText).map(collapse).filter(Boolean).join(' ')
-  return children.map(plainText).join('')
+  // A nested list sits inside a list item next to the item's own text.
+  return children
+    .map((child) => (child.type === 'list' ? ` ${plainText(child)} ` : plainText(child)))
+    .join('')
 }
 
 const collapse = (text: string) => text.replace(/\s+/g, ' ').trim()
@@ -45,9 +53,9 @@ const truncate = (text: string, max: number) => {
  * The section is the first H2 whose text contains "FAQ" or "Frequently Asked"
  * (e.g. "Frequently Asked Questions", "Delta Symbol FAQ"). Each H3 after it is
  * a question; the paragraphs and lists up to the next H3 are its answer. The
- * section ends at the next H2 (or H1 / horizontal rule). A closing call-to-action
- * paragraph linking to useoctree.com after the last answer is not part of that
- * answer. Questions without answer text are skipped.
+ * section ends at the next H2 (or H1 / horizontal rule). The closing
+ * call-to-action paragraph (see CLOSING_CTA) is never part of an answer.
+ * Questions without answer text are skipped.
  */
 export function extractFaqFromLexical(content: LexicalState): FaqItem[] {
   const nodes = content?.root?.children ?? []
@@ -77,8 +85,7 @@ export function extractFaqFromLexical(content: LexicalState): FaqItem[] {
     if (!question || (node.type !== 'paragraph' && node.type !== 'list')) continue
     const text = collapse(plainText(node))
     if (!text) continue
-    // "Write your next document in Octree ...: https://www.useoctree.com" closes the post.
-    if (parts.length > 0 && node.type === 'paragraph' && SITE_LINK.test(text)) break
+    if (node.type === 'paragraph' && CLOSING_CTA.test(text)) continue
     parts.push(text)
   }
   flush()

@@ -17,10 +17,7 @@ import { generateArticleSchema } from '@/utilities/generateArticleSchema'
 import { extractFaqFromLexical } from '@/utilities/extractFaqFromLexical'
 import { generateFaqSchema } from '@/utilities/learnMetadata'
 import { LivePreviewListener } from '@/components/LivePreviewListener'
-import {
-  generateBreadcrumbSchema,
-  getBlogBreadcrumbs,
-} from '@/utilities/generateBreadcrumbs'
+import { generateBreadcrumbSchema, getBlogBreadcrumbs } from '@/utilities/generateBreadcrumbs'
 
 export async function generateStaticParams() {
   const payload = await getPayload({ config: configPromise })
@@ -66,7 +63,7 @@ export default async function Post({ params: paramsPromise }: Args) {
     post.title,
     post.slug || '',
     firstCategory?.title || undefined,
-    firstCategory?.slug || undefined
+    firstCategory?.slug || undefined,
   )
   const breadcrumbSchema = generateBreadcrumbSchema(breadcrumbs)
   const articleSchema = generateArticleSchema(post)
@@ -94,7 +91,8 @@ export default async function Post({ params: paramsPromise }: Args) {
       {faqSchema && (
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+          // Answers are post body text: escape "<" so a "</script>" in it cannot end the tag.
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema).replace(/</g, '\\u003c') }}
         />
       )}
       {/* Allows redirects for valid pages too */}
