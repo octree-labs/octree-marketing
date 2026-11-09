@@ -19,16 +19,16 @@ const breadcrumbSchema = generateBreadcrumbSchema(breadcrumbs)
 
 const page = {
   slug: 'bibliography-examples',
-  title: 'Bibliography Examples: APA, MLA, Chicago and IEEE, with the LaTeX That Produces Them',
-  seoTitle: 'Bibliography Examples: APA, MLA, Chicago, IEEE + LaTeX',
+  title: 'BibTeX and References in LaTeX: Bibliography Examples',
+  seoTitle: 'BibTeX & LaTeX References: Bibliography Examples',
   description:
-    'Bibliography examples in APA 7, MLA 9, Chicago and IEEE, each with its BibTeX source, plus thebibliography, BibTeX and biblatex documents that compile.',
+    'BibTeX and references in LaTeX: .bib entry types, \\cite, \\bibliographystyle, the bibtex compile cycle, biblatex, and APA, MLA, Chicago and IEEE examples.',
   keywords:
-    'bibliography example, bibliography examples, latex bibliography example, bibtex example, thebibliography example, biblatex example, annotated bibliography example, apa bibliography example, mla bibliography example, chicago bibliography example, ieee bibliography example, reference list example, works cited example, bib file example, bibtex entry types, bibliographystyle, printbibliography, addbibresource, bibtex book entry, bibtex article entry, bibtex inproceedings, bibtex misc, latex references',
+    'bibtex, referencing in latex, references in latex, latex references, latex bibtex, bibtex latex, bibliography example, bibliography examples, latex bibliography example, bibtex example, thebibliography example, biblatex example, annotated bibliography example, apa bibliography example, mla bibliography example, chicago bibliography example, ieee bibliography example, reference list example, works cited example, bib file example, bibtex entry types, bibliographystyle, printbibliography, addbibresource, bibtex book entry, bibtex article entry, bibtex inproceedings, bibtex misc, latex references',
 }
 
 /** Last content update, used for dateModified in the article schema. */
-const LAST_UPDATED = '2026-10-20'
+const LAST_UPDATED = '2026-11-09'
 
 const faq: FaqItem[] = [
   {
@@ -42,7 +42,7 @@ const faq: FaqItem[] = [
       'A reference list (APA, IEEE) contains only the sources you cited; a bibliography (Chicago) may also include sources you read but did not cite. MLA calls its cited-only list Works Cited. In LaTeX the difference is a heading and a \\nocite: \\printbibliography[title={Bibliography}] with \\nocite{*} lists everything in the .bib file.',
   },
   {
-    question: 'How do I write a bibliography in LaTeX?',
+    question: 'How do I add references in LaTeX?',
     answer:
       'For a handful of sources, type them in a thebibliography environment with one \\bibitem per source and cite them with \\cite{key}. For more, put them in a .bib file and run BibTeX (\\bibliographystyle{plain} and \\bibliography{refs} in the body) or biblatex (\\usepackage[style=apa]{biblatex} and \\addbibresource{refs.bib} in the preamble, \\printbibliography in the body, compiled with biber). latexmk runs the extra passes for you.',
   },
@@ -54,7 +54,7 @@ const faq: FaqItem[] = [
   {
     question: 'Why does my bibliography show [?] or a question mark instead of a citation?',
     answer:
-      'The key in \\cite matches no entry, or the bibliography has not been built yet. The log says "LaTeX Warning: Citation `key\' undefined" and, for BibTeX, the .blg says "Warning--I didn\'t find a database entry for "key"". Fix the key, then run pdflatex, bibtex (or biber), pdflatex, pdflatex; latexmk does the sequence for you.',
+      'The key in \\cite matches no entry, or the bibliography has not been built yet. The log says LaTeX Warning: Citation `key\' undefined and, for BibTeX, the .blg says Warning--I didn\'t find a database entry for "key". Fix the key, then run pdflatex, bibtex (or biber), pdflatex, pdflatex; latexmk does the sequence for you.',
   },
   {
     question: 'Should I use BibTeX or biblatex?',
@@ -88,7 +88,30 @@ export default async function BibliographyExamplesPage() {
         </div>
 
         <article className="prose prose-lg dark:prose-invert max-w-4xl mx-auto">
-          <h1>Bibliography Examples: APA, MLA, Chicago and IEEE, with the LaTeX That Produces Them</h1>
+          <h1>BibTeX and References in LaTeX: Bibliography Examples</h1>
+          <div className="not-prose my-6 p-6 rounded-lg border bg-muted/40 break-words">
+            <p className="text-sm font-semibold uppercase tracking-wide text-muted-foreground mb-3">Quick answer</p>
+            <ul className="space-y-2 text-base list-disc pl-5">
+              <li>
+                <strong>Store sources:</strong> put entries such as <code>{`@article{key, author={...}, title={...}, journal={...}, year={2024}}`}</code> in refs.bib.
+              </li>
+              <li>
+                <strong>Cite:</strong> <code>{`\\cite{key}`}</code> in the text.
+              </li>
+              <li>
+                <strong>Print the list:</strong> <code>{`\\bibliographystyle{plain}`}</code> and <code>{`\\bibliography{refs}`}</code> where the references go.
+              </li>
+              <li>
+                <strong>Compile:</strong> pdflatex, bibtex, pdflatex, pdflatex (or latexmk, which runs the cycle for you).
+              </li>
+              <li>
+                <strong>biblatex instead:</strong> <code>{`\\usepackage[style=apa]{biblatex}`}</code> and <code>{`\\addbibresource{refs.bib}`}</code> in the preamble, <code>{`\\printbibliography`}</code> in the body, compiled with biber.
+              </li>
+              <li>
+                <strong>[?] in the PDF:</strong> the key is wrong or bibtex has not run; see the errors table below.
+              </li>
+            </ul>
+          </div>
           <p className="lead">
             A <strong>bibliography example</strong> is only useful if you can see both sides of it:
             the entry as it appears on the page and the source that generates it. This guide shows
@@ -103,6 +126,53 @@ export default async function BibliographyExamplesPage() {
             biblatex-chicago 3.18), and the rendered entries were read back from the PDFs. Where a document
             needs a <code>.bib</code> file, a <code>filecontents</code> block writes it for you, so
             each example is a single file that compiles in one run.
+          </p>
+
+          {/* ───────────────────────────── BibTeX basics ───────────────────────────── */}
+          <h2>Referencing in LaTeX with BibTeX: How It Works</h2>
+          <p>
+            References in LaTeX come from three pieces: a <code>.bib</code> database of sources, a{' '}
+            <code>\cite</code> command for every citation in the text, and a style that turns the
+            database entries into a formatted reference list. BibTeX is the program that connects
+            them. A minimal document:
+          </p>
+          <pre><code>{`\\documentclass{article}
+\\begin{filecontents}[overwrite]{refs.bib}
+@article{knuth1984lp,
+  author  = {Donald E. Knuth},
+  title   = {Literate Programming},
+  journal = {The Computer Journal},
+  volume  = {27},
+  number  = {2},
+  pages   = {97--111},
+  year    = {1984}
+}
+\\end{filecontents}
+\\begin{document}
+Literate programming was introduced by Knuth \\cite{knuth1984lp}.
+
+\\bibliographystyle{plain}
+\\bibliography{refs}   % refs.bib, without the extension
+\\end{document}`}</code></pre>
+          <h3>The pdflatex, bibtex, pdflatex, pdflatex cycle</h3>
+          <p>
+            A bibliography needs four runs, because each tool reads what the previous one wrote:
+          </p>
+          <ol>
+            <li><strong>pdflatex main</strong> writes every <code>\cite</code> key, the style and the database name to <code>main.aux</code>. Citations print as [?].</li>
+            <li><strong>bibtex main</strong> reads <code>main.aux</code>, looks the keys up in <code>refs.bib</code>, and writes the formatted list to <code>main.bbl</code>.</li>
+            <li><strong>pdflatex main</strong> typesets the list from <code>main.bbl</code> and records the labels.</li>
+            <li><strong>pdflatex main</strong> again, so the citations in the text pick up those labels.</li>
+          </ol>
+          <p>
+            <code>latexmk -pdf main</code> runs exactly as many passes as needed, and editors that
+            compile with latexmk, Octree included, do it on every build. With biblatex the cycle is
+            the same with <code>biber</code> in place of <code>bibtex</code>. Rather than typing
+            entries by hand, export them from a reference manager; the{' '}
+            <Link href="/blog/zotero-citation-guide-reference-management">Zotero citation guide</Link>{' '}
+            shows how to keep a <code>.bib</code> file in sync, and the{' '}
+            <Link href="https://tools.useoctree.com/templates/bibliography" target="_blank" rel="noopener noreferrer">bibliography template</Link>{' '}
+            is a ready-made starting point.
           </p>
 
           {/* ───────────────────────────── Definitions ───────────────────────────── */}
@@ -382,7 +452,7 @@ export default async function BibliographyExamplesPage() {
           </p>
 
           {/* ───────────────────────────── LaTeX ───────────────────────────── */}
-          <h2>A Bibliography in LaTeX, Three Ways</h2>
+          <h2>References in LaTeX, Three Ways: thebibliography, BibTeX and biblatex</h2>
           <p>
             The three methods differ in where the formatting lives. With <code>thebibliography</code>{' '}
             you type the formatted entries yourself. With BibTeX a <code>.bst</code> style file
@@ -494,6 +564,7 @@ came out of the same project \\cite{knuth1984lp}.
             <code>\bibliography</code> to print the whole file. Swapping the style line changes
             every entry at once. The Knuth book under each of the standard styles, as compiled:
           </p>
+          <div className="overflow-x-auto">
           <table>
             <thead>
               <tr>
@@ -535,6 +606,7 @@ came out of the same project \\cite{knuth1984lp}.
               </tr>
             </tbody>
           </table>
+          </div>
           <p>
             <code>apalike</code> is APA-like, not APA 7: it keeps the place of publication, brackets
             the citation and, since it ignores <code>sorttitle</code>, still labels <em>The
@@ -617,6 +689,7 @@ out of the same project \\parencite{knuth1984lp}; every package is archived onli
             <code>.bib</code> file gives the other styles by changing one line; each of these was
             compiled with the same body:
           </p>
+          <div className="overflow-x-auto">
           <table>
             <thead>
               <tr>
@@ -653,19 +726,21 @@ out of the same project \\parencite{knuth1984lp}; every package is archived onli
               </tr>
             </tbody>
           </table>
+          </div>
           <p>
             All four packages are in a full TeX Live; on a minimal installation,{' '}
             <code>tlmgr install biblatex-apa biblatex-mla biblatex-chicago biblatex-ieee</code>{' '}
             adds them.
           </p>
 
-          <h3>The .bib entry types</h3>
+          <h2>BibTeX Entry Types and Required Fields</h2>
           <p>
             The entry type decides which fields a style expects. The required fields are the ones
             the classic BibTeX styles warn about when missing. biblatex&apos;s own names are{' '}
             <code>journaltitle</code>, <code>location</code> and <code>date</code>; it reads{' '}
             <code>journal</code>, <code>address</code> and <code>year</code> as aliases for them.
           </p>
+          <div className="overflow-x-auto">
           <table>
             <thead>
               <tr>
@@ -714,6 +789,7 @@ out of the same project \\parencite{knuth1984lp}; every package is archived onli
               </tr>
             </tbody>
           </table>
+          </div>
           <p>
             Separate authors with <code>and</code>, never commas; write page ranges with a double
             hyphen, <code>97--111</code>; and brace anything whose capitalization must survive,{' '}
@@ -821,11 +897,12 @@ chapters 14 and 15 for the line-breaking parameters discussed in Section 3.
           </p>
 
           {/* ───────────────────────────── Errors ───────────────────────────── */}
-          <h2 id="common-errors">Common Bibliography Errors</h2>
+          <h2 id="common-errors">Common Errors: Citation Undefined and Empty Bibliography</h2>
           <p>
             Each message was reproduced on TeX Live 2025. BibTeX and biber write to the{' '}
             <code>.blg</code> file; LaTeX&apos;s own warnings are in the <code>.log</code>.
           </p>
+          <div className="overflow-x-auto">
           <table>
             <thead>
               <tr>
@@ -872,6 +949,7 @@ chapters 14 and 15 for the line-breaking parameters discussed in Section 3.
               </tr>
             </tbody>
           </table>
+          </div>
 
           {/* ───────────────────────────── FAQ ───────────────────────────── */}
           <h2>Frequently Asked Questions</h2>
@@ -892,7 +970,7 @@ chapters 14 and 15 for the line-breaking parameters discussed in Section 3.
             <code>\printbibliography[title=&#123;Bibliography&#125;]</code> with{' '}
             <code>\nocite&#123;*&#125;</code> lists everything in the <code>.bib</code> file.
           </p>
-          <h3>How do I write a bibliography in LaTeX?</h3>
+          <h3>How do I add references in LaTeX?</h3>
           <p>
             For a handful of sources, type them in a <code>thebibliography</code> environment with
             one <code>\bibitem</code> per source and cite them with <code>\cite&#123;key&#125;</code>.

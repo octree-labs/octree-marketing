@@ -19,16 +19,16 @@ const breadcrumbSchema = generateBreadcrumbSchema(breadcrumbs)
 
 const page = {
   slug: 'glossaries-acronyms',
-  title: 'Glossaries and Acronyms in LaTeX: the glossaries and acronym Packages',
-  seoTitle: 'LaTeX Glossaries, Acronyms and Abbreviations',
+  title: 'Glossaries and Acronyms in LaTeX: the glossaries Package',
+  seoTitle: 'LaTeX Glossaries and Acronyms: glossaries Package',
   description:
-    'Build a glossary, list of abbreviations or nomenclature in LaTeX: the glossaries package (\\newglossaryentry, \\newacronym, \\gls, \\printglossaries, makeglossaries and latexmk), the simpler acronym package, nomencl, symbol lists, sorting, hyperref ordering and the errors you will meet.',
+    'Make glossaries in LaTeX: \\newglossaryentry, \\newacronym, \\gls and \\printglossaries, the makeglossaries step, automake, acronym and common errors.',
   keywords:
-    'latex glossary, latex glossaries, glossaries package, latex acronyms, acronym package latex, latex list of abbreviations, latex abbreviations, latex nomenclature, nomencl, makeglossaries, newacronym, newglossaryentry, gls latex, printglossaries, glossaries-extra, latex list of symbols, latexmk glossaries',
+    'glossaries, latex glossary, latex glossaries, glossaries package, list of glossaries, latex list of glossaries, printglossaries, acrshort, latex acronyms, acronym package latex, latex list of abbreviations, latex abbreviations, latex nomenclature, nomencl, makeglossaries, newacronym, newglossaryentry, gls latex, printglossaries, glossaries-extra, latex list of symbols, latexmk glossaries',
 }
 
 /** Last content update, used for dateModified in the article schema. */
-const LAST_UPDATED = '2026-10-18'
+const LAST_UPDATED = '2026-11-09'
 
 const faq: FaqItem[] = [
   {
@@ -44,17 +44,22 @@ const faq: FaqItem[] = [
   {
     question: 'How do I make an acronym show its full form on first use only?',
     answer:
-      'That is the default behaviour of \\gls with \\newacronym in glossaries and of \\ac in the acronym package: the first use prints "long form (SHORT)" and later uses print only SHORT. To force the long form again, call \\glsresetall (glossaries) or \\acresetall (acronym), for example at the start of each chapter; \\glsreset{label} resets a single entry.',
+      'That is the default behaviour of \\gls with \\newacronym in glossaries and of \\ac in the acronym package: the first use prints “long form (SHORT)” and later uses print only SHORT. To force the long form again, call \\glsresetall (glossaries) or \\acresetall (acronym), for example at the start of each chapter; \\glsreset{label} resets a single entry.',
   },
   {
     question: 'Should hyperref be loaded before or after glossaries?',
     answer:
-      'Before. glossaries detects hyperref at load time and turns every \\gls into a link to the glossary entry; if hyperref is loaded afterwards the links are silently missing, with no warning to tell you why. The same order (hyperref first) applies to glossaries-extra and nomencl; the acronym package also hyperlinks when hyperref is already loaded.',
+      'Before. glossaries detects hyperref at load time and turns every \\gls into a link to the glossary entry; if hyperref is loaded afterwards the entries are not linked. The same order (hyperref first) applies to glossaries-extra; the acronym package also hyperlinks when hyperref is already loaded.',
   },
   {
     question: 'How do I sort glossary entries in order of definition or first use instead of alphabetically?',
     answer:
       'Pass the sort package option: \\usepackage[sort=def]{glossaries} sorts in the order entries are defined and sort=use in the order they are first used. The default sort=standard is alphabetical by the sort key, which is the name unless you set sort={...} on the entry, which you should do whenever the name contains a command such as \\ensuremath.',
+  },
+  {
+    question: 'How do I print a list of glossaries and a list of acronyms?',
+    answer:
+      'Load the package with the acronym option, \\usepackage[acronym]{glossaries}, and put \\printglossaries where the lists should appear; it prints the list of acronyms and the main glossary. To place or title them separately use \\printglossary[type=\\acronymtype] and \\printglossary. Remember to run makeglossaries between LaTeX runs, or nothing is printed.',
   },
 ]
 
@@ -83,7 +88,30 @@ export default async function LaTeXGlossariesAcronymsPage() {
         </div>
 
         <article className="prose prose-lg dark:prose-invert max-w-4xl mx-auto">
-          <h1>Glossaries and Acronyms in LaTeX: the glossaries and acronym Packages</h1>
+          <h1>Glossaries and Acronyms in LaTeX: the glossaries Package</h1>
+          <div className="not-prose my-6 p-6 rounded-lg border bg-muted/40 break-words">
+            <p className="text-sm font-semibold uppercase tracking-wide text-muted-foreground mb-3">Quick answer</p>
+            <ul className="space-y-2 text-base list-disc pl-5">
+              <li>
+                <strong>Load:</strong> <code>{`\\usepackage{glossaries}`}</code> then <code>{`\\makeglossaries`}</code> in the preamble (load hyperref first if you use it).
+              </li>
+              <li>
+                <strong>Define a term:</strong> <code>{`\\newglossaryentry{latex}`}</code>&#123;name=&#123;LaTeX&#125;, description=&#123;A document preparation system&#125;&#125;
+              </li>
+              <li>
+                <strong>Define an acronym:</strong> <code>{`\\newacronym{gcd}{GCD}`}</code>&#123;greatest common divisor&#125;
+              </li>
+              <li>
+                <strong>Use it:</strong> <code>{`\\gls{gcd}`}</code> gives &quot;greatest common divisor (GCD)&quot; the first time, &quot;GCD&quot; after; <code>{`\\acrshort{gcd}`}</code> always gives GCD.
+              </li>
+              <li>
+                <strong>Print the list:</strong> <code>{`\\printglossaries`}</code> prints every glossary (main glossary and list of acronyms).
+              </li>
+              <li>
+                <strong>Build:</strong> pdflatex, then makeglossaries, then pdflatex twice; or <code>{`\\usepackage[automake]{glossaries}`}</code> to skip the manual step.
+              </li>
+            </ul>
+          </div>
           <p className="lead">
             A thesis needs a glossary, a list of abbreviations and often a list of symbols;
             a paper usually needs abbreviations that are spelled out on first use and
@@ -96,7 +124,7 @@ export default async function LaTeXGlossariesAcronymsPage() {
           </p>
 
           {/* ── glossaries basics ── */}
-          <h2>The glossaries Package</h2>
+          <h2>How to Make a Glossary in LaTeX with the glossaries Package</h2>
           <p>
             Load <code>glossaries</code> after <code>hyperref</code>, call{' '}
             <code>\makeglossaries</code> in the preamble, and define every entry in the
@@ -152,6 +180,7 @@ Every \\gls{matrix} has a \\gls{svd}; several \\glspl{matrix} share one.
           </ul>
 
           <h3>The commands in the text</h3>
+          <div className="overflow-x-auto">
           <table>
             <thead>
               <tr>
@@ -171,6 +200,7 @@ Every \\gls{matrix} has a \\gls{svd}; several \\glspl{matrix} share one.
               <tr><td><code>\glsunset{'{label}'}</code>, <code>\glsunsetall</code></td><td>Mark as already used, so <code>\gls</code> gives the short form</td></tr>
             </tbody>
           </table>
+          </div>
           <p>
             The &ldquo;first use&rdquo; flag is global: once <code>\gls{'{svd}'}</code> has
             expanded anywhere in the document, every later use is short. If you want the full
@@ -181,8 +211,25 @@ Every \\gls{matrix} has a \\gls{svd}; several \\glspl{matrix} share one.
             reading order.
           </p>
 
+          <h3>Printing a list of glossaries: \printglossaries</h3>
+          <p>
+            <code>\printglossaries</code> prints every glossary you have created, one after the
+            other: the main glossary, the list of acronyms when you load the package with{' '}
+            <code>acronym</code>, and the list of symbols with <code>symbols</code>. To control
+            the order, the titles or the position of each list, print them one at a time with{' '}
+            <code>\printglossary</code>:
+          </p>
+          <pre><code>{`\\printglossary[type=\\acronymtype, title={List of Abbreviations}]
+\\printglossary[type=symbols, title={List of Symbols}]   % needs the symbols option
+\\printglossary[title={Glossary}, toctitle={Glossary}]`}</code></pre>
+          <p>
+            Only entries that were used with <code>\gls</code> (or a related command) appear in
+            the list. To include an entry you never use in the text, call{' '}
+            <code>{`\\glsadd{label}`}</code>, or <code>\glsaddall</code> for every defined entry.
+          </p>
+
           {/* ── Build ── */}
-          <h2>The Build Step: makeglossaries, makeindex and latexmk</h2>
+          <h2>The makeglossaries Build Step (and latexmk)</h2>
           <p>
             This is where most problems come from. When you compile, <code>\gls</code> writes
             each used entry to <code>main.glo</code> (and acronyms to <code>main.acn</code>).
@@ -310,7 +357,7 @@ Energy $E = \\gls{hbar}\\omega$ and $E = m\\gls{c}^2$.
 
 \\begin{document}
 The \\gls{cpu} and the \\gls{api}; again the \\gls{cpu} and \\gls{api}.
-\\printabbreviations   % \\printglossaries would print the same list
+\\printabbreviations   % the list of abbreviations
 \\end{document}`}</code></pre>
           <p>
             Other styles include <code>short-long</code>, <code>long-short-sc</code> (small-caps
@@ -378,7 +425,7 @@ Plural: \\acp{cpu}. \\acused{lstm} Now \\ac{lstm} is treated as used.
 The energy $E = mc^2$ where $m$ is the mass.
 \\nomenclature{$c$}{Speed of light in vacuum}
 \\nomenclature{$m$}{Mass of the particle}
-\\nomenclature[A]{$E$}{Energy}
+\\nomenclature{$E$}{Energy}
 \\printnomenclature
 \\end{document}`}</code></pre>
           <p>
@@ -396,9 +443,9 @@ sub makenlo2nls {
 }`}</code></pre>
           <p>
             The optional argument of <code>\nomenclature</code> is a sort prefix: entries are
-            sorted by prefix first, then by symbol, so <code>[A]</code> puts a symbol before
-            everything without a prefix and prefixes such as <code>[G]</code> for Greek letters
-            and <code>[S]</code> for subscripts let you group the list. Redefine{' '}
+            sorted by prefix first, then by symbol (entries without one get the default prefix{' '}
+            <code>a</code>), so prefixes such as <code>[G]</code> for Greek letters and{' '}
+            <code>[S]</code> for subscripts let you group the list. Redefine{' '}
             <code>\nomgroup</code> to print a heading for each prefix. <code>intoc</code> adds
             the list to the contents, and <code>\printnomenclature[2cm]</code> sets the width of
             the symbol column.
@@ -406,6 +453,7 @@ sub makenlo2nls {
 
           {/* ── Comparison ── */}
           <h2>Which Package Should You Use?</h2>
+          <div className="overflow-x-auto">
           <table>
             <thead>
               <tr>
@@ -426,9 +474,11 @@ sub makenlo2nls {
               <tr><td>Best for</td><td>Theses, books, anything with a real glossary</td><td>Papers and reports that only need abbreviations</td><td>Engineering and physics symbol lists</td></tr>
             </tbody>
           </table>
+          </div>
 
           {/* ── Errors ── */}
           <h2>Common Errors and Fixes</h2>
+          <div className="overflow-x-auto">
           <table>
             <thead>
               <tr>
@@ -442,6 +492,11 @@ sub makenlo2nls {
                 <td>Glossary is empty; the log only says <em>No file main.gls</em></td>
                 <td>makeglossaries was never run, so there is no <code>.gls</code> file</td>
                 <td>Run <code>makeglossaries main</code> between LaTeX runs, add the <code>.latexmkrc</code> rule, or switch to <code>\makenoidxglossaries</code></td>
+              </tr>
+              <tr>
+                <td>Glossary prints its heading but no entries</td>
+                <td>No entry was used with <code>\gls</code>, so nothing was written to the <code>.glo</code> file</td>
+                <td>Use the entries in the text, or add <code>\glsaddall</code> after defining them</td>
               </tr>
               <tr>
                 <td><em>Package glossaries Error: Glossary entry `foo&apos; has not been defined</em></td>
@@ -460,7 +515,7 @@ sub makenlo2nls {
               </tr>
               <tr>
                 <td><code>\gls</code> does not link to the glossary</td>
-                <td>hyperref loaded after glossaries (no warning is given)</td>
+                <td>hyperref loaded after glossaries</td>
                 <td>Load hyperref first</td>
               </tr>
               <tr>
@@ -485,9 +540,11 @@ sub makenlo2nls {
               </tr>
             </tbody>
           </table>
+          </div>
 
           {/* ── Quick reference ── */}
           <h2>Quick Reference</h2>
+          <div className="overflow-x-auto">
           <table>
             <thead>
               <tr>
@@ -508,6 +565,7 @@ sub makenlo2nls {
               <tr><td>Build</td><td>pdflatex &rarr; makeglossaries &rarr; pdflatex &times; 2</td><td>pdflatex &times; 2</td></tr>
             </tbody>
           </table>
+          </div>
 
           {/* ── FAQ ── */}
           <h2>Frequently Asked Questions</h2>
@@ -543,11 +601,9 @@ sub makenlo2nls {
           <h3>Should hyperref be loaded before or after glossaries?</h3>
           <p>
             Before. glossaries detects hyperref at load time and turns every <code>\gls</code>{' '}
-            into a link to the glossary entry; if hyperref is loaded afterwards the links are
-            silently missing, with no warning to tell you why. The same order (hyperref first)
-            applies to
-            glossaries-extra and nomencl; the acronym package also hyperlinks when hyperref is
-            already loaded.
+            into a link to the glossary entry; if hyperref is loaded afterwards the entries are
+            not linked. The same order (hyperref first) applies to glossaries-extra; the acronym
+            package also hyperlinks when hyperref is already loaded.
           </p>
           <h3>How do I sort glossary entries in order of definition or first use instead of alphabetically?</h3>
           <p>
@@ -556,6 +612,10 @@ sub makenlo2nls {
             are first used. The default <code>sort=standard</code> is alphabetical by the sort
             key, which is the name unless you set <code>sort={'{...}'}</code> on the entry, which
             you should do whenever the name contains a command such as <code>\ensuremath</code>.
+          </p>
+          <h3>How do I print a list of glossaries and a list of acronyms?</h3>
+          <p>
+            Load the package with the acronym option, <code>{`\\usepackage[acronym]{glossaries}`}</code>, and put <code>{`\\printglossaries`}</code> where the lists should appear; it prints the list of acronyms and the main glossary. To place or title them separately use <code>{`\\printglossary[type=\\acronymtype]`}</code> and <code>{`\\printglossary`}</code>. Remember to run makeglossaries between LaTeX runs, or nothing is printed.
           </p>
 
           {/* ── Next Steps ── */}

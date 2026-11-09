@@ -19,14 +19,15 @@ const breadcrumbSchema = generateBreadcrumbSchema(breadcrumbs)
 
 const page = {
   slug: 'greek-alphabet',
-  title: 'The Greek Alphabet: All 24 Letters in Order (with LaTeX Commands)',
-  seoTitle: 'Greek Alphabet: All 24 Letters in Order + LaTeX',
-  description: 'The complete Greek alphabet in order: all 24 uppercase and lowercase letters with names, pronunciation, Unicode code points, HTML entities, what each letter means in math and science, how to type them, and their LaTeX commands.',
-  keywords: 'greek alphabet, greek alphabet in order, greek letters, greek alphabet symbols, greek alphabet lowercase, greek alphabet uppercase, greek letters in order, greek alphabet latex, how many letters in the greek alphabet, greek letters math, greek alphabet pronunciation, greek letters unicode, alpha beta gamma delta, last letter of greek alphabet',
+  title: 'Greek Alphabet: All 24 Letters, Symbols, Names and Uses',
+  seoTitle: 'Greek Alphabet: All 24 Letters, Symbols and Uses',
+  description:
+    'The Greek alphabet: all 24 letters with uppercase and lowercase symbols, names, pronunciation and uses, plus beta, epsilon, theta and pi with Unicode.',
+  keywords: 'greek alphabet, beta symbol, symbol of epsilon, epsilon symbol, theta symbol, lambda symbol, mu symbol, pi symbol, rho symbol, tau symbol, chi symbol, psi symbol, greek letter symbols, greek alphabet in order, greek letters, greek alphabet symbols, greek alphabet lowercase, greek alphabet uppercase, greek letters in order, how many letters in the greek alphabet, greek alphabet pronunciation, greek letters unicode, alpha beta gamma delta, last letter of greek alphabet',
 }
 
 /** Last content update, used for dateModified in the article schema. */
-const LAST_UPDATED = '2026-10-17'
+const LAST_UPDATED = '2026-11-09'
 
 const faq: FaqItem[] = [
   {
@@ -50,9 +51,14 @@ const faq: FaqItem[] = [
       'Partly tradition — Euclid, Archimedes, and Ptolemy wrote in Greek, and Renaissance mathematicians kept their notation — and partly necessity. Once the 26 Latin letters are used up for variables, Greek supplies another 24 symbols that are visually distinct from Latin ones, so θ can be an angle in the same equation where t is time.',
   },
   {
-    question: 'What is the difference between ε and ϵ, or φ and ϕ?',
+    question: 'What is the beta symbol?',
     answer:
-      "Nothing semantically; they are glyph variants of the same letter. LaTeX exposes both so authors can match a journal's house style. Most modern texts prefer \\varepsilon (ε) and \\varphi (φ).",
+      'β is lowercase beta and Β uppercase beta, the second letter of the Greek alphabet (Unicode U+03B2 and U+0392, HTML &beta; and &Beta;). In statistics β is a regression coefficient or the Type II error rate; in physics it is beta decay or v/c. In LaTeX write \\beta in math mode.',
+  },
+  {
+    question: 'What is the symbol of epsilon?',
+    answer:
+      'Lowercase epsilon is ε (U+03B5), with a second lunate form ϵ (U+03F5); uppercase is Ε (U+0395), identical to Latin E. Most texts use ε for a small positive number or for permittivity. In LaTeX, \\varepsilon gives ε and \\epsilon gives ϵ; HTML uses &epsilon;.',
   },
 ]
 
@@ -81,7 +87,27 @@ export default async function GreekAlphabetPage() {
         </div>
 
         <article className="prose prose-lg dark:prose-invert max-w-4xl mx-auto">
-          <h1>The Greek Alphabet: All 24 Letters in Order (with LaTeX Commands)</h1>
+          <h1>Greek Alphabet: All 24 Letters, Symbols, Names and Uses</h1>
+          <div className="not-prose my-6 p-6 rounded-lg border bg-muted/40 break-words">
+            <p className="text-sm font-semibold uppercase tracking-wide text-muted-foreground mb-3">Quick answer</p>
+            <ul className="space-y-2 text-base list-disc pl-5">
+              <li>
+                <strong>24 letters in order:</strong> Α α alpha, Β β beta, Γ γ gamma, Δ δ delta, Ε ε epsilon, Ζ ζ zeta, Η η eta, Θ θ theta, Ι ι iota, Κ κ kappa, Λ λ lambda, Μ μ mu, Ν ν nu, Ξ ξ xi, Ο ο omicron, Π π pi, Ρ ρ rho, Σ σ ς sigma, Τ τ tau, Υ υ upsilon, Φ φ phi, Χ χ chi, Ψ ψ psi, Ω ω omega.
+              </li>
+              <li>
+                <strong>Beta symbol:</strong> Β β (U+0392, U+03B2); regression coefficients, beta decay. LaTeX <code>{`\\beta`}</code>.
+              </li>
+              <li>
+                <strong>Epsilon symbol:</strong> Ε ε (U+0395, U+03B5), with the variant ϵ; a small quantity, permittivity. LaTeX <code>{`\\varepsilon`}</code> or <code>{`\\epsilon`}</code>.
+              </li>
+              <li>
+                <strong>First and last:</strong> alpha (Α α) is first, omega (Ω ω) is last.
+              </li>
+              <li>
+                <strong>In LaTeX:</strong> lowercase letters are <code>{`\\alpha`}</code> ... <code>{`\\omega`}</code> in math mode; uppercase with a Latin look-alike (A, B, E ...) is just the Latin letter.
+              </li>
+            </ul>
+          </div>
           <p className="lead">
             The Greek alphabet has 24 letters, from alpha (&Alpha; &alpha;) to omega
             (&Omega; &omega;). It has been in continuous use since around 800 BC, and today
@@ -91,7 +117,7 @@ export default async function GreekAlphabetPage() {
           </p>
 
           {/* ───────────────────────────── Full Table ───────────────────────────── */}
-          <h2>The 24 Greek Letters in Order</h2>
+          <h2>The 24 Greek Letters in Order: Symbols, Names and Uses</h2>
           <p>
             Uppercase and lowercase forms are shown side by side. In LaTeX, every lowercase
             letter has its own command. Uppercase letters that look identical to a Latin
@@ -100,6 +126,7 @@ export default async function GreekAlphabetPage() {
             <code>E</code>, and so on in math mode. Lowercase omicron is likewise typed
             as a plain <code>o</code>.
           </p>
+          <div className="overflow-x-auto">
           <table>
             <thead>
               <tr>
@@ -108,37 +135,39 @@ export default async function GreekAlphabetPage() {
                 <th>Lower</th>
                 <th>Name</th>
                 <th>Transliteration / Pronunciation</th>
+                <th>Common use</th>
                 <th>LaTeX (lower / upper)</th>
                 <th>Variant</th>
               </tr>
             </thead>
             <tbody>
-              <tr><td>1</td><td>&Alpha;</td><td>&alpha;</td><td>Alpha</td><td>a — &quot;AL-fuh&quot;</td><td><code>\alpha</code> / <code>A</code></td><td>—</td></tr>
-              <tr><td>2</td><td>&Beta;</td><td>&beta;</td><td>Beta</td><td>b — &quot;BAY-tuh&quot; (US), &quot;BEE-tuh&quot; (UK)</td><td><code>\beta</code> / <code>B</code></td><td>—</td></tr>
-              <tr><td>3</td><td>&Gamma;</td><td>&gamma;</td><td>Gamma</td><td>g — &quot;GAM-uh&quot;</td><td><code>\gamma</code> / <code>\Gamma</code></td><td>—</td></tr>
-              <tr><td>4</td><td>&Delta;</td><td>&delta;</td><td>Delta</td><td>d — &quot;DEL-tuh&quot;</td><td><code>\delta</code> / <code>\Delta</code></td><td>—</td></tr>
-              <tr><td>5</td><td>&Epsilon;</td><td>&epsilon;</td><td>Epsilon</td><td>e (short) — &quot;EP-sih-lon&quot;</td><td><code>\epsilon</code> / <code>E</code></td><td><code>\varepsilon</code> &#949;</td></tr>
-              <tr><td>6</td><td>&Zeta;</td><td>&zeta;</td><td>Zeta</td><td>z — &quot;ZAY-tuh&quot;</td><td><code>\zeta</code> / <code>Z</code></td><td>—</td></tr>
-              <tr><td>7</td><td>&Eta;</td><td>&eta;</td><td>Eta</td><td>&#275; (long e) — &quot;AY-tuh&quot;</td><td><code>\eta</code> / <code>H</code></td><td>—</td></tr>
-              <tr><td>8</td><td>&Theta;</td><td>&theta;</td><td>Theta</td><td>th — &quot;THAY-tuh&quot;</td><td><code>\theta</code> / <code>\Theta</code></td><td><code>\vartheta</code> &#977;</td></tr>
-              <tr><td>9</td><td>&Iota;</td><td>&iota;</td><td>Iota</td><td>i — &quot;eye-OH-tuh&quot;</td><td><code>\iota</code> / <code>I</code></td><td>—</td></tr>
-              <tr><td>10</td><td>&Kappa;</td><td>&kappa;</td><td>Kappa</td><td>k — &quot;KAP-uh&quot;</td><td><code>\kappa</code> / <code>K</code></td><td>—</td></tr>
-              <tr><td>11</td><td>&Lambda;</td><td>&lambda;</td><td>Lambda</td><td>l — &quot;LAM-duh&quot;</td><td><code>\lambda</code> / <code>\Lambda</code></td><td>—</td></tr>
-              <tr><td>12</td><td>&Mu;</td><td>&mu;</td><td>Mu</td><td>m — &quot;MYOO&quot;</td><td><code>\mu</code> / <code>M</code></td><td>—</td></tr>
-              <tr><td>13</td><td>&Nu;</td><td>&nu;</td><td>Nu</td><td>n — &quot;NYOO&quot;</td><td><code>\nu</code> / <code>N</code></td><td>—</td></tr>
-              <tr><td>14</td><td>&Xi;</td><td>&xi;</td><td>Xi</td><td>x (ks) — &quot;KSEE&quot; or &quot;ZYE&quot;</td><td><code>\xi</code> / <code>\Xi</code></td><td>—</td></tr>
-              <tr><td>15</td><td>&Omicron;</td><td>&omicron;</td><td>Omicron</td><td>o (short) — &quot;OM-ih-kron&quot;</td><td><code>o</code> / <code>O</code></td><td>—</td></tr>
-              <tr><td>16</td><td>&Pi;</td><td>&pi;</td><td>Pi</td><td>p — &quot;PIE&quot; (English), &quot;PEE&quot; (Greek)</td><td><code>\pi</code> / <code>\Pi</code></td><td><code>\varpi</code> &#982;</td></tr>
-              <tr><td>17</td><td>&Rho;</td><td>&rho;</td><td>Rho</td><td>r (rh) — &quot;ROH&quot;</td><td><code>\rho</code> / <code>P</code></td><td><code>\varrho</code> &#1009;</td></tr>
-              <tr><td>18</td><td>&Sigma;</td><td>&sigma; / &sigmaf;</td><td>Sigma</td><td>s — &quot;SIG-muh&quot;</td><td><code>\sigma</code> / <code>\Sigma</code></td><td><code>\varsigma</code> &#962; (word-final)</td></tr>
-              <tr><td>19</td><td>&Tau;</td><td>&tau;</td><td>Tau</td><td>t — &quot;TAW&quot; or &quot;TOW&quot;</td><td><code>\tau</code> / <code>T</code></td><td>—</td></tr>
-              <tr><td>20</td><td>&Upsilon;</td><td>&upsilon;</td><td>Upsilon</td><td>u / y — &quot;OOP-sih-lon&quot;</td><td><code>\upsilon</code> / <code>\Upsilon</code></td><td>—</td></tr>
-              <tr><td>21</td><td>&Phi;</td><td>&phi;</td><td>Phi</td><td>ph (f) — &quot;FYE&quot; or &quot;FEE&quot;</td><td><code>\phi</code> / <code>\Phi</code></td><td><code>\varphi</code> &#966;</td></tr>
-              <tr><td>22</td><td>&Chi;</td><td>&chi;</td><td>Chi</td><td>ch (kh) — &quot;KYE&quot;</td><td><code>\chi</code> / <code>X</code></td><td>—</td></tr>
-              <tr><td>23</td><td>&Psi;</td><td>&psi;</td><td>Psi</td><td>ps — &quot;SIGH&quot; or &quot;PSEE&quot;</td><td><code>\psi</code> / <code>\Psi</code></td><td>—</td></tr>
-              <tr><td>24</td><td>&Omega;</td><td>&omega;</td><td>Omega</td><td>&#333; (long o) — &quot;oh-MAY-guh&quot;</td><td><code>\omega</code> / <code>\Omega</code></td><td>—</td></tr>
+              <tr><td>1</td><td>&Alpha;</td><td>&alpha;</td><td>Alpha</td><td>a — &quot;AL-fuh&quot;</td><td>Angles, significance level</td><td><code>\alpha</code> / <code>A</code></td><td>—</td></tr>
+              <tr><td>2</td><td>&Beta;</td><td>&beta;</td><td>Beta</td><td>b — &quot;BAY-tuh&quot; (US), &quot;BEE-tuh&quot; (UK)</td><td>Regression coefficients, beta decay</td><td><code>\beta</code> / <code>B</code></td><td>—</td></tr>
+              <tr><td>3</td><td>&Gamma;</td><td>&gamma;</td><td>Gamma</td><td>g — &quot;GAM-uh&quot;</td><td>Lorentz factor; &Gamma; gamma function</td><td><code>\gamma</code> / <code>\Gamma</code></td><td>—</td></tr>
+              <tr><td>4</td><td>&Delta;</td><td>&delta;</td><td>Delta</td><td>d — &quot;DEL-tuh&quot;</td><td>Small change; &Delta; difference</td><td><code>\delta</code> / <code>\Delta</code></td><td>—</td></tr>
+              <tr><td>5</td><td>&Epsilon;</td><td>&epsilon;</td><td>Epsilon</td><td>e (short) — &quot;EP-sih-lon&quot;</td><td>Small positive number, permittivity</td><td><code>\varepsilon</code> / <code>E</code></td><td><code>\epsilon</code> &#1013;</td></tr>
+              <tr><td>6</td><td>&Zeta;</td><td>&zeta;</td><td>Zeta</td><td>z — &quot;ZAY-tuh&quot;</td><td>Riemann zeta function, damping ratio</td><td><code>\zeta</code> / <code>Z</code></td><td>—</td></tr>
+              <tr><td>7</td><td>&Eta;</td><td>&eta;</td><td>Eta</td><td>&#275; (long e) — &quot;AY-tuh&quot;</td><td>Efficiency, viscosity</td><td><code>\eta</code> / <code>H</code></td><td>—</td></tr>
+              <tr><td>8</td><td>&Theta;</td><td>&theta;</td><td>Theta</td><td>th — &quot;THAY-tuh&quot;</td><td>Angles, unknown parameter</td><td><code>\theta</code> / <code>\Theta</code></td><td><code>\vartheta</code> &#977;</td></tr>
+              <tr><td>9</td><td>&Iota;</td><td>&iota;</td><td>Iota</td><td>i — &quot;eye-OH-tuh&quot;</td><td>Inclusion maps (rare)</td><td><code>\iota</code> / <code>I</code></td><td>—</td></tr>
+              <tr><td>10</td><td>&Kappa;</td><td>&kappa;</td><td>Kappa</td><td>k — &quot;KAP-uh&quot;</td><td>Curvature, Cohen&apos;s kappa</td><td><code>\kappa</code> / <code>K</code></td><td>—</td></tr>
+              <tr><td>11</td><td>&Lambda;</td><td>&lambda;</td><td>Lambda</td><td>l — &quot;LAM-duh&quot;</td><td>Wavelength, eigenvalues</td><td><code>\lambda</code> / <code>\Lambda</code></td><td>—</td></tr>
+              <tr><td>12</td><td>&Mu;</td><td>&mu;</td><td>Mu</td><td>m — &quot;MYOO&quot;</td><td>Mean, micro- prefix</td><td><code>\mu</code> / <code>M</code></td><td>—</td></tr>
+              <tr><td>13</td><td>&Nu;</td><td>&nu;</td><td>Nu</td><td>n — &quot;NYOO&quot;</td><td>Frequency, degrees of freedom</td><td><code>\nu</code> / <code>N</code></td><td>—</td></tr>
+              <tr><td>14</td><td>&Xi;</td><td>&xi;</td><td>Xi</td><td>x (ks) — &quot;KSEE&quot; or &quot;ZYE&quot;</td><td>Random variable</td><td><code>\xi</code> / <code>\Xi</code></td><td>—</td></tr>
+              <tr><td>15</td><td>&Omicron;</td><td>&omicron;</td><td>Omicron</td><td>o (short) — &quot;OM-ih-kron&quot;</td><td>Almost never used</td><td><code>o</code> / <code>O</code></td><td>—</td></tr>
+              <tr><td>16</td><td>&Pi;</td><td>&pi;</td><td>Pi</td><td>p — &quot;PIE&quot; (English), &quot;PEE&quot; (Greek)</td><td>3.14159&hellip;; &Pi; product</td><td><code>\pi</code> / <code>\Pi</code></td><td><code>\varpi</code> &#982;</td></tr>
+              <tr><td>17</td><td>&Rho;</td><td>&rho;</td><td>Rho</td><td>r (rh) — &quot;ROH&quot;</td><td>Density, correlation</td><td><code>\rho</code> / <code>P</code></td><td><code>\varrho</code> &#1009;</td></tr>
+              <tr><td>18</td><td>&Sigma;</td><td>&sigma; / &sigmaf;</td><td>Sigma</td><td>s — &quot;SIG-muh&quot;</td><td>Standard deviation; &Sigma; sum</td><td><code>\sigma</code> / <code>\Sigma</code></td><td><code>\varsigma</code> &#962; (word-final)</td></tr>
+              <tr><td>19</td><td>&Tau;</td><td>&tau;</td><td>Tau</td><td>t — &quot;TAW&quot; or &quot;TOW&quot;</td><td>Torque, time constant</td><td><code>\tau</code> / <code>T</code></td><td>—</td></tr>
+              <tr><td>20</td><td>&Upsilon;</td><td>&upsilon;</td><td>Upsilon</td><td>u / y — &quot;OOP-sih-lon&quot;</td><td>Rare</td><td><code>\upsilon</code> / <code>\Upsilon</code></td><td>—</td></tr>
+              <tr><td>21</td><td>&Phi;</td><td>&phi;</td><td>Phi</td><td>ph (f) — &quot;FYE&quot; or &quot;FEE&quot;</td><td>Golden ratio, angles; &Phi; flux</td><td><code>\varphi</code> / <code>\Phi</code></td><td><code>\phi</code> &#981;</td></tr>
+              <tr><td>22</td><td>&Chi;</td><td>&chi;</td><td>Chi</td><td>ch (kh) — &quot;KYE&quot;</td><td>Chi-squared distribution</td><td><code>\chi</code> / <code>X</code></td><td>—</td></tr>
+              <tr><td>23</td><td>&Psi;</td><td>&psi;</td><td>Psi</td><td>ps — &quot;SIGH&quot; or &quot;PSEE&quot;</td><td>Wave function</td><td><code>\psi</code> / <code>\Psi</code></td><td>—</td></tr>
+              <tr><td>24</td><td>&Omega;</td><td>&omega;</td><td>Omega</td><td>&#333; (long o) — &quot;oh-MAY-guh&quot;</td><td>Angular frequency; &Omega; ohm</td><td><code>\omega</code> / <code>\Omega</code></td><td>—</td></tr>
             </tbody>
           </table>
+          </div>
           <p>
             Lowercase sigma has two forms: <strong>&sigma;</strong> inside a word and{' '}
             <strong>&sigmaf;</strong> (final sigma) at the end of a word. The variant forms in
@@ -209,7 +238,7 @@ phi     chi     psi     omega`}</code></pre>
             <li><strong>&eta; eta</strong> — efficiency, dynamic viscosity, the Minkowski metric, the eta meson.</li>
             <li><strong>&theta; / &Theta; theta</strong> — angles, an unknown parameter in statistics; &Theta; is big-Theta complexity and the Heaviside step function.</li>
             <li><strong>&iota; iota</strong> — inclusion maps in algebra; rare elsewhere because it looks like <em>i</em>.</li>
-            <li><strong>&kappa; kappa</strong> — curvature, condition number of a matrix, Cohen&apos;s kappa, the von Kármán constant.</li>
+            <li><strong>&kappa; kappa</strong> — curvature, condition number of a matrix, Cohen&apos;s kappa, the von Kármán constant. See our <Link href="/blog/kappa-symbol-greek-letters-latex">kappa symbol guide</Link>.</li>
             <li><strong>&lambda; / &Lambda; lambda</strong> — wavelength, eigenvalues, decay constant, Poisson rate, Lagrange multipliers, lambda calculus; &Lambda; is the cosmological constant and a diagonal eigenvalue matrix.</li>
             <li><strong>&mu; mu</strong> — the mean, the micro- prefix (10<sup>&minus;6</sup>), coefficient of friction, permeability, reduced mass, the muon.</li>
             <li><strong>&nu; nu</strong> — frequency, degrees of freedom, kinematic viscosity, Poisson&apos;s ratio, the neutrino.</li>
@@ -220,11 +249,100 @@ phi     chi     psi     omega`}</code></pre>
             <li><strong>&sigma; / &Sigma; sigma</strong> — standard deviation, stress, electrical conductivity, the Pauli matrices, cross section; &Sigma; is summation and the covariance matrix. See our <Link href="/blog/sigma-symbol-meaning-uses-how-to-type">sigma symbol guide</Link>.</li>
             <li><strong>&tau; tau</strong> — torque, time constant, proper time, shear stress, the tau lepton, and the circle constant 2&pi;.</li>
             <li><strong>&upsilon; / &Upsilon; upsilon</strong> — rarely used (it looks like <em>v</em>); &Upsilon; is the upsilon meson.</li>
-            <li><strong>&phi; / &Phi; phi</strong> — the golden ratio, phase angle, azimuthal angle, Euler&apos;s totient function; &Phi; is magnetic flux, electric potential, and the standard normal CDF.</li>
+            <li><strong>&phi; / &Phi; phi</strong> — the golden ratio, phase angle, azimuthal angle, Euler&apos;s totient function; &Phi; is magnetic flux, electric potential, and the standard normal CDF. See our <Link href="/blog/phi-symbol-latex-greek-letters-physics">phi symbol guide</Link>.</li>
             <li><strong>&chi; chi</strong> — the chi-squared distribution, magnetic and electric susceptibility, the Euler characteristic, indicator functions.</li>
             <li><strong>&psi; / &Psi; psi</strong> — the quantum wave function, stream function in fluid dynamics, the digamma function.</li>
             <li><strong>&omega; / &Omega; omega</strong> — angular frequency and velocity, the first infinite ordinal; &Omega; is the ohm, the sample space in probability, solid angle, and big-Omega complexity. See our <Link href="/blog/omega-symbol-meaning-uses-math-science">omega symbol guide</Link>.</li>
           </ul>
+
+          {/* ───────────────────────────── Letter Symbols ───────────────────────────── */}
+          <h2>Greek Letter Symbols: Beta, Epsilon, Theta, Pi and More</h2>
+          <p>
+            The letters below are the ones people search for most, each with its meaning, its
+            Unicode code points and the HTML entity that types it on a web page. For every
+            LaTeX command, see the{' '}
+            <Link href="/learn/greek-letters-math-symbols">Greek letters and math symbols in LaTeX</Link> page.
+          </p>
+          <h3>Beta Symbol (Β β)</h3>
+          <p>
+            Beta is the second letter of the Greek alphabet. Lowercase &beta; marks regression coefficients and the probability of a Type II error in statistics, beta particles and beta decay in physics, the beta function, and the speed ratio <em>v</em>/<em>c</em> in relativity; the uppercase form looks exactly like Latin B.
+          </p>
+          <p>
+            Unicode U+0392 (&Beta;) and U+03B2 (&beta;); HTML <code>&amp;Beta;</code> and 
+            <code>&amp;beta;</code>. Do not confuse &beta; with the German sharp s &szlig; (U+00DF). In LaTeX, write <code>\beta</code> in math mode.
+          </p>
+          <h3>Epsilon Symbol (Ε ε ϵ)</h3>
+          <p>
+            Epsilon, the fifth letter, has two lowercase shapes: the curly &epsilon; (U+03B5) and the lunate &#1013; (U+03F5, <code>&amp;#1013;</code>). Mathematicians use it for an arbitrarily small positive number, as in the &epsilon;&ndash;&delta; definition of a limit; physicists for permittivity &epsilon;<sub>0</sub> and strain.
+          </p>
+          <p>
+            Unicode U+0395 (&Epsilon;) and U+03B5 (&epsilon;); HTML <code>&amp;Epsilon;</code> and 
+            <code>&amp;epsilon;</code>. The set-membership sign &isin; (U+2208) is a different character. In LaTeX, <code>\varepsilon</code> gives &epsilon; and <code>\epsilon</code> gives &#1013;. More in our <Link href="/blog/epsilon-symbol-meaning-uses-how-to-type">epsilon symbol guide</Link>.
+          </p>
+          <h3>Theta Symbol (Θ θ)</h3>
+          <p>
+            Theta is the standard name for an angle, &theta;, and for an unknown parameter in statistics, as in the estimate &theta;&#770;. Uppercase &Theta; is big-Theta notation for tight complexity bounds.
+          </p>
+          <p>
+            Unicode U+0398 (&Theta;) and U+03B8 (&theta;); HTML <code>&amp;Theta;</code> and 
+            <code>&amp;theta;</code>. The script variant &#977; is U+03D1 (<code>&amp;thetasym;</code>). LaTeX: <code>\theta</code>, <code>\Theta</code>, <code>\vartheta</code>.
+          </p>
+          <h3>Lambda Symbol (Λ λ)</h3>
+          <p>
+            Lambda stands for wavelength, eigenvalues (A<strong>v</strong> = &lambda;<strong>v</strong>), radioactive decay constants and the rate of a Poisson process; it is also the symbol of lambda calculus and anonymous functions in programming. Uppercase &Lambda; is the cosmological constant.
+          </p>
+          <p>
+            Unicode U+039B (&Lambda;) and U+03BB (&lambda;); HTML <code>&amp;Lambda;</code> and 
+            <code>&amp;lambda;</code>. LaTeX: <code>\lambda</code> and <code>\Lambda</code>. See our <Link href="/blog/lambda-symbol-meaning-uses-how-to-type">lambda symbol guide</Link>.
+          </p>
+          <h3>Mu Symbol (Μ μ)</h3>
+          <p>
+            Mu is the population mean in statistics, the micro- prefix (10<sup>&minus;6</sup>, as in &mu;m), the coefficient of friction, magnetic permeability and the muon.
+          </p>
+          <p>
+            Unicode U+039C (&Mu;) and U+03BC (&mu;); HTML <code>&amp;Mu;</code> and 
+            <code>&amp;mu;</code>. Unicode also has a separate micro sign &micro; (U+00B5, <code>&amp;micro;</code>) for units; it looks the same. LaTeX: <code>\mu</code>, or <code>\textmu</code> (textcomp) in running text.
+          </p>
+          <h3>Pi Symbol (Π π)</h3>
+          <p>
+            Lowercase &pi; is the circle constant 3.14159&hellip;, the ratio of a circle&apos;s circumference to its diameter, and also the prime-counting function &pi;(<em>x</em>). Uppercase &Pi; is the product operator.
+          </p>
+          <p>
+            Unicode U+03A0 (&Pi;) and U+03C0 (&pi;); HTML <code>&amp;Pi;</code> and 
+            <code>&amp;pi;</code>. The n-ary product sign &prod; (U+220F, <code>&amp;prod;</code>) is a separate, larger character. LaTeX: <code>\pi</code>, <code>\Pi</code>, and <code>\prod</code> for the operator.
+          </p>
+          <h3>Rho Symbol (Ρ ρ)</h3>
+          <p>
+            Rho denotes density (mass per unit volume), electrical resistivity, charge density and Pearson&apos;s or Spearman&apos;s correlation coefficient. Its uppercase form looks like Latin P.
+          </p>
+          <p>
+            Unicode U+03A1 (&Rho;) and U+03C1 (&rho;); HTML <code>&amp;Rho;</code> and 
+            <code>&amp;rho;</code>. The variant &#1009; is U+03F1. LaTeX: <code>\rho</code> and <code>\varrho</code>; uppercase is a plain <code>P</code>.
+          </p>
+          <h3>Tau Symbol (Τ τ)</h3>
+          <p>
+            Tau is torque, the time constant of an exponential decay or an RC circuit, shear stress and proper time in relativity. Some mathematicians use &tau; = 2&pi; as the circle constant.
+          </p>
+          <p>
+            Unicode U+03A4 (&Tau;) and U+03C4 (&tau;); HTML <code>&amp;Tau;</code> and 
+            <code>&amp;tau;</code>. Uppercase &Tau; looks like Latin T. LaTeX: <code>\tau</code>.
+          </p>
+          <h3>Chi Symbol (Χ χ)</h3>
+          <p>
+            Chi gives its name to the chi-squared (&chi;<sup>2</sup>) distribution and test in statistics; it is also magnetic and electric susceptibility, the Euler characteristic and the indicator function &chi;<sub><em>A</em></sub>. It is pronounced &quot;kye&quot;, and uppercase &Chi; looks like Latin X.
+          </p>
+          <p>
+            Unicode U+03A7 (&Chi;) and U+03C7 (&chi;); HTML <code>&amp;Chi;</code> and 
+            <code>&amp;chi;</code>. LaTeX: <code>\chi</code>, so <code>{`\\chi^2`}</code> for chi-squared.
+          </p>
+          <h3>Psi Symbol (Ψ ψ)</h3>
+          <p>
+            Psi is the wave function &psi; (or &Psi;) of quantum mechanics, the stream function in fluid dynamics and the digamma function &psi;(<em>x</em>). &Psi; is also the common symbol for psychology.
+          </p>
+          <p>
+            Unicode U+03A8 (&Psi;) and U+03C8 (&psi;); HTML <code>&amp;Psi;</code> and 
+            <code>&amp;psi;</code>. LaTeX: <code>\psi</code> and <code>\Psi</code>.
+          </p>
 
           {/* ───────────────────────────── Typing Greek Letters ───────────────────────────── */}
           <h2>How to Type Greek Letters</h2>
@@ -236,6 +354,7 @@ phi     chi     psi     omega`}</code></pre>
             sigma), and U+03C2 is the lowercase final sigma &sigmaf;. HTML and XML use the
             letter&apos;s name as an entity, capitalised for uppercase:
           </p>
+          <div className="overflow-x-auto">
           <table>
             <thead>
               <tr>
@@ -260,6 +379,7 @@ phi     chi     psi     omega`}</code></pre>
               <tr><td>&Omega;</td><td>U+03A9</td><td><code>&amp;Omega;</code></td><td>&omega;</td><td>U+03C9</td><td><code>&amp;omega;</code></td></tr>
             </tbody>
           </table>
+          </div>
           <p>
             Every other letter follows the same pattern: the <em>n</em>th uppercase letter is
             U+0390 + <em>n</em> and the <em>n</em>th lowercase letter is U+03B0 + <em>n</em>
@@ -287,7 +407,7 @@ phi     chi     psi     omega`}</code></pre>
           </ul>
 
           {/* ───────────────────────────── Greek Letters in LaTeX ───────────────────────────── */}
-          <h2>Greek Letters in LaTeX</h2>
+          <h2>Typing the Greek Alphabet in LaTeX</h2>
           <p>
             Greek letter commands only work in <strong>math mode</strong>: wrap them in{' '}
             <code>$...$</code> for inline math or <code>\[...\]</code> for a displayed
@@ -305,16 +425,14 @@ $\\epsilon$ vs $\\varepsilon$,  $\\phi$ vs $\\varphi$,  $\\theta$ vs $\\vartheta
 % Uppercase letters that match Latin letters have no command
 $A, B, E, Z, H, I, K, M, N, O, P, T, X$`}</code></pre>
 
-          <h3>Upright Greek with upgreek</h3>
           <p>
-            Lowercase Greek letters are italic by default, which is correct for variables.
-            Units and constants (&micro;m, the &pi; in &quot;&pi; meson&quot;) should be upright.
-            The <code>upgreek</code> package adds <code>\up</code> versions of every letter:
+            Upright Greek for units and constants (<code>upgreek</code>, <code>\upmu</code>),
+            bold Greek vectors (<code>\boldsymbol</code>, <code>\bm</code>), the{' '}
+            <code>\epsilon</code>/<code>\varepsilon</code> variants and every other command are
+            covered in{' '}
+            <Link href="/learn/greek-letters-math-symbols">Greek letters in LaTeX</Link>; this page
+            sticks to the alphabet itself.
           </p>
-          <pre><code>{`\\usepackage{upgreek}
-
-$\\upalpha, \\upbeta, \\upgamma, \\uppi, \\upmu$   % upright lowercase
-$\\Upgamma, \\Updelta, \\Upomega$              % upright uppercase`}</code></pre>
 
           <h3>Greek in Text Mode</h3>
           <p>
@@ -404,11 +522,13 @@ $\\mathit{\\Gamma}$  or  $\\varGamma, \\varDelta, \\varOmega$   % amsmath
             are visually distinct from Latin ones, so &theta; can be an angle in the same
             equation where <em>t</em> is time.
           </p>
-          <h3>What is the difference between &epsilon; and &#1013;, or &phi; and &#981;?</h3>
+          <h3>What is the beta symbol?</h3>
           <p>
-            Nothing semantically; they are glyph variants of the same letter. LaTeX exposes both
-            so authors can match a journal&apos;s house style. Most modern texts prefer{' '}
-            <code>\varepsilon</code> (&#949;) and <code>\varphi</code> (&#966;).
+            β is lowercase beta and Β uppercase beta, the second letter of the Greek alphabet (Unicode U+03B2 and U+0392, HTML &amp;beta; and &amp;Beta;). In statistics β is a regression coefficient or the Type II error rate; in physics it is beta decay or v/c. In LaTeX write <code>{`\\beta`}</code> in math mode.
+          </p>
+          <h3>What is the symbol of epsilon?</h3>
+          <p>
+            Lowercase epsilon is ε (U+03B5), with a second lunate form ϵ (U+03F5); uppercase is Ε (U+0395), identical to Latin E. Most texts use ε for a small positive number or for permittivity. In LaTeX, <code>{`\\varepsilon`}</code> gives ε and <code>{`\\epsilon`}</code> gives ϵ; HTML uses &amp;epsilon;.
           </p>
 
           {/* ───────────────────────────── Next Steps ───────────────────────────── */}

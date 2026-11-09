@@ -19,25 +19,21 @@ const breadcrumbSchema = generateBreadcrumbSchema(breadcrumbs)
 
 const page = {
   slug: 'sections',
-  title: 'Sections, Subsections and Chapters in LaTeX: Heading Levels, Numbering and Unnumbered Sections',
-  seoTitle: 'Sections, Subsections and Headings in LaTeX',
-  description: 'LaTeX heading levels from \\part to \\subparagraph, unnumbered sections, secnumdepth and tocdepth, custom numbering, titlesec formatting and \\appendix.',
-  keywords: 'latex subsection, latex section, latex subsubsection, latex unnumbered section, latex section numbering, latex paragraph heading, latex chapter, latex section without number, latex secnumdepth, latex tocdepth, latex addcontentsline, latex titlesec, latex appendix, latex section font size, latex heading levels, latex part, latex frontmatter mainmatter',
+  title: 'Sections and Subsections in LaTeX: \\section, \\subsection, \\subsubsection',
+  seoTitle: 'LaTeX Sections and Subsections: \\subsubsection',
+  description:
+    'Sections and subsections in LaTeX: \\section, \\subsection, \\subsubsection (a subsection of a subsection), \\paragraph, \\section*, secnumdepth and titlesec.',
+  keywords: 'subsections, subsection, latex subsection, subsection of a subsection, latex subsubsection of subsection, latex section, latex subsubsection, latex unnumbered section, latex section numbering, latex paragraph heading, latex chapter, latex section without number, latex secnumdepth, latex tocdepth, latex addcontentsline, latex titlesec, latex appendix, latex section font size, latex heading levels, latex part, latex frontmatter mainmatter',
 }
 
 /** Last content update, used for dateModified in the article schema. */
-const LAST_UPDATED = '2026-10-21'
+const LAST_UPDATED = '2026-11-09'
 
 const faq: FaqItem[] = [
   {
     question: 'How do I make an unnumbered section in LaTeX?',
     answer:
       'Use the starred form: \\section*{Title}. It prints no number and is left out of the table of contents. To list it anyway, add \\addcontentsline{toc}{section}{Title} right after it, preceded by \\phantomsection if hyperref is loaded so the link lands on the heading.',
-  },
-  {
-    question: 'Why is my table of contents empty or out of date?',
-    answer:
-      'The first compile writes the headings to a .toc file; \\tableofcontents can only read it on the next run. Compile twice (three times with hyperref) or use latexmk, which repeats until the document is stable. If the TOC is still empty, check that the .toc file is not being deleted between runs.',
   },
   {
     question: 'How do I number subsubsections in LaTeX?',
@@ -47,7 +43,7 @@ const faq: FaqItem[] = [
   {
     question: 'What is the difference between \\chapter and \\section?',
     answer:
-      '\\chapter is the top level in the report and book classes and starts a new page; \\section is the top level in article, which has no \\chapter (using it gives "Undefined control sequence"). In report and book, section numbers are prefixed with the chapter number, as in 2.1.',
+      '\\chapter is the top level in the report and book classes and starts a new page; \\section is the top level in article, which has no \\chapter (using it gives “Undefined control sequence”). In report and book, section numbers are prefixed with the chapter number, as in 2.1.',
   },
   {
     question: 'How do I change the section numbering to letters or Roman numerals?',
@@ -58,6 +54,11 @@ const faq: FaqItem[] = [
     question: 'How do I change the font, size or color of section headings?',
     answer:
       'Load the titlesec package and use \\titleformat{\\section}{<format>}{\\thesection}{1em}{}, where <format> is any font commands, for example \\normalfont\\Large\\bfseries\\color{blue}. \\titlespacing* sets the space before and after. Redefining the internal \\section macro by hand is fragile and unnecessary.',
+  },
+  {
+    question: 'How do I make a subsection of a subsection in LaTeX?',
+    answer:
+      'Use \\subsubsection{Title} inside a \\subsection; it is numbered 1.1.1 in article. For one level deeper use \\paragraph and then \\subparagraph, which are unnumbered run-in headings unless you raise the counter with \\setcounter{secnumdepth}{4} or 5. There is no \\subsubsubsection command.',
   },
 ]
 
@@ -86,7 +87,30 @@ export default async function LaTeXSectionsPage() {
         </div>
 
         <article className="prose prose-lg dark:prose-invert max-w-4xl mx-auto">
-          <h1>Sections, Subsections and Chapters in LaTeX: Heading Levels, Numbering and Unnumbered Sections</h1>
+          <h1>Sections and Subsections in LaTeX: \section, \subsection, \subsubsection</h1>
+          <div className="not-prose my-6 p-6 rounded-lg border bg-muted/40 break-words">
+            <p className="text-sm font-semibold uppercase tracking-wide text-muted-foreground mb-3">Quick answer</p>
+            <ul className="space-y-2 text-base list-disc pl-5">
+              <li>
+                <strong>Section:</strong> <code>{`\\section{Introduction}`}</code> gives 1 Introduction.
+              </li>
+              <li>
+                <strong>Subsection:</strong> <code>{`\\subsection{Background}`}</code> gives 1.1 Background.
+              </li>
+              <li>
+                <strong>Subsection of a subsection:</strong> <code>{`\\subsubsection{Detail}`}</code> gives 1.1.1 Detail; below that come <code>{`\\paragraph`}</code> and <code>{`\\subparagraph`}</code>.
+              </li>
+              <li>
+                <strong>Unnumbered:</strong> <code>{`\\section*{Preface}`}</code> prints no number and is left out of the contents.
+              </li>
+              <li>
+                <strong>Number deeper:</strong> <code>{`\\setcounter{secnumdepth}{4}`}</code> numbers down to <code>{`\\paragraph`}</code>; <code>{`\\setcounter{tocdepth}{3}`}</code> lists subsubsections in the contents.
+              </li>
+              <li>
+                <strong>Chapters:</strong> <code>{`\\chapter`}</code> exists only in report and book, not article.
+              </li>
+            </ul>
+          </div>
           <p className="lead">
             LaTeX headings are a hierarchy of commands, from <code>\part</code> down to{' '}
             <code>\subparagraph</code>, that number themselves, build the table of contents and
@@ -100,11 +124,12 @@ export default async function LaTeXSectionsPage() {
           </p>
 
           {/* ── Hierarchy ── */}
-          <h2>The Heading Hierarchy</h2>
+          <h2>The Section and Subsection Hierarchy</h2>
           <p>
             Seven commands make up the hierarchy. Which ones exist and how they number depends
             on the document class:
           </p>
+          <div className="overflow-x-auto">
           <table>
             <thead>
               <tr>
@@ -124,6 +149,7 @@ export default async function LaTeXSectionsPage() {
               <tr><td><code>\subparagraph</code></td><td>5</td><td>Unnumbered, indented run-in</td><td>Unnumbered, indented run-in</td></tr>
             </tbody>
           </table>
+          </div>
           <pre><code>{`\\documentclass{article}
 \\begin{document}
 \\tableofcontents
@@ -151,8 +177,42 @@ export default async function LaTeXSectionsPage() {
             <code>\section</code> only populates the navigation.
           </p>
 
+          {/* ── Subsubsection ── */}
+          <h2>Subsection of a Subsection: \subsubsection, \paragraph and \subparagraph</h2>
+          <p>
+            A subsection of a subsection is <code>\subsubsection</code>. It is numbered 1.1.1 in
+            article and appears in the table of contents. For one more level, use{' '}
+            <code>\paragraph</code>, and below that <code>\subparagraph</code>; there is no{' '}
+            <code>\subsubsubsection</code>. Those two are unnumbered run-in headings by default,
+            so raise <code>secnumdepth</code> if they should carry numbers like 1.1.1.1:
+          </p>
+          <pre><code>{`\\documentclass{article}
+\\setcounter{secnumdepth}{5}   % number down to \\subparagraph
+\\setcounter{tocdepth}{4}      % list down to \\paragraph
+\\begin{document}
+\\tableofcontents
+\\section{Methods}                 % 1
+\\subsection{Data}                 % 1.1
+\\subsubsection{Collection}        % 1.1.1
+\\paragraph{Sensors}               % 1.1.1.1
+Text runs in after a paragraph heading.
+\\subparagraph{Calibration}        % 1.1.1.1.1
+Indented and also run in.
+\\end{document}`}</code></pre>
+          <p>
+            If you find yourself needing a fifth level, the document is usually better served by
+            splitting a section, or by a description list for the lowest level. In report and
+            book, <code>\subsubsection</code> is unnumbered by default because{' '}
+            <code>secnumdepth</code> is 2 there; <code>{`\\setcounter{secnumdepth}{3}`}</code>{' '}
+            numbers it again. To make <code>\paragraph</code> start on its own line like the
+            other headings instead of running in, give it a <code>hang</code> shape with titlesec:
+          </p>
+          <pre><code>{`\\usepackage{titlesec}
+\\titleformat{\\paragraph}[hang]{\\normalfont\\normalsize\\bfseries}{\\theparagraph}{1em}{}
+\\titlespacing*{\\paragraph}{0pt}{3.25ex plus 1ex minus .2ex}{1.5ex plus .2ex}`}</code></pre>
+
           {/* ── Unnumbered ── */}
-          <h2>Unnumbered Sections</h2>
+          <h2>Unnumbered Sections: \section* and \subsection*</h2>
           <p>
             Every heading command has a starred form that prints no number, does not advance
             the counter, and is omitted from the table of contents and the running headers.
@@ -410,6 +470,7 @@ export default async function LaTeXSectionsPage() {
 
           {/* ── Errors ── */}
           <h2>Common Errors and Fixes</h2>
+          <div className="overflow-x-auto">
           <table>
             <thead>
               <tr>
@@ -476,6 +537,7 @@ export default async function LaTeXSectionsPage() {
               </tr>
             </tbody>
           </table>
+          </div>
 
           {/* ── Complete example ── */}
           <h2>Complete Example</h2>
@@ -513,6 +575,7 @@ Unnumbered, but listed and linked.
 
           {/* ── Quick reference ── */}
           <h2>Quick Reference</h2>
+          <div className="overflow-x-auto">
           <table>
             <thead>
               <tr>
@@ -539,6 +602,7 @@ Unnumbered, but listed and linked.
               <tr><td>Math in a heading with hyperref</td><td><code>\texorpdfstring{'{$x^2$}{x^2}'}</code></td></tr>
             </tbody>
           </table>
+          </div>
 
           {/* ── FAQ ── */}
           <h2>Frequently Asked Questions</h2>
@@ -548,14 +612,6 @@ Unnumbered, but listed and linked.
             left out of the table of contents. To list it anyway, add{' '}
             <code>\addcontentsline{'{toc}{section}{Title}'}</code> right after it, preceded by{' '}
             <code>\phantomsection</code> if hyperref is loaded so the link lands on the heading.
-          </p>
-          <h3>Why is my table of contents empty or out of date?</h3>
-          <p>
-            The first compile writes the headings to a <code>.toc</code> file;{' '}
-            <code>\tableofcontents</code> can only read it on the next run. Compile twice (three
-            times with hyperref) or use latexmk, which repeats until the document is stable. If
-            the TOC is still empty, check that the <code>.toc</code> file is not being deleted
-            between runs.
           </p>
           <h3>How do I number subsubsections in LaTeX?</h3>
           <p>
@@ -589,6 +645,10 @@ Unnumbered, but listed and linked.
             <code>{`\\normalfont\\Large\\bfseries\\color{blue}`}</code>.{' '}
             <code>\titlespacing*</code> sets the space before and after. Redefining the internal{' '}
             <code>\section</code> macro by hand is fragile and unnecessary.
+          </p>
+          <h3>How do I make a subsection of a subsection in LaTeX?</h3>
+          <p>
+            Use <code>{`\\subsubsection{Title}`}</code> inside a <code>{`\\subsection`}</code>; it is numbered 1.1.1 in article. For one level deeper use <code>{`\\paragraph`}</code> and then <code>{`\\subparagraph`}</code>, which are unnumbered run-in headings unless you raise the counter with <code>{`\\setcounter{secnumdepth}{4}`}</code> or 5. There is no <code>{`\\subsubsubsection`}</code> command.
           </p>
 
           {/* ── Next Steps ── */}

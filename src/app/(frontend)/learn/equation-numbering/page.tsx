@@ -1,6 +1,6 @@
 import type { Metadata } from 'next/types'
 
-import { learnMetadata } from '@/utilities/learnMetadata'
+import { learnMetadata, type FaqItem } from '@/utilities/learnMetadata'
 import Link from 'next/link'
 import { buttonVariants } from '@/components/ui/button'
 import React from 'react'
@@ -19,14 +19,48 @@ const breadcrumbSchema = generateBreadcrumbSchema(breadcrumbs)
 
 const page = {
   slug: 'equation-numbering',
-  title: 'LaTeX Equation Numbering and Referencing: \\label, \\eqref, \\tag and align',
-  seoTitle: 'LaTeX Equation Numbering: \\label, \\eqref and \\tag',
-  description: 'How to number and reference equations in LaTeX: equation vs equation*, \\label, \\ref, \\eqref and cleveref \\cref, numbering within sections, custom tags, \\nonumber and \\notag, multi-line equations with align, split, multline and gather, line breaks in long equations, subequations (1a, 1b), left-hand numbers, and common errors.',
-  keywords: 'latex equation numbering, latex reference equation, cite equation latex, latex eqref, latex label equation, latex new line in equation, latex align equation, latex split equation, latex multline, latex nonumber, latex notag, latex tag equation, latex subequations, latex numberwithin, latex equation number left, cleveref equation, latex equation without number, latex line break equation',
+  title: 'Equation Numbering and Referencing in LaTeX: \\label, \\ref, \\eqref',
+  seoTitle: 'LaTeX Equation Numbering and Referencing',
+  description:
+    'LaTeX equation numbering and referencing: number equations, label them with \\label and cite them with \\ref, \\eqref or \\cref. \\tag, subequations and fixes.',
+  keywords: 'latex equation numbering, latex number equations, reference equations latex, label equations latex, latex reference equation, cite equation latex, latex eqref, latex label equation, latex new line in equation, latex align equation, latex split equation, latex multline, latex nonumber, latex notag, latex tag equation, latex subequations, latex numberwithin, latex equation number left, cleveref equation, latex equation without number, latex line break equation',
 }
 
+const faq: FaqItem[] = [
+  {
+    question: 'How do you number equations in LaTeX?',
+    answer:
+      'Use the equation environment: \\begin{equation} E = mc^2 \\end{equation} is numbered (1), (2), (3) automatically. Use equation* or \\[ ... \\] for an unnumbered display, and align for several numbered lines. Add \\numberwithin{equation}{section} to the preamble to number per section, as (1.1), (1.2).',
+  },
+  {
+    question: 'How do you reference an equation in LaTeX?',
+    answer:
+      'Put \\label{eq:name} inside the equation and write \\eqref{eq:name} where you want the number. \\eqref comes from amsmath and prints the number in parentheses, (1). \\ref{eq:name} prints the bare number, and \\cref{eq:name} from cleveref adds the word, eq. (1). Compile twice so the numbers resolve.',
+  },
+  {
+    question: 'What is the difference between \\ref and \\eqref?',
+    answer:
+      '\\ref prints only the number, so you write the parentheses yourself: (\\ref{eq:x}). \\eqref prints the number with parentheses, upright even inside italic text, exactly as it appears next to the equation. Use \\eqref for equations and \\ref for sections, figures and tables.',
+  },
+  {
+    question: 'Why does my equation reference show ?? or say Reference undefined?',
+    answer:
+      'LaTeX writes labels to the .aux file on one run and reads them on the next, so the first compile after adding a label always shows ??. Compile a second time. If the warning stays, the label name is misspelled, or \\label is outside the numbered environment, or it is on a line suppressed with \\notag.',
+  },
+  {
+    question: 'How do I remove the number from one equation?',
+    answer:
+      'Use the starred environment, equation* or align*, for a whole display. Inside a numbered align, put \\notag (or \\nonumber) before the \\\\ of each line that should not be numbered. \\tag{text} replaces the number with your own label instead.',
+  },
+  {
+    question: 'How do I number equations as (1a), (1b)?',
+    answer:
+      'Wrap the equations in the subequations environment from amsmath: \\begin{subequations} \\begin{align} ... \\end{align} \\end{subequations}. Each line gets the parent number plus a letter, and a \\label placed directly inside subequations refers to the whole group.',
+  },
+]
+
 /** Last content update, used for dateModified in the article schema. */
-const LAST_UPDATED = '2026-10-17'
+const LAST_UPDATED = '2026-11-09'
 
 export default async function LaTeXEquationNumberingPage() {
   return (
@@ -40,6 +74,7 @@ export default async function LaTeXEquationNumberingPage() {
         title={page.title}
         description={page.description}
         dateModified={LAST_UPDATED}
+        faq={faq}
       />
       <div className="container">
         <div className="mb-8 max-w-4xl mx-auto">
@@ -52,7 +87,30 @@ export default async function LaTeXEquationNumberingPage() {
         </div>
 
         <article className="prose prose-lg dark:prose-invert max-w-4xl mx-auto">
-          <h1>LaTeX Equation Numbering and Referencing: \label, \eqref, \tag and align</h1>
+          <h1>Equation Numbering and Referencing in LaTeX: \label, \ref, \eqref</h1>
+          <div className="not-prose my-6 p-6 rounded-lg border bg-muted/40 break-words">
+            <p className="text-sm font-semibold uppercase tracking-wide text-muted-foreground mb-3">Quick answer</p>
+            <ul className="space-y-2 text-base list-disc pl-5">
+              <li>
+                <strong>Number an equation:</strong> <code>{`\\begin{equation}`}</code> ... <code>{`\\end{equation}`}</code> is numbered automatically; <code>{`equation*`}</code> (or <code>{`\\[ ... \\]`}</code>) is not.
+              </li>
+              <li>
+                <strong>Label it:</strong> put <code>{`\\label{eq:energy}`}</code> inside the environment.
+              </li>
+              <li>
+                <strong>Reference it:</strong> <code>{`\\eqref{eq:energy}`}</code> prints (1); <code>{`\\ref{eq:energy}`}</code> prints 1; <code>{`\\cref{eq:energy}`}</code> (cleveref) prints eq. (1).
+              </li>
+              <li>
+                <strong>Custom number:</strong> <code>{`\\tag{A}`}</code> replaces the number; <code>{`\\notag`}</code> drops it on one line of align.
+              </li>
+              <li>
+                <strong>Per-section numbers:</strong> <code>{`\\numberwithin{equation}{section}`}</code> in the preamble gives (1.1), (1.2), (2.1).
+              </li>
+              <li>
+                <strong>References show ??:</strong> compile twice; labels are resolved on the second run.
+              </li>
+            </ul>
+          </div>
           <p className="lead">
             LaTeX numbers every <code>equation</code> environment automatically, and a{' '}
             <code>\label</code> inside it lets you cite that number anywhere in the text with{' '}
@@ -65,7 +123,7 @@ export default async function LaTeXEquationNumberingPage() {
           </p>
 
           {/* ── Basics ── */}
-          <h2>Numbered and Unnumbered Equations</h2>
+          <h2>How to Number Equations in LaTeX: equation vs equation*</h2>
           <p>
             The <code>equation</code> environment produces a centered, numbered display. Its
             starred twin <code>equation*</code>, provided by <code>amsmath</code>, produces the
@@ -96,7 +154,7 @@ export default async function LaTeXEquationNumberingPage() {
           </p>
 
           {/* ── label/ref/eqref ── */}
-          <h2>Referencing an Equation: \label, \ref and \eqref</h2>
+          <h2>How to Label and Reference Equations: \label, \ref and \eqref</h2>
           <p>
             Put <code>\label</code> anywhere inside the numbered environment. Three commands read
             it back:
@@ -127,6 +185,19 @@ on page~\\pageref{eq:energy}        % prints: on page 4`}</code></pre>
             sections. The prefix is only a convention, but it makes <code>\ref</code> commands
             readable and prevents an equation and a figure from sharing a label by accident.
           </p>
+
+          <h3>How to cite an equation in the text</h3>
+          <p>
+            &ldquo;Citing&rdquo; an equation in LaTeX means referencing its number, not adding a
+            bibliography entry. The pattern is always the same: a <code>\label</code> on the
+            equation and <code>\eqref</code> (or <code>\cref</code>) in the sentence. Never type
+            the number by hand; it goes stale as soon as an equation is added above it.
+          </p>
+          <pre><code>{`\\begin{equation}
+  F = ma \\label{eq:newton}
+\\end{equation}
+By Newton's second law \\eqref{eq:newton}, the force doubles
+when the mass doubles.`}</code></pre>
 
           <h3>cleveref: \cref and \Cref</h3>
           <p>
@@ -242,6 +313,7 @@ See \\crefrange{eq:first}{eq:last}.         % eqs. (1) to (5)
             depends on two things: whether the lines should be aligned on a symbol, and whether
             you want one number for the whole block or one per line.
           </p>
+          <div className="overflow-x-auto">
           <table>
             <thead>
               <tr>
@@ -261,6 +333,7 @@ See \\crefrange{eq:first}{eq:last}.         % eqs. (1) to (5)
               <tr><td><code>flalign</code></td><td>Spread to full width</td><td>Every line</td><td>Equation on the left, condition on the right</td></tr>
             </tbody>
           </table>
+          </div>
 
           <h3>align: a number on every line</h3>
           <pre><code>{`\\begin{align}
@@ -435,6 +508,7 @@ Only the second line is numbered, as \\eqref{eq:manual}.`}</code></pre>
 
           {/* ── Errors ── */}
           <h2>Common Errors</h2>
+          <div className="overflow-x-auto">
           <table>
             <thead>
               <tr>
@@ -465,6 +539,11 @@ Only the second line is numbered, as \\eqref{eq:manual}.`}</code></pre>
                 <td><code>{`\\usepackage{amsmath}`}</code></td>
               </tr>
               <tr>
+                <td><em>LaTeX Warning: Reference `eq:x&apos; on page 1 undefined</em></td>
+                <td>The label has not been written to the <code>.aux</code> file yet, or it does not exist</td>
+                <td>Compile a second time; if the warning stays, the label is misspelled or missing</td>
+              </tr>
+              <tr>
                 <td>Reference shows <strong>??</strong></td>
                 <td>Label misspelled, not yet compiled twice, or placed outside the numbered environment</td>
                 <td>Check the spelling; keep <code>\label</code> inside the environment</td>
@@ -491,6 +570,7 @@ Only the second line is numbered, as \\eqref{eq:manual}.`}</code></pre>
               </tr>
             </tbody>
           </table>
+          </div>
 
           {/* ── Complete example ── */}
           <h2>Complete Example</h2>
@@ -570,6 +650,7 @@ is not numbered because it is never referenced; \\cref{eq:binom} is.
 
           {/* ── Quick reference ── */}
           <h2>Quick Reference</h2>
+          <div className="overflow-x-auto">
           <table>
             <thead>
               <tr>
@@ -598,6 +679,34 @@ is not numbered because it is never referenced; \\cref{eq:binom} is.
               <tr><td>Manual number</td><td><code>{`\\refstepcounter{equation}`}</code> + <code>{`\\tag{\\theequation}`}</code></td></tr>
             </tbody>
           </table>
+          </div>
+
+          {/* ── FAQ ── */}
+          <h2>Frequently Asked Questions</h2>
+          <h3>How do you number equations in LaTeX?</h3>
+          <p>
+            Use the equation environment: <code>{`\\begin{equation}`}</code> E = mc^2 <code>{`\\end{equation}`}</code> is numbered (1), (2), (3) automatically. Use equation* or <code>{`\\[ ... \\]`}</code> for an unnumbered display, and align for several numbered lines. Add <code>{`\\numberwithin{equation}{section}`}</code> to the preamble to number per section, as (1.1), (1.2).
+          </p>
+          <h3>How do you reference an equation in LaTeX?</h3>
+          <p>
+            Put <code>{`\\label{eq:name}`}</code> inside the equation and write <code>{`\\eqref{eq:name}`}</code> where you want the number. <code>{`\\eqref`}</code> comes from amsmath and prints the number in parentheses, (1). <code>{`\\ref{eq:name}`}</code> prints the bare number, and <code>{`\\cref{eq:name}`}</code> from cleveref adds the word, eq. (1). Compile twice so the numbers resolve.
+          </p>
+          <h3>What is the difference between \ref and \eqref?</h3>
+          <p>
+            <code>{`\\ref`}</code> prints only the number, so you write the parentheses yourself: (<code>{`\\ref{eq:x}`}</code>). <code>{`\\eqref`}</code> prints the number with parentheses, upright even inside italic text, exactly as it appears next to the equation. Use <code>{`\\eqref`}</code> for equations and <code>{`\\ref`}</code> for sections, figures and tables.
+          </p>
+          <h3>Why does my equation reference show ?? or say Reference undefined?</h3>
+          <p>
+            LaTeX writes labels to the .aux file on one run and reads them on the next, so the first compile after adding a label always shows ??. Compile a second time. If the warning stays, the label name is misspelled, or <code>{`\\label`}</code> is outside the numbered environment, or it is on a line suppressed with <code>{`\\notag`}</code>.
+          </p>
+          <h3>How do I remove the number from one equation?</h3>
+          <p>
+            Use the starred environment, <code>{`equation*`}</code> or <code>{`align*`}</code>, for a whole display. Inside a numbered align, put <code>{`\\notag`}</code> (or <code>{`\\nonumber`}</code>) before the \\ of each line that should not be numbered. <code>{`\\tag{text}`}</code> replaces the number with your own label instead.
+          </p>
+          <h3>How do I number equations as (1a), (1b)?</h3>
+          <p>
+            Wrap the equations in the subequations environment from amsmath: <code>{`\\begin{subequations}`}</code> <code>{`\\begin{align}`}</code> ... <code>{`\\end{align}`}</code> <code>{`\\end{subequations}`}</code>. Each line gets the parent number plus a letter, and a <code>{`\\label`}</code> placed directly inside subequations refers to the whole group.
+          </p>
 
           {/* ── Next Steps ── */}
           <h2>Next Steps</h2>
@@ -616,7 +725,6 @@ is not numbered because it is never referenced; \\cref{eq:binom} is.
           <ul>
             <li><Link href="https://tools.useoctree.com/tools/math-to-latex" target="_blank" rel="noopener noreferrer">Math to LaTeX Converter</Link> &ndash; Turn handwritten or typed math into LaTeX</li>
             <li><Link href="https://tools.useoctree.com/tools/latex-preview" target="_blank" rel="noopener noreferrer">LaTeX Preview</Link> &ndash; Check equation numbering with a live PDF preview</li>
-            <li><Link href="https://tools.useoctree.com/tools/math-to-latex" target="_blank" rel="noopener noreferrer">Math to LaTeX</Link> &ndash; Convert handwritten equations to LaTeX</li>
             <li><Link href="https://tools.useoctree.com/symbols" target="_blank" rel="noopener noreferrer">LaTeX Symbols Reference</Link> &ndash; Browse math operators and special characters</li>
           </ul>
 
