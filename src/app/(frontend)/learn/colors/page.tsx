@@ -83,7 +83,7 @@ export default async function LearnColorsPage() {
         <article className="prose prose-lg dark:prose-invert max-w-4xl mx-auto">
           <h1>Colors in LaTeX: \colorbox, \textcolor and xcolor</h1>
 
-          <div className="not-prose my-6 p-6 rounded-lg border bg-muted/40">
+          <div className="not-prose my-6 p-6 rounded-lg border bg-muted/40 break-words">
             <p className="text-sm font-semibold uppercase tracking-wide text-muted-foreground mb-3">Quick answer</p>
             <ul className="space-y-2 text-base list-disc pl-5">
               <li>
@@ -262,6 +262,7 @@ The term $\\colorbox{yellow}{$x^2$}$ is highlighted.
             The <code>xcolor</code> package provides a set of base colors available
             without any additional options:
           </p>
+          <div className="overflow-x-auto">
           <table>
             <thead>
               <tr>
@@ -348,6 +349,7 @@ The term $\\colorbox{yellow}{$x^2$}$ is highlighted.
               </tr>
             </tbody>
           </table>
+          </div>
 
           <h2>Using Colors for Text</h2>
           <p>
@@ -629,6 +631,7 @@ Normal text, {\\color{green} green text here}, back to normal.
             When you load <code>\usepackage[dvipsnames]&#123;xcolor&#125;</code>, you get access
             to 68 named colors. Here are some of the most commonly used:
           </p>
+          <div className="overflow-x-auto">
           <table>
             <thead>
               <tr>
@@ -719,12 +722,14 @@ Normal text, {\\color{green} green text here}, back to normal.
               </tr>
             </tbody>
           </table>
+          </div>
 
           <h2>Color Models Reference</h2>
           <p>
             The <code>xcolor</code> package supports several color models for defining
             custom colors:
           </p>
+          <div className="overflow-x-auto">
           <table>
             <thead>
               <tr>
@@ -761,6 +766,7 @@ Normal text, {\\color{green} green text here}, back to normal.
               </tr>
             </tbody>
           </table>
+          </div>
           <p>
             Use <code>rgb</code> or <code>HTML</code> for screen-oriented documents and
             <code>cmyk</code> for print. The <code>RGB</code> model is convenient when
@@ -770,6 +776,7 @@ Normal text, {\\color{green} green text here}, back to normal.
 
           {/* ── Common errors ── */}
           <h2>Common Errors</h2>
+          <div className="overflow-x-auto">
           <table>
             <thead>
               <tr>
@@ -811,6 +818,7 @@ Normal text, {\\color{green} green text here}, back to normal.
               </tr>
             </tbody>
           </table>
+          </div>
           <pre><code>{`% Option clash: tikz has already loaded xcolor without options
 \\documentclass{article}
 \\usepackage{tikz}

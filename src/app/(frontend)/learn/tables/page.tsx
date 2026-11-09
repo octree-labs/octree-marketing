@@ -245,6 +245,8 @@ Table~\\ref{tab:accuracy} summarises the results.
             column types out of the box:
           </p>
 
+          <div className="overflow-x-auto">
+
           <table>
             <thead>
               <tr>
@@ -286,6 +288,7 @@ Table~\\ref{tab:accuracy} summarises the results.
               </tr>
             </tbody>
           </table>
+          </div>
 
           <pre><code>{`% Paragraph columns are useful for wrapping long text
 \\begin{tabular}{l p{5cm} r}
@@ -614,6 +617,7 @@ Table~\\ref{tab:accuracy} summarises the results.
   \\end{tabular}
   \\caption{Row and column spacing applied together}
 \\end{table}`}</code></pre>
+          <div className="overflow-x-auto">
           <table>
             <thead>
               <tr>
@@ -630,6 +634,7 @@ Table~\\ref{tab:accuracy} summarises the results.
               <tr><td>Inconsistent gaps between rows</td><td>Use booktabs rules and <code>\addlinespace</code> instead of empty rows</td></tr>
             </tbody>
           </table>
+          </div>
 
           <h2>Multi-Column Cells</h2>
           <p>
@@ -1131,6 +1136,8 @@ As shown in \\cref{tab:summary} ...         % table 1
             Here is a summary of the most important packages for LaTeX tables and what each one provides:
           </p>
 
+          <div className="overflow-x-auto">
+
           <table>
             <thead>
               <tr>
@@ -1177,6 +1184,7 @@ As shown in \\cref{tab:summary} ...         % table 1
               </tr>
             </tbody>
           </table>
+          </div>
 
           <p>
             A typical preamble for a document with professional tables looks like this:
@@ -1358,6 +1366,7 @@ Table~\\ref{tab:results} lists the results.
             Tables produce some of LaTeX&apos;s least helpful messages. These are the ones that
             come up most, with what they actually mean:
           </p>
+          <div className="overflow-x-auto">
           <table>
             <thead>
               <tr>
@@ -1419,11 +1428,14 @@ Table~\\ref{tab:results} lists the results.
               </tr>
             </tbody>
           </table>
+          </div>
 
           <h2>Quick Reference</h2>
           <p>
             A handy reference table for column types and common commands:
           </p>
+
+          <div className="overflow-x-auto">
 
           <table>
             <thead>
@@ -1485,8 +1497,11 @@ Table~\\ref{tab:results} lists the results.
               </tr>
             </tbody>
           </table>
+          </div>
 
           <p>Common table commands at a glance:</p>
+
+          <div className="overflow-x-auto">
 
           <table>
             <thead>
@@ -1554,6 +1569,7 @@ Table~\\ref{tab:results} lists the results.
               </tr>
             </tbody>
           </table>
+          </div>
 
           <h2>Next Steps</h2>
           <p>Now that you can create professional tables in LaTeX, explore more topics:</p>
@@ -1574,7 +1590,7 @@ Table~\\ref{tab:results} lists the results.
             Building tables by hand can be tedious. Use our free tools to speed up your workflow:
           </p>
           <ul>
-            <li><strong><Link href="https://tools.useoctree.com/tools/table-to-latex" target="_blank" rel="noopener noreferrer">Table to LaTeX Converter</Link></strong> &ndash; Paste data from Excel, Google Sheets, or CSV and instantly get LaTeX table code with booktabs formatting</li>
+            <li><strong><Link href="https://tools.useoctree.com/tools/table-to-latex" target="_blank" rel="noopener noreferrer">Table to LaTeX Converter</Link></strong> &ndash; Upload a CSV exported from Excel or Google Sheets and get LaTeX table code with booktabs formatting</li>
             <li><Link href="https://tools.useoctree.com/tools/latex-preview" target="_blank" rel="noopener noreferrer">LaTeX Preview</Link> &ndash; Test your LaTeX code with live PDF preview</li>
             <li><Link href="https://tools.useoctree.com/tools/math-to-latex" target="_blank" rel="noopener noreferrer">Math to LaTeX</Link> &ndash; Convert handwritten equations to LaTeX</li>
             <li><Link href="https://tools.useoctree.com/tools/citation-generator" target="_blank" rel="noopener noreferrer">Citation Generator</Link> &ndash; Generate BibTeX citations from DOIs</li>

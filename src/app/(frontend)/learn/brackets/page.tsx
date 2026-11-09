@@ -93,7 +93,7 @@ export default async function LaTeXBracketsPage() {
         <article className="prose prose-lg dark:prose-invert max-w-4xl mx-auto">
           <h1>Brackets in LaTeX: Parentheses, Angle Brackets and \left \right Sizing</h1>
 
-          <div className="not-prose my-6 p-6 rounded-lg border bg-muted/40">
+          <div className="not-prose my-6 p-6 rounded-lg border bg-muted/40 break-words">
             <p className="text-sm font-semibold uppercase tracking-wide text-muted-foreground mb-3">Quick answer</p>
             <ul className="space-y-2 text-base list-disc pl-5">
               <li>
@@ -135,6 +135,7 @@ export default async function LaTeXBracketsPage() {
             In math mode, round and square brackets are ordinary characters. Everything else is
             a command, and most come in an opening and a closing form:
           </p>
+          <div className="overflow-x-auto">
           <table>
             <thead>
               <tr>
@@ -156,6 +157,7 @@ export default async function LaTeXBracketsPage() {
               <tr><td>&#x231C; &#x231D;</td><td><code>\ulcorner \urcorner</code></td><td>amssymb; also <code>\llcorner \lrcorner</code></td></tr>
             </tbody>
           </table>
+          </div>
           <pre><code>{`\\usepackage{amsmath, amssymb}
 
 $(a)$ $[b]$ $\\{c\\}$ $\\langle d \\rangle$ $\\lvert e \\rvert$ $\\lVert f \\rVert$
@@ -316,6 +318,7 @@ A literal command: \\verb|\\section{Title}| prints the braces as well.`}</code><
           <pre><code>{`\\[ ( \\bigl( \\Bigl( \\biggl( \\Biggl( x \\Biggr) \\biggr) \\Bigr) \\bigr) ) \\]
 \\[ \\bigl\\{ \\Bigl[ \\biggl\\langle \\Biggl\\lvert x \\Biggr\\rvert \\biggr\\rangle \\Bigr] \\bigr\\} \\]
 \\[ \\bigl\\langle \\psi \\bigm| \\phi \\bigr\\rangle \\]`}</code></pre>
+          <div className="overflow-x-auto">
           <table>
             <thead>
               <tr>
@@ -332,6 +335,7 @@ A literal command: \\verb|\\section{Title}| prints the braces as well.`}</code><
               <tr><td><code>\Bigg</code></td><td><code>\Biggl \Biggr \Biggm</code></td><td>30pt (3&times;)</td></tr>
             </tbody>
           </table>
+          </div>
           <p>
             Manual sizes have two advantages over <code>\left</code> and <code>\right</code>:
             they do not need to be matched, so they can be split across lines freely, and they
@@ -433,6 +437,7 @@ $\\langle u, v \\rangle$ \\quad $\\langle \\psi \\mid \\phi \\rangle$
             <code>&amp;</code> between columns and <code>\\</code> between rows, and they size
             the brackets automatically:
           </p>
+          <div className="overflow-x-auto">
           <table>
             <thead>
               <tr>
@@ -451,6 +456,7 @@ $\\langle u, v \\rangle$ \\quad $\\langle \\psi \\mid \\phi \\rangle$
               <tr><td><code>smallmatrix</code></td><td>none</td><td>Inline; <code>psmallmatrix</code>, <code>bsmallmatrix</code> etc. with mathtools</td></tr>
             </tbody>
           </table>
+          </div>
           <pre><code>{`\\usepackage{amsmath, mathtools}
 
 \\[
@@ -553,6 +559,7 @@ $M = \\begin{psmallmatrix} 1 & 2 \\\\ 3 & 4 \\end{psmallmatrix}$ inline.`}</code
 
           {/* ── Errors ── */}
           <h2>Common Errors and Fixes</h2>
+          <div className="overflow-x-auto">
           <table>
             <thead>
               <tr>
@@ -614,6 +621,7 @@ $M = \\begin{psmallmatrix} 1 & 2 \\\\ 3 & 4 \\end{psmallmatrix}$ inline.`}</code
               </tr>
             </tbody>
           </table>
+          </div>
 
           {/* ── Complete example ── */}
           <h2>Complete Example</h2>
@@ -662,6 +670,7 @@ $M = \\begin{psmallmatrix} 1 & 2 \\\\ 3 & 4 \\end{psmallmatrix}$ inline.`}</code
 
           {/* ── Quick reference ── */}
           <h2>Quick Reference</h2>
+          <div className="overflow-x-auto">
           <table>
             <thead>
               <tr>
@@ -687,6 +696,7 @@ $M = \\begin{psmallmatrix} 1 & 2 \\\\ 3 & 4 \\end{psmallmatrix}$ inline.`}</code
               <tr><td>Define \abs</td><td><code>{`\\DeclarePairedDelimiter{\\abs}{\\lvert}{\\rvert}`}</code>, then <code>\abs{'{x}'}</code>, <code>\abs*{'{...}'}</code>, <code>\abs[\Big]{'{...}'}</code></td></tr>
             </tbody>
           </table>
+          </div>
 
           {/* ── FAQ ── */}
           <h2>Frequently Asked Questions</h2>

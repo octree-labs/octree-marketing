@@ -87,7 +87,7 @@ export default async function BoldItalicsUnderlinePage() {
         <article className="prose prose-lg dark:prose-invert max-w-4xl mx-auto">
           <h1>Underline, Bold and Italics in LaTeX</h1>
 
-          <div className="not-prose my-6 p-6 rounded-lg border bg-muted/40">
+          <div className="not-prose my-6 p-6 rounded-lg border bg-muted/40 break-words">
             <p className="text-sm font-semibold uppercase tracking-wide text-muted-foreground mb-3">Quick answer</p>
             <ul className="space-y-2 text-base list-disc pl-5">
               <li>
@@ -132,6 +132,8 @@ export default async function BoldItalicsUnderlinePage() {
             <code>\ul</code> from <code>soul</code>.
           </p>
 
+          <div className="overflow-x-auto">
+
           <table>
             <thead>
               <tr>
@@ -149,6 +151,7 @@ export default async function BoldItalicsUnderlinePage() {
               <tr><td><code>\uuline</code>, <code>\uwave</code></td><td><code>ulem</code></td><td>Yes</td><td>No</td><td>Double and wavy underlines</td></tr>
             </tbody>
           </table>
+          </div>
 
           <h3>The \underline Command</h3>
           <pre><code>{`\\documentclass{article}
@@ -522,6 +525,8 @@ Or verbatim: \\verb|\\documentclass{article}| prints everything literally.
 \\textit{Italic with an \\textup{upright} word inside.}
 {\\bfseries\\itshape Bold italic, then \\textnormal{back to normal}.}`}</code></pre>
 
+          <div className="overflow-x-auto">
+
           <table>
             <thead>
               <tr>
@@ -544,6 +549,7 @@ Or verbatim: \\verb|\\documentclass{article}| prints everything literally.
               <tr><td>All</td><td><code>\textnormal</code></td><td><code>\normalfont</code></td><td>Reset to the document font</td></tr>
             </tbody>
           </table>
+          </div>
 
           <h2>Font Sizes with Bold and Italics</h2>
           <p>
@@ -602,6 +608,8 @@ $ \\mathbb{R}, \\mathbb{Z}, \\mathbb{N} $
 % Bold symbol — works with Greek and symbols
 $ \\boldsymbol{\\nabla} \\times \\boldsymbol{E} = -\\frac{\\partial \\boldsymbol{B}}{\\partial t} $`}</code></pre>
 
+          <div className="overflow-x-auto">
+
           <table>
             <thead>
               <tr>
@@ -648,6 +656,7 @@ $ \\boldsymbol{\\nabla} \\times \\boldsymbol{E} = -\\frac{\\partial \\boldsymbol
               </tr>
             </tbody>
           </table>
+          </div>
 
           <h2>Using the emph Command</h2>
           <p>
@@ -744,6 +753,8 @@ The \\code{tabular} environment takes a column specifier.`}</code></pre>
             Beyond the basic commands, several packages extend LaTeX&apos;s text formatting capabilities.
           </p>
 
+          <div className="overflow-x-auto">
+
           <table>
             <thead>
               <tr>
@@ -780,6 +791,7 @@ The \\code{tabular} environment takes a column specifier.`}</code></pre>
               </tr>
             </tbody>
           </table>
+          </div>
 
           <pre><code>{`% soul package examples
 \\usepackage{soul}
@@ -809,6 +821,8 @@ $ \\bm{\\alpha} + \\bm{\\beta} = \\bm{\\gamma} $`}</code></pre>
           <p>
             Here is a summary of all the key formatting commands covered in this guide:
           </p>
+
+          <div className="overflow-x-auto">
 
           <table>
             <thead>
@@ -911,12 +925,15 @@ $ \\bm{\\alpha} + \\bm{\\beta} = \\bm{\\gamma} $`}</code></pre>
               </tr>
             </tbody>
           </table>
+          </div>
 
           <h2>Common Errors</h2>
           <p>
             These are the errors and surprises that come up most with underline, bold and italics,
             with the fix for each:
           </p>
+
+          <div className="overflow-x-auto">
 
           <table>
             <thead>
@@ -959,6 +976,7 @@ $ \\bm{\\alpha} + \\bm{\\beta} = \\bm{\\gamma} $`}</code></pre>
               </tr>
             </tbody>
           </table>
+          </div>
 
           <h3>Using \textbf in Math Mode</h3>
           <p>

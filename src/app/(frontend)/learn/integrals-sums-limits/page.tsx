@@ -88,7 +88,7 @@ export default async function IntegralsSumsLimitsPage() {
         <article className="prose prose-lg dark:prose-invert max-w-4xl mx-auto">
           <h1>Sums, Integrals and Limits in LaTeX: \sum, \int, \lim and \partial</h1>
 
-          <div className="not-prose my-6 p-6 rounded-lg border bg-muted/40">
+          <div className="not-prose my-6 p-6 rounded-lg border bg-muted/40 break-words">
             <p className="text-sm font-semibold uppercase tracking-wide text-muted-foreground mb-3">Quick answer</p>
             <ul className="space-y-2 text-base list-disc pl-5">
               <li>
@@ -123,6 +123,8 @@ export default async function IntegralsSumsLimitsPage() {
             differentials, series, the big-operator family, and the usual mistakes.
           </p>
 
+          <div className="overflow-x-auto">
+
           <table>
             <thead>
               <tr>
@@ -140,6 +142,7 @@ export default async function IntegralsSumsLimitsPage() {
               <tr><td>Bounds above/below inline</td><td><code>{`$\\sum\\limits_{i=1}^{n}$`}</code></td></tr>
             </tbody>
           </table>
+          </div>
 
           {/* ---- Sum symbol ---- */}
           <h2>Summation in LaTeX (\sum)</h2>
@@ -359,6 +362,8 @@ $\\int f(x)dx$      % too tight: f(x) runs into dx`}</code></pre>
   \\iint\\limits_D f \\, \\mathrm{d}A
 \\]`}</code></pre>
 
+          <div className="overflow-x-auto">
+
           <table>
             <thead>
               <tr>
@@ -410,6 +415,7 @@ $\\int f(x)dx$      % too tight: f(x) runs into dx`}</code></pre>
               </tr>
             </tbody>
           </table>
+          </div>
 
           {/* ---- Differentials ---- */}
           <h2>Upright Differentials: \mathrm&#123;d&#125;x and \,</h2>
@@ -660,6 +666,7 @@ $\\displaystyle \\sum_{i=1}^{n} a_i$
             LaTeX provides a full family of &quot;big operators&quot; that behave like <code>\sum</code> with
             respect to limits placement. Here is a reference table:
           </p>
+          <div className="overflow-x-auto">
           <table>
             <thead>
               <tr>
@@ -741,6 +748,7 @@ $\\displaystyle \\sum_{i=1}^{n} a_i$
               </tr>
             </tbody>
           </table>
+          </div>
           <pre><code>{`% Examples of big operators with bounds
 \\[
   \\bigcup_{i=1}^{n} A_i
@@ -870,6 +878,7 @@ $\\frac{\\partial f}{\\partial x}$
 $\\sum_{i=1 \\\\ i \\ne j}$     % no error, but the line breaks inside the formula
 % CORRECT
 $\\sum_{\\substack{i=1 \\\\ i \\ne j}}$`}</code></pre>
+          <div className="overflow-x-auto">
           <table>
             <thead>
               <tr>
@@ -911,6 +920,7 @@ $\\sum_{\\substack{i=1 \\\\ i \\ne j}}$`}</code></pre>
               </tr>
             </tbody>
           </table>
+          </div>
 
           {/* ---- FAQ ---- */}
           <h2>Frequently Asked Questions</h2>

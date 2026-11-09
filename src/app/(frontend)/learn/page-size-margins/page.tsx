@@ -83,7 +83,7 @@ export default async function PageSizeMarginsPage() {
         <article className="prose prose-lg dark:prose-invert max-w-4xl mx-auto">
           <h1>LaTeX Margins and Page Size with the geometry Package</h1>
 
-          <div className="not-prose my-6 p-6 rounded-lg border bg-muted/40">
+          <div className="not-prose my-6 p-6 rounded-lg border bg-muted/40 break-words">
             <p className="text-sm font-semibold uppercase tracking-wide text-muted-foreground mb-3">Quick answer</p>
             <ul className="space-y-2 text-base list-disc pl-5">
               <li>
@@ -225,7 +225,7 @@ export default async function PageSizeMarginsPage() {
           <p>
             Always name the paper size next to the margins. Without it, <code>geometry</code> uses
             the class default, which is US Letter for the standard classes in most distributions,
-            so a document you meant for A4 comes out 6&nbsp;mm narrower and 18&nbsp;mm taller
+            so a document you meant for A4 comes out 6&nbsp;mm wider and 18&nbsp;mm shorter
             than expected. You can give the size to the class or to geometry; geometry picks up
             the class option:
           </p>
@@ -416,6 +416,7 @@ Margins are back to the original 1-inch setting.
 \\usepackage[paperwidth=6in, paperheight=9in]{geometry}`}</code></pre>
 
           <h3>Common Paper Sizes</h3>
+          <div className="overflow-x-auto">
           <table>
             <thead>
               <tr>
@@ -464,6 +465,7 @@ Margins are back to the original 1-inch setting.
               </tr>
             </tbody>
           </table>
+          </div>
 
           <h2>Common Margin Presets</h2>
           <p>
@@ -515,6 +517,7 @@ Margins are back to the original 1-inch setting.
           <p>
             Here is a summary of the most useful <code>geometry</code> package options:
           </p>
+          <div className="overflow-x-auto">
           <table>
             <thead>
               <tr>
@@ -591,11 +594,13 @@ Margins are back to the original 1-inch setting.
               </tr>
             </tbody>
           </table>
+          </div>
 
           <h2>Common Paper Sizes</h2>
           <p>
             A complete reference of ISO and North American paper sizes you may encounter:
           </p>
+          <div className="overflow-x-auto">
           <table>
             <thead>
               <tr>
@@ -665,9 +670,11 @@ Margins are back to the original 1-inch setting.
               </tr>
             </tbody>
           </table>
+          </div>
 
           {/* ── Common errors ── */}
           <h2>Common Errors</h2>
+          <div className="overflow-x-auto">
           <table>
             <thead>
               <tr>
@@ -703,12 +710,13 @@ Margins are back to the original 1-inch setting.
                 <td>Call them only at a page or chapter boundary</td>
               </tr>
               <tr>
-                <td>Margins ignored in a Beamer or KOMA-Script document</td>
-                <td>The class manages its own layout</td>
-                <td>Use the class&apos;s own options (e.g. <code>typearea</code> in KOMA-Script)</td>
+                <td>Margins ignored, or the slides break, in a Beamer presentation</td>
+                <td>Beamer sets its own page size and does not support geometry</td>
+                <td>Drop geometry and use <code>{`\\setbeamersize{text margin left=5mm, text margin right=5mm}`}</code></td>
               </tr>
             </tbody>
           </table>
+          </div>
 
           {/* ── FAQ ── */}
           <h2>Frequently Asked Questions</h2>
@@ -737,7 +745,7 @@ Margins are back to the original 1-inch setting.
             <code>\restoregeometry</code> where the original margins should come back. Both commands
             start a new page, so place them at a page break.
           </p>
-          <h3>How do I fix &ldquo;\headheight is too small&rdquo;?</h3>
+          <h3>How do I fix &quot;\headheight is too small&quot;?</h3>
           <p>
             The warning comes from fancyhdr when the header is taller than the space reserved for
             it. Add the value it suggests, rounded up, to the geometry options, as in{' '}

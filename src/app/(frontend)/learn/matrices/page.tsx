@@ -98,7 +98,7 @@ export default async function MatricesPage() {
         <article className="prose prose-lg dark:prose-invert max-w-4xl mx-auto">
           <h1>Matrices in LaTeX: pmatrix, bmatrix, Matrix Brackets and Determinants</h1>
 
-          <div className="not-prose my-6 p-6 rounded-lg border bg-muted/40">
+          <div className="not-prose my-6 p-6 rounded-lg border bg-muted/40 break-words">
             <p className="text-sm font-semibold uppercase tracking-wide text-muted-foreground mb-3">Quick answer</p>
             <ul className="space-y-2 text-base list-disc pl-5">
               <li>
@@ -139,6 +139,7 @@ export default async function MatricesPage() {
 
           {/* ── Comparison table ── */}
           <h2>Matrix Brackets Compared</h2>
+          <div className="overflow-x-auto">
           <table>
             <thead>
               <tr>
@@ -215,6 +216,7 @@ export default async function MatricesPage() {
               </tr>
             </tbody>
           </table>
+          </div>
           <p>
             All of them share the same internal syntax. The one thing to remember is that a
             matrix environment must sit inside math mode (<code>\[...\]</code>,{' '}
@@ -1002,6 +1004,7 @@ M = \\begin{pmatrix}
 
           {/* ── Errors ── */}
           <h2>Common Errors and Fixes</h2>
+          <div className="overflow-x-auto">
           <table>
             <thead>
               <tr>
@@ -1063,9 +1066,11 @@ M = \\begin{pmatrix}
               </tr>
             </tbody>
           </table>
+          </div>
 
           {/* ── Quick ref ── */}
           <h2>Quick Reference Table</h2>
+          <div className="overflow-x-auto">
           <table>
             <thead>
               <tr>
@@ -1167,6 +1172,7 @@ M = \\begin{pmatrix}
               </tr>
             </tbody>
           </table>
+          </div>
 
           {/* ── FAQ ── */}
           <h2>Frequently Asked Questions</h2>
