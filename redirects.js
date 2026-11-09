@@ -1,3 +1,5 @@
+import { trailingSlashRedirect } from './src/lib/posthogRelay.js'
+
 const redirects = async () => {
   const internetExplorerRedirect = {
     destination: '/ie-incompatible.html',
@@ -29,7 +31,8 @@ const redirects = async () => {
     { source: '/blog/latex-table-generator', destination: '/learn/tables', permanent: true },
   ]
 
-  const redirects = [internetExplorerRedirect, ...retiredBlogPosts]
+  // trailingSlashRedirect first: see src/lib/posthogRelay.js.
+  const redirects = [trailingSlashRedirect, internetExplorerRedirect, ...retiredBlogPosts]
 
   return redirects
 }
