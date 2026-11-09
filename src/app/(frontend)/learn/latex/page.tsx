@@ -637,6 +637,7 @@ l.42 \\textbol
             <li><Link href="/learn/glossaries-acronyms">Glossaries and Acronyms</Link> – The glossaries package and automatic acronym expansion</li>
             <li><Link href="/learn/table-of-contents">Table of Contents</Link> – \tableofcontents, depth, links and styling</li>
             <li><Link href="/learn/framebox">Framebox and Boxed Text</Link> – \fbox, \framebox, boxed equations and colored frames</li>
+            <li><Link href="/learn/spacing">Spacing</Link> – \hspace, \vspace, math spaces, line and paragraph spacing</li>
           </ul>
           <h3>Page layout</h3>
           <ul>
@@ -677,6 +678,7 @@ l.42 \\textbol
             <li><Link href="/learn/tikz">TikZ</Link> – Diagrams and drawings in LaTeX</li>
             <li><Link href="/learn/pgfplots">PGFPlots</Link> – Publication-quality plots from data</li>
             <li><Link href="/learn/molecular-orbital-diagrams">Molecular Orbital Diagrams</Link> – MO diagrams with TikZ and the modiagram package</li>
+            <li><Link href="/learn/beamer">Beamer Presentations</Link> – Frames, themes, overlays and handouts</li>
             <li><Link href="/learn/beamer-footnote">Footnotes in Beamer</Link> – Footnotes on slides</li>
           </ul>
 

@@ -26,7 +26,7 @@ const page = {
 }
 
 /** Last content update, used for dateModified in the article schema. */
-const LAST_UPDATED = '2026-11-08'
+const LAST_UPDATED = '2026-11-09'
 
 const faq: FaqItem[] = [
   {
@@ -180,10 +180,10 @@ $\\lfloor g \\rfloor$ $\\lceil h \\rceil$`}</code></pre>
           </p>
 
           {/* ── Angle brackets ── */}
-          <h2>Angle Brackets in LaTeX (\langle, \rangle)</h2>
+          <h2>Angle Brackets ⟨ ⟩ in LaTeX (\langle, \rangle)</h2>
           <p>
-            Angle brackets are <code>\langle</code> and <code>\rangle</code> in math mode. They are
-            the brackets of inner products, expectation values, bra-ket notation and generated
+            Angle brackets ⟨ ⟩, also called angular brackets or chevrons, are{' '}
+            <code>\langle</code> and <code>\rangle</code> in math mode. They are the brackets of inner products, expectation values, bra-ket notation and generated
             groups, and like the other delimiters they can be sized:
           </p>
           <pre><code>{`\\documentclass{article}
@@ -215,9 +215,30 @@ Angle brackets in text: \\textlangle tag\\textrangle
             proper opening and closing delimiters with the right shape, the right spacing, and
             the ability to grow with <code>\left</code> and <code>\right</code>. Outside math,{' '}
             <code>\textlangle</code> and <code>\textrangle</code> give the text-mode versions.
-            The Unicode characters ⟨ ⟩ only work under XeLaTeX or LuaLaTeX with a font that has
-            them; under pdfLaTeX they stop the compile.
           </p>
+          <h3>Unicode angle brackets: ⟨ ⟩ versus 〈 〉 and &lt; &gt;</h3>
+          <p>
+            The mathematical angle brackets are U+27E8 ⟨ and U+27E9 ⟩, and they are what{' '}
+            <code>\langle</code> and <code>\rangle</code> print. Several look-alikes exist: the
+            older U+2329 〈 and U+232A 〉 (deprecated, and canonically equivalent to the CJK
+            brackets U+3008 〈 and U+3009 〉, which are full-width punctuation), and the
+            single-guillemet quotation marks ‹ ›. None of them is a substitute in a formula.
+          </p>
+          <p>
+            Typing ⟨ ⟩ straight into the source only works under XeLaTeX or LuaLaTeX with{' '}
+            <code>unicode-math</code>, which maps U+27E8 and U+27E9 to <code>\langle</code> and{' '}
+            <code>\rangle</code>, so they still grow with <code>\left</code> and{' '}
+            <code>\right</code>. Under pdfLaTeX a pasted ⟨ stops the compile with{' '}
+            <em>Unicode character ⟨ (U+27E8) not set up for use with LaTeX</em>; replace it with{' '}
+            <code>\langle</code>. To output the character in HTML, use{' '}
+            <code>&amp;#x27E8;</code> and <code>&amp;#x27E9;</code>.
+          </p>
+          <pre><code>{`% Compile with XeLaTeX or LuaLaTeX
+\\documentclass{article}
+\\usepackage{unicode-math}
+\\begin{document}
+$⟨x, y⟩ = \\langle x, y \\rangle$ \\quad $\\left⟨ \\frac{a}{b} \\right⟩$
+\\end{document}`}</code></pre>
 
           {/* ── Braces in text ── */}
           <h2>Curly Braces in Text and Math</h2>
