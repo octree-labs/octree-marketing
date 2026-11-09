@@ -502,7 +502,7 @@ See Figure~\\ref{fig:left} and Figure~\\ref{fig:right}.
                   <td>Use <code>width=\linewidth</code> inside the subfigure; it refers to the panel width</td>
                 </tr>
                 <tr>
-                  <td><code>\ref</code> prints the figure number, not the panel</td>
+                  <td><code>\ref</code> prints a wrong number (the section or an earlier figure), not the panel</td>
                   <td><code>\label</code> before the subfigure&apos;s <code>\caption</code></td>
                   <td>Put <code>\label</code> after <code>\caption</code> inside the subfigure</td>
                 </tr>

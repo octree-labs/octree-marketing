@@ -57,7 +57,7 @@ const faq: FaqItem[] = [
   {
     question: 'Why do I get a blank page after my title page?',
     answer:
-      'The titlepage environment already ends the page, so an extra \\newpage or \\clearpage after \\end{titlepage} adds an empty page. In two-sided book and report documents, chapters start on a right-hand page, so a blank left page after the title is intended; use the openany or oneside class option if you do not want it.',
+      'The titlepage environment already ends the page, so an extra \\newpage or \\clearpage after \\end{titlepage} adds an empty page. In the book class, which is two-sided with openright by default, chapters start on a right-hand page, so a blank left page after the title is intended; use the openany or oneside class option if you do not want it.',
   },
 ]
 
@@ -493,10 +493,10 @@ Text on the first page.
           <p>
             The <code>titlepage</code> environment already ends the page, so an extra{' '}
             <code>\newpage</code> or <code>\clearpage</code> after{' '}
-            <code>{`\\end{titlepage}`}</code> adds an empty page. In two-sided book and report
-            documents, chapters start on a right-hand page, so a blank left page after the title
-            is intended; use the <code>openany</code> or <code>oneside</code> class option if you
-            do not want it.
+            <code>{`\\end{titlepage}`}</code> adds an empty page. In the <code>book</code> class,
+            which is two-sided with <code>openright</code> by default, chapters start on a
+            right-hand page, so a blank left page after the title is intended; use the{' '}
+            <code>openany</code> or <code>oneside</code> class option if you do not want it.
           </p>
 
           {/* ── Next Steps ── */}
