@@ -52,7 +52,7 @@ const faq: FaqItem[] = [
   {
     question: 'Why do I get "Missing \\right. inserted"?',
     answer:
-      'Every \\left must be matched by a \\right in the same line and the same cell of an alignment. A \\left( on one line of an align and the \\right) on the next, or on the other side of an &, triggers this error (inside align it is reported as "Extra }, or forgotten \\right"). Close the first line with \\right. and open the next with \\left. (the dot is an invisible delimiter), or use the manual \\bigl and \\bigr sizes, which need no matching.',
+      'Every \\left must be matched by a \\right in the same line and the same cell of an alignment. A \\left( on one line of an align and the \\right) on the next, or on the other side of an &, triggers this error (inside align it is reported as “Extra }, or forgotten \\right”). Close the first line with \\right. and open the next with \\left. (the dot is an invisible delimiter), or use the manual \\bigl and \\bigr sizes, which need no matching.',
   },
   {
     question: 'What are accolades in LaTeX?',
@@ -228,9 +228,9 @@ Angle brackets in text: \\textlangle tag\\textrangle
             Typing ⟨ ⟩ straight into the source only works under XeLaTeX or LuaLaTeX with{' '}
             <code>unicode-math</code>, which maps U+27E8 and U+27E9 to <code>\langle</code> and{' '}
             <code>\rangle</code>, so they still grow with <code>\left</code> and{' '}
-            <code>\right</code>. Under pdfLaTeX a pasted ⟨ stops the compile with{' '}
-            <em>Unicode character ⟨ (U+27E8) not set up for use with LaTeX</em>; replace it with{' '}
-            <code>\langle</code>. To output the character in HTML, use{' '}
+            <code>\right</code>. Under pdfLaTeX, current LaTeX maps a pasted ⟨ to the text symbol{' '}
+            <code>\textlangle</code>, so in math it only prints a small text glyph that does not
+            scale (see Pasting Unicode Brackets below); replace it with <code>\langle</code>. To output the character in HTML, use{' '}
             <code>&amp;#x27E8;</code> and <code>&amp;#x27E9;</code>.
           </p>
           <pre><code>{`% Compile with XeLaTeX or LuaLaTeX

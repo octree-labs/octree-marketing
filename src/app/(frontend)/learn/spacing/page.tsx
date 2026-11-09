@@ -47,12 +47,12 @@ const faq: FaqItem[] = [
   {
     question: 'How do I set double spacing or 1.5 line spacing in LaTeX?',
     answer:
-      'Load the setspace package and write \\doublespacing or \\onehalfspacing in the preamble, or \\setstretch{1.5} for a custom factor. setspace keeps footnotes, captions and tables single-spaced. \\linespread{1.5} also works but scales everything, and it means a little more than one-and-a-half spacing.',
+      'Load the setspace package and write \\doublespacing or \\onehalfspacing in the preamble, or \\setstretch{1.5} for a custom factor. setspace keeps footnotes, captions and tables single-spaced. \\linespread{1.5} also works but scales everything, and it gives noticeably more than one-and-a-half spacing, close to double.',
   },
   {
     question: 'How do I add space between paragraphs instead of indenting them?',
     answer:
-      'Load the parskip package: \\usepackage{parskip}. It sets the paragraph indent to zero and adds a blank line of space between paragraphs, while keeping lists and the table of contents tidy. Setting \\setlength{\\parskip}{1em} and \\setlength{\\parindent}{0pt} by hand also works but adds the space in places you may not want.',
+      'Load the parskip package: \\usepackage{parskip}. It sets the paragraph indent to zero and adds about half a line of space between paragraphs, while keeping lists and the table of contents tidy. Setting \\setlength{\\parskip}{1em} and \\setlength{\\parindent}{0pt} by hand also works but adds the space in places you may not want.',
   },
   {
     question: 'Why does LaTeX say “Missing number, treated as zero”?',
@@ -298,7 +298,7 @@ Third paragraph, one and a half blank lines further down.
 \\[ ab \\quad a\\!b \\quad a\\,b \\quad a\\:b \\quad a\\;b \\]
 
 % Typical uses
-\\[ \\int_0^1 f(x)\\,dx \\qquad \\iint\\!\\!\\int_V g \\, dV \\]
+\\[ \\int_0^1 f(x)\\,dx \\qquad \\int\\!\\!\\int_D g\\,dA \\]
 \\[ f(x) = x^2, \\quad x > 0 \\qquad \\text{for all } y \\]
 \\[ \\{\\, x \\mid x > 0 \\,\\} \\qquad \\sqrt{2}\\,x \\qquad \\sin x\\,\\cos x \\]
 \\[ a = b \\qquad\\text{and}\\qquad c = d \\]
@@ -321,7 +321,7 @@ Third paragraph, one and a half blank lines further down.
             Line spacing (the distance between baselines, <code>\baselineskip</code>) is set by
             the font size. To change it for the whole document, the <code>setspace</code>{' '}
             package is the reliable way: it scales the body text but keeps footnotes, captions,
-            tables and the title block single-spaced, as most thesis rules require.
+            and floats such as tables single-spaced, as most thesis rules require.
           </p>
           <pre><code>{`\\documentclass[12pt]{article}
 \\usepackage{setspace}
@@ -368,7 +368,7 @@ A double-spaced passage.
             option:
           </p>
           <pre><code>{`\\documentclass{article}
-\\usepackage{parskip}     % no indent, a blank line between paragraphs
+\\usepackage{parskip}     % no indent, half a line of space between paragraphs
 
 \\begin{document}
 First paragraph. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
@@ -501,13 +501,13 @@ The interval is\\\\ \\relax
             Load the <code>setspace</code> package and write <code>\doublespacing</code> or{' '}
             <code>\onehalfspacing</code> in the preamble, or <code>{`\\setstretch{1.5}`}</code>{' '}
             for a custom factor. setspace keeps footnotes, captions and tables single-spaced.{' '}
-            <code>{`\\linespread{1.5}`}</code> also works but scales everything, and it means a
-            little more than one-and-a-half spacing.
+            <code>{`\\linespread{1.5}`}</code> also works but scales everything, and it gives
+            noticeably more than one-and-a-half spacing, close to double.
           </p>
           <h3>How do I add space between paragraphs instead of indenting them?</h3>
           <p>
             Load the parskip package: <code>{`\\usepackage{parskip}`}</code>. It sets the
-            paragraph indent to zero and adds a blank line of space between paragraphs, while
+            paragraph indent to zero and adds about half a line of space between paragraphs, while
             keeping lists and the table of contents tidy. Setting{' '}
             <code>{`\\setlength{\\parskip}{1em}`}</code> and{' '}
             <code>{`\\setlength{\\parindent}{0pt}`}</code> by hand also works but adds the space in

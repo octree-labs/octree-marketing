@@ -179,7 +179,7 @@ export default async function LearnBeamerPage() {
               <tbody>
                 <tr><td><code>[fragile]</code></td><td>Allows <code>verbatim</code>, <code>\verb</code>, <code>lstlisting</code> and <code>minted</code> on the frame</td></tr>
                 <tr><td><code>[allowframebreaks]</code></td><td>Content that does not fit continues on extra slides, titled &ldquo;Title I, II, &hellip;&rdquo;</td></tr>
-                <tr><td><code>[shrink=10]</code></td><td>Scales the content down (by up to 10%) to fit</td></tr>
+                <tr><td><code>[shrink=10]</code></td><td>Shrinks the content by at least 10% (more if needed) to fit; small text, use sparingly</td></tr>
                 <tr><td><code>[plain]</code></td><td>Hides headline, footline and sidebars, e.g. for a full-slide image</td></tr>
                 <tr><td><code>[t]</code>, <code>[c]</code>, <code>[b]</code></td><td>Aligns content at the top, center (default) or bottom</td></tr>
                 <tr><td><code>[noframenumbering]</code></td><td>Does not count the frame, e.g. for backup slides</td></tr>
