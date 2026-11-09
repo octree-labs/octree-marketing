@@ -264,7 +264,8 @@ export default function DevelopersPage() {
                   </td>
                   <td>string</td>
                   <td>
-                    A complete single-file document. Use this or <Code>files</Code>.
+                    A complete single-file document (it must contain <Code>\documentclass</Code>),
+                    compiled as <Code>main.tex</Code>. Use this or <Code>files</Code>.
                   </td>
                 </tr>
                 <tr>
@@ -275,8 +276,9 @@ export default function DevelopersPage() {
                     <Code>{'{ path, content }[]'}</Code>
                   </td>
                   <td>
-                    Project files with relative paths, e.g. <Code>sections/intro.tex</Code>,{' '}
-                    <Code>refs.bib</Code>. Text files in v1.
+                    Project files with relative, forward-slash paths, e.g.{' '}
+                    <Code>sections/intro.tex</Code>, <Code>refs.bib</Code>. Up to 50 files, text
+                    only in v1.
                   </td>
                 </tr>
                 <tr>
@@ -285,9 +287,10 @@ export default function DevelopersPage() {
                   </td>
                   <td>string</td>
                   <td>
-                    Path of the file to compile when you send <Code>files</Code>, e.g.{' '}
-                    <Code>main.tex</Code>. It must contain <Code>\documentclass</Code>, or the
-                    request is rejected with 400.
+                    Optional, with <Code>files</Code> only: the <Code>.tex</Code> file to compile.
+                    Defaults to <Code>main.tex</Code> if present, else the first{' '}
+                    <Code>.tex</Code> file containing <Code>\documentclass</Code>. The main file
+                    must contain <Code>\documentclass</Code>, or the request is rejected with 400.
                   </td>
                 </tr>
                 <tr>
@@ -300,7 +303,8 @@ export default function DevelopersPage() {
                   <td>
                     <Code>json</Code> (default) returns the object below; <Code>pdf</Code> returns
                     the raw PDF. <Code>Accept: application/pdf</Code> does the same as{' '}
-                    <Code>pdf</Code>.
+                    <Code>pdf</Code>; an explicit <Code>response</Code> field wins over the
+                    header. Failures are JSON either way.
                   </td>
                 </tr>
               </tbody>
@@ -400,8 +404,9 @@ export default function DevelopersPage() {
           <p>
             <Code>kind</Code> is one of <Code>missing_package</Code>,{' '}
             <Code>undefined_control_sequence</Code>, <Code>missing_dollar</Code>,{' '}
-            <Code>missing_brace</Code>, <Code>latex_error</Code> or <Code>timeout</Code>, so an
-            agent can branch on the error type without parsing the log.
+            <Code>missing_brace</Code> or <Code>latex_error</Code>, so an agent can branch on the
+            error type without parsing the log. A compile that runs out of time is not a LaTeX
+            error: it is HTTP 504 <Code>compile_timeout</Code>.
           </p>
 
           <h3 id="me">GET /api/v1/me</h3>
@@ -448,13 +453,16 @@ export default function DevelopersPage() {
                     <Code>invalid_request</Code>
                   </td>
                   <td>
-                    Malformed body, e.g. neither <Code>latex</Code> nor <Code>files</Code>, or a{' '}
-                    <Code>main</Code> file without <Code>\documentclass</Code>.
+                    Malformed body, e.g. invalid JSON, neither <Code>latex</Code> nor{' '}
+                    <Code>files</Code>, more than 50 files, a bad or duplicate path, or a main file
+                    without <Code>\documentclass</Code>.
                   </td>
                 </tr>
                 <tr>
                   <td>401</td>
-                  <td>–</td>
+                  <td>
+                    <Code>unauthorized</Code>
+                  </td>
                   <td>Missing, invalid or revoked API key.</td>
                 </tr>
                 <tr>
@@ -462,7 +470,7 @@ export default function DevelopersPage() {
                   <td>
                     <Code>payload_too_large</Code>
                   </td>
-                  <td>Source too large: over 2 MB or more than 50 files.</td>
+                  <td>Source over 2 MB, or a request body over 4 MB.</td>
                 </tr>
                 <tr>
                   <td>429</td>
@@ -480,8 +488,8 @@ export default function DevelopersPage() {
                     <Code>rate_limited</Code>
                   </td>
                   <td>
-                    Too many failed key attempts (10) from your IP address. Check the key and wait
-                    before retrying.
+                    Too many failed key attempts from your IP address (10 a minute). Check the key
+                    and wait for <Code>Retry-After</Code> seconds.
                   </td>
                 </tr>
                 <tr>
@@ -496,7 +504,10 @@ export default function DevelopersPage() {
                   <td>
                     <Code>compile_unavailable</Code>
                   </td>
-                  <td>The compiler is temporarily unavailable. Retry with backoff.</td>
+                  <td>
+                    The compiler is busy or temporarily unavailable. Retry after{' '}
+                    <Code>Retry-After</Code> seconds.
+                  </td>
                 </tr>
                 <tr>
                   <td>504</td>

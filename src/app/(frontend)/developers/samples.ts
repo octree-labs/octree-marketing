@@ -99,22 +99,22 @@ export const responseLatexError = String.raw`{
     {
       "file": "main.tex",
       "line": 7,
-      "message": "Undefined control sequence. \\foo",
+      "message": "Undefined control sequence.",
       "kind": "undefined_control_sequence"
     }
   ],
-  "log_tail": "! Undefined control sequence.\nl.7 \\foo …",
-  "suggestion": "…",
+  "log_tail": "…\n./main.tex:7: Undefined control sequence.\nl.7 \\foo\n…",
+  "suggestion": "A command is not defined. Check its spelling, or add the \\usepackage that provides it.",
   "duration_ms": 960
 }`
 
 export const responseQuota = String.raw`{
   "error": "quota_exceeded",
-  "message": "…",
+  "message": "Daily API compile limit of 30 reached on the free plan. Upgrade to Pro for 1000 compiles a day.",
   "limit": 30,
   "used": 30,
-  "resets_at": "2026-11-09T00:00:00Z",
-  "upgrade_url": "https://…"
+  "resets_at": "2026-11-09T00:00:00.000Z",
+  "upgrade_url": "https://app.useoctree.com/pricing?from=api"
 }`
 
 export const meRequest = String.raw`curl https://app.useoctree.com/api/v1/me \
@@ -125,5 +125,5 @@ export const meResponse = String.raw`{
   "plan": "free",
   "daily_limit": 30,
   "used_today": 4,
-  "resets_at": "2026-11-09T00:00:00Z"
+  "resets_at": "2026-11-09T00:00:00.000Z"
 }`

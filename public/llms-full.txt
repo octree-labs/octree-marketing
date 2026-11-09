@@ -30,7 +30,7 @@ Request body (JSON), one of:
     }
 
 - `files[].content` is text in v1 (binary assets such as images are not supported yet).
-- With `files`, the `main` file must contain `\documentclass`, otherwise the request is a 400.
+- `latex` must contain `\documentclass` and is compiled as main.tex. With `files` (at most 50, relative forward-slash paths), `main` is optional: it defaults to main.tex if present, else the first .tex file containing `\documentclass`. The main file must contain `\documentclass`, otherwise the request is a 400.
 - There is no engine option: documents compile with pdfLaTeX, and the compiler switches to XeLaTeX or LuaLaTeX automatically when the document needs it (for example when it loads fontspec).
 - `response`: `"json"` (default) or `"pdf"`. `"pdf"`, or the header `Accept: application/pdf`, returns the raw PDF bytes.
 
@@ -44,17 +44,17 @@ LaTeX error (still HTTP 200):
 
     { "ok": false, "errors": [ { "file": "main.tex", "line": 7, "message": "Undefined control sequence.", "kind": "undefined_control_sequence" } ], "log_tail": "...", "suggestion": "...", "duration_ms": 960 }
 
-`suggestion` is optional. `kind` is one of: missing_package, undefined_control_sequence, missing_dollar, missing_brace, latex_error, timeout.
+`suggestion` is optional. `kind` is one of: missing_package, undefined_control_sequence, missing_dollar, missing_brace, latex_error. A compile that runs out of time is HTTP 504 compile_timeout, not a LaTeX error.
 
 Other status codes (every error body is JSON with an `error` code and a `message` string):
 
-- 400 invalid_request: malformed body, or a `main` file without \documentclass.
-- 401: missing, invalid or revoked API key.
-- 413 payload_too_large: source over 2 MB or more than 50 files.
+- 400 invalid_request: malformed body (invalid JSON, neither latex nor files, more than 50 files, bad or duplicate path), or a main file without \documentclass.
+- 401 unauthorized: missing, invalid or revoked API key.
+- 413 payload_too_large: source over 2 MB, or request body over 4 MB.
 - 429 quota_exceeded: daily quota used up. Also returns limit, used, resets_at, upgrade_url.
-- 429 rate_limited: too many failed key attempts (10) from your IP address.
+- 429 rate_limited: too many failed key attempts from your IP address (10 a minute); honour Retry-After.
 - 503 service_unavailable: API key check temporarily unavailable; retry with backoff.
-- 503 compile_unavailable: compiler temporarily unavailable; retry with backoff.
+- 503 compile_unavailable: compiler busy or temporarily unavailable; retry after Retry-After seconds.
 - 504 compile_timeout: the compile took too long.
 
 Example:
