@@ -81,8 +81,7 @@ export const requestFiles = String.raw`{
     { "path": "sections/intro.tex", "content": "\\section{Introduction}\nHello." },
     { "path": "refs.bib", "content": "@book{knuth84, author={Knuth, Donald E.}, title={The TeXbook}, year={1984}, publisher={Addison-Wesley}}" }
   ],
-  "main": "main.tex",
-  "engine": "pdflatex"
+  "main": "main.tex"
 }`
 
 export const responseOk = String.raw`{
@@ -91,7 +90,7 @@ export const responseOk = String.raw`{
   "pages": 1,
   "duration_ms": 1840,
   "warnings": [],
-  "log_tail": "Output written on main.pdf (1 page, 10432 bytes)."
+  "log_tail": ""
 }`
 
 export const responseLatexError = String.raw`{
@@ -111,6 +110,7 @@ export const responseLatexError = String.raw`{
 
 export const responseQuota = String.raw`{
   "error": "quota_exceeded",
+  "message": "…",
   "limit": 30,
   "used": 30,
   "resets_at": "2026-11-09T00:00:00Z",
@@ -124,5 +124,6 @@ export const meResponse = String.raw`{
   "user_id": "3f6c…",
   "plan": "free",
   "daily_limit": 30,
-  "used_today": 4
+  "used_today": 4,
+  "resets_at": "2026-11-09T00:00:00Z"
 }`

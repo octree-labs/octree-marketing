@@ -37,7 +37,7 @@ const faq: FaqItem[] = [
   {
     question: 'Which LaTeX packages are installed?',
     answer:
-      'The API runs the same compiler as the Octree editor at app.useoctree.com: a full TeX Live installation driven by latexmk, so packages such as amsmath, TikZ, pgfplots, biblatex, beamer and the common thesis and resume classes are already there. pdfLaTeX is the default and the engine that v1 supports; other engines may not be available yet.',
+      'The API runs the same compiler as the Octree editor at app.useoctree.com: a full TeX Live installation driven by latexmk, so packages such as amsmath, TikZ, pgfplots, biblatex, beamer and the common thesis and resume classes are already there. Documents compile with pdfLaTeX by default; when a document needs XeLaTeX or LuaLaTeX (for example it loads fontspec), the compiler switches automatically.',
   },
   {
     question: 'Can I compile multi-file projects and images?',
@@ -47,7 +47,7 @@ const faq: FaqItem[] = [
   {
     question: 'What are the rate limits?',
     answer:
-      'Limits are per account per day: 30 compiles on the free plan and 1,000 on Pro. When you run out, the API answers HTTP 429 with error quota_exceeded, the limit, how many you have used, when the count resets and a link to upgrade. GET /api/v1/me and the get_quota MCP tool show your current usage.',
+      'Limits are per account per day: 30 compiles on the free plan and 1,000 on Pro. When you run out, the API answers HTTP 429 with error quota_exceeded, the limit, how many you have used, when the count resets and a link to upgrade. GET /api/v1/me and the get_quota MCP tool show your current usage and when it resets (midnight UTC). check_latex counts toward the same limit.',
   },
   {
     question: 'Do you store the documents I compile through the API?',
@@ -242,7 +242,12 @@ export default function DevelopersPage() {
           </p>
 
           <h3 id="compile">POST /api/v1/compile</h3>
-          <p>Compile LaTeX to PDF. Send either a single document or a set of files:</p>
+          <p>
+            Compile LaTeX to PDF. Send either a single document or a set of files. There is no
+            engine option: documents compile with pdfLaTeX, and the compiler switches to XeLaTeX or
+            LuaLaTeX automatically when the document needs it (for example when it loads{' '}
+            <Code>fontspec</Code>).
+          </p>
           <div className="overflow-x-auto">
             <table>
               <thead>
@@ -281,16 +286,8 @@ export default function DevelopersPage() {
                   <td>string</td>
                   <td>
                     Path of the file to compile when you send <Code>files</Code>, e.g.{' '}
-                    <Code>main.tex</Code>.
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <Code>engine</Code>
-                  </td>
-                  <td>string, optional</td>
-                  <td>
-                    <Code>pdflatex</Code> (default). Other engines may be unsupported in v1.
+                    <Code>main.tex</Code>. It must contain <Code>\documentclass</Code>, or the
+                    request is rejected with 400.
                   </td>
                 </tr>
                 <tr>
@@ -369,7 +366,10 @@ export default function DevelopersPage() {
                   <td>
                     <Code>warnings</Code>
                   </td>
-                  <td>LaTeX warnings from a successful compile.</td>
+                  <td>
+                    Always <Code>[]</Code> on success in v1; warnings show up only in the log of a
+                    failed compile.
+                  </td>
                 </tr>
                 <tr>
                   <td>
@@ -383,7 +383,10 @@ export default function DevelopersPage() {
                   <td>
                     <Code>log_tail</Code>
                   </td>
-                  <td>The last lines of the LaTeX log.</td>
+                  <td>
+                    The last lines of the LaTeX log when the compile fails;{' '}
+                    <Code>&apos;&apos;</Code> on success.
+                  </td>
                 </tr>
                 <tr>
                   <td>
@@ -402,7 +405,10 @@ export default function DevelopersPage() {
           </p>
 
           <h3 id="me">GET /api/v1/me</h3>
-          <p>Your plan and today&rsquo;s usage. Useful as a key check before a batch job.</p>
+          <p>
+            Your plan, today&rsquo;s usage and <Code>resets_at</Code>, the next reset (midnight UTC,
+            ISO 8601). Useful as a key check before a batch job.
+          </p>
           <CodeBlock title="request" code={s.meRequest} />
           <CodeBlock title="200" code={s.meResponse} />
 
@@ -421,40 +427,92 @@ export default function DevelopersPage() {
               <thead>
                 <tr>
                   <th>Status</th>
+                  <th>
+                    <Code>error</Code>
+                  </th>
                   <th>Meaning</th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
                   <td>200</td>
+                  <td>none</td>
                   <td>
                     Request handled. Check <Code>ok</Code>: the document compiled, or it has LaTeX
                     errors listed in <Code>errors</Code>.
                   </td>
                 </tr>
                 <tr>
+                  <td>400</td>
+                  <td>
+                    <Code>invalid_request</Code>
+                  </td>
+                  <td>
+                    Malformed body, e.g. neither <Code>latex</Code> nor <Code>files</Code>, or a{' '}
+                    <Code>main</Code> file without <Code>\documentclass</Code>.
+                  </td>
+                </tr>
+                <tr>
                   <td>401</td>
+                  <td>–</td>
                   <td>Missing, invalid or revoked API key.</td>
                 </tr>
                 <tr>
                   <td>413</td>
+                  <td>
+                    <Code>payload_too_large</Code>
+                  </td>
                   <td>Source too large: over 2 MB or more than 50 files.</td>
                 </tr>
                 <tr>
                   <td>429</td>
                   <td>
-                    Daily quota used up. Body: <Code>error: &quot;quota_exceeded&quot;</Code>,{' '}
-                    <Code>limit</Code>, <Code>used</Code>, <Code>resets_at</Code>,{' '}
-                    <Code>upgrade_url</Code>.
+                    <Code>quota_exceeded</Code>
+                  </td>
+                  <td>
+                    Daily quota used up. Also returns <Code>limit</Code>, <Code>used</Code>,{' '}
+                    <Code>resets_at</Code> and <Code>upgrade_url</Code>.
+                  </td>
+                </tr>
+                <tr>
+                  <td>429</td>
+                  <td>
+                    <Code>rate_limited</Code>
+                  </td>
+                  <td>
+                    Too many failed key attempts (10) from your IP address. Check the key and wait
+                    before retrying.
                   </td>
                 </tr>
                 <tr>
                   <td>503</td>
+                  <td>
+                    <Code>service_unavailable</Code>
+                  </td>
+                  <td>The API key check is temporarily unavailable. Retry with backoff.</td>
+                </tr>
+                <tr>
+                  <td>503</td>
+                  <td>
+                    <Code>compile_unavailable</Code>
+                  </td>
                   <td>The compiler is temporarily unavailable. Retry with backoff.</td>
+                </tr>
+                <tr>
+                  <td>504</td>
+                  <td>
+                    <Code>compile_timeout</Code>
+                  </td>
+                  <td>The compile took too long. Simplify the document or split the work.</td>
                 </tr>
               </tbody>
             </table>
           </div>
+
+          <p>
+            Every error response is JSON with an <Code>error</Code> code and a human-readable{' '}
+            <Code>message</Code>.
+          </p>
 
           <h3 id="limits" className="scroll-mt-24">
             Limits and keys
@@ -462,7 +520,8 @@ export default function DevelopersPage() {
           <ul>
             <li>
               <strong>Free:</strong> 30 compiles per day. <strong>Pro:</strong> 1,000 compiles per
-              day. REST and MCP share the same count.
+              day, reset at midnight UTC. REST and MCP share the same count, and{' '}
+              <Code>check_latex</Code> counts like a compile.
             </li>
             <li>
               <strong>Request size:</strong> up to 2 MB of source and 50 files.
@@ -501,7 +560,7 @@ export default function DevelopersPage() {
                     <Code>latex</Code>, or <Code>files</Code> + <Code>main</Code>
                   </td>
                   <td>
-                    A short summary (pages, time, warnings or errors) and the PDF as a resource.
+                    A short summary (pages and time, or the errors) and the PDF as a resource.
                   </td>
                 </tr>
                 <tr>
@@ -513,7 +572,7 @@ export default function DevelopersPage() {
                   </td>
                   <td>
                     Errors only, with file, line and kind. The fast loop for an agent fixing a
-                    document.
+                    document. Counts toward the daily quota.
                   </td>
                 </tr>
                 <tr>
@@ -521,7 +580,9 @@ export default function DevelopersPage() {
                     <Code>get_quota</Code>
                   </td>
                   <td>none</td>
-                  <td>Plan, daily limit and compiles used today.</td>
+                  <td>
+                    Plan, daily limit, compiles used today and <Code>resets_at</Code>.
+                  </td>
                 </tr>
               </tbody>
             </table>
@@ -531,12 +592,14 @@ export default function DevelopersPage() {
             How an agent should use it
           </h3>
           <p>
-            Write the <Code>.tex</Code> files first. Call <Code>check_latex</Code> and fix what it
-            reports, using the file, line and <Code>kind</Code> of each error, until it comes back
-            clean. Then call <Code>compile_latex</Code> once to get the PDF. Each check returns only
-            the errors, not a PDF, so the fix loop stays small, and the agent never has to read a
-            raw LaTeX log. If you write instructions for your agent (a <Code>CLAUDE.md</Code>,
-            Cursor rules or a system prompt), this one line is enough:
+            Write the <Code>.tex</Code> files first, with <Code>\documentclass</Code> in the main
+            file. Call <Code>check_latex</Code> and fix what it reports, using the file, line and{' '}
+            <Code>kind</Code> of each error, until it comes back clean. Then call{' '}
+            <Code>compile_latex</Code> once to get the PDF. Every check counts toward the daily
+            quota, so fix all reported errors before checking again. Each check returns only the
+            errors, not a PDF, so the fix loop stays small, and the agent never has to read a raw
+            LaTeX log. If you write instructions for your agent (a <Code>CLAUDE.md</Code>, Cursor
+            rules or a system prompt), this one line is enough:
           </p>
           <CodeBlock
             title="agent instructions"

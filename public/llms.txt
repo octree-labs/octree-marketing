@@ -15,10 +15,10 @@ Octree exposes its LaTeX compiler (full TeX Live, latexmk, pdfLaTeX by default) 
 - Docs: https://www.useoctree.com/developers
 - Full API and MCP reference as plain text: https://www.useoctree.com/llms-full.txt
 - Get an API key: https://app.useoctree.com/settings#api-keys
-- REST: POST https://app.useoctree.com/api/v1/compile with `Authorization: Bearer oct_live_...` and JSON `{"latex": "..."}` or `{"files": [{"path", "content"}], "main": "main.tex"}`; returns `{ok, pdf_base64, ...}` or `{ok: false, errors: [{file, line, message, kind}]}`. Add `"response": "pdf"` for raw PDF bytes.
+- REST: POST https://app.useoctree.com/api/v1/compile with `Authorization: Bearer oct_live_...` and JSON `{"latex": "..."}` or `{"files": [{"path", "content"}], "main": "main.tex"}` (main file must contain \documentclass); pdfLaTeX by default, XeLaTeX/LuaLaTeX picked automatically when needed (e.g. fontspec); returns `{ok, pdf_base64, ...}` or `{ok: false, errors: [{file, line, message, kind}]}`. Add `"response": "pdf"` for raw PDF bytes.
 - MCP: https://app.useoctree.com/api/mcp (Streamable HTTP, stateless, bearer API key). Tools: compile_latex, check_latex, get_quota.
 - Claude Code: `claude mcp add --transport http octree https://app.useoctree.com/api/mcp --header "Authorization: Bearer oct_live_..."`
-- Limits: free 30 compiles/day, Pro 1,000/day.
+- Limits: free 30 compiles/day, Pro 1,000/day, reset at midnight UTC; check_latex counts toward the quota.
 
 ## Features
 

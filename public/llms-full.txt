@@ -15,7 +15,7 @@ Keys start with `oct_live_`, are shown once at creation, are stored hashed, and 
 
 - Free plan: 30 compiles per day.
 - Pro plan: 1,000 compiles per day.
-- REST and MCP share the same daily count.
+- REST and MCP share the same daily count, reset at midnight UTC. check_latex counts toward it.
 - Request size: up to 2 MB of source and 50 files.
 
 ## REST: POST https://app.useoctree.com/api/v1/compile
@@ -26,19 +26,19 @@ Request body (JSON), one of:
 
     {
       "files": [ { "path": "main.tex", "content": "..." }, { "path": "refs.bib", "content": "..." } ],
-      "main": "main.tex",
-      "engine": "pdflatex"
+      "main": "main.tex"
     }
 
 - `files[].content` is text in v1 (binary assets such as images are not supported yet).
-- `engine` is optional; `pdflatex` is the default. Other engines may be unsupported in v1.
+- With `files`, the `main` file must contain `\documentclass`, otherwise the request is a 400.
+- There is no engine option: documents compile with pdfLaTeX, and the compiler switches to XeLaTeX or LuaLaTeX automatically when the document needs it (for example when it loads fontspec).
 - `response`: `"json"` (default) or `"pdf"`. `"pdf"`, or the header `Accept: application/pdf`, returns the raw PDF bytes.
 
 Success (HTTP 200):
 
-    { "ok": true, "pdf_base64": "...", "pages": 1, "duration_ms": 1840, "warnings": [], "log_tail": "..." }
+    { "ok": true, "pdf_base64": "...", "pages": 1, "duration_ms": 1840, "warnings": [], "log_tail": "" }
 
-`pages` may be absent.
+`pages` may be absent. On success `warnings` is always [] and `log_tail` is "" in v1; warnings appear only in the log of a failed compile.
 
 LaTeX error (still HTTP 200):
 
@@ -46,12 +46,16 @@ LaTeX error (still HTTP 200):
 
 `suggestion` is optional. `kind` is one of: missing_package, undefined_control_sequence, missing_dollar, missing_brace, latex_error, timeout.
 
-Other status codes:
+Other status codes (every error body is JSON with an `error` code and a `message` string):
 
+- 400 invalid_request: malformed body, or a `main` file without \documentclass.
 - 401: missing, invalid or revoked API key.
-- 413: source over 2 MB or more than 50 files.
-- 429: daily quota used up. Body: { "error": "quota_exceeded", "limit", "used", "resets_at", "upgrade_url" }.
-- 503: compiler temporarily unavailable; retry with backoff.
+- 413 payload_too_large: source over 2 MB or more than 50 files.
+- 429 quota_exceeded: daily quota used up. Also returns limit, used, resets_at, upgrade_url.
+- 429 rate_limited: too many failed key attempts (10) from your IP address.
+- 503 service_unavailable: API key check temporarily unavailable; retry with backoff.
+- 503 compile_unavailable: compiler temporarily unavailable; retry with backoff.
+- 504 compile_timeout: the compile took too long.
 
 Example:
 
@@ -62,7 +66,7 @@ Example:
 
 ## REST: GET https://app.useoctree.com/api/v1/me
 
-Returns { "user_id", "plan", "daily_limit", "used_today" }.
+Returns { "user_id", "plan", "daily_limit", "used_today", "resets_at" } (resets_at is the next midnight UTC, ISO 8601).
 
 ## REST: GET https://app.useoctree.com/api/v1/openapi.json
 
@@ -77,8 +81,8 @@ OpenAPI description of the API.
 Tools:
 
 - compile_latex: input `latex`, or `files` + `main`. Returns a short summary and the PDF as a resource.
-- check_latex: same input. Returns errors only (file, line, kind). Use it as the fast loop while fixing a document.
-- get_quota: no input. Returns plan, daily limit and compiles used today.
+- check_latex: same input. Returns errors only (file, line, kind). Use it as the fast loop while fixing a document. Counts toward the daily quota.
+- get_quota: no input. Returns plan, daily limit, compiles used today and resets_at.
 
 Recommended agent loop: write the .tex files, call check_latex until it reports no errors, then call compile_latex once to get the PDF.
 

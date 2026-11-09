@@ -39,10 +39,6 @@ const getPagesSitemap = unstable_cache(
         lastmod: dateFallback,
       },
       {
-        loc: `${SITE_URL}/docs/compile-api`,
-        lastmod: dateFallback,
-      },
-      {
         loc: `${SITE_URL}/learn`,
         lastmod: dateFallback,
       },
