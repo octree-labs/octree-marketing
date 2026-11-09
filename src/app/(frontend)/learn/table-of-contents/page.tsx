@@ -19,16 +19,16 @@ const breadcrumbSchema = generateBreadcrumbSchema(breadcrumbs)
 
 const page = {
   slug: 'table-of-contents',
-  title: 'Table of Contents in LaTeX: \\tableofcontents, Depth, Links and Styling',
-  seoTitle: 'Table of Contents in LaTeX: Example, Depth, Links, Styling',
+  title: 'Table of Contents in LaTeX: \\tableofcontents, Depth and Styling',
+  seoTitle: 'Table of Contents in LaTeX: Depth, Links and Styling',
   description:
-    'Make a table of contents in LaTeX: \\tableofcontents, a full example, tocdepth, unnumbered entries, clickable links, tocloft styling and Beamer outlines.',
+    'Table of contents in LaTeX: \\tableofcontents, compiling twice, tocdepth, unnumbered sections, lists of figures, hyperref links, tocloft styling and errors.',
   keywords:
-    'table of contents, table of contents example, latex table of contents, table of contents latex, \\tableofcontents, latex tableofcontents, latex toc, tocdepth, latex tocdepth, secnumdepth, addcontentsline, latex unnumbered section in table of contents, tocloft, latex table of contents dots, hyperref table of contents, clickable table of contents latex, contentsname, latex list of figures, listoffigures, listoftables, tocbibind, beamer table of contents, beamer outline currentsection, latex table of contents not showing',
+    'table of contents, table of contents example, latex table of contents, table of contents latex, table of contents in latex, toc latex, latex toc depth, titletoc, \\tableofcontents, latex tableofcontents, latex toc, tocdepth, latex tocdepth, secnumdepth, addcontentsline, latex unnumbered section in table of contents, tocloft, latex table of contents dots, hyperref table of contents, clickable table of contents latex, contentsname, latex list of figures, listoffigures, listoftables, tocbibind, beamer table of contents, beamer outline currentsection, latex table of contents not showing',
 }
 
 /** Last content update, used for dateModified in the article schema. */
-const LAST_UPDATED = '2026-10-21'
+const LAST_UPDATED = '2026-11-09'
 
 const faq: FaqItem[] = [
   {
@@ -88,10 +88,60 @@ export default async function TableOfContentsPage() {
         </div>
 
         <article className="prose prose-lg dark:prose-invert max-w-4xl mx-auto">
-          <h1>Table of Contents in LaTeX: \tableofcontents, Depth, Links and Styling</h1>
+          <h1>Table of Contents in LaTeX: \tableofcontents, Depth and Styling</h1>
+
+          <div className="not-prose my-6 p-6 rounded-lg border bg-muted/40">
+            <p className="text-sm font-semibold uppercase tracking-wide text-muted-foreground mb-3">Quick answer</p>
+            <ul className="space-y-2 text-base list-disc pl-5">
+              <li>
+                <strong>Command:</strong> <code>\tableofcontents</code> after <code>\maketitle</code>,
+                then <strong>compile twice</strong> (the first run only writes the <code>.toc</code> file).
+              </li>
+              <li>
+                <strong>Depth:</strong> <code>{`\\setcounter{tocdepth}{1}`}</code> lists sections only;{' '}
+                <code>2</code> adds subsections.
+              </li>
+              <li>
+                <strong>Unnumbered entries:</strong> <code>{`\\section*{Preface}`}</code> then{' '}
+                <code>{`\\addcontentsline{toc}{section}{Preface}`}</code>.
+              </li>
+              <li>
+                <strong>Lists and links:</strong> <code>\listoffigures</code>, <code>\listoftables</code>;{' '}
+                <code>{`\\usepackage{hyperref}`}</code> makes every entry clickable.
+              </li>
+              <li>
+                <strong>Styling and title:</strong> <code>tocloft</code> or <code>titletoc</code> for fonts, dots
+                and spacing; <code>{`\\renewcommand{\\contentsname}{Table of Contents}`}</code> renames
+                &ldquo;Contents&rdquo;.
+              </li>
+            </ul>
+            <pre className="mt-4 overflow-x-auto rounded-md bg-background p-4 text-sm"><code>{`\\documentclass{article}
+\\usepackage{hyperref}                  % clickable entries
+\\setcounter{tocdepth}{2}               % sections and subsections
+\\renewcommand{\\contentsname}{Table of Contents}
+
+\\begin{document}
+
+\\tableofcontents                       % compile twice to fill it
+\\listoffigures
+
+\\section*{Preface}                     % unnumbered...
+\\addcontentsline{toc}{section}{Preface} % ...but listed
+
+\\section{Introduction}
+\\subsection{Background}
+
+\\begin{figure}[h]
+  \\centering
+  \\rule{3cm}{1cm}
+  \\caption{A placeholder figure}
+\\end{figure}
+
+\\end{document}`}</code></pre>
+          </div>
           <p className="lead">
-            A <strong>table of contents</strong> lists the chapters and sections of a document
-            with their page numbers. In LaTeX you never type it by hand: one command,{' '}
+            A <strong>table of contents</strong> (TOC) lists the chapters and sections of a document
+            with their page numbers. In LaTeX you never type the TOC by hand: one command,{' '}
             <code>\tableofcontents</code>, builds it from your headings and keeps the page numbers
             right as the document grows. This guide starts with a three-line version and a
             complete table of contents example, then covers depth, unnumbered entries, clickable
@@ -647,6 +697,7 @@ Text.
 
           {/* ───────────────────────────── Errors ───────────────────────────── */}
           <h2 id="errors">Common Errors</h2>
+          <div className="overflow-x-auto">
           <table>
             <thead>
               <tr>
@@ -703,6 +754,7 @@ Text.
               </tr>
             </tbody>
           </table>
+          </div>
 
           {/* ───────────────────────────── FAQ ───────────────────────────── */}
           <h2>Frequently Asked Questions</h2>
@@ -734,7 +786,7 @@ Text.
           <p>
             Set the <code>tocdepth</code> counter in the preamble:{' '}
             <code>{`\\setcounter{tocdepth}{1}`}</code> lists parts, chapters and sections only.
-            The levels are part &minus;1 (0 in article), chapter 0, section 1, subsection 2,
+            The levels are part -1 (0 in article), chapter 0, section 1, subsection 2,
             subsubsection 3, paragraph 4 and subparagraph 5. The setting must come before{' '}
             <code>\tableofcontents</code>.
           </p>
