@@ -22,11 +22,11 @@ const page = {
   title: 'Lists and Bullet Points in LaTeX: itemize, enumerate, description',
   seoTitle: 'Lists and Bullet Points in LaTeX',
   description: 'Bullet points and numbered lists in LaTeX: itemize, enumerate and description, custom bullets, enumitem labels and spacing, inline lists and Beamer.',
-  keywords: 'bullet points in latex, latex bullet points, latex list, latex itemize, latex enumerate, latex numbered list, latex description list, latex enumerate letters, enumerate with letters latex, latex lettered list, latex custom bullets, latex nested list, enumitem latex, latex list spacing, latex inline list, latex bullet symbol, latex checkmark bullet, latex change bullet style, latex resume list numbering, latex beamer itemize, something\'s wrong perhaps a missing item, too deeply nested latex, latex itemize enumerate description, latex star bullet, latex list indentation, latex leftmargin, latex multicolumn list',
+  keywords: 'bullet points in latex, latex bullet points, latex list, latex itemize, latex enumerate, latex numbered list, latex number list, numbered list latex, numbering latex, numbers in latex, latex enumerate start number, latex enumerate resume, latex nested numbering, latex setcounter enumi, latex description list, latex enumerate letters, enumerate with letters latex, latex lettered list, latex custom bullets, latex nested list, enumitem latex, latex list spacing, latex inline list, latex bullet symbol, latex checkmark bullet, latex change bullet style, latex resume list numbering, latex beamer itemize, something\'s wrong perhaps a missing item, too deeply nested latex, latex itemize enumerate description, latex star bullet, latex list indentation, latex leftmargin, latex multicolumn list',
 }
 
 /** Last content update, used for dateModified in the article schema. */
-const LAST_UPDATED = '2026-10-24'
+const LAST_UPDATED = '2026-11-09'
 
 const faq: FaqItem[] = [
   {
@@ -60,7 +60,17 @@ const faq: FaqItem[] = [
       'With enumitem, start the second list with \\begin{enumerate}[resume] and it carries on from where the last enumerate stopped. To start at an arbitrary number use [start=3].',
   },
   {
-    question: 'What does "Something\'s wrong--perhaps a missing \\item" mean?',
+    question: 'How do I make a numbered list start at a specific number in LaTeX?',
+    answer:
+      'Load enumitem and write \\begin{enumerate}[start=5]; the first item is then 5. Without a package, put \\setcounter{enumi}{4} right after \\begin{enumerate}: the counter holds the previous number, so set it to one less than the number you want.',
+  },
+  {
+    question: 'How do I get nested numbering like 1.1 and 1.2 in a LaTeX list?',
+    answer:
+      'Build the label of the inner list from the outer counter with enumitem: \\begin{enumerate}[label=\\arabic{enumi}.\\arabic*.] inside a normal enumerate gives 1.1, 1.2. Add \\arabic{enumii} for a third level (1.2.1), or set it for all lists with \\setlist[enumerate,2]{label=\\arabic{enumi}.\\arabic*.}.',
+  },
+  {
+    question: 'What does “Something\'s wrong––perhaps a missing \\item” mean?',
     answer:
       'LaTeX found text, a table or a blank list before the first \\item inside itemize or enumerate, or the list has no items at all. Move the text after an \\item, or delete the empty list. The same message appears when a tabular or figure sits inside a list without an \\item before it.',
   },
@@ -163,7 +173,7 @@ export default async function LaTeXListsPage() {
           </p>
 
           {/* ── Ordered Lists (enumerate) ── */}
-          <h2>Numbered Lists with enumerate</h2>
+          <h2>Numbered Lists in LaTeX: enumerate, Custom Numbering and Resuming</h2>
           <p>
             The <code>enumerate</code> environment produces a numbered (ordered) list.
             LaTeX automatically handles the numbering:
@@ -261,6 +271,115 @@ Part~\\ref{q:1a} is worth five marks.   % prints "1a"`}</code></pre>
             numbers or split the list for anything longer.
           </p>
 
+          <h3>Custom numbering: 1), Step 1, (i)</h3>
+          <p>
+            The same <code>label</code> key changes the number format. <code>\arabic*</code>,{' '}
+            <code>\roman*</code>, <code>\Roman*</code>, <code>\alph*</code> and{' '}
+            <code>\Alph*</code> stand for the counter, and anything around them is printed as
+            written, including words and bold text:
+          </p>
+          <pre><code>{`\\documentclass{article}
+\\usepackage{enumitem}
+\\begin{document}
+
+\\begin{enumerate}[label=\\arabic*)]            % 1), 2), 3)
+  \\item First
+  \\item Second
+\\end{enumerate}
+
+\\begin{enumerate}[label=(\\roman*)]            % (i), (ii), (iii)
+  \\item First
+  \\item Second
+\\end{enumerate}
+
+\\begin{enumerate}[label=\\textbf{Step \\arabic*:}, leftmargin=*]   % Step 1:, Step 2:
+  \\item Install the package.
+  \\item Load it in the preamble.
+\\end{enumerate}
+
+\\begin{enumerate}[label=Q\\arabic*., ref=Q\\arabic*]    % Q1., Q2.; \\ref prints Q1
+  \\item Why? \\label{q:why}
+  \\item How?
+\\end{enumerate}
+Answer~\\ref{q:why} first.
+
+\\end{document}`}</code></pre>
+
+          <h3>Start at a number and resume numbering</h3>
+          <p>
+            A numbered list that is interrupted by a paragraph, a figure or an equation can carry
+            on where it stopped. With <code>enumitem</code> use <code>resume</code>; to begin at
+            a chosen number use <code>start</code>. Without the package, set the counter{' '}
+            <code>enumi</code> by hand right after <code>{`\\begin{enumerate}`}</code>; it holds
+            the number of the <em>previous</em> item, so set it to one less than the number you
+            want:
+          </p>
+          <pre><code>{`\\documentclass{article}
+\\usepackage{enumitem}
+\\begin{document}
+
+\\begin{enumerate}
+  \\item One
+  \\item Two
+\\end{enumerate}
+Some text that interrupts the list.
+\\begin{enumerate}[resume]            % continues with 3, 4
+  \\item Three
+  \\item Four
+\\end{enumerate}
+
+\\begin{enumerate}[start=5]           % 5, 6
+  \\item Five
+  \\item Six
+\\end{enumerate}
+
+\\begin{enumerate}
+  \\setcounter{enumi}{9}              % without enumitem: next item is 10
+  \\item Ten
+  \\item Eleven
+\\end{enumerate}
+
+\\end{document}`}</code></pre>
+          <p>
+            The counters are <code>enumi</code>, <code>enumii</code>, <code>enumiii</code> and{' '}
+            <code>enumiv</code> for the four levels. <code>\setcounter</code> also works in the
+            middle of a list, to skip numbers. To print the current number in the text, use{' '}
+            <code>\theenumi</code>, or better <code>\label</code> and <code>\ref</code>.
+          </p>
+
+          <h3>Nested numbering: 1.1, 1.2, 1.2.1</h3>
+          <p>
+            By default a nested list restarts with its own style, (a), (b). For legal-style or
+            outline numbering, where each level repeats the numbers above it, build the label
+            from the parent counters:
+          </p>
+          <pre><code>{`\\documentclass{article}
+\\usepackage{enumitem}
+\\begin{document}
+
+\\begin{enumerate}[label=\\arabic*.]
+  \\item Scope
+  \\begin{enumerate}[label=\\arabic{enumi}.\\arabic*.]
+    \\item Purpose
+    \\item Audience
+    \\begin{enumerate}[label=\\arabic{enumi}.\\arabic{enumii}.\\arabic*.]
+      \\item Students
+      \\item Researchers
+    \\end{enumerate}
+  \\end{enumerate}
+  \\item Method
+\\end{enumerate}
+
+\\end{document}`}</code></pre>
+          <p>
+            To apply the same scheme to every list in the document, put it in the preamble with{' '}
+            <code>{`\\setlist[enumerate,2]{label=\\arabic{enumi}.\\arabic*.}`}</code> and{' '}
+            <code>{`\\setlist[enumerate,3]{label=\\arabic{enumi}.\\arabic{enumii}.\\arabic*.}`}</code>.
+            For numbered headings rather than list items, see{' '}
+            <Link href="/learn/sections">sections and subsections</Link>; for numbered
+            equations, <Link href="/learn/equation-numbering">equation numbering</Link>.
+          </p>
+
           {/* ── Description Lists ── */}
           <h2>Description Lists</h2>
           <p>
@@ -295,6 +414,7 @@ Part~\\ref{q:1a} is worth five marks.   % prints "1a"`}</code></pre>
             types in total). You can mix different list types freely. Each itemize level has its
             own bullet, and each enumerate level its own numbering:
           </p>
+          <div className="overflow-x-auto">
           <table>
             <thead>
               <tr>
@@ -312,6 +432,7 @@ Part~\\ref{q:1a} is worth five marks.   % prints "1a"`}</code></pre>
               <tr><td>4</td><td>&middot; <code>\textperiodcentered</code></td><td><code>\labelitemiv</code></td><td>A., B., C.</td><td><code>\labelenumiv</code></td></tr>
             </tbody>
           </table>
+          </div>
 
           <h3>Nested itemize</h3>
           <pre><code>{`\\begin{itemize}
@@ -479,6 +600,7 @@ Part~\\ref{q:1a} is worth five marks.   % prints "1a"`}</code></pre>
 \\end{enumerate}
 See item~\\ref{it:first}.   % prints "i", not "(i)"`}</code></pre>
 
+          <div className="overflow-x-auto">
           <table>
             <thead>
               <tr>
@@ -495,6 +617,7 @@ See item~\\ref{it:first}.   % prints "i", not "(i)"`}</code></pre>
               <tr><td><code>\Roman*</code></td><td>I, II, III</td><td><code>label=\Roman*.</code></td></tr>
             </tbody>
           </table>
+          </div>
 
           <p>
             The same key sets the bullet for an itemize list, so you do not need to repeat{' '}
@@ -736,6 +859,7 @@ We need
 
           {/* ── Cheat sheet ── */}
           <h2>Cheat Sheet</h2>
+          <div className="overflow-x-auto">
           <table>
             <thead>
               <tr>
@@ -768,9 +892,11 @@ We need
               <tr><td>More than 4 nesting levels</td><td><code>{`\\setlistdepth{9}`}</code> + <code>{`\\renewlist{itemize}{itemize}{9}`}</code></td><td>enumitem</td></tr>
             </tbody>
           </table>
+          </div>
 
           {/* ── Errors ── */}
           <h2>Common Errors and Fixes</h2>
+          <div className="overflow-x-auto">
           <table>
             <thead>
               <tr>
@@ -827,9 +953,11 @@ We need
               </tr>
             </tbody>
           </table>
+          </div>
 
           {/* ── Quick Reference Table ── */}
           <h2>Environment Reference</h2>
+          <div className="overflow-x-auto">
           <table>
             <thead>
               <tr>
@@ -866,9 +994,11 @@ We need
               </tr>
             </tbody>
           </table>
+          </div>
 
           {/* ── Common Packages ── */}
           <h2>Common Packages</h2>
+          <div className="overflow-x-auto">
           <table>
             <thead>
               <tr>
@@ -899,6 +1029,7 @@ We need
               </tr>
             </tbody>
           </table>
+          </div>
 
           {/* ── FAQ ── */}
           <h2>Frequently Asked Questions</h2>
@@ -944,6 +1075,21 @@ We need
             With enumitem, start the second list with <code>{`\\begin{enumerate}[resume]`}</code> and
             it carries on from where the last enumerate stopped. To start at an arbitrary number
             use <code>[start=3]</code>.
+          </p>
+          <h3>How do I make a numbered list start at a specific number in LaTeX?</h3>
+          <p>
+            Load enumitem and write <code>{`\\begin{enumerate}[start=5]`}</code>; the first item
+            is then 5. Without a package, put <code>{`\\setcounter{enumi}{4}`}</code> right after{' '}
+            <code>{`\\begin{enumerate}`}</code>: the counter holds the previous number, so set it
+            to one less than the number you want.
+          </p>
+          <h3>How do I get nested numbering like 1.1 and 1.2 in a LaTeX list?</h3>
+          <p>
+            Build the label of the inner list from the outer counter with enumitem:{' '}
+            <code>{`\\begin{enumerate}[label=\\arabic{enumi}.\\arabic*.]`}</code> inside a normal{' '}
+            <code>enumerate</code> gives 1.1, 1.2. Add <code>{`\\arabic{enumii}`}</code> for a third
+            level (1.2.1), or set it for all lists with{' '}
+            <code>{`\\setlist[enumerate,2]{label=\\arabic{enumi}.\\arabic*.}`}</code>.
           </p>
           <h3>What does &ldquo;Something&apos;s wrong&ndash;&ndash;perhaps a missing \item&rdquo; mean?</h3>
           <p>

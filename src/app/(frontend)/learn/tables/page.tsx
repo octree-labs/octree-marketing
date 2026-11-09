@@ -22,11 +22,11 @@ const page = {
   title: 'LaTeX Tables: How to Make a Table in LaTeX and Overleaf',
   seoTitle: 'LaTeX Tables: Make a Table in LaTeX or Overleaf',
   description: 'How to make a table in LaTeX: the tabular environment and table float with caption and label, booktabs rules, multicolumn and multirow, column widths with p/m/b and tabularx, float placement, landscape and multi-page tables, colored rows, decimal alignment with siunitx, footnotes in tables, and fixes for common tabular errors.',
-  keywords: 'table in latex, tabular in latex, latex table, latex tabular, how to make a table in latex, latex booktabs, latex multicolumn, latex multirow, latex table generator, latex longtable, latex hline, latex table width, latex tabularx, create table in latex, latex table example, latex table formatting, latex colored table, latex landscape table, latex sidewaystable, latex table caption, latex table placement, latex siunitx table, misplaced noalign, extra alignment tab, latex table spacing, latex table row spacing, latex row height, latex table column spacing, latex arraystretch, latex tabcolsep, latex table padding, latex addlinespace, latex cell padding, latex table row column separation, latex table generator online, excel to latex table, latex table from excel, create latex tables easily, overleaf table, overleaf tabular, table in overleaf, tables in overleaf, how to make a table in overleaf, overleaf insert table, latex table overleaf',
+  keywords: 'table in latex, tabular in latex, latex table, latex tabular, latex table tabular, tabular latex, table generator for latex, latex tables generator, tabular caption, caption table, caption in table, latex table caption above, captionof table, how to make a table in latex, latex booktabs, latex multicolumn, latex multirow, latex table generator, latex longtable, latex hline, latex table width, latex tabularx, create table in latex, latex table example, latex table formatting, latex colored table, latex landscape table, latex sidewaystable, latex table caption, latex table placement, latex siunitx table, misplaced noalign, extra alignment tab, latex table spacing, latex table row spacing, latex row height, latex table column spacing, latex arraystretch, latex tabcolsep, latex table padding, latex addlinespace, latex cell padding, latex table row column separation, latex table generator online, excel to latex table, latex table from excel, create latex tables easily, overleaf table, overleaf tabular, table in overleaf, tables in overleaf, how to make a table in overleaf, overleaf insert table, latex table overleaf',
 }
 
 /** Last content update, used for dateModified in the article schema. */
-const LAST_UPDATED = '2026-11-08'
+const LAST_UPDATED = '2026-11-09'
 
 const faq: FaqItem[] = [
   {
@@ -38,6 +38,16 @@ const faq: FaqItem[] = [
     question: 'Why does \\toprule give "Undefined control sequence" in Overleaf?',
     answer:
       '\\toprule, \\midrule and \\bottomrule come from the booktabs package, and \\multirow from the multirow package. The error means the package is not loaded: add \\usepackage{booktabs} (or \\usepackage{multirow}) to the preamble of main.tex, before \\begin{document}, and recompile.',
+  },
+  {
+    question: 'How do I add a caption to a table in LaTeX?',
+    answer:
+      'Put the tabular inside a table environment and add \\caption{...} above it, then \\label{tab:name} right after the caption: \\begin{table} \\centering \\caption{Results} \\label{tab:results} \\begin{tabular}{lc} ... \\end{tabular} \\end{table}. Refer to it with Table~\\ref{tab:results}. For a tabular that is not in a float, load the caption package and use \\captionof{table}{...}.',
+  },
+  {
+    question: 'What does \\begin{tabular}{|l|c|r|} mean?',
+    answer:
+      'It starts a table with three columns: l is left-aligned, c centred and r right-aligned, and each | draws a vertical line, so there are lines at both edges and between every column. Cells are separated with & and rows end with \\\\. Use p{3cm} instead of a letter for a column of fixed width whose text wraps.',
   },
   {
     question: 'Is there a free LaTeX table generator?',
@@ -127,7 +137,7 @@ Table~\\ref{tab:accuracy} summarises the results.
             centred. Everything below walks through these parts in detail.
           </p>
 
-          <h2>Basic Table Structure</h2>
+          <h2 id="tabular">tabular in LaTeX: Column Specs, Lines and Alignment</h2>
           <p>
             The foundation of every LaTeX table is the <code>tabular</code> environment. It takes a
             column specification that defines how many columns the table has and how each column is
@@ -154,6 +164,58 @@ Table~\\ref{tab:accuracy} summarises the results.
             The column specifier <code>&#123;l c r&#125;</code> defines three columns: left-aligned,
             centred, and right-aligned respectively. Each <code>&amp;</code> advances to the next
             column, and each <code>\\\\</code> ends the current row.
+          </p>
+
+          <p>
+            Everything about a <code>tabular</code> is decided by that column specification. One
+            letter per column sets its alignment, <code>|</code> between letters draws a vertical
+            line, and a width turns a column into a wrapping paragraph. Inside the table,{' '}
+            <code>\hline</code> draws a full rule, <code>\multicolumn</code> merges cells across
+            columns and <code>\multirow</code> merges them down rows:
+          </p>
+          <pre><code>{`\\documentclass{article}
+\\usepackage{multirow}
+\\begin{document}
+
+\\begin{tabular}{|l|c|r|p{3cm}|}
+  \\hline
+  \\multicolumn{3}{|c|}{\\textbf{Merged header over three columns}} & Notes \\\\
+  \\hline
+  Left & Centre & Right & A paragraph column wraps long text inside 3cm. \\\\
+  \\hline
+  \\multirow{2}{*}{Two rows} & a & 1 & \\\\
+                            & b & 2 & \\\\
+  \\hline
+\\end{tabular}
+
+\\end{document}`}</code></pre>
+          <div className="overflow-x-auto">
+            <table>
+              <thead>
+                <tr>
+                  <th>In the spec or table</th>
+                  <th>Meaning</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td><code>l</code>, <code>c</code>, <code>r</code></td><td>Left, centred, right-aligned column, as wide as its widest cell</td></tr>
+                <tr><td><code>{`p{3cm}`}</code></td><td>Paragraph column 3 cm wide; text wraps and is top-aligned (<code>m</code> and <code>b</code> with the <code>array</code> package)</td></tr>
+                <tr><td><code>|</code></td><td>Vertical line between columns; <code>||</code> for a double line</td></tr>
+                <tr><td><code>{`@{}`}</code></td><td>Removes the padding at that edge, e.g. <code>{`@{}lr@{}`}</code></td></tr>
+                <tr><td><code>{`*{4}{c}`}</code></td><td>Repeats a column type: four centred columns</td></tr>
+                <tr><td><code>&amp;</code> and <code>\\</code></td><td>Next cell; end of row</td></tr>
+                <tr><td><code>\hline</code>, <code>{`\\cline{2-3}`}</code></td><td>Full horizontal line; line under columns 2 to 3 only</td></tr>
+                <tr><td><code>{`\\multicolumn{3}{|c|}{...}`}</code></td><td>One cell spanning 3 columns, with its own alignment and lines</td></tr>
+                <tr><td><code>{`\\multirow{2}{*}{...}`}</code></td><td>One cell spanning 2 rows (<code>multirow</code> package); leave the cells below it empty</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p>
+            <code>\hline</code> with vertical lines is the classic grid look. For papers, the{' '}
+            <code>booktabs</code> rules (<code>\toprule</code>, <code>\midrule</code>,{' '}
+            <code>\bottomrule</code>) and no vertical lines read better; both styles are
+            compared in <a href="#booktabs">Professional Tables with booktabs</a> below, and each
+            part of the specification is covered in detail in the next sections.
           </p>
 
           <h2>The table Environment</h2>
@@ -397,7 +459,7 @@ Table~\\ref{tab:accuracy} summarises the results.
   \\bottomrule
 \\end{tabular}`}</code></pre>
 
-          <h2>Professional Tables with booktabs</h2>
+          <h2 id="booktabs">Professional Tables with booktabs</h2>
           <p>
             The <code>booktabs</code> package is the gold standard for typesetting tables in LaTeX.
             It follows a key principle: <strong>never use vertical rules</strong> and
@@ -1067,7 +1129,7 @@ Table~\\ref{tab:accuracy} summarises the results.
             <Link href="/learn/footnotes">LaTeX Footnotes</Link>.
           </p>
 
-          <h2>Table Captions and Labels</h2>
+          <h2 id="captions">Table Captions and Labels</h2>
           <p>
             Captions and labels are essential for numbered tables and cross-references. The
             <code>\caption</code> command generates a numbered caption (e.g., &quot;Table 1:
@@ -1110,6 +1172,40 @@ on page~\\pageref{tab:summary}.`}</code></pre>
           <p>
             Always place <code>\label</code> after <code>\caption</code>, not before. If you place
             it before the caption, the reference number may be incorrect.
+          </p>
+
+          <h3>Caption for a tabular outside a float</h3>
+          <p>
+            <code>\caption</code> only works inside a float such as <code>table</code>; on a bare{' '}
+            <code>tabular</code> it stops with <em>\caption outside float</em>. When a table must
+            not float (inside a <code>minipage</code>, a multi-column layout or a box), use{' '}
+            <code>\captionof</code> from the <code>caption</code> package, which numbers it as a
+            table all the same:
+          </p>
+          <pre><code>{`\\documentclass{article}
+\\usepackage{caption}
+\\begin{document}
+
+\\begin{center}
+  \\captionof{table}{A caption on a non-floating tabular.}
+  \\label{tab:inline}
+  \\begin{tabular}{lr}
+    \\hline
+    Item & Value \\\\
+    \\hline
+    A    & 1     \\\\
+    \\hline
+  \\end{tabular}
+\\end{center}
+
+Table~\\ref{tab:inline} stays exactly where it is written.
+
+\\end{document}`}</code></pre>
+          <p>
+            For the caption below the table instead of above, simply move <code>\caption</code>{' '}
+            after <code>{`\\end{tabular}`}</code>; with the <code>caption</code> package, add{' '}
+            <code>{`\\captionsetup[table]{skip=6pt}`}</code> if the gap between caption and table
+            looks wrong in that position.
           </p>
 
           <h3>Numbering style and cleveref</h3>
@@ -1199,7 +1295,7 @@ As shown in \\cref{tab:summary} ...         % table 1
 \\usepackage{array}`}</code></pre>
 
           {/* ── Generator ── */}
-          <h2 id="latex-table-generator">LaTeX Table Generator: Build Tables Without Writing tabular by Hand</h2>
+          <h2 id="latex-table-generator">Using a LaTeX table generator: Excel and CSV to tabular</h2>
           <p>
             Most of the work in a LaTeX table is mechanical: one <code>&amp;</code> per column, one{' '}
             <code>\\</code> per row, and a column specifier that matches. A LaTeX table generator
@@ -1352,6 +1448,25 @@ Table~\\ref{tab:results} lists the results.
             <code>{`\\usepackage{booktabs}`}</code> (or <code>{`\\usepackage{multirow}`}</code>) to
             the preamble of <code>main.tex</code>, before <code>{`\\begin{document}`}</code>, and
             recompile.
+          </p>
+          <h3>How do I add a caption to a table in LaTeX?</h3>
+          <p>
+            Put the <code>tabular</code> inside a <code>table</code> environment and add{' '}
+            <code>{`\\caption{...}`}</code> above it, then <code>{`\\label{tab:name}`}</code> right
+            after the caption:{' '}
+            <code>{`\\begin{table} \\centering \\caption{Results} \\label{tab:results} \\begin{tabular}{lc} ... \\end{tabular} \\end{table}`}</code>.
+            Refer to it with <code>{`Table~\\ref{tab:results}`}</code>. For a <code>tabular</code>{' '}
+            that is not in a float, load the <code>caption</code> package and use{' '}
+            <code>{`\\captionof{table}{...}`}</code>.
+          </p>
+          <h3>What does \begin&#123;tabular&#125;&#123;|l|c|r|&#125; mean?</h3>
+          <p>
+            It starts a table with three columns: <code>l</code> is left-aligned,{' '}
+            <code>c</code> centred and <code>r</code> right-aligned, and each <code>|</code> draws
+            a vertical line, so there are lines at both edges and between every column. Cells are
+            separated with <code>&amp;</code> and rows end with <code>\\</code>. Use{' '}
+            <code>{`p{3cm}`}</code> instead of a letter for a column of fixed width whose text
+            wraps.
           </p>
           <h3>Is there a free LaTeX table generator?</h3>
           <p>
