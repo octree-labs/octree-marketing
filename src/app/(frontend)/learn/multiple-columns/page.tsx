@@ -279,7 +279,7 @@ Figure~\\ref{fig:wide} is placed at the top of the next page. \\lipsum[2-5]
           <h3>Figures inside multicols</h3>
           <p>
             Ordinary floats are not allowed inside <code>multicols</code>: multicol warns
-            &ldquo;Floats and marginpars not allowed inside multicols environment!&rdquo; and the
+            &ldquo;Floats and marginpars not allowed inside `multicols&apos; environment!&rdquo; and the
             figure is lost. Use <code>figure*</code> to span all columns, or place the image
             directly with <code>\captionof</code> from the <code>caption</code> package:
           </p>
@@ -393,7 +393,7 @@ Figure~\\ref{fig:wide} is placed at the top of the next page. \\lipsum[2-5]
                   <td><code>{`\\usepackage{multicol}`}</code>; in twocolumn use <code>\newpage</code></td>
                 </tr>
                 <tr>
-                  <td><em>Package multicol Warning: Floats and marginpars not allowed inside multicols environment!</em></td>
+                  <td><em>Package multicol Warning: Floats and marginpars not allowed inside `multicols&apos; environment!</em></td>
                   <td>A <code>figure</code>, <code>table</code> or <code>\marginpar</code> inside <code>multicols</code>; it disappears</td>
                   <td><code>figure*</code>, or a non-floating image with <code>\captionof</code></td>
                 </tr>

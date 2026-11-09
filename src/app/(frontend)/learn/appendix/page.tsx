@@ -369,7 +369,7 @@ Details are in Supplement~\\ref{app:extra}.
                   <td>Add <code>{`\\addcontentsline{toc}{section}{Appendix}`}</code></td>
                 </tr>
                 <tr>
-                  <td>hyperref: <em>destination with the same identifier (name{`{section.1}`}) has been already used</em></td>
+                  <td>pdfTeX warning: <em>destination with the same identifier (name{`{section.1}`}) has been already used</em></td>
                   <td>The section counter was reset by hand (<code>{`\\setcounter{section}{0}`}</code>) instead of with <code>\appendix</code></td>
                   <td>Use <code>\appendix</code>, which hyperref knows about</td>
                 </tr>

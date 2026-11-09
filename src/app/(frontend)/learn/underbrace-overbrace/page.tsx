@@ -47,7 +47,7 @@ const faq: FaqItem[] = [
   {
     question: 'How do I make braces overlap in LaTeX?',
     answer:
-      'Draw one brace normally and the other over an invisible copy of the overlapping part. With mathtools: \\overbrace{a+b+\\mathrlap{\\underbrace{\\phantom{c+d}}_{y}}c}^{x}+d puts an overbrace over a+b+c and an underbrace under c+d. \\mathrlap makes the underbrace take no width, and \\phantom gives it the right length.',
+      'Draw one brace normally and the other over an invisible copy of the overlapping part. With mathtools: {\\overbrace{a+b+\\mathrlap{\\underbrace{\\phantom{c+d}}_{y}}c}^{x}}+d puts an overbrace over a+b+c and an underbrace under c+d. \\mathrlap makes the underbrace take no width, and \\phantom gives it the right length.',
   },
   {
     question: 'What is the difference between \\underbrace and \\underset?',
@@ -400,7 +400,7 @@ Inline it works too: $\\underbrace{x + y}_{z}$, but it pushes the lines apart.
           <p>
             Draw one brace normally and the other over an invisible copy of the overlapping part.
             With mathtools:{' '}
-            <code>{`\\overbrace{a+b+\\mathrlap{\\underbrace{\\phantom{c+d}}_{y}}c}^{x}+d`}</code> puts
+            <code>{`{\\overbrace{a+b+\\mathrlap{\\underbrace{\\phantom{c+d}}_{y}}c}^{x}}+d`}</code> puts
             an overbrace over <em>a+b+c</em> and an underbrace under <em>c+d</em>.{' '}
             <code>\mathrlap</code> makes the underbrace take no width, and <code>\phantom</code>{' '}
             gives it the right length.

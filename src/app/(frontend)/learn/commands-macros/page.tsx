@@ -464,6 +464,7 @@ Use \\verb|\\renewenvironment| to change an existing one.
                 <tr><td><code>{`\\sum_{i=1}^{n}`}</code></td><td>Sum with limits</td><td></td></tr>
                 <tr><td><code>{`\\int_a^b`}</code></td><td>Integral with limits</td><td></td></tr>
                 <tr><td><code>\alpha</code>, <code>\beta</code>, &hellip;</td><td>Greek letters</td><td></td></tr>
+                <tr><td><code>\cdot</code>, <code>\times</code></td><td>Multiplication dot and cross</td><td></td></tr>
                 <tr><td><code>\left( ... \right)</code></td><td>Brackets that grow with their content</td><td></td></tr>
                 <tr><td><code>{`\\text{...}`}</code></td><td>Upright text inside math</td><td>amsmath</td></tr>
                 <tr><td><code>{`\\mathbb{R}`}</code></td><td>Blackboard bold letters</td><td>amssymb</td></tr>
@@ -488,7 +489,7 @@ and \\texttt{monospaced} text.\\footnote{A footnote.} See \\href{https://useoctr
 \\subsection{Math}
 \\begin{itemize}
   \\item $\\frac{a}{b} + \\sqrt{x} + \\sum_{i=1}^{n} i^2 + \\int_0^1 f(x)\\,dx$
-  \\item $\\alpha \\in \\mathbb{R}$ and $\\left( \\frac{1}{2} \\right)$ \\text{ok}
+  \\item $\\alpha \\in \\mathbb{R}$ and $\\left( \\frac{1}{2} \\right) \\cdot 2 = 1 \\text{ exactly}$
 \\end{itemize}
 Section~\\ref{sec:intro} is the one you are reading.
 \\end{document}`}</code></pre>

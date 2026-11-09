@@ -172,11 +172,17 @@ Unicode typed directly: café, naïve, Straße, Ελληνικά, Привет, 
 latexmk -xelatex -synctex=1 main.tex  # all runs, plus bibliography`}</code></pre>
           <p>
             In <Link href="https://app.useoctree.com" target="_blank" rel="noopener noreferrer">Octree</Link>{' '}
-            there is no setting to change: the compiler reads the preamble and switches to
-            XeLaTeX when it finds <code>fontspec</code>, <code>\setmainfont</code>,{' '}
-            <code>polyglossia</code>, <code>xeCJK</code> or <code>unicode-math</code>, and to
-            LuaLaTeX for documents that use <code>\directlua</code> or <code>luacode</code>. To
-            print the engine&apos;s logo, load <code>metalogo</code> and write <code>\XeLaTeX</code>.
+            there is no setting to change: the compiler scans the project&apos;s <code>.tex</code>,{' '}
+            <code>.sty</code> and <code>.cls</code> files and switches to XeLaTeX when it finds{' '}
+            <code>{`\\usepackage{fontspec}`}</code>, <code>\setmainfont</code> (or{' '}
+            <code>\setsansfont</code>, <code>\setmonofont</code>, <code>\newfontfamily</code>),{' '}
+            <code>{`\\usepackage{polyglossia}`}</code>, <code>{`\\usepackage{xeCJK}`}</code>,{' '}
+            <code>\setCJKmainfont</code> or <code>{`\\usepackage{unicode-math}`}</code>. LuaLaTeX
+            takes precedence when the source uses <code>\directlua</code> or{' '}
+            <code>luacode</code>. Anything else, including a document that only uses the{' '}
+            <code>ctex</code> classes, compiles with pdfLaTeX; add{' '}
+            <code>{`\\usepackage{fontspec}`}</code> to switch it. To print the engine&apos;s
+            logo, load <code>metalogo</code> and write <code>\XeLaTeX</code>.
           </p>
 
           {/* ── fontspec ── */}
