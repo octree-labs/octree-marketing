@@ -82,8 +82,8 @@ const learnTopics = [
   },
   {
     slug: 'mathematical-expressions',
-    title: 'Mathematical Expressions',
-    description: 'Write fractions, roots, aligned equations, and more in LaTeX. Complete guide to math typesetting with amsmath.',
+    title: 'Inline and Display Math in LaTeX',
+    description: 'Inline math with $...$ and \\(...\\), display math with \\[...\\] and equation, why $$ is discouraged, \\text in math, fractions, roots and common math errors.',
     color: 'from-violet-500/10 to-violet-600/5',
   },
   {
@@ -142,14 +142,14 @@ const learnTopics = [
   },
   {
     slug: 'horizontal-lines',
-    title: 'Horizontal Lines in LaTeX',
+    title: 'Horizontal Line in LaTeX',
     description: '\\hrule, \\rule and \\hrulefill, partial and centred lines, colored and dashed rules, table rules with booktabs, header rules and signature lines.',
     color: 'from-zinc-500/10 to-zinc-600/5',
   },
   {
     slug: 'quotes',
-    title: 'LaTeX Quotation Marks & Quotes',
-    description: 'The ``double\'\' and `single\' convention, csquotes and \\enquote, German and French quotes, quote and quotation environments, block quotes with attribution and Beamer.',
+    title: 'Quotes in LaTeX',
+    description: 'The ``double\'\' and `single\' convention, csquotes \\enquote and \\textquote, German and French quotes, quote and quotation environments, block quotes with attribution and Beamer.',
     color: 'from-neutral-500/10 to-neutral-600/5',
   },
   {
@@ -160,7 +160,7 @@ const learnTopics = [
   },
   {
     slug: 'font-size',
-    title: 'LaTeX Font Size',
+    title: 'Font Size in LaTeX',
     description: 'Change font size in LaTeX: the ten size commands from \\tiny to \\Huge with exact point sizes, class options, extsizes, \\fontsize, and sizes for captions, footnotes and headings.',
     color: 'from-orange-500/10 to-amber-600/5',
   },
@@ -184,8 +184,8 @@ const learnTopics = [
   },
   {
     slug: 'multiline-equations',
-    title: 'Multi-line Equations',
-    description: 'Break and align equations with align, split, multline and gather, nest aligned blocks, add text between lines, allow page breaks, and retire eqnarray.',
+    title: 'Multiline Equations in LaTeX',
+    description: 'New lines in equations, align math with align and align*, split, multline, gather and cases, nest aligned blocks, add text between lines, allow page breaks, and retire eqnarray.',
     color: 'from-violet-500/10 to-purple-600/5',
   },
   {

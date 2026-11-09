@@ -1,6 +1,6 @@
 import type { Metadata } from 'next/types'
 
-import { learnMetadata } from '@/utilities/learnMetadata'
+import { learnMetadata, type FaqItem } from '@/utilities/learnMetadata'
 import Link from 'next/link'
 import { buttonVariants } from '@/components/ui/button'
 import React from 'react'
@@ -14,19 +14,52 @@ import { LearnSchema } from '@/components/Learn/schema'
 export const dynamic = 'force-static'
 export const revalidate = 3600
 
-const breadcrumbs = getLearnBreadcrumbs('LaTeX Quotation Marks and Quotes', 'quotes')
+const breadcrumbs = getLearnBreadcrumbs('Quotes in LaTeX', 'quotes')
 const breadcrumbSchema = generateBreadcrumbSchema(breadcrumbs)
 
 const page = {
   slug: 'quotes',
-  title: "LaTeX Quotation Marks and Quotes: `` '', csquotes and Block Quotes",
-  seoTitle: "Quotes in LaTeX: Quotation Marks, `` '' and csquotes",
-  description: 'How to write quotation marks in LaTeX: why "text" renders wrong, the ``double\'\' and `single\' convention, nested quotes, the csquotes package with \\enquote and autostyle, German and French quotes, the quote, quotation and verse environments, block quotes with attribution, epigraphs, quotes in Beamer, straight quotes in code and common errors.',
-  keywords: 'latex quotes, latex quotation marks, quotation marks latex, latex double quotes, latex single quotes, latex quote environment, latex block quote, latex quotation, csquotes, latex enquote, beamer quotes, latex german quotes, latex guillemets, latex straight quotes, latex apostrophe, latex verse environment, latex epigraph',
+  title: 'Quotes in LaTeX: Quotation Marks, Block Quotes and csquotes',
+  seoTitle: 'Quotes in LaTeX: Quotation Marks and csquotes',
+  description: 'Quotes in LaTeX: type ``double\'\' and `single\' marks, why "text" fails, csquotes \\enquote and \\textquote, and block quotes with quote, quotation and verse.',
+  keywords: 'quotes in latex, quotes latex, quote latex, latex quote, latex quotes, latex quotation marks, quotation marks latex, latex double quotes, latex single quotes, latex quote environment, latex block quote, latex quotation, csquotes, latex enquote, beamer quotes, latex german quotes, latex guillemets, latex straight quotes, latex apostrophe, latex verse environment, latex epigraph',
 }
 
 /** Last content update, used for dateModified in the article schema. */
-const LAST_UPDATED = '2026-10-17'
+const LAST_UPDATED = '2026-11-09'
+
+const faq: FaqItem[] = [
+  {
+    question: 'How do you write quotation marks in LaTeX?',
+    answer:
+      "Type two backticks to open and two apostrophes to close: ``text'' gives “text”. Single quotes are `text'. Do not use the straight \" key for quotes in running text: LaTeX prints it as a closing mark, or as a straight typewriter mark with T1 encoding.",
+  },
+  {
+    question: 'Why are my quotes backwards in LaTeX?',
+    answer:
+      "Both marks come out as closing marks when the opening one is typed with \" or '. The opening mark must be the backtick key (`), usually below Esc. Write ``like this'' instead of \"like this\" or ''like this''.",
+  },
+  {
+    question: 'What does \\enquote do in LaTeX?',
+    answer:
+      '\\enquote{text} comes from the csquotes package. It prints the correct opening and closing marks for the document language and switches to the inner marks automatically when one \\enquote is nested in another. Load it with \\usepackage[autostyle]{csquotes}.',
+  },
+  {
+    question: 'How do I make a block quote in LaTeX?',
+    answer:
+      'Put the passage in \\begin{quote} ... \\end{quote} for a short block, quotation for several paragraphs with first-line indents, or verse for poetry. These environments indent both margins and add no quotation marks. The csquotes command \\blockquote chooses between an inline quote and a block by length.',
+  },
+  {
+    question: 'How do I type nested quotes in LaTeX?',
+    answer:
+      "Put single quotes inside double ones and separate the closing marks with a thin space: ``She said `yes'\\,''. Without \\, the three apostrophes run together. With csquotes, nest \\enquote inside \\enquote and the inner marks are chosen for you.",
+  },
+  {
+    question: 'What is the difference between \\enquote and \\textquote?',
+    answer:
+      '\\enquote{text} only adds quotation marks. \\textquote[source]{text} also takes an optional citation that is printed after the closing mark, and \\textcquote does the same with a biblatex key. Use \\textquote when you quote a source inline.',
+  },
+]
 
 export default async function LaTeXQuotesPage() {
   return (
@@ -40,6 +73,7 @@ export default async function LaTeXQuotesPage() {
         title={page.title}
         description={page.description}
         dateModified={LAST_UPDATED}
+        faq={faq}
       />
       <div className="container">
         <div className="mb-8 max-w-4xl mx-auto">
@@ -52,15 +86,45 @@ export default async function LaTeXQuotesPage() {
         </div>
 
         <article className="prose prose-lg dark:prose-invert max-w-4xl mx-auto">
-          <h1>LaTeX Quotation Marks and Quotes: `` &apos;&apos;, csquotes and Block Quotes</h1>
+          <h1>Quotes in LaTeX: Quotation Marks, Block Quotes and csquotes</h1>
+
+          <div className="not-prose my-6 p-6 rounded-lg border bg-muted/40 break-words">
+            <p className="text-sm font-semibold uppercase tracking-wide text-muted-foreground mb-3">Quick answer</p>
+            <ul className="space-y-2 text-base list-disc pl-5">
+              <li>
+                <strong>Double quotes:</strong> <code>{"``text''"}</code> gives &ldquo;text&rdquo;
+                (two backticks, two apostrophes).
+              </li>
+              <li>
+                <strong>Single quotes:</strong> <code>{"`text'"}</code> gives &lsquo;text&rsquo;.
+              </li>
+              <li>
+                <strong>Not</strong> <code>&quot;text&quot;</code>: the straight key prints two closing
+                marks, or straight typewriter marks with T1 encoding.
+              </li>
+              <li>
+                <strong>By command:</strong> <code>{`\\textquotedblleft text\\textquotedblright`}</code>,{' '}
+                <code>\textquoteleft</code> and <code>\textquoteright</code>.
+              </li>
+              <li>
+                <strong>Automatic:</strong> <code>{`\\usepackage[autostyle]{csquotes}`}</code>, then{' '}
+                <code>{`\\enquote{text}`}</code>, or <code>{`\\textquote[source]{text}`}</code> with a
+                citation.
+              </li>
+              <li>
+                <strong>Block quotes:</strong> the <code>quote</code>, <code>quotation</code> and{' '}
+                <code>verse</code> environments.
+              </li>
+            </ul>
+          </div>
           <p className="lead">
-            Typing <code>&quot;text&quot;</code> in LaTeX gives you two closing marks instead of
-            an opening and a closing one. The fix is a convention that dates back to TeX: two
-            backticks open a quotation and two apostrophes close it. This guide explains that
-            convention, the <code>csquotes</code> package that automates it, German and French
-            quote styles, the <code>quote</code>, <code>quotation</code> and <code>verse</code>{' '}
-            environments, block quotes with attribution, quotes in Beamer, straight quotes in
-            code, and the errors that come from smart quotes pasted in from a word processor.
+            Quotes in LaTeX are typed with the backtick and apostrophe keys, not with the{' '}
+            <code>&quot;</code> key you use everywhere else: typing <code>&quot;text&quot;</code>{' '}
+            gives you two closing marks. This guide covers that convention, the commands for each
+            quote character, the <code>csquotes</code> package that picks the marks for you,
+            German and French styles, block quotes with the <code>quote</code>,{' '}
+            <code>quotation</code> and <code>verse</code> environments, attribution, Beamer,
+            straight quotes in code, and the errors that come from pasted smart quotes.
           </p>
 
           {/* ── Why " fails ── */}
@@ -76,7 +140,7 @@ export default async function LaTeXQuotesPage() {
           </p>
 
           {/* ── Conventions ── */}
-          <h2>The Backtick Convention: ``double&apos;&apos; and `single&apos;</h2>
+          <h2>Quotation Marks in LaTeX: ``double&apos;&apos; and `single&apos;</h2>
           <p>
             Opening marks are typed with the backtick (grave accent) key, closing marks with the
             apostrophe. The font&apos;s ligatures turn two backticks into &ldquo; and two
@@ -97,8 +161,49 @@ She said \`\`the word \`quote' is overused.''   % nested`}</code></pre>
             special handling at all: <code>don&apos;t</code>, <code>Lamport&apos;s</code>.
           </p>
 
+          <h3>Quote Characters by Command: \textquotedblleft and Friends</h3>
+          <p>
+            Every quotation mark also has a command name. You rarely need them in running text,
+            but they are useful inside macros, in places where a backtick is awkward to type, and
+            when a quote must sit directly against another symbol:
+          </p>
+          <div className="overflow-x-auto">
+          <table>
+            <thead>
+              <tr>
+                <th>Mark</th>
+                <th>Shortcut</th>
+                <th>Command</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>&ldquo;</td><td><code>``</code></td><td><code>\textquotedblleft</code></td></tr>
+              <tr><td>&rdquo;</td><td><code>&apos;&apos;</code></td><td><code>\textquotedblright</code></td></tr>
+              <tr><td>&lsquo;</td><td><code>`</code></td><td><code>\textquoteleft</code></td></tr>
+              <tr><td>&rsquo;</td><td><code>&apos;</code></td><td><code>\textquoteright</code></td></tr>
+              <tr><td>&bdquo;</td><td>none</td><td><code>\quotedblbase</code> (T1)</td></tr>
+              <tr><td>&sbquo;</td><td>none</td><td><code>\quotesinglbase</code> (T1)</td></tr>
+              <tr><td>&quot; (straight)</td><td>none</td><td><code>\textquotedbl</code> (T1)</td></tr>
+            </tbody>
+          </table>
+          </div>
+          <pre><code>{`\\documentclass{article}
+\\usepackage[T1]{fontenc}
+\\begin{document}
+
+\\textquotedblleft Double\\textquotedblright{} and
+\\textquoteleft single\\textquoteright{} by command.
+
+\\quotedblbase low-high\\textquotedblleft{} for German style.
+
+\\end{document}`}</code></pre>
+          <p>
+            Add <code>{'{}'}</code> after a closing command such as{' '}
+            <code>\textquotedblright</code> when a space follows, or TeX swallows the space.
+          </p>
+
           {/* ── csquotes ── */}
-          <h2>The csquotes Package</h2>
+          <h2>Quotes in LaTeX with csquotes: \enquote and \textquote</h2>
           <p>
             Typing backticks is fine for a short paper, but a book with hundreds of quotations in
             several languages is better served by <code>csquotes</code>. Its{' '}
@@ -113,13 +218,24 @@ She said \`\`the word \`quote' is overused.''   % nested`}</code></pre>
 
 \\enquote*{Inner-level marks on demand}       % 'single' in English`}</code></pre>
           <p>
+            To quote a source inline, use <code>\textquote</code>. It adds the marks like{' '}
+            <code>\enquote</code> and prints an optional citation after the closing mark; the
+            second optional argument holds punctuation that belongs inside the quotation:
+          </p>
+          <pre><code>{`\\textquote[Knuth 1974]{Premature optimization is the root of all evil}
+% "Premature optimization is the root of all evil" (Knuth 1974)
+
+\\textquote[Knuth][.]{We should forget about small efficiencies}
+% with biblatex: \\textcquote[671]{knuth1974}{...} takes a bibliography key`}</code></pre>
+          <p>
             The <code>autostyle</code> option makes the quote style follow <code>babel</code>{' '}
             (or <code>polyglossia</code>) whenever the language changes, so one source file
             produces &ldquo;English&rdquo;, &bdquo;Deutsch&ldquo; and &laquo;&nbsp;fran&ccedil;ais&nbsp;&raquo; without
             touching the markup. You can also pin a style explicitly with the <code>style</code>{' '}
             option or <code>\setquotestyle</code>:
           </p>
-          <pre><code>{`\\usepackage[style=british]{csquotes}   % 'single outside', "double inside"
+          <pre><code>{`% Load csquotes once, with one of these styles:
+\\usepackage[style=british]{csquotes}   % 'single outside', "double inside"
 \\usepackage[style=german]{csquotes}    % „German“ quotes
 \\usepackage[style=french]{csquotes}    % « French » guillemets with spacing
 
@@ -174,7 +290,7 @@ She said \`\`the word \`quote' is overused.''   % nested`}</code></pre>
           </p>
 
           {/* ── Environments ── */}
-          <h2>quote, quotation and verse</h2>
+          <h2>Block Quotes in LaTeX: quote, quotation and verse</h2>
           <p>
             For a displayed passage, LaTeX offers three environments. They differ in how they
             handle paragraphs:
@@ -293,6 +409,11 @@ She said \`\`the word \`quote' is overused.''   % nested`}</code></pre>
 
           {/* ── Errors ── */}
           <h2>Common Errors</h2>
+          <p>
+            Most quote problems are one of three things: backwards marks, a straight{' '}
+            <code>&quot;</code> in the source, or nested marks that run together.
+          </p>
+          <div className="overflow-x-auto">
           <table>
             <thead>
               <tr>
@@ -302,6 +423,21 @@ She said \`\`the word \`quote' is overused.''   % nested`}</code></pre>
               </tr>
             </thead>
             <tbody>
+              <tr>
+                <td>Opening quote is backwards (&rdquo;text&rdquo; or &rsquo;text&rsquo;)</td>
+                <td>Opening mark typed with <code>&apos;</code> or <code>&quot;</code></td>
+                <td>Open with backticks: <code>{"``text''"}</code>, <code>{"`text'"}</code></td>
+              </tr>
+              <tr>
+                <td>Closing quote is backwards (&ldquo;text&ldquo;)</td>
+                <td>Closing mark typed with backticks</td>
+                <td>Close with apostrophes: <code>{"''"}</code></td>
+              </tr>
+              <tr>
+                <td>Straight typewriter <code>&quot;</code> marks in the PDF</td>
+                <td><code>&quot;</code> typed with <code>{`\\usepackage[T1]{fontenc}`}</code> loaded</td>
+                <td>Same fixes as below; T1 makes <code>&quot;</code> straight instead of curly</td>
+              </tr>
               <tr>
                 <td>Both quotation marks look the same (&rdquo;text&rdquo;)</td>
                 <td>Straight <code>&quot;</code> typed in the source</td>
@@ -323,9 +459,9 @@ She said \`\`the word \`quote' is overused.''   % nested`}</code></pre>
                 <td><code>{`\\usepackage[T1]{fontenc}`}</code></td>
               </tr>
               <tr>
-                <td>Three apostrophes run together</td>
+                <td>Nested quotes run together (&rsquo;&rdquo; looks like three marks)</td>
                 <td>Single and double closing quotes adjacent</td>
-                <td>Separate them with <code>\,</code></td>
+                <td>Separate them with <code>\,</code>, or nest <code>\enquote</code></td>
               </tr>
               <tr>
                 <td>Umlauts break after <code>{`\\MakeOuterQuote{"}`}</code></td>
@@ -339,6 +475,32 @@ She said \`\`the word \`quote' is overused.''   % nested`}</code></pre>
               </tr>
             </tbody>
           </table>
+          </div>
+
+          <h3>Backwards Quotes</h3>
+          <pre><code>{`\\documentclass{article}
+\\begin{document}
+
+% Wrong: both marks print as closing marks
+"quoted text" and ''quoted text''
+
+% Right: backticks open, apostrophes close
+\`\`quoted text'' and \`single'
+
+\\end{document}`}</code></pre>
+
+          <h3>Nested Quotes</h3>
+          <pre><code>{`\\documentclass{article}
+\\usepackage{csquotes}
+\\begin{document}
+
+% By hand: thin space between the closing marks
+\`\`She said \`yes'\\,'' and left.
+
+% With csquotes: the inner level is automatic
+\\enquote{She said \\enquote{yes} and left.}
+
+\\end{document}`}</code></pre>
 
           {/* ── Complete example ── */}
           <h2>Complete Example</h2>
@@ -383,7 +545,8 @@ A straight quote in code: \\verb|s = "text"|, and a prime in math: $f'(x)$.
 \\end{document}`}</code></pre>
 
           {/* ── Quick reference ── */}
-          <h2>Quick Reference</h2>
+          <h2>Quote LaTeX Quick Reference</h2>
+          <div className="overflow-x-auto">
           <table>
             <thead>
               <tr>
@@ -409,8 +572,57 @@ A straight quote in code: \\verb|s = "text"|, and a prime in math: $f'(x)$.
               <tr><td>Chapter epigraph</td><td><code>{`\\epigraph{text}{--- Author}`}</code> (epigraph)</td></tr>
               <tr><td>Straight quotes in verbatim</td><td><code>{`\\usepackage{upquote}`}</code></td></tr>
               <tr><td>Straight <code>&quot;</code> in text</td><td><code>\textquotedbl</code></td></tr>
+              <tr><td>Quote with inline citation</td><td><code>{`\\textquote[source]{text}`}</code> (csquotes)</td></tr>
             </tbody>
           </table>
+          </div>
+
+          {/* ── FAQ ── */}
+          <h2>Frequently Asked Questions</h2>
+          <h3>How do you write quotation marks in LaTeX?</h3>
+          <p>
+            Type two backticks to open and two apostrophes to close:{' '}
+            <code>{"``text''"}</code> gives &ldquo;text&rdquo;. Single quotes are{' '}
+            <code>{"`text'"}</code>. Do not use the straight <code>&quot;</code> key for quotes in
+            running text: LaTeX prints it as a closing mark, or as a straight typewriter mark with
+            T1 encoding.
+          </p>
+          <h3>Why are my quotes backwards in LaTeX?</h3>
+          <p>
+            Both marks come out as closing marks when the opening one is typed with{' '}
+            <code>&quot;</code> or <code>&apos;</code>. The opening mark must be the backtick key
+            (<code>`</code>), usually below Esc. Write <code>{"``like this''"}</code> instead of{' '}
+            <code>&quot;like this&quot;</code> or <code>{"''like this''"}</code>.
+          </p>
+          <h3>What does \enquote do in LaTeX?</h3>
+          <p>
+            <code>{`\\enquote{text}`}</code> comes from the csquotes package. It prints the correct
+            opening and closing marks for the document language and switches to the inner marks
+            automatically when one <code>\enquote</code> is nested in another. Load it with{' '}
+            <code>{`\\usepackage[autostyle]{csquotes}`}</code>.
+          </p>
+          <h3>How do I make a block quote in LaTeX?</h3>
+          <p>
+            Put the passage in <code>{`\\begin{quote} ... \\end{quote}`}</code> for a short block,{' '}
+            <code>quotation</code> for several paragraphs with first-line indents, or{' '}
+            <code>verse</code> for poetry. These environments indent both margins and add no
+            quotation marks. The csquotes command <code>\blockquote</code> chooses between an
+            inline quote and a block by length.
+          </p>
+          <h3>How do I type nested quotes in LaTeX?</h3>
+          <p>
+            Put single quotes inside double ones and separate the closing marks with a thin space:{' '}
+            <code>{"``She said `yes'\\,''"}</code>. Without <code>\,</code> the three apostrophes
+            run together. With csquotes, nest <code>\enquote</code> inside <code>\enquote</code>{' '}
+            and the inner marks are chosen for you.
+          </p>
+          <h3>What is the difference between \enquote and \textquote?</h3>
+          <p>
+            <code>{`\\enquote{text}`}</code> only adds quotation marks.{' '}
+            <code>{`\\textquote[source]{text}`}</code> also takes an optional citation that is
+            printed after the closing mark, and <code>\textcquote</code> does the same with a
+            biblatex key. Use <code>\textquote</code> when you quote a source inline.
+          </p>
 
           {/* ── Next Steps ── */}
           <h2>Next Steps</h2>
