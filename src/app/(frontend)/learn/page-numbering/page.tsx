@@ -1,6 +1,6 @@
 import type { Metadata } from 'next/types'
 
-import { learnMetadata } from '@/utilities/learnMetadata'
+import { learnMetadata, type FaqItem } from '@/utilities/learnMetadata'
 import Link from 'next/link'
 import { buttonVariants } from '@/components/ui/button'
 import React from 'react'
@@ -14,19 +14,52 @@ import { LearnSchema } from '@/components/Learn/schema'
 export const dynamic = 'force-static'
 export const revalidate = 3600
 
-const breadcrumbs = getLearnBreadcrumbs('LaTeX Page Numbering', 'page-numbering')
+const breadcrumbs = getLearnBreadcrumbs('Page Numbering in LaTeX', 'page-numbering')
 const breadcrumbSchema = generateBreadcrumbSchema(breadcrumbs)
 
 const page = {
   slug: 'page-numbering',
-  title: 'LaTeX Page Numbering: Roman, Arabic, Starting Pages and fancyhdr',
-  seoTitle: 'LaTeX Page Numbering: Roman, Arabic and fancyhdr',
-  description: 'How to control page numbering in LaTeX: \\pagenumbering{roman} and {arabic}, front matter in book, starting at a given page with \\setcounter, removing the number on the title page and chapter openers, page styles, fancyhdr headers and footers, "Page X of Y" with lastpage, per-chapter numbering, Beamer frame numbers and common errors.',
-  keywords: 'latex page numbering, page numbering latex, latex page number, latex roman numerals page numbers, latex start page number, latex remove page number, latex no page number first page, latex page number position, fancyhdr page number, latex page x of y, latex pagenumbering, latex setcounter page, latex frontmatter mainmatter, beamer frame number, latex thispagestyle empty',
+  title: 'Page Numbering in LaTeX: \\pagenumbering, fancyhdr and Starting Pages',
+  seoTitle: 'Page Numbering in LaTeX: \\pagenumbering, fancyhdr',
+  description: 'Page numbering in LaTeX: \\pagenumbering{roman} and {arabic}, start at any page with \\setcounter, hide the page number, move it with fancyhdr, Page X of Y.',
+  keywords: 'page numbering latex, page number latex, latex page numbering, latex page number, page numbers in latex, latex page number position, latex page number bottom right, latex roman numerals page numbers, latex start page number, latex remove page number, latex no page number first page, latex page number position, fancyhdr page number, latex page x of y, latex pagenumbering, latex setcounter page, latex frontmatter mainmatter, beamer frame number, latex thispagestyle empty',
 }
 
 /** Last content update, used for dateModified in the article schema. */
-const LAST_UPDATED = '2026-10-17'
+const LAST_UPDATED = '2026-11-09'
+
+const faq: FaqItem[] = [
+  {
+    question: 'How do I add page numbers in LaTeX?',
+    answer:
+      'Page numbers are on by default: the article, report and book classes print \\thepage in the footer or header of every page. If they are missing, a \\pagestyle{empty} or \\thispagestyle{empty} has switched them off; put \\pagestyle{plain} after \\begin{document} for a centred number in the footer, or use fancyhdr with \\fancyfoot[C]{\\thepage}.',
+  },
+  {
+    question: 'How do I start page numbering from a specific page in LaTeX?',
+    answer:
+      'Write \\setcounter{page}{n} at the point where the numbering should change; that page is then numbered n. If you also switch the style, put \\clearpage, then \\pagenumbering{arabic}, then \\setcounter{page}{n}, because \\pagenumbering resets the counter to 1.',
+  },
+  {
+    question: 'How do I remove the page number from the first page?',
+    answer:
+      'Put \\thispagestyle{empty} on that page. In an article with \\maketitle it must come after \\maketitle, which sets the plain style on the title page itself. To remove page numbers from every page, use \\pagestyle{empty} instead.',
+  },
+  {
+    question: 'How do I use roman numerals for the front matter and arabic numbers after?',
+    answer:
+      'Write \\pagenumbering{roman} at the start of the document and \\clearpage followed by \\pagenumbering{arabic} where the main text begins; the arabic numbering restarts at 1. In the book class, \\frontmatter and \\mainmatter do both switches for you.',
+  },
+  {
+    question: 'How do I put the page number in the bottom right or top right corner?',
+    answer:
+      'Load fancyhdr, then write \\pagestyle{fancy}, \\fancyhf{} to clear the defaults, and \\fancyfoot[R]{\\thepage} for the bottom right or \\fancyhead[R]{\\thepage} for the top right. L and C give the left and centre positions. Redefine the plain style with \\fancypagestyle{plain} if title and chapter pages should match.',
+  },
+  {
+    question: 'How do I show "Page X of Y" in LaTeX?',
+    answer:
+      'Load the lastpage package and write the total as \\pageref{LastPage}, for example \\fancyfoot[C]{Page \\thepage\\ of \\pageref{LastPage}} with fancyhdr. Compile twice so the label is known; with hyperref use \\pageref*{LastPage} to avoid a link.',
+  },
+]
 
 export default async function LaTeXPageNumberingPage() {
   return (
@@ -40,6 +73,7 @@ export default async function LaTeXPageNumberingPage() {
         title={page.title}
         description={page.description}
         dateModified={LAST_UPDATED}
+        faq={faq}
       />
       <div className="container">
         <div className="mb-8 max-w-4xl mx-auto">
@@ -52,7 +86,40 @@ export default async function LaTeXPageNumberingPage() {
         </div>
 
         <article className="prose prose-lg dark:prose-invert max-w-4xl mx-auto">
-          <h1>LaTeX Page Numbering: Roman, Arabic, Starting Pages and fancyhdr</h1>
+          <h1>Page Numbering in LaTeX: \pagenumbering, fancyhdr and Starting Pages</h1>
+
+          <div className="not-prose my-6 p-6 rounded-lg border bg-muted/40 break-words">
+            <p className="text-sm font-semibold uppercase tracking-wide text-muted-foreground mb-3">Quick answer</p>
+            <ul className="space-y-2 text-base list-disc pl-5">
+              <li>
+                <strong>Roman, then arabic:</strong> <code>{`\\pagenumbering{roman}`}</code> for the
+                front matter, then <code>\clearpage</code> and{' '}
+                <code>{`\\pagenumbering{arabic}`}</code>, which restarts at 1.
+              </li>
+              <li>
+                <strong>Start at a given page number:</strong> <code>{`\\setcounter{page}{1}`}</code>{' '}
+                (any number), after <code>\pagenumbering</code>.
+              </li>
+              <li>
+                <strong>No page number:</strong> <code>{`\\thispagestyle{empty}`}</code> for one page
+                (after <code>\maketitle</code>), <code>{`\\pagestyle{empty}`}</code> for all.
+              </li>
+              <li>
+                <strong>Built-in styles:</strong> <code>{`\\pagestyle{plain}`}</code> (number centred
+                in the footer), <code>headings</code> (number in the header), <code>empty</code>.
+              </li>
+              <li>
+                <strong>Move the page number:</strong> <code>{`\\usepackage{fancyhdr}`}</code>,{' '}
+                <code>{`\\pagestyle{fancy}`}</code>, <code>{`\\fancyhf{}`}</code>, then{' '}
+                <code>{`\\fancyfoot[C]{\\thepage}`}</code> (or <code>[R]</code>, <code>[L]</code>,{' '}
+                <code>\fancyhead</code>).
+              </li>
+              <li>
+                <strong>Page X of Y:</strong> <code>{`\\usepackage{lastpage}`}</code> and{' '}
+                <code>{`\\fancyfoot[C]{Page \\thepage\\ of \\pageref{LastPage}}`}</code>.
+              </li>
+            </ul>
+          </div>
           <p className="lead">
             LaTeX numbers pages automatically, but almost every real document needs more than the
             default: roman numerals for the front matter, no number on the title page, a number
@@ -63,7 +130,7 @@ export default async function LaTeXPageNumberingPage() {
           </p>
 
           {/* ── Defaults ── */}
-          <h2>How LaTeX Numbers Pages by Default</h2>
+          <h2>How Page Numbering in LaTeX Works by Default</h2>
           <p>
             Every page has a counter called <code>page</code>, and the command{' '}
             <code>\thepage</code> prints it. In <code>article</code> the first page is 1, the
@@ -76,7 +143,7 @@ export default async function LaTeXPageNumberingPage() {
           </p>
 
           {/* ── pagenumbering ── */}
-          <h2>Changing the Numeral Style: \pagenumbering</h2>
+          <h2>Roman and Arabic Page Numbering: \pagenumbering</h2>
           <p>
             <code>{`\\pagenumbering{style}`}</code> switches the numeral style <strong>and
             resets the counter to 1</strong>. The five built-in styles are:
@@ -92,6 +159,8 @@ export default async function LaTeXPageNumberingPage() {
             arabic-numbered body looks like this:
           </p>
           <pre><code>{`\\documentclass{article}
+\\title{Report}
+\\author{A. Author}
 \\begin{document}
 \\pagenumbering{roman}     % i, ii, ...
 \\maketitle
@@ -115,6 +184,8 @@ Body text starts on page 1.
             also control chapter numbering:
           </p>
           <pre><code>{`\\documentclass{book}
+\\title{Thesis}
+\\author{A. Author}
 \\begin{document}
 \\frontmatter   % roman page numbers; \\chapter is unnumbered
 \\maketitle
@@ -140,7 +211,7 @@ Body text starts on page 1.
           </p>
 
           {/* ── setcounter ── */}
-          <h2>Starting at a Specific Page Number: \setcounter</h2>
+          <h2>Start Page Numbering at a Specific Page: \setcounter</h2>
           <p>
             To start a chapter extracted from a larger work at page 37, or to continue the
             numbering of a previous volume, set the counter directly. Do it <em>after</em>{' '}
@@ -158,7 +229,7 @@ Body text starts on page 1.
           </p>
 
           {/* ── Removing numbers ── */}
-          <h2>Removing the Page Number</h2>
+          <h2>Remove the Page Number in LaTeX</h2>
 
           <h3>On the title page</h3>
           <p>
@@ -198,6 +269,7 @@ Body text starts on page 1.
 
           {/* ── Page styles ── */}
           <h2>The Built-in Page Styles</h2>
+          <div className="overflow-x-auto">
           <table>
             <thead>
               <tr>
@@ -213,12 +285,50 @@ Body text starts on page 1.
               <tr><td><code>myheadings</code></td><td>text you set with <code>\markboth</code>/<code>\markright</code>, and the page number</td><td>nothing</td></tr>
             </tbody>
           </table>
+          </div>
           <p>
             <code>{`\\pagestyle{...}`}</code> applies from the current page onward;{' '}
             <code>{`\\thispagestyle{...}`}</code> affects one page. For <code>myheadings</code>,
             set the text with <code>{`\\markboth{left header}{right header}`}</code> (two-sided)
             or <code>{`\\markright{header}`}</code> (one-sided). Anything beyond these four styles
             is the job of <code>fancyhdr</code>.
+          </p>
+
+          {/* ── Position ── */}
+          <h2>Page Number Position in LaTeX: Bottom, Top, Left or Right</h2>
+          <p>
+            The built-in styles only offer two positions: centred in the footer{' '}
+            (<code>plain</code>) or in the header next to the running title (<code>headings</code>).
+            For any other position, load <code>fancyhdr</code>, clear its defaults and put{' '}
+            <code>\thepage</code> in the slot you want. <code>\fancyfoot</code> is the footer,{' '}
+            <code>\fancyhead</code> the header, and <code>[L]</code>, <code>[C]</code>,{' '}
+            <code>[R]</code> pick left, centre and right:
+          </p>
+          <pre><code>{`\\documentclass{article}
+\\usepackage{fancyhdr}
+\\pagestyle{fancy}
+\\fancyhf{}                          % clear header and footer
+\\fancyfoot[R]{\\thepage}             % page number bottom right
+% \\fancyhead[R]{\\thepage}           % ...or top right instead
+\\renewcommand{\\headrulewidth}{0pt}  % no line under the header
+
+% Title and chapter pages use the plain style: give it the same footer
+\\fancypagestyle{plain}{\\fancyhf{}\\fancyfoot[R]{\\thepage}}
+
+\\title{Notes}
+\\author{A. Author}
+
+\\begin{document}
+\\maketitle
+\\section{Introduction}
+The number sits in the bottom right corner of every page.
+\\end{document}`}</code></pre>
+          <p>
+            The <code>\fancypagestyle&#123;plain&#125;</code> line matters: without it the title
+            page still shows the default centred number, because <code>\maketitle</code> and{' '}
+            <code>\chapter</code> switch that page to <code>plain</code>. Formatting goes inside
+            the slot too, for example <code>{`\\fancyfoot[C]{\\textbf{\\thepage}}`}</code> or{' '}
+            <code>{`\\fancyfoot[C]{-- \\thepage\\ --}`}</code>.
           </p>
 
           {/* ── fancyhdr ── */}
@@ -263,8 +373,10 @@ Body text starts on page 1.
             <code>{`\\pageref{LastPage}`}</code>. It needs two compilations to settle, and with{' '}
             <code>hyperref</code> you will usually want the unlinked <code>\pageref*</code>:
           </p>
-          <pre><code>{`\\usepackage{lastpage}
+          <pre><code>{`\\usepackage{fancyhdr}
+\\usepackage{lastpage}
 \\usepackage{hyperref}
+\\pagestyle{fancy}
 \\fancyfoot[C]{Page \\thepage\\ of \\pageref*{LastPage}}`}</code></pre>
           <p>
             <code>LastPage</code> reports the number <em>as printed</em> on the last page. If
@@ -371,7 +483,13 @@ Body text starts on page 1.
           </p>
 
           {/* ── Errors ── */}
-          <h2>Common Problems and Fixes</h2>
+          <h2>Common Errors</h2>
+          <p>
+            Most page numbering problems are not errors at all: the document compiles and the
+            number is simply missing, wrong or in the wrong place. These are the ones that come up
+            most, with the log message where there is one:
+          </p>
+          <div className="overflow-x-auto">
           <table>
             <thead>
               <tr>
@@ -423,6 +541,7 @@ Body text starts on page 1.
               </tr>
             </tbody>
           </table>
+          </div>
 
           {/* ── Complete example ── */}
           <h2>Complete Example</h2>
@@ -480,6 +599,7 @@ Appendix pages continue the arabic sequence.
 
           {/* ── Quick reference ── */}
           <h2>Quick Reference</h2>
+          <div className="overflow-x-auto">
           <table>
             <thead>
               <tr>
@@ -506,6 +626,59 @@ Appendix pages continue the arabic sequence.
               <tr><td>Beamer frame numbers</td><td><code>{`\\setbeamertemplate{footline}[frame number]`}</code></td></tr>
             </tbody>
           </table>
+          </div>
+
+          {/* ── FAQ ── */}
+          <h2>Frequently Asked Questions</h2>
+          <h3>How do I add page numbers in LaTeX?</h3>
+          <p>
+            Page numbers are on by default: the <code>article</code>, <code>report</code> and{' '}
+            <code>book</code> classes print <code>\thepage</code> in the footer or header of every
+            page. If they are missing, a <code>{`\\pagestyle{empty}`}</code> or{' '}
+            <code>{`\\thispagestyle{empty}`}</code> has switched them off; put{' '}
+            <code>{`\\pagestyle{plain}`}</code> after <code>{`\\begin{document}`}</code> for a
+            centred number in the footer, or use fancyhdr with{' '}
+            <code>{`\\fancyfoot[C]{\\thepage}`}</code>.
+          </p>
+          <h3>How do I start page numbering from a specific page in LaTeX?</h3>
+          <p>
+            Write <code>{`\\setcounter{page}{n}`}</code> at the point where the numbering should
+            change; that page is then numbered <em>n</em>. If you also switch the style, put{' '}
+            <code>\clearpage</code>, then <code>{`\\pagenumbering{arabic}`}</code>, then{' '}
+            <code>{`\\setcounter{page}{n}`}</code>, because <code>\pagenumbering</code> resets the
+            counter to 1.
+          </p>
+          <h3>How do I remove the page number from the first page?</h3>
+          <p>
+            Put <code>{`\\thispagestyle{empty}`}</code> on that page. In an article with{' '}
+            <code>\maketitle</code> it must come after <code>\maketitle</code>, which sets the{' '}
+            <code>plain</code> style on the title page itself. To remove page numbers from every
+            page, use <code>{`\\pagestyle{empty}`}</code> instead.
+          </p>
+          <h3>How do I use roman numerals for the front matter and arabic numbers after?</h3>
+          <p>
+            Write <code>{`\\pagenumbering{roman}`}</code> at the start of the document and{' '}
+            <code>\clearpage</code> followed by <code>{`\\pagenumbering{arabic}`}</code> where the
+            main text begins; the arabic numbering restarts at 1. In the <code>book</code> class,{' '}
+            <code>\frontmatter</code> and <code>\mainmatter</code> do both switches for you.
+          </p>
+          <h3>How do I put the page number in the bottom right or top right corner?</h3>
+          <p>
+            Load fancyhdr, then write <code>{`\\pagestyle{fancy}`}</code>,{' '}
+            <code>{`\\fancyhf{}`}</code> to clear the defaults, and{' '}
+            <code>{`\\fancyfoot[R]{\\thepage}`}</code> for the bottom right or{' '}
+            <code>{`\\fancyhead[R]{\\thepage}`}</code> for the top right. <code>L</code> and{' '}
+            <code>C</code> give the left and centre positions. Redefine the <code>plain</code> style
+            with <code>{`\\fancypagestyle{plain}`}</code> if title and chapter pages should match.
+          </p>
+          <h3>How do I show &quot;Page X of Y&quot; in LaTeX?</h3>
+          <p>
+            Load the <code>lastpage</code> package and write the total as{' '}
+            <code>{`\\pageref{LastPage}`}</code>, for example{' '}
+            <code>{`\\fancyfoot[C]{Page \\thepage\\ of \\pageref{LastPage}}`}</code> with
+            fancyhdr. Compile twice so the label is known; with hyperref use{' '}
+            <code>{`\\pageref*{LastPage}`}</code> to avoid a link.
+          </p>
 
           {/* ── Next Steps ── */}
           <h2>Next Steps</h2>

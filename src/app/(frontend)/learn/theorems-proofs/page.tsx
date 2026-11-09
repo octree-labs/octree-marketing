@@ -19,14 +19,14 @@ const breadcrumbSchema = generateBreadcrumbSchema(breadcrumbs)
 
 const page = {
   slug: 'theorems-proofs',
-  title: 'Theorems and Proofs in LaTeX: amsthm, \\newtheorem and the End of Proof Symbol (QED)',
-  seoTitle: 'End of Proof Symbol in LaTeX: QED, \\qedsymbol, amsthm',
-  description: 'The end of proof symbol (∎) in LaTeX: amsthm proofs, \\qedsymbol, a filled \\blacksquare, \\qedhere after equations, plus \\newtheorem and lemma numbering.',
-  keywords: 'latex theorem, end of proof symbol latex, theorem definition latex, latex newtheorem, amsthm, latex proof environment, latex qed symbol, qedhere, latex lemma, latex theorem numbering, latex theoremstyle, latex blacksquare, latex proof box, latex corollary, latex definition environment, thmtools, tcolorbox theorem, latex reference theorem',
+  title: 'Theorems and Proofs in LaTeX: amsthm, \\newtheorem and the QED Symbol',
+  seoTitle: 'End of Proof Symbol and Theorems in LaTeX (amsthm)',
+  description: 'End of proof symbol in LaTeX with amsthm: \\qed, \\qedhere, a filled \\blacksquare. Define a theorem with \\newtheorem, styles plain, definition, remark.',
+  keywords: 'end of proof symbol latex, latex end of proof symbol, define theorem latex, theorem definition latex, latex theorem, latex definition environment, latex qed, qedsymbol, latex newtheorem, amsthm, latex proof environment, latex qed symbol, qedhere, latex lemma, latex theorem numbering, latex theoremstyle, latex blacksquare, latex proof box, latex corollary, latex definition environment, thmtools, tcolorbox theorem, latex reference theorem',
 }
 
 /** Last content update, used for dateModified in the article schema. */
-const LAST_UPDATED = '2026-10-22'
+const LAST_UPDATED = '2026-11-09'
 
 const faq: FaqItem[] = [
   {
@@ -38,6 +38,26 @@ const faq: FaqItem[] = [
     question: 'Why does the QED box appear on the wrong line?',
     answer:
       'When a proof ends with a displayed equation, an align or a list, amsthm puts the symbol on a new line below it. Write \\qedhere at the end of the last equation line or list item to move the symbol up onto that line. Load amsmath before amsthm, or \\qedhere may not work in displays.',
+  },
+  {
+    question: 'How do you define a theorem in LaTeX?',
+    answer:
+      'Load amsthm in the preamble and declare the environment with \\newtheorem{theorem}{Theorem}: the first argument is the environment name, the second the word that is printed. Then write \\begin{theorem} ... \\end{theorem} in the document. Add [section] at the end, \\newtheorem{theorem}{Theorem}[section], to number theorems 1.1, 1.2 within each section.',
+  },
+  {
+    question: 'How do I create a definition environment in LaTeX?',
+    answer:
+      'Switch to the definition style before declaring it: \\theoremstyle{definition} followed by \\newtheorem{definition}{Definition}[section]. The definition style prints a bold heading and an upright body, so the defined term can be set in italics with \\emph. Use \\newtheorem{definition}[theorem]{Definition} instead if definitions should share the theorem numbering.',
+  },
+  {
+    question: 'What is the end of proof symbol called?',
+    answer:
+      'It is called the QED symbol, the tombstone, or the Halmos (after Paul Halmos, who introduced it to mathematics). Unicode encodes the filled version as ∎ (U+220E END OF PROOF). In LaTeX the amsthm proof environment prints a hollow square □ by default, and \\renewcommand{\\qedsymbol}{$\\blacksquare$} switches it to the filled ∎ style.',
+  },
+  {
+    question: 'How do I number theorems, lemmas and corollaries in one sequence?',
+    answer:
+      'Declare the theorem first and give the others its counter in square brackets between the two names: \\newtheorem{theorem}{Theorem}[section], then \\newtheorem{lemma}[theorem]{Lemma} and \\newtheorem{corollary}[theorem]{Corollary}. Theorem 2.1 is then followed by Lemma 2.2 and Corollary 2.3.',
   },
 ]
 
@@ -66,7 +86,41 @@ export default async function LaTeXTheoremsProofsPage() {
         </div>
 
         <article className="prose prose-lg dark:prose-invert max-w-4xl mx-auto">
-          <h1>Theorems and Proofs in LaTeX: amsthm, \newtheorem and the End of Proof Symbol (QED)</h1>
+          <h1>Theorems and Proofs in LaTeX: amsthm, \newtheorem and the QED Symbol</h1>
+
+          <div className="not-prose my-6 p-6 rounded-lg border bg-muted/40 break-words">
+            <p className="text-sm font-semibold uppercase tracking-wide text-muted-foreground mb-3">Quick answer</p>
+            <ul className="space-y-2 text-base list-disc pl-5">
+              <li>
+                <strong>Package:</strong> <code>{`\\usepackage{amsthm}`}</code>, loaded after{' '}
+                <code>amsmath</code>.
+              </li>
+              <li>
+                <strong>Define a theorem:</strong> <code>{`\\newtheorem{theorem}{Theorem}[section]`}</code>{' '}
+                in the preamble, then <code>{`\\begin{theorem} ... \\end{theorem}`}</code>. Lemmas
+                sharing its numbers: <code>{`\\newtheorem{lemma}[theorem]{Lemma}`}</code>.
+              </li>
+              <li>
+                <strong>Styles:</strong> <code>{`\\theoremstyle{plain}`}</code> (italic body,
+                theorems), <code>definition</code> (upright, definitions and examples),{' '}
+                <code>remark</code> (italic heading), each placed before its{' '}
+                <code>\newtheorem</code>.
+              </li>
+              <li>
+                <strong>Proof:</strong> <code>{`\\begin{proof} ... \\end{proof}`}</code> ends with the
+                end of proof symbol □ automatically.
+              </li>
+              <li>
+                <strong>Filled QED square:</strong>{' '}
+                <code>{`\\renewcommand\\qedsymbol{$\\blacksquare$}`}</code> (needs{' '}
+                <code>amssymb</code>).
+              </li>
+              <li>
+                <strong>Symbol after an equation:</strong> <code>\qedhere</code> at the end of the
+                last line; outside a proof, <code>\qed</code>.
+              </li>
+            </ul>
+          </div>
           <p className="lead">
             LaTeX has no built-in <code>theorem</code> environment. You create one with{' '}
             <code>\newtheorem</code>, and the <code>amsthm</code> package adds the styles, the{' '}
@@ -79,7 +133,7 @@ export default async function LaTeXTheoremsProofsPage() {
           </p>
 
           {/* ── Setup ── */}
-          <h2>Setting Up amsthm</h2>
+          <h2>How to Define a Theorem in LaTeX: amsthm and \newtheorem</h2>
           <p>
             Load <code>amsmath</code> first, then <code>amsthm</code>, then declare the
             environments you need. The second argument of <code>\newtheorem</code> is the word that
@@ -168,11 +222,12 @@ export default async function LaTeXTheoremsProofsPage() {
           </p>
 
           {/* ── Styles ── */}
-          <h2>Theorem Styles: plain, definition and remark</h2>
+          <h2>Theorem and Definition Styles: plain, definition and remark</h2>
           <p>
             amsthm ships three styles. <code>\theoremstyle</code> switches the current style, and
             each <code>\newtheorem</code> that follows picks it up:
           </p>
+          <div className="overflow-x-auto">
           <table>
             <thead>
               <tr>
@@ -188,6 +243,7 @@ export default async function LaTeXTheoremsProofsPage() {
               <tr><td><code>remark</code></td><td>Italic</td><td>Upright</td><td>Remark, Note, Notation, Case</td></tr>
             </tbody>
           </table>
+          </div>
           <pre><code>{`\\theoremstyle{plain}
 \\newtheorem{theorem}{Theorem}[section]
 \\newtheorem{lemma}[theorem]{Lemma}
@@ -206,6 +262,35 @@ export default async function LaTeXTheoremsProofsPage() {
             the word being defined cannot be emphasised. Inside an italic theorem, use{' '}
             <code>\textup</code> or <code>\emph</code> (which toggles back to upright) for text
             that should not be slanted.
+          </p>
+
+          <h3>A definition environment</h3>
+          <p>
+            A definition is declared exactly like a theorem, only under the{' '}
+            <code>definition</code> style, so the body is upright and the term being defined can
+            stand out in italics:
+          </p>
+          <pre><code>{`\\documentclass{article}
+\\usepackage{amsmath}
+\\usepackage{amsthm}
+
+\\theoremstyle{definition}
+\\newtheorem{definition}{Definition}[section]
+
+\\begin{document}
+\\section{Groups}
+
+\\begin{definition}[Group]
+  A \\emph{group} is a set $G$ with an associative operation
+  $G \\times G \\to G$, an identity element and an inverse for
+  every element.
+\\end{definition}
+
+\\end{document}`}</code></pre>
+          <p>
+            This prints <strong>Definition 1.1</strong> (Group). with the body in upright type.
+            Without the <code>\theoremstyle</code> line the body would be italic and the
+            emphasised word <em>group</em> would flip to upright, which reads backwards.
           </p>
 
           <h3>Custom styles with \newtheoremstyle</h3>
@@ -248,7 +333,7 @@ export default async function LaTeXTheoremsProofsPage() {
 \\renewcommand{\\proofname}{Beweis}`}</code></pre>
 
           {/* ── End of proof symbol ── */}
-          <h2>End of Proof Symbol (∎, □): \qedsymbol, \blacksquare and \qedhere</h2>
+          <h2>End of Proof Symbol in LaTeX (∎, □): \qedsymbol, \blacksquare and \qedhere</h2>
           <p>
             The end of proof symbol is the small square that marks where a proof finishes. It is
             also called the QED symbol (after <em>quod erat demonstrandum</em>), the tombstone, or
@@ -256,6 +341,7 @@ export default async function LaTeXTheoremsProofsPage() {
             <code>\qedsymbol</code>, and the <code>proof</code> environment prints it flush right on
             the last line automatically. The default is a hollow square, <code>\openbox</code> (□).
           </p>
+          <div className="overflow-x-auto">
           <table>
             <thead>
               <tr>
@@ -271,6 +357,7 @@ export default async function LaTeXTheoremsProofsPage() {
               <tr><td>Symbol outside a proof environment</td><td><code>\qed</code> (amsthm) or <code>{`\\hfill$\\square$`}</code> (amssymb)</td></tr>
             </tbody>
           </table>
+          </div>
 
           <h3>Changing the QED symbol to a filled square</h3>
           <p>
@@ -439,6 +526,7 @@ See Theorem~\\ref{thm:pyth}.   % the label is prefix:suffix`}</code></pre>
 
           {/* ── Errors ── */}
           <h2>Common Errors</h2>
+          <div className="overflow-x-auto">
           <table>
             <thead>
               <tr>
@@ -489,6 +577,11 @@ See Theorem~\\ref{thm:pyth}.   % the label is prefix:suffix`}</code></pre>
                 <td>Load <code>amsmath</code> first, then <code>amsthm</code></td>
               </tr>
               <tr>
+                <td><em>No counter &apos;chapter&apos; defined</em></td>
+                <td><code>{`\\newtheorem{theorem}{Theorem}[chapter]`}</code> in an <code>article</code>, which has no chapters</td>
+                <td>Use <code>[section]</code> in <code>article</code>; <code>[chapter]</code> only in <code>book</code> and <code>report</code></td>
+              </tr>
+              <tr>
                 <td><code>\theoremstyle</code> has no effect</td>
                 <td>It was issued after the <code>\newtheorem</code> it was meant for</td>
                 <td>Put <code>\theoremstyle</code> before the declarations it applies to</td>
@@ -500,6 +593,7 @@ See Theorem~\\ref{thm:pyth}.   % the label is prefix:suffix`}</code></pre>
               </tr>
             </tbody>
           </table>
+          </div>
 
           {/* ── Complete example ── */}
           <h2>Complete Example</h2>
@@ -574,6 +668,7 @@ See Theorem~\\ref{thm:pyth}.   % the label is prefix:suffix`}</code></pre>
 
           {/* ── Quick reference ── */}
           <h2>Quick Reference</h2>
+          <div className="overflow-x-auto">
           <table>
             <thead>
               <tr>
@@ -601,6 +696,7 @@ See Theorem~\\ref{thm:pyth}.   % the label is prefix:suffix`}</code></pre>
               <tr><td>List of theorems</td><td><code>\listoftheorems</code> (thmtools)</td></tr>
             </tbody>
           </table>
+          </div>
 
           {/* ── FAQ ── */}
           <h2>Frequently Asked Questions</h2>
@@ -620,6 +716,42 @@ See Theorem~\\ref{thm:pyth}.   % the label is prefix:suffix`}</code></pre>
             last equation line or list item to move the symbol up onto that line. Load{' '}
             <code>amsmath</code> before <code>amsthm</code>, or <code>\qedhere</code> may not
             work in displays.
+          </p>
+
+          <h3>How do you define a theorem in LaTeX?</h3>
+          <p>
+            Load <code>amsthm</code> in the preamble and declare the environment with{' '}
+            <code>{`\\newtheorem{theorem}{Theorem}`}</code>: the first argument is the environment
+            name, the second the word that is printed. Then write{' '}
+            <code>{`\\begin{theorem} ... \\end{theorem}`}</code> in the document. Add{' '}
+            <code>[section]</code> at the end,{' '}
+            <code>{`\\newtheorem{theorem}{Theorem}[section]`}</code>, to number theorems 1.1, 1.2
+            within each section.
+          </p>
+          <h3>How do I create a definition environment in LaTeX?</h3>
+          <p>
+            Switch to the definition style before declaring it:{' '}
+            <code>{`\\theoremstyle{definition}`}</code> followed by{' '}
+            <code>{`\\newtheorem{definition}{Definition}[section]`}</code>. The definition style
+            prints a bold heading and an upright body, so the defined term can be set in italics
+            with <code>\emph</code>. Use <code>{`\\newtheorem{definition}[theorem]{Definition}`}</code>{' '}
+            instead if definitions should share the theorem numbering.
+          </p>
+          <h3>What is the end of proof symbol called?</h3>
+          <p>
+            It is called the QED symbol, the tombstone, or the Halmos (after Paul Halmos, who
+            introduced it to mathematics). Unicode encodes the filled version as ∎ (U+220E END OF
+            PROOF). In LaTeX the amsthm <code>proof</code> environment prints a hollow square □ by
+            default, and <code>{`\\renewcommand{\\qedsymbol}{$\\blacksquare$}`}</code> switches
+            it to the filled ∎ style.
+          </p>
+          <h3>How do I number theorems, lemmas and corollaries in one sequence?</h3>
+          <p>
+            Declare the theorem first and give the others its counter in square brackets between
+            the two names: <code>{`\\newtheorem{theorem}{Theorem}[section]`}</code>, then{' '}
+            <code>{`\\newtheorem{lemma}[theorem]{Lemma}`}</code> and{' '}
+            <code>{`\\newtheorem{corollary}[theorem]{Corollary}`}</code>. Theorem 2.1 is then
+            followed by Lemma 2.2 and Corollary 2.3.
           </p>
 
           {/* ── Next Steps ── */}
