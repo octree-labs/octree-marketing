@@ -1,6 +1,6 @@
 import type { Metadata } from 'next/types'
 
-import { learnMetadata } from '@/utilities/learnMetadata'
+import { learnMetadata, type FaqItem } from '@/utilities/learnMetadata'
 import Link from 'next/link'
 import { buttonVariants } from '@/components/ui/button'
 import React from 'react'
@@ -19,14 +19,46 @@ const breadcrumbSchema = generateBreadcrumbSchema(breadcrumbs)
 
 const page = {
   slug: 'bold-italics-underline',
-  title: 'Bold, Italics and Underlining in LaTeX – Guide 2026',
-  seoTitle: 'Bold, Italics and Underlining in LaTeX',
-  description: 'Learn how to use bold, italic, and underline text in LaTeX. Complete guide covering \\textbf, \\textit, \\underline, \\emph, and advanced formatting with soul and ulem packages.',
-  keywords: 'latex bold, latex italic, latex underline, textbf latex, textit latex, emph latex, latex text formatting, bold text in latex, italic text in latex, underline in latex, latex font styles, latex emphasis, italic in latex, latex italics, italics in latex, how to italicize in latex, latex italic text, italic text in latex bold italics and underlining, latex bold italic, latex underline text, latex emph vs textit, latex small caps, latex textsc, latex texttt monospace, latex textsf, latex slanted text, latex font style commands, latex text formatting commands, latex mathbf boldsymbol',
+  title: 'Underline, Bold and Italics in LaTeX',
+  description: 'Underline in LaTeX with \\underline, \\uline (ulem) or \\ul (soul); double and wavy underlines, math mode, plus bold \\textbf and italics \\textit, \\emph.',
+  keywords: 'underline latex, latex underline, underline in latex, how to underline in latex, latex uline, ulem underline, soul ul latex, latex double underline, latex wavy underline, underline math mode latex, bold in latex, latex bold, latex italic, latex underline, textbf latex, textit latex, emph latex, latex text formatting, bold text in latex, italic text in latex, underline in latex, latex font styles, latex emphasis, italic in latex, latex italics, italics in latex, how to italicize in latex, latex italic text, italic text in latex bold italics and underlining, latex bold italic, latex underline text, latex emph vs textit, latex small caps, latex textsc, latex texttt monospace, latex textsf, latex slanted text, latex font style commands, latex text formatting commands, latex mathbf boldsymbol',
 }
 
 /** Last content update, used for dateModified in the article schema. */
-const LAST_UPDATED = '2026-10-18'
+const LAST_UPDATED = '2026-11-08'
+
+const faq: FaqItem[] = [
+  {
+    question: 'How do you underline text in LaTeX?',
+    answer:
+      'Use \\underline{text}. It is built in and needs no package, but the underlined text cannot break across lines. For longer text, add \\usepackage[normalem]{ulem} to the preamble and write \\uline{text}, or load soul and write \\ul{text}; both wrap onto the next line like normal text.',
+  },
+  {
+    question: 'Why does \\underline run into the margin?',
+    answer:
+      '\\underline puts its argument in a single box, and TeX never breaks a line inside a box, so a long underlined phrase overflows instead of wrapping. Replace it with \\uline from ulem or \\ul from soul. soul can also hyphenate the underlined words.',
+  },
+  {
+    question: 'How do I make a double or wavy underline in LaTeX?',
+    answer:
+      'Load \\usepackage[normalem]{ulem} and use \\uuline{text} for a double underline and \\uwave{text} for a wavy one. ulem also has \\dashuline and \\dotuline. Without a package, \\underline{\\underline{text}} gives a double underline that does not break across lines.',
+  },
+  {
+    question: 'How do I underline in math mode?',
+    answer:
+      'Use \\underline inside the math, as in $\\underline{x}$ or $\\underline{\\underline{\\sigma}}$ for a double underline. \\uline and \\ul are text commands. To put a label under the underlined part, use \\underbrace{a+b}_{\\text{label}}.',
+  },
+  {
+    question: 'How do you make text bold in LaTeX?',
+    answer:
+      'Write \\textbf{text} for a word or phrase, or {\\bfseries ...} for a longer passage. In math mode use \\mathbf{x} for bold upright letters and \\boldsymbol{\\alpha} (amsmath) or \\bm{\\alpha} (bm package) for bold Greek letters and symbols.',
+  },
+  {
+    question: 'What is the difference between \\textit and \\emph?',
+    answer:
+      '\\textit always sets italic. \\emph means emphasis: in upright text it gives italics, but inside italic text it switches back to upright so the emphasis still shows. Use \\emph for stressed words and \\textit for titles and foreign words.',
+  },
+]
 
 export default async function BoldItalicsUnderlinePage() {
   return (
@@ -40,6 +72,7 @@ export default async function BoldItalicsUnderlinePage() {
         title={page.title}
         description={page.description}
         dateModified={LAST_UPDATED}
+        faq={faq}
       />
       <div className="container">
         <div className="mb-8 max-w-4xl mx-auto">
@@ -52,13 +85,202 @@ export default async function BoldItalicsUnderlinePage() {
         </div>
 
         <article className="prose prose-lg dark:prose-invert max-w-4xl mx-auto">
-          <h1>Bold, Italics and Underlining in LaTeX</h1>
+          <h1>Underline, Bold and Italics in LaTeX</h1>
+
+          <div className="not-prose my-6 p-6 rounded-lg border bg-muted/40 break-words">
+            <p className="text-sm font-semibold uppercase tracking-wide text-muted-foreground mb-3">Quick answer</p>
+            <ul className="space-y-2 text-base list-disc pl-5">
+              <li>
+                <strong>Underline:</strong> <code>{`\\underline{text}`}</code>, built in, no line breaks.
+              </li>
+              <li>
+                <strong>Underline that wraps:</strong> <code>{`\\usepackage[normalem]{ulem}`}</code> then{' '}
+                <code>{`\\uline{text}`}</code>, or <code>{`\\usepackage{soul}`}</code> then{' '}
+                <code>{`\\ul{text}`}</code>.
+              </li>
+              <li>
+                <strong>Bold:</strong> <code>{`\\textbf{text}`}</code>; in math <code>{`\\mathbf{x}`}</code>.
+              </li>
+              <li>
+                <strong>Italics:</strong> <code>{`\\textit{text}`}</code>, or <code>{`\\emph{text}`}</code>{' '}
+                for emphasis that flips back to upright inside italic text.
+              </li>
+              <li>
+                <strong>Double and wavy underline:</strong> <code>{`\\uuline{text}`}</code> and{' '}
+                <code>{`\\uwave{text}`}</code> from ulem.
+              </li>
+            </ul>
+          </div>
           <p className="lead">
-            Text formatting is fundamental to creating readable, well-structured documents in LaTeX.
-            Whether you need to emphasise a key term, highlight a definition, or draw attention to
-            important information, LaTeX provides a rich set of commands for bold, italic, and underlined
-            text. This guide covers every method available, from basic commands to advanced packages.
+            Underline in LaTeX with <code>\underline&#123;&#125;</code>, make text bold with{' '}
+            <code>\textbf&#123;&#125;</code> and italic with <code>\textit&#123;&#125;</code> or{' '}
+            <code>\emph&#123;&#125;</code>. None of them needs a package. This guide covers when the
+            built-in underline is not enough (long text, line breaks, double, wavy and coloured
+            underlines with <code>ulem</code> and <code>soul</code>, underlining in math), the bold
+            and italic commands and their declaration forms, other font styles, and the errors you
+            are likely to meet.
           </p>
+
+          {/* ── Underline ── */}
+          <h2>Underline in LaTeX</h2>
+          <p>
+            To underline in LaTeX, wrap the text in <code>\underline&#123;...&#125;</code>. It is
+            built in, needs no package and works in text and math mode. Its one real limit is that
+            it puts the text in a single unbreakable box: an underlined phrase cannot wrap onto the
+            next line or be hyphenated, so a long one runs into the margin. For anything longer
+            than a few words, use <code>\uline</code> from the <code>ulem</code> package or{' '}
+            <code>\ul</code> from <code>soul</code>.
+          </p>
+
+          <div className="overflow-x-auto">
+
+          <table>
+            <thead>
+              <tr>
+                <th>Command</th>
+                <th>Package</th>
+                <th>Breaks across lines</th>
+                <th>Hyphenates</th>
+                <th>Best for</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td><code>\underline</code></td><td>none</td><td>No</td><td>No</td><td>A word or two, and math</td></tr>
+              <tr><td><code>\uline</code></td><td><code>ulem</code> (with <code>[normalem]</code>)</td><td>Yes</td><td>No</td><td>Underlined phrases and sentences</td></tr>
+              <tr><td><code>\ul</code></td><td><code>soul</code></td><td>Yes</td><td>Yes</td><td>Long passages, coloured underlines</td></tr>
+              <tr><td><code>\uuline</code>, <code>\uwave</code></td><td><code>ulem</code></td><td>Yes</td><td>No</td><td>Double and wavy underlines</td></tr>
+            </tbody>
+          </table>
+          </div>
+
+          <h3>The \underline Command</h3>
+          <pre><code>{`\\documentclass{article}
+\\begin{document}
+
+This is \\underline{underlined text} in a sentence.
+
+% The rule is drawn below the lowest letter, so words with
+% descenders (g, p, y) get a lower line than words without:
+\\underline{word} and \\underline{typography}
+
+% Problem: \\underline never breaks across lines
+\\underline{This is a very long underlined passage that you might
+want to span several lines, but it stays on one line and runs
+into the margin.}
+
+\\end{document}`}</code></pre>
+          <p>
+            Both quirks, the missing line breaks and the uneven depth, go away with the package
+            commands below, which draw the rule at a fixed distance under the baseline.
+          </p>
+
+          <h3>\uline from ulem: Underlines That Break Across Lines</h3>
+          <pre><code>{`\\documentclass{article}
+\\usepackage[normalem]{ulem}
+\\begin{document}
+
+\\uline{This underlined passage breaks across lines like normal
+text, so it never runs into the margin.}
+
+\\uline{Formatting such as \\textbf{bold} works inside.}
+
+\\end{document}`}</code></pre>
+          <p>
+            Always load <code>ulem</code> with the <code>[normalem]</code> option. Without it the
+            package redefines <code>\emph</code> to underline instead of italicise, which changes
+            every emphasised word in the document. <code>\uline</code> breaks lines at spaces but
+            does not hyphenate words.
+          </p>
+
+          <h3>\ul from soul: Underlines with Hyphenation</h3>
+          <pre><code>{`\\documentclass{article}
+\\usepackage{xcolor}  % only needed for \\setulcolor
+\\usepackage{soul}
+\\begin{document}
+
+\\ul{Soul underlines break across lines and can even hyphenate
+long words such as internationalization.}
+
+\\setulcolor{red}     % colour of the line
+\\ul{Red underline}
+
+\\setul{1.5pt}{0.8pt} % depth below the baseline, thickness
+\\ul{Lower, thicker underline}
+
+\\end{document}`}</code></pre>
+          <p>
+            <code>soul</code> works letter by letter, so it is picky about commands inside its
+            argument. If a <code>\cite</code> or <code>\ref</code> inside <code>\ul</code> stops the
+            compile, put the command in braces, <code>{`\\ul{see {\\cite{knuth}}}`}</code>, or
+            register it once in the preamble with <code>{`\\soulregister{\\cite}{7}`}</code>.
+          </p>
+
+          <h3>Double, Wavy, Dashed and Dotted Underlines</h3>
+          <pre><code>{`\\documentclass{article}
+\\usepackage[normalem]{ulem}
+\\begin{document}
+
+\\uuline{Double underline}
+
+\\uwave{Wavy underline}
+
+\\dashuline{Dashed underline}
+
+\\dotuline{Dotted underline}
+
+% A double underline with no package (does not break lines)
+\\underline{\\underline{Total: 42}}
+
+\\end{document}`}</code></pre>
+
+          <h3>Coloured, Thicker or Lower Underlines with ulem</h3>
+          <pre><code>{`\\documentclass{article}
+\\usepackage{xcolor}
+\\usepackage[normalem]{ulem}
+
+% A red underline that still breaks across lines
+\\newcommand{\\redul}{\\bgroup\\markoverwith{\\textcolor{red}{\\rule[-0.5ex]{2pt}{0.4pt}}}\\ULon}
+
+\\begin{document}
+
+\\redul{Red underline from ulem.}
+
+\\renewcommand{\\ULthickness}{1pt}  % thicker line
+\\setlength{\\ULdepth}{2pt}         % further below the baseline
+\\uline{Thicker, lower underline.}
+
+\\end{document}`}</code></pre>
+          <p>
+            For coloured text rather than a coloured line, and for highlighting, see the{' '}
+            <Link href="/learn/colors">colors guide</Link>.
+          </p>
+
+          <h3>Underline in Math Mode</h3>
+          <p>
+            In equations use <code>\underline</code>: <code>\uline</code> and <code>\ul</code> are
+            text commands. Inside math, <code>\underline</code> underlines the whole expression,
+            and <code>\underbrace</code> does the same with a label underneath:
+          </p>
+          <pre><code>{`\\documentclass{article}
+\\usepackage{amsmath}
+\\begin{document}
+
+$\\underline{x}$ and $\\underline{AB}$
+
+% Double underline, used for tensors or a final answer
+$\\underline{\\underline{\\sigma}}$
+
+% Underline with a label
+\\[
+  \\underbrace{a + b + c}_{\\text{three terms}} = \\overline{xyz}
+\\]
+
+% An underlined word inside an equation
+\\[
+  f(x) = 0 \\quad \\text{for \\underline{all} } x
+\\]
+
+\\end{document}`}</code></pre>
 
           <h2>Bold Text in LaTeX</h2>
           <p>
@@ -195,79 +417,6 @@ $ \\mathit{diff}(x) $   % compare $diff(x)$, set as d, i, f, f
 $ x_{\\mathrm{max}} = 3\\,\\mathrm{m} $
 $ f(x) = 0 \\text{ for all } x > 1 $`}</code></pre>
 
-          <h2>Underlining in LaTeX</h2>
-          <p>
-            Underlining is less common in typeset documents than in handwritten or typewritten text.
-            LaTeX provides a basic underlining command, but it has limitations. For more flexible
-            underlining, specialised packages are recommended.
-          </p>
-
-          <h3>Using \underline&#123;&#125;</h3>
-          <p>
-            The built-in <code>\underline&#123;&#125;</code> command adds a line beneath the enclosed text.
-            However, it has notable limitations: it does not break across lines, and it does not adjust
-            for descenders (letters like g, p, and y).
-          </p>
-
-          <pre><code>{`\\documentclass{article}
-\\begin{document}
-
-This is \\underline{underlined text} in a sentence.
-
-% Problem: \\underline does not break across lines
-% This will NOT work well for long passages:
-\\underline{This is a very long underlined text that you might
-want to span across multiple lines but it will not break.}
-
-\\end{document}`}</code></pre>
-
-          <h3>Using the soul Package</h3>
-          <p>
-            The <code>soul</code> package provides the <code>\ul&#123;&#125;</code> command, which supports
-            line breaking and offers better typographic results than <code>\underline&#123;&#125;</code>.
-          </p>
-
-          <pre><code>{`\\documentclass{article}
-\\usepackage{soul}
-\\begin{document}
-
-This is \\ul{underlined text that can break across
-multiple lines without any problems}.
-
-% soul also provides other commands:
-\\st{This text is struck through.}
-\\hl{This text is highlighted.}   % requires color package
-\\caps{Small Caps Text}
-
-\\end{document}`}</code></pre>
-
-          <h3>Using the ulem Package</h3>
-          <p>
-            The <code>ulem</code> package replaces <code>\emph&#123;&#125;</code> with underlining by default.
-            Load it with the <code>[normalem]</code> option to prevent this behaviour. It provides
-            several underlining styles.
-          </p>
-
-          <pre><code>{`\\documentclass{article}
-\\usepackage[normalem]{ulem}
-\\begin{document}
-
-\\uline{Single underline that breaks across lines.}
-
-\\uuline{Double underline.}
-
-\\uwave{Wavy underline.}
-
-\\sout{Strikethrough text.}
-
-\\xout{Crossed-out text with slashes.}
-
-\\dashuline{Dashed underline.}
-
-\\dotuline{Dotted underline.}
-
-\\end{document}`}</code></pre>
-
           <h2>Combining Formatting</h2>
           <p>
             LaTeX allows you to nest formatting commands to apply multiple styles simultaneously.
@@ -376,6 +525,8 @@ Or verbatim: \\verb|\\documentclass{article}| prints everything literally.
 \\textit{Italic with an \\textup{upright} word inside.}
 {\\bfseries\\itshape Bold italic, then \\textnormal{back to normal}.}`}</code></pre>
 
+          <div className="overflow-x-auto">
+
           <table>
             <thead>
               <tr>
@@ -398,6 +549,7 @@ Or verbatim: \\verb|\\documentclass{article}| prints everything literally.
               <tr><td>All</td><td><code>\textnormal</code></td><td><code>\normalfont</code></td><td>Reset to the document font</td></tr>
             </tbody>
           </table>
+          </div>
 
           <h2>Font Sizes with Bold and Italics</h2>
           <p>
@@ -456,6 +608,8 @@ $ \\mathbb{R}, \\mathbb{Z}, \\mathbb{N} $
 % Bold symbol — works with Greek and symbols
 $ \\boldsymbol{\\nabla} \\times \\boldsymbol{E} = -\\frac{\\partial \\boldsymbol{B}}{\\partial t} $`}</code></pre>
 
+          <div className="overflow-x-auto">
+
           <table>
             <thead>
               <tr>
@@ -502,6 +656,7 @@ $ \\boldsymbol{\\nabla} \\times \\boldsymbol{E} = -\\frac{\\partial \\boldsymbol
               </tr>
             </tbody>
           </table>
+          </div>
 
           <h2>Using the emph Command</h2>
           <p>
@@ -598,6 +753,8 @@ The \\code{tabular} environment takes a column specifier.`}</code></pre>
             Beyond the basic commands, several packages extend LaTeX&apos;s text formatting capabilities.
           </p>
 
+          <div className="overflow-x-auto">
+
           <table>
             <thead>
               <tr>
@@ -634,6 +791,7 @@ The \\code{tabular} environment takes a column specifier.`}</code></pre>
               </tr>
             </tbody>
           </table>
+          </div>
 
           <pre><code>{`% soul package examples
 \\usepackage{soul}
@@ -663,6 +821,8 @@ $ \\bm{\\alpha} + \\bm{\\beta} = \\bm{\\gamma} $`}</code></pre>
           <p>
             Here is a summary of all the key formatting commands covered in this guide:
           </p>
+
+          <div className="overflow-x-auto">
 
           <table>
             <thead>
@@ -765,11 +925,58 @@ $ \\bm{\\alpha} + \\bm{\\beta} = \\bm{\\gamma} $`}</code></pre>
               </tr>
             </tbody>
           </table>
+          </div>
 
-          <h2>Common Mistakes</h2>
+          <h2>Common Errors</h2>
           <p>
-            Here are frequent errors that LaTeX beginners make with text formatting, along with their fixes:
+            These are the errors and surprises that come up most with underline, bold and italics,
+            with the fix for each:
           </p>
+
+          <div className="overflow-x-auto">
+
+          <table>
+            <thead>
+              <tr>
+                <th>Symptom</th>
+                <th>Cause</th>
+                <th>Fix</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><em>Undefined control sequence</em> on <code>\uline</code> or <code>\ul</code></td>
+                <td>The package is not loaded</td>
+                <td><code>{`\\usepackage[normalem]{ulem}`}</code> or <code>{`\\usepackage{soul}`}</code></td>
+              </tr>
+              <tr>
+                <td>Every <code>\emph</code> is suddenly underlined</td>
+                <td><code>ulem</code> loaded without <code>[normalem]</code></td>
+                <td><code>{`\\usepackage[normalem]{ulem}`}</code></td>
+              </tr>
+              <tr>
+                <td>Underlined text runs into the margin</td>
+                <td><code>\underline</code> cannot break lines</td>
+                <td><code>\uline</code> or <code>\ul</code></td>
+              </tr>
+              <tr>
+                <td><em>Argument of \@citex has an extra &#125;</em> or <em>Reconstruction failed</em> inside <code>\ul</code></td>
+                <td>soul cannot split the command</td>
+                <td>Brace it, <code>{`\\ul{see {\\cite{key}}}`}</code>, or <code>{`\\soulregister{\\cite}{7}`}</code></td>
+              </tr>
+              <tr>
+                <td><code>\setulcolor</code> or <code>\hl</code> gives no colour</td>
+                <td>No colour package</td>
+                <td><code>{`\\usepackage{xcolor}`}</code> alongside soul</td>
+              </tr>
+              <tr>
+                <td>Bold Greek letter is not bold</td>
+                <td><code>\mathbf</code> ignores Greek</td>
+                <td><code>\boldsymbol</code> or <code>\bm</code></td>
+              </tr>
+            </tbody>
+          </table>
+          </div>
 
           <h3>Using \textbf in Math Mode</h3>
           <p>
@@ -840,9 +1047,58 @@ $ \\boldsymbol{\\alpha} $  % Produces bold alpha
 \\usepackage{bm}
 $ \\bm{\\alpha} $          % Also produces bold alpha`}</code></pre>
 
+          {/* ── FAQ ── */}
+          <h2>Frequently Asked Questions</h2>
+          <h3>How do you underline text in LaTeX?</h3>
+          <p>
+            Use <code>{`\\underline{text}`}</code>. It is built in and needs no package, but the
+            underlined text cannot break across lines. For longer text, add{' '}
+            <code>{`\\usepackage[normalem]{ulem}`}</code> to the preamble and write{' '}
+            <code>{`\\uline{text}`}</code>, or load soul and write <code>{`\\ul{text}`}</code>; both
+            wrap onto the next line like normal text.
+          </p>
+          <h3>Why does \underline run into the margin?</h3>
+          <p>
+            <code>\underline</code> puts its argument in a single box, and TeX never breaks a line
+            inside a box, so a long underlined phrase overflows instead of wrapping. Replace it with{' '}
+            <code>\uline</code> from ulem or <code>\ul</code> from soul. soul can also hyphenate the
+            underlined words.
+          </p>
+          <h3>How do I make a double or wavy underline in LaTeX?</h3>
+          <p>
+            Load <code>{`\\usepackage[normalem]{ulem}`}</code> and use <code>{`\\uuline{text}`}</code>{' '}
+            for a double underline and <code>{`\\uwave{text}`}</code> for a wavy one. ulem also has{' '}
+            <code>\dashuline</code> and <code>\dotuline</code>. Without a package,{' '}
+            <code>{`\\underline{\\underline{text}}`}</code> gives a double underline that does not
+            break across lines.
+          </p>
+          <h3>How do I underline in math mode?</h3>
+          <p>
+            Use <code>\underline</code> inside the math, as in <code>{`$\\underline{x}$`}</code> or{' '}
+            <code>{`$\\underline{\\underline{\\sigma}}$`}</code> for a double underline.{' '}
+            <code>\uline</code> and <code>\ul</code> are text commands. To put a label under the
+            underlined part, use <code>{`\\underbrace{a+b}_{\\text{label}}`}</code>.
+          </p>
+          <h3>How do you make text bold in LaTeX?</h3>
+          <p>
+            Write <code>{`\\textbf{text}`}</code> for a word or phrase, or{' '}
+            <code>{`{\\bfseries ...}`}</code> for a longer passage. In math mode use{' '}
+            <code>{`\\mathbf{x}`}</code> for bold upright letters and{' '}
+            <code>{`\\boldsymbol{\\alpha}`}</code> (amsmath) or <code>{`\\bm{\\alpha}`}</code> (bm
+            package) for bold Greek letters and symbols.
+          </p>
+          <h3>What is the difference between \textit and \emph?</h3>
+          <p>
+            <code>\textit</code> always sets italic. <code>\emph</code> means emphasis: in upright
+            text it gives italics, but inside italic text it switches back to upright so the
+            emphasis still shows. Use <code>\emph</code> for stressed words and{' '}
+            <code>\textit</code> for titles and foreign words.
+          </p>
+
           <h2>Next Steps</h2>
           <p>Now that you know how to format text in LaTeX, explore more topics:</p>
           <ul>
+            <li><Link href="/learn/colors">Colors in LaTeX</Link> – \textcolor, \colorbox and highlighted text</li>
             <li><Link href="/learn/strikethrough">Strikethrough &amp; Cross Out</Link> – \sout, \st and \cancel for struck-through text and math</li>
             <li><Link href="/learn/quotes">LaTeX Quotation Marks &amp; Quotes</Link> – Correct quotation marks, csquotes and block quotes</li>
             <li><Link href="/learn/font-size">LaTeX Font Size</Link> – Size commands from \tiny to \Huge, class options and \fontsize, to combine with bold and italics</li>

@@ -26,7 +26,7 @@ const page = {
 }
 
 /** Last content update, used for dateModified in the article schema. */
-const LAST_UPDATED = '2026-10-23'
+const LAST_UPDATED = '2026-11-08'
 
 const faq: FaqItem[] = [
   {
@@ -38,6 +38,11 @@ const faq: FaqItem[] = [
     question: 'Why does \\toprule give "Undefined control sequence" in Overleaf?',
     answer:
       '\\toprule, \\midrule and \\bottomrule come from the booktabs package, and \\multirow from the multirow package. The error means the package is not loaded: add \\usepackage{booktabs} (or \\usepackage{multirow}) to the preamble of main.tex, before \\begin{document}, and recompile.',
+  },
+  {
+    question: 'Is there a free LaTeX table generator?',
+    answer:
+      'Yes. The Octree Table to LaTeX converter at tools.useoctree.com is free and needs no account: export your spreadsheet from Excel or Google Sheets as CSV, upload it, and copy the generated tabular code into your document. Add the caption, label and any merged cells by hand.',
   },
 ]
 
@@ -240,6 +245,8 @@ Table~\\ref{tab:accuracy} summarises the results.
             column types out of the box:
           </p>
 
+          <div className="overflow-x-auto">
+
           <table>
             <thead>
               <tr>
@@ -281,6 +288,7 @@ Table~\\ref{tab:accuracy} summarises the results.
               </tr>
             </tbody>
           </table>
+          </div>
 
           <pre><code>{`% Paragraph columns are useful for wrapping long text
 \\begin{tabular}{l p{5cm} r}
@@ -609,6 +617,7 @@ Table~\\ref{tab:accuracy} summarises the results.
   \\end{tabular}
   \\caption{Row and column spacing applied together}
 \\end{table}`}</code></pre>
+          <div className="overflow-x-auto">
           <table>
             <thead>
               <tr>
@@ -625,6 +634,7 @@ Table~\\ref{tab:accuracy} summarises the results.
               <tr><td>Inconsistent gaps between rows</td><td>Use booktabs rules and <code>\addlinespace</code> instead of empty rows</td></tr>
             </tbody>
           </table>
+          </div>
 
           <h2>Multi-Column Cells</h2>
           <p>
@@ -1126,6 +1136,8 @@ As shown in \\cref{tab:summary} ...         % table 1
             Here is a summary of the most important packages for LaTeX tables and what each one provides:
           </p>
 
+          <div className="overflow-x-auto">
+
           <table>
             <thead>
               <tr>
@@ -1172,6 +1184,7 @@ As shown in \\cref{tab:summary} ...         % table 1
               </tr>
             </tbody>
           </table>
+          </div>
 
           <p>
             A typical preamble for a document with professional tables looks like this:
@@ -1186,28 +1199,45 @@ As shown in \\cref{tab:summary} ...         % table 1
 \\usepackage{array}`}</code></pre>
 
           {/* ── Generator ── */}
-          <h2>Generate Tables Automatically</h2>
+          <h2 id="latex-table-generator">LaTeX Table Generator: Build Tables Without Writing tabular by Hand</h2>
           <p>
             Most of the work in a LaTeX table is mechanical: one <code>&amp;</code> per column, one{' '}
             <code>\\</code> per row, and a column specifier that matches. A LaTeX table generator
-            does that part for you. You paste cells copied from Excel, Google Sheets, Numbers or a
-            CSV file and copy the resulting <code>tabular</code> code into your document, which
-            removes the most common source of <em>Extra alignment tab</em> and{' '}
-            <em>Misplaced \noalign</em> errors. The free Octree Table to LaTeX converter is one
-            such tool; the workflow is the same with any of them:
+            does that part for you, which removes the most common source of{' '}
+            <em>Extra alignment tab</em> and <em>Misplaced \noalign</em> errors. With the free
+            Octree Table to LaTeX converter (linked below) it takes three steps:
           </p>
           <ol>
-            <li>Select the cells in your spreadsheet, including the header row, and copy them.</li>
-            <li>Paste into the generator. Tabs become column separators and line breaks become rows.</li>
-            <li>Copy the generated code into your document, inside a <code>table</code> float if it needs a caption and label.</li>
-            <li>Finish by hand: apply the spacing commands above, switch numeric columns to <code>siunitx</code>, and merge cells with <code>\multicolumn</code> where needed.</li>
+            <li>
+              <strong>Export your data as CSV.</strong> In Excel use <em>File &rarr; Save As &rarr; CSV</em>,
+              in Google Sheets <em>File &rarr; Download &rarr; Comma-separated values</em>; include
+              the header row.
+            </li>
+            <li>
+              <strong>Upload the CSV file</strong> to the converter and check the rendered preview
+              next to the generated <code>tabular</code> code.
+            </li>
+            <li>
+              <strong>Copy the code into your document</strong>, inside a <code>table</code> float
+              if it needs a caption and label, then finish by hand: the spacing commands above,{' '}
+              <code>siunitx</code> for numeric columns and <code>\multicolumn</code> for merged
+              cells.
+            </li>
           </ol>
+          <p>
+            Hand-write the <code>tabular</code> instead when the table is small (a few rows you
+            would type faster than export), when its structure matters more than its data (merged
+            cells with <code>\multirow</code>, nested headers, a <code>longtable</code> across
+            pages), or when a script regenerates the numbers on every run, in which case let the
+            script write the <code>.tex</code> file and <code>\input</code> it as shown in the
+            Overleaf section.
+          </p>
 
           <div className="not-prose my-8 p-6 bg-primary/5 rounded-lg border border-primary/10">
             <h3 className="text-lg font-semibold mb-2">Generate tables automatically</h3>
             <p className="text-muted-foreground mb-4">
               Typing <code>&amp;</code> and <code>\\</code> by hand is where most table errors come
-              from. Paste your data from Excel, Google Sheets or CSV into the free Table to LaTeX
+              from. Upload a CSV exported from Excel or Google Sheets to the free Table to LaTeX
               converter and get a <code>booktabs</code> table with the right column specifier,
               ready to drop into a <code>table</code> float.
             </p>
@@ -1237,8 +1267,8 @@ As shown in \\cref{tab:summary} ...         % table 1
             In Overleaf&apos;s Visual Editor, the toolbar has a table button: pick the number of
             rows and columns from a grid and an empty table is inserted at the cursor. In Code
             Editor you type or paste the <code>tabular</code> yourself. The toolbar is quickest for
-            a small table you fill in by hand; for data that already lives in a spreadsheet, the
-            generator in the previous section is faster. Either way, the <code>booktabs</code>{' '}
+            a small table you fill in by hand; for data that already lives in a spreadsheet, the{' '}
+            <a href="#latex-table-generator">table generator</a> in the previous section is faster. Either way, the <code>booktabs</code>{' '}
             rules shown above usually look cleaner than <code>\hline</code> and vertical lines.
           </p>
 
@@ -1323,12 +1353,20 @@ Table~\\ref{tab:results} lists the results.
             the preamble of <code>main.tex</code>, before <code>{`\\begin{document}`}</code>, and
             recompile.
           </p>
+          <h3>Is there a free LaTeX table generator?</h3>
+          <p>
+            Yes. The Octree Table to LaTeX converter at tools.useoctree.com is free and needs no
+            account: export your spreadsheet from Excel or Google Sheets as CSV, upload it, and copy
+            the generated <code>tabular</code> code into your document. Add the caption, label and
+            any merged cells by hand.
+          </p>
 
           <h2>Common Errors</h2>
           <p>
             Tables produce some of LaTeX&apos;s least helpful messages. These are the ones that
             come up most, with what they actually mean:
           </p>
+          <div className="overflow-x-auto">
           <table>
             <thead>
               <tr>
@@ -1390,11 +1428,14 @@ Table~\\ref{tab:results} lists the results.
               </tr>
             </tbody>
           </table>
+          </div>
 
           <h2>Quick Reference</h2>
           <p>
             A handy reference table for column types and common commands:
           </p>
+
+          <div className="overflow-x-auto">
 
           <table>
             <thead>
@@ -1456,8 +1497,11 @@ Table~\\ref{tab:results} lists the results.
               </tr>
             </tbody>
           </table>
+          </div>
 
           <p>Common table commands at a glance:</p>
+
+          <div className="overflow-x-auto">
 
           <table>
             <thead>
@@ -1525,6 +1569,7 @@ Table~\\ref{tab:results} lists the results.
               </tr>
             </tbody>
           </table>
+          </div>
 
           <h2>Next Steps</h2>
           <p>Now that you can create professional tables in LaTeX, explore more topics:</p>
@@ -1545,7 +1590,7 @@ Table~\\ref{tab:results} lists the results.
             Building tables by hand can be tedious. Use our free tools to speed up your workflow:
           </p>
           <ul>
-            <li><strong><Link href="https://tools.useoctree.com/tools/table-to-latex" target="_blank" rel="noopener noreferrer">Table to LaTeX Converter</Link></strong> &ndash; Paste data from Excel, Google Sheets, or CSV and instantly get LaTeX table code with booktabs formatting</li>
+            <li><strong><Link href="https://tools.useoctree.com/tools/table-to-latex" target="_blank" rel="noopener noreferrer">Table to LaTeX Converter</Link></strong> &ndash; Upload a CSV exported from Excel or Google Sheets and get LaTeX table code with booktabs formatting</li>
             <li><Link href="https://tools.useoctree.com/tools/latex-preview" target="_blank" rel="noopener noreferrer">LaTeX Preview</Link> &ndash; Test your LaTeX code with live PDF preview</li>
             <li><Link href="https://tools.useoctree.com/tools/math-to-latex" target="_blank" rel="noopener noreferrer">Math to LaTeX</Link> &ndash; Convert handwritten equations to LaTeX</li>
             <li><Link href="https://tools.useoctree.com/tools/citation-generator" target="_blank" rel="noopener noreferrer">Citation Generator</Link> &ndash; Generate BibTeX citations from DOIs</li>
