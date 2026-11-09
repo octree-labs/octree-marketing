@@ -14,25 +14,27 @@ import { LearnSchema } from '@/components/Learn/schema'
 export const dynamic = 'force-static'
 export const revalidate = 3600
 
-const breadcrumbs = getLearnBreadcrumbs('LaTeX Tutorial for Beginners', 'latex')
+const breadcrumbs = getLearnBreadcrumbs('Learn LaTeX', 'latex')
 const breadcrumbSchema = generateBreadcrumbSchema(breadcrumbs)
 
 const page = {
   slug: 'latex',
-  title: 'LaTeX Tutorial for Beginners (2026): Your First Document in 15 Minutes',
-  seoTitle: 'LaTeX Tutorial for Beginners (2026)',
-  description: 'Learn LaTeX from zero: what it is, no-install setup, your first compilable document, the preamble, formatting, sections, math, tables, figures, citations.',
+  title: 'Learn LaTeX: Tutorial for Beginners',
+  seoTitle: 'Learn LaTeX: Tutorial for Beginners (2026)',
+  description: 'Learn LaTeX step by step: a LaTeX tutorial for beginners with a first compilable document, what to install, a learning path, math, tables and figures.',
   keywords: 'latex tutorial, tutorial latex, learn latex, latex for beginners, how to use latex, latex basics, latex beginner guide, how to write latex, latex first document, latex preamble, latex document class, latex packages, latex online editor, latex vs word, bibtex tutorial, latex figures, latex tables, latex math, latex errors, overleaf alternative',
 }
 
 /** Last content update, used for dateModified in the article schema. */
-const LAST_UPDATED = '2026-10-18'
+const LAST_UPDATED = '2026-11-09'
+
+const APP_URL = 'https://app.useoctree.com/?utm_source=www&utm_medium=learn&utm_campaign=learn-latex'
 
 const faq: FaqItem[] = [
   {
-    question: 'Is LaTeX hard to learn?',
+    question: 'How long does it take to learn LaTeX?',
     answer:
-      'The basics take an afternoon: a document is plain text with a handful of commands such as \\section, \\textbf and \\begin{itemize}. What takes longer is learning the package for each new need (tables, figures, citations), and this tutorial links to a guide for each one. You do not need to know everything to write a complete paper.',
+      'The basics take an afternoon: a document is plain text with a handful of commands such as \\section, \\textbf and \\begin{itemize}. Most people write a complete paper within a week by following the learning path on this page and looking up each new need (tables, figures, citations) when it comes up. You do not need to know everything to start.',
   },
   {
     question: 'Do I need to install anything to use LaTeX?',
@@ -52,7 +54,7 @@ const faq: FaqItem[] = [
   {
     question: 'Why does my document not compile?',
     answer:
-      'Open the log and find the first line starting with "!". That is the error; everything after it may be a knock-on effect. The line number after "l." tells you where. The most common causes are an unclosed brace or $, a misspelled command, and a package you forgot to load.',
+      'Open the log and find the first line starting with !. That is the error; everything after it may be a knock-on effect. The line number after l. tells you where. The most common causes are an unclosed brace or $, a misspelled command, and a package you forgot to load.',
   },
   {
     question: 'How do I convert a Word document to LaTeX?',
@@ -86,7 +88,44 @@ export default async function LearnLatexPage() {
         </div>
 
         <article className="prose prose-lg dark:prose-invert max-w-4xl mx-auto">
-          <h1>LaTeX Tutorial for Beginners (2026): Your First Document in 15 Minutes</h1>
+          <h1>Learn LaTeX: Tutorial for Beginners</h1>
+
+          <div className="not-prose my-6 p-6 rounded-lg border bg-muted/40">
+            <p className="text-sm font-semibold uppercase tracking-wide text-muted-foreground mb-3">LaTeX in 60 seconds</p>
+            <ul className="space-y-2 text-base list-disc pl-5">
+              <li>
+                <strong>LaTeX is plain text plus commands</strong> that a compiler turns into a
+                PDF. Commands start with <code>\</code>; arguments go in <code>{`{...}`}</code>.
+              </li>
+              <li>
+                <strong>Every document</strong> is <code>{`\\documentclass{article}`}</code>, a
+                preamble of <code>\usepackage</code> lines, then the text between{' '}
+                <code>{`\\begin{document}`}</code> and <code>{`\\end{document}`}</code>.
+              </li>
+              <li>
+                <strong>Math</strong> goes between <code>$...$</code>; a blank line starts a new
+                paragraph; <code>%</code> starts a comment.
+              </li>
+              <li>
+                <strong>No install needed:</strong> paste the document below into an online
+                editor and compile.
+              </li>
+            </ul>
+            <pre className="mt-4 overflow-x-auto rounded-md bg-background p-4 text-sm"><code>{`\\documentclass{article}
+\\usepackage{amsmath}
+
+\\title{Hello, \\LaTeX}
+\\author{Your Name}
+
+\\begin{document}
+\\maketitle
+
+\\section{Introduction}
+This is \\textbf{bold}, this is \\emph{emphasis}, and this is math:
+$e^{i\\pi} + 1 = 0$.
+
+\\end{document}`}</code></pre>
+          </div>
           <p className="lead">
             This LaTeX tutorial takes you from nothing to a compiled PDF with a title, sections,
             formatted text, lists, an equation, a table, a figure and a citation. It explains what
@@ -121,17 +160,60 @@ export default async function LearnLatexPage() {
             afternoon it takes to learn.
           </p>
 
-          {/* ── Get started ── */}
-          <h2>Getting Started with Zero Install</h2>
+          {/* ── Learning path ── */}
+          <h2>Learning Path: Learn LaTeX in 12 Steps</h2>
           <p>
-            The fastest route is an online editor. <Link href="https://www.useoctree.com">Octree</Link>{' '}
-            is free, runs in the browser, compiles your document on every save and shows the PDF
-            beside the source. You can also ask its AI assistant to write or fix LaTeX for you,
-            which is a good way to learn a command you do not know yet. Overleaf is the other
-            well-known online option.
+            Work through these in order. Each step is a short guide with examples that compile
+            as written; by step 10 you can write a full paper with citations, and the rest add polish.
+          </p>
+          <ol>
+            <li><a href="#your-first-document">Your first document</a> (below) &ndash; the document class, preamble and body</li>
+            <li><Link href="/learn/special-characters">Special characters</Link> &ndash; escaping <code>&amp; % $ # _</code> so they print</li>
+            <li><Link href="/learn/bold-italics-underline">Bold, italics and underline</Link> &ndash; <code>\textbf</code>, <code>\emph</code> and friends</li>
+            <li><Link href="/learn/sections">Sections and headings</Link>, then the <Link href="/learn/table-of-contents">table of contents</Link></li>
+            <li><Link href="/learn/lists">Lists</Link> &ndash; itemize, enumerate and description</li>
+            <li><Link href="/learn/mathematical-expressions">Mathematical expressions</Link> &ndash; inline and display math, fractions, roots</li>
+            <li><Link href="/learn/subscripts-superscripts">Subscripts and superscripts</Link> and <Link href="/learn/greek-letters-math-symbols">Greek letters</Link></li>
+            <li><Link href="/learn/tables">Tables</Link> &ndash; tabular and booktabs</li>
+            <li><Link href="/learn/equation-numbering">Equation numbering and cross-references</Link> &ndash; <code>\label</code>, <code>\ref</code>, <code>\eqref</code></li>
+            <li><Link href="/learn/bibliography-examples">Bibliographies and citations</Link> &ndash; BibTeX and biblatex styles</li>
+            <li><Link href="/learn/page-size-margins">Page size and margins</Link> and <Link href="/learn/hyperlinks">hyperlinks</Link></li>
+            <li><Link href="/learn/tikz">TikZ diagrams</Link> and <Link href="/learn/pgfplots">pgfplots charts</Link></li>
+          </ol>
+
+          {/* ── What you need ── */}
+          <h2>What You Need</h2>
+          <p>
+            To write LaTeX you need an editor and a TeX distribution that compiles the source to
+            PDF. There are two ways to get them:
+          </p>
+          <div className="overflow-x-auto">
+            <table>
+              <thead>
+                <tr>
+                  <th></th>
+                  <th>Online editor</th>
+                  <th>Local install (TeX Live / MiKTeX)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>Setup</td><td>None; open a browser</td><td>Download a few hundred MB (MiKTeX basic) to about 7 GB (full TeX Live), plus an editor</td></tr>
+                <tr><td>Packages</td><td>All installed already</td><td>TeX Live: all; MiKTeX: fetched on first use</td></tr>
+                <tr><td>Works offline</td><td>No</td><td>Yes</td></tr>
+                <tr><td>Collaboration</td><td>Share a link</td><td>Git or file sharing</td></tr>
+                <tr><td>Best for</td><td>Learning, coursework, papers with co-authors</td><td>Large theses, offline work, custom build setups</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p>
+            <strong>To start right now</strong>, use an online editor.{' '}
+            <Link href={APP_URL} target="_blank" rel="noopener noreferrer">Octree</Link> is free,
+            runs in the browser, compiles your document on every save and shows the PDF beside
+            the source. Its AI assistant can write or fix LaTeX for you, which is a good way to
+            learn a command you do not know yet. Overleaf is the other well-known online option.
           </p>
           <p>
-            For local, offline work install a TeX distribution and an editor:
+            <strong>For local, offline work</strong> install a TeX distribution and an editor:
           </p>
           <ul>
             <li><strong>TeX Live</strong> (Windows, Linux; on macOS as <strong>MacTeX</strong>) &ndash; the complete distribution, several gigabytes with every package. Install once a year.</li>
@@ -144,7 +226,7 @@ export default async function LearnLatexPage() {
           </p>
 
           {/* ── First document ── */}
-          <h2>Your First Document</h2>
+          <h2 id="your-first-document">Your First Document</h2>
           <p>
             Paste this into a new file called <code>main.tex</code> and compile it. It is a
             complete, valid document:
@@ -239,6 +321,7 @@ And a displayed equation:
 
 A long dash---like this---and an en dash for ranges: 1990--2000.
 Quotes use \`\`two backticks and two apostrophes''.`}</code></pre>
+          <div className="overflow-x-auto">
           <table>
             <thead>
               <tr>
@@ -254,6 +337,7 @@ Quotes use \`\`two backticks and two apostrophes''.`}</code></pre>
               <tr><td><code>\texttt&#123;monospace&#125;</code></td><td><code>monospace</code></td></tr>
             </tbody>
           </table>
+          </div>
           <p>
             Prefer <code>\emph</code> over <code>\textit</code> for emphasis, and use underlining
             sparingly; it is a typewriter habit. The{' '}
@@ -466,6 +550,7 @@ See Figure~\\ref{fig:plot}.`}</code></pre>
           <pre><code>{`! Undefined control sequence.
 l.42 \\textbol
              {important}`}</code></pre>
+          <div className="overflow-x-auto">
           <table>
             <thead>
               <tr>
@@ -522,6 +607,7 @@ l.42 \\textbol
               </tr>
             </tbody>
           </table>
+          </div>
           <p>
             Two habits prevent most errors: compile often, so a mistake is in the few lines you
             just wrote, and comment out half the document with <code>\iffalse ... \fi</code>{' '}
@@ -549,13 +635,23 @@ l.42 \\textbol
             <li><Link href="/learn/comments">Comments</Link> – %, block comments and todo notes</li>
             <li><Link href="/learn/colors">Colors</Link> – xcolor for text, boxes and tables</li>
             <li><Link href="/learn/glossaries-acronyms">Glossaries and Acronyms</Link> – The glossaries package and automatic acronym expansion</li>
+            <li><Link href="/learn/table-of-contents">Table of Contents</Link> – \tableofcontents, depth, links and styling</li>
+            <li><Link href="/learn/framebox">Framebox and Boxed Text</Link> – \fbox, \framebox, boxed equations and colored frames</li>
           </ul>
           <h3>Page layout</h3>
           <ul>
             <li><Link href="/learn/page-size-margins">Page Size &amp; Margins</Link> – The geometry package and landscape pages</li>
             <li><Link href="/learn/page-numbering">Page Numbering</Link> – Roman and arabic numbers, fancyhdr and &ldquo;Page X of Y&rdquo;</li>
             <li><Link href="/learn/horizontal-lines">Horizontal Lines</Link> – \hrule, \rule and table rules</li>
+          </ul>
+          <h3>Citations and academic formats</h3>
+          <ul>
+            <li><Link href="/learn/bibliography-examples">Bibliography Examples</Link> – APA, MLA, Chicago and IEEE with the LaTeX that produces them</li>
             <li><Link href="/learn/apa-title-page">APA Title Page</Link> – APA 7 title pages and the apa7 class</li>
+            <li><Link href="/learn/apa-headings">APA Headings</Link> – The five APA 7 heading levels</li>
+            <li><Link href="/learn/mla-in-text-citation">MLA In-Text Citation</Link> – Examples for every case</li>
+            <li><Link href="/learn/mla-book-citation">MLA Book Citation</Link> – Citing a book in MLA 9</li>
+            <li><Link href="/learn/ama-citation-format">AMA Citation Format</Link> – In-text citations and reference examples</li>
           </ul>
           <h3>Mathematics</h3>
           <ul>
@@ -570,6 +666,10 @@ l.42 \\textbol
             <li><Link href="/learn/greek-letters-math-symbols">Greek Letters &amp; Math Symbols</Link> – Complete symbol reference</li>
             <li><Link href="/learn/greek-alphabet">The Greek Alphabet</Link> – All 24 letters with their LaTeX commands</li>
             <li><Link href="/learn/theorems-proofs">Theorems, Lemmas &amp; Proofs</Link> – amsthm and the proof environment</li>
+            <li><Link href="/learn/blackboard-bold">Blackboard Bold</Link> – \mathbb&#123;R&#125; and number sets</li>
+            <li><Link href="/learn/approximately-equal">Approximately Equal (≈)</Link> – \approx and its relatives</li>
+            <li><Link href="/learn/derivative-rules">Derivative Rules</Link> – Power, product, quotient and chain rules with LaTeX</li>
+            <li><Link href="/learn/laplace-transform-table">Laplace Transform Table</Link> – Common pairs and properties with LaTeX source</li>
           </ul>
           <h3>Tables, graphics and science</h3>
           <ul>
@@ -577,17 +677,19 @@ l.42 \\textbol
             <li><Link href="/learn/tikz">TikZ</Link> – Diagrams and drawings in LaTeX</li>
             <li><Link href="/learn/pgfplots">PGFPlots</Link> – Publication-quality plots from data</li>
             <li><Link href="/learn/molecular-orbital-diagrams">Molecular Orbital Diagrams</Link> – MO diagrams with TikZ and the modiagram package</li>
+            <li><Link href="/learn/beamer-footnote">Footnotes in Beamer</Link> – Footnotes on slides</li>
           </ul>
 
           {/* ── FAQ ── */}
           <h2>Frequently Asked Questions</h2>
-          <h3>Is LaTeX hard to learn?</h3>
+          <h3>How long does it take to learn LaTeX?</h3>
           <p>
             The basics take an afternoon: a document is plain text with a handful of commands
             such as <code>\section</code>, <code>\textbf</code> and{' '}
-            <code>\begin&#123;itemize&#125;</code>. What takes longer is learning the package for
-            each new need (tables, figures, citations), and this tutorial links to a guide for
-            each one. You do not need to know everything to write a complete paper.
+            <code>\begin&#123;itemize&#125;</code>. Most people write a complete paper within a
+            week by following the learning path on this page and looking up each new need
+            (tables, figures, citations) when it comes up. You do not need to know everything to
+            start.
           </p>
           <h3>Do I need to install anything to use LaTeX?</h3>
           <p>
@@ -653,7 +755,7 @@ l.42 \\textbol
               explains any error in the log in plain English.
             </p>
             <Link
-              href="https://app.useoctree.com"
+              href={APP_URL}
               target="_blank"
               rel="noopener noreferrer"
               className={buttonVariants()}

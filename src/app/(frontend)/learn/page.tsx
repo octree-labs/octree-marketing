@@ -19,8 +19,8 @@ const breadcrumbSchema = generateBreadcrumbSchema(breadcrumbs)
 const learnTopics = [
   {
     slug: 'latex',
-    title: 'LaTeX Tutorial for Beginners',
-    description: 'Your first LaTeX document in 15 minutes: zero-install setup, the preamble, formatting, sections, math, tables, figures, citations and reading the error log.',
+    title: 'Learn LaTeX: Tutorial for Beginners',
+    description: 'Your first LaTeX document in minutes, a step-by-step learning path, what to install (or not), the preamble, math, tables, figures, citations and reading the error log.',
     image: '/logos/LaTeX_logo.svg.png',
     color: 'from-blue-500/10 to-blue-600/5',
   },
@@ -33,8 +33,8 @@ const learnTopics = [
   },
   {
     slug: 'pgfplots',
-    title: 'Learn PGFPlots',
-    description: 'Generate publication-quality plots and charts for scientific papers. Perfect for data visualization in academic documents.',
+    title: 'pgfplots in LaTeX',
+    description: 'Plot data and functions in LaTeX with pgfplots: line plots from coordinates and CSV files, function graphs, bar charts, legends and common errors.',
     image: '/logos/PGF.png',
     color: 'from-green-500/10 to-green-600/5',
   },
@@ -64,8 +64,8 @@ const learnTopics = [
   },
   {
     slug: 'greek-letters-math-symbols',
-    title: 'Greek Letters & Math Symbols',
-    description: 'Complete reference for Greek letters and math symbols in LaTeX. Find every symbol with copy-paste commands.',
+    title: 'Greek Letters in LaTeX',
+    description: 'All 24 Greek letters in LaTeX with uppercase, variants and Unicode, \\epsilon vs \\varepsilon, lambda, bold and upright Greek, plus every common math symbol.',
     color: 'from-indigo-500/10 to-indigo-600/5',
   },
   {
