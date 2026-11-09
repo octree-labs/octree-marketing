@@ -368,7 +368,7 @@ $f\\colon \\R^n \\to \\R$, \\quad $\\E[X] = \\sum_{k \\in \\N} k\\,\\Prob(X = k)
                 <td><code>dsfont</code></td>
                 <td><code>\mathds</code></td>
                 <td>Yes</td>
-                <td>No</td>
+                <td>Only <code>h</code> and <code>k</code></td>
                 <td>Only 1</td>
                 <td>Made for 𝟙. Type 1 fonts; <code>[sans]</code> option for a sans-serif design.</td>
               </tr>
@@ -403,7 +403,8 @@ $\\mathds{1}_A(x)$, \\quad $\\mathds{R}$, $\\mathds{N}$, \\quad compare $\\mathb
             keep <code>\mathbb</code> for sets and use <code>\mathds</code> only for the 1. In our
             compile, <code>\mathds&#123;r&#125;</code>, <code>\mathds&#123;0&#125;</code> and{' '}
             <code>\mathds&#123;2&#125;</code> each printed nothing and left a &quot;Missing
-            character&quot; warning in the log: the font has no such glyphs.
+            character&quot; warning in the log: the font has no such glyphs. Its only lowercase letters are{' '}
+            <code>\mathds&#123;h&#125;</code> and <code>\mathds&#123;k&#125;</code>.
           </p>
 
           <h3>bbm: upper and lowercase</h3>

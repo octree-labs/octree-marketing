@@ -560,7 +560,7 @@ The number sits in the bottom right corner of every page.
 % would get "Chapter 0." in the running head; this version checks it
 \\makeatletter
 \\renewcommand{\\chaptermark}[1]{%
-  \\markboth{\\if@mainmatter\\chaptername\\ \\thechapter.\\ \\fi #1}{}}
+  \\markboth{\\if@mainmatter\\@chapapp\\ \\thechapter.\\ \\fi #1}{}}
 \\makeatother
 \\fancyhf{}
 \\fancyhead[LE]{\\nouppercase{\\leftmark}}     % chapter title on even pages
