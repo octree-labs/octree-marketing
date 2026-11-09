@@ -942,11 +942,6 @@ chapters 14 and 15 for the line-breaking parameters discussed in Section 3.
                 <td>bibtex was run instead of biber, or no backend ran at all.</td>
                 <td>Run <code>biber main</code> (no extension) and pdflatex twice, or use <code>latexmk -pdf</code>, which picks the backend from the document.</td>
               </tr>
-              <tr>
-                <td><code>! Undefined control sequence.</code> at <code>\autocite</code></td>
-                <td>Chicago loaded as <code>style=chicago-notes</code> rather than through the wrapper package.</td>
-                <td><code>\usepackage[notes]&#123;biblatex-chicago&#125;</code>, or cite with <code>\footcite</code>.</td>
-              </tr>
             </tbody>
           </table>
           </div>
