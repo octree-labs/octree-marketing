@@ -1,6 +1,6 @@
 import type { Metadata } from 'next/types'
 
-import { learnMetadata } from '@/utilities/learnMetadata'
+import { learnMetadata, type FaqItem } from '@/utilities/learnMetadata'
 import Link from 'next/link'
 import { buttonVariants } from '@/components/ui/button'
 import React from 'react'
@@ -14,19 +14,86 @@ import { LearnSchema } from '@/components/Learn/schema'
 export const dynamic = 'force-static'
 export const revalidate = 3600
 
-const breadcrumbs = getLearnBreadcrumbs('Greek Letters & Math Symbols', 'greek-letters-math-symbols')
+const breadcrumbs = getLearnBreadcrumbs('Greek Letters in LaTeX', 'greek-letters-math-symbols')
 const breadcrumbSchema = generateBreadcrumbSchema(breadcrumbs)
 
 const page = {
   slug: 'greek-letters-math-symbols',
-  title: 'Greek Letters and Math Symbols in LaTeX – Complete Reference 2026',
-  seoTitle: 'Greek Letters & Math Symbols in LaTeX – Reference',
-  description: 'Complete reference for Greek letters and math symbols in LaTeX. Find every symbol: alpha, beta, gamma, delta, infinity, arrows, operators, relations, and more with copy-paste LaTeX commands.',
-  keywords: 'latex greek letters, latex alpha, latex beta, latex gamma, latex delta, latex symbols, latex math symbols, latex infinity, latex arrow, latex operators, latex relations, latex degree symbol, latex pi, latex theta, latex sigma, latex omega, latex lambda, latex epsilon, latex phi, latex psi, latex mu, latex nabla, latex partial, latex forall, latex exists',
+  title: 'Greek Letters in LaTeX: Full Table, Epsilon, Lambda and Math Symbols',
+  seoTitle: 'Greek Letters in LaTeX: Epsilon, Lambda, Full Table',
+  description: 'All 24 Greek letters in LaTeX: uppercase, variants like \\varepsilon, epsilon vs varepsilon, lambda, bold and upright Greek, and common math symbols.',
+  keywords: 'latex greek letters, greek letters in latex, latex epsilon, epsilon in latex, latex varepsilon, epsilon vs varepsilon, lambda latex, latex lambda, latex alpha, latex beta, latex gamma, latex delta, latex theta, latex mu, latex pi, latex sigma, latex phi, latex varphi, latex omega, latex kappa, latex rho, latex upright greek, upgreek, latex upmu, latex bold greek, boldsymbol, latex symbols, latex math symbols, latex infinity, latex arrow, latex operators, latex relations',
 }
 
 /** Last content update, used for dateModified in the article schema. */
-const LAST_UPDATED = '2026-10-17'
+const LAST_UPDATED = '2026-11-09'
+
+const faq: FaqItem[] = [
+  {
+    question: 'How do you write epsilon in LaTeX?',
+    answer:
+      'In math mode, $\\epsilon$ gives the lunate epsilon ϵ and $\\varepsilon$ gives the curly epsilon ε that most textbooks use. Both are built in, no package needed. Capital epsilon has no command because it looks like a Latin E, so write E (or \\mathrm{E}).',
+  },
+  {
+    question: 'What is the difference between \\epsilon and \\varepsilon?',
+    answer:
+      'They are two shapes of the same letter. \\epsilon is the lunate form ϵ, which looks like the set membership sign; \\varepsilon is the open, curly form ε used in most analysis and physics texts for small quantities and permittivity. To get ε everywhere, add \\renewcommand{\\epsilon}{\\varepsilon} to the preamble.',
+  },
+  {
+    question: 'How do I write lambda in LaTeX?',
+    answer:
+      'Use $\\lambda$ for lowercase λ and $\\Lambda$ for uppercase Λ, both in math mode with no package. Typical uses are eigenvalues ($A\\mathbf{v} = \\lambda\\mathbf{v}$), wavelength ($c = \\lambda\\nu$) and the Poisson rate. For a bold lambda write $\\boldsymbol{\\lambda}$ with amsmath.',
+  },
+  {
+    question: 'Why is \\Alpha an undefined control sequence?',
+    answer:
+      'LaTeX only defines capital Greek letters that look different from Latin ones: \\Gamma, \\Delta, \\Theta, \\Lambda, \\Xi, \\Pi, \\Sigma, \\Upsilon, \\Phi, \\Psi and \\Omega. Capital alpha, beta, epsilon, zeta, eta, iota, kappa, mu, nu, omicron, rho, tau and chi are written with the Latin letters A, B, E, Z, H, I, K, M, N, O, P, T and X.',
+  },
+  {
+    question: 'Why do I get "Missing $ inserted" when I type \\alpha?',
+    answer:
+      'Greek letter commands only work in math mode. Typed in a normal sentence, \\alpha makes LaTeX insert a $ and stop. Write $\\alpha$ instead, or load the textgreek package and use \\textalpha for a Greek letter in running text.',
+  },
+]
+
+type GreekRow = {
+  name: string
+  glyphs: string
+  lower: string
+  upper: string
+  /** True when the uppercase is a plain Latin letter rather than a command. */
+  upperIsLatin?: boolean
+  variant?: string
+  unicode: string
+  use: string
+}
+
+const greekLetters: GreekRow[] = [
+  { name: 'Alpha', glyphs: 'α Α', lower: '\\alpha', upper: 'A', upperIsLatin: true, unicode: 'U+03B1 / U+0391', use: 'Angles, significance level' },
+  { name: 'Beta', glyphs: 'β Β', lower: '\\beta', upper: 'B', upperIsLatin: true, unicode: 'U+03B2 / U+0392', use: 'Coefficients, beta function' },
+  { name: 'Gamma', glyphs: 'γ Γ', lower: '\\gamma', upper: '\\Gamma', unicode: 'U+03B3 / U+0393', use: 'Gamma function, Lorentz factor' },
+  { name: 'Delta', glyphs: 'δ Δ', lower: '\\delta', upper: '\\Delta', unicode: 'U+03B4 / U+0394', use: 'Small change, Dirac delta' },
+  { name: 'Epsilon', glyphs: 'ϵ ε Ε', lower: '\\epsilon', upper: 'E', upperIsLatin: true, variant: '\\varepsilon', unicode: 'U+03F5, U+03B5 / U+0395', use: 'Small quantity, permittivity' },
+  { name: 'Zeta', glyphs: 'ζ Ζ', lower: '\\zeta', upper: 'Z', upperIsLatin: true, unicode: 'U+03B6 / U+0396', use: 'Riemann zeta, damping ratio' },
+  { name: 'Eta', glyphs: 'η Η', lower: '\\eta', upper: 'H', upperIsLatin: true, unicode: 'U+03B7 / U+0397', use: 'Efficiency, learning rate' },
+  { name: 'Theta', glyphs: 'θ ϑ Θ', lower: '\\theta', upper: '\\Theta', variant: '\\vartheta', unicode: 'U+03B8, U+03D1 / U+0398', use: 'Angles, parameters, big-Theta' },
+  { name: 'Iota', glyphs: 'ι Ι', lower: '\\iota', upper: 'I', upperIsLatin: true, unicode: 'U+03B9 / U+0399', use: 'Inclusion map' },
+  { name: 'Kappa', glyphs: 'κ ϰ Κ', lower: '\\kappa', upper: 'K', upperIsLatin: true, variant: '\\varkappa', unicode: 'U+03BA, U+03F0 / U+039A', use: 'Curvature, Cohen’s kappa' },
+  { name: 'Lambda', glyphs: 'λ Λ', lower: '\\lambda', upper: '\\Lambda', unicode: 'U+03BB / U+039B', use: 'Eigenvalue, wavelength, rate' },
+  { name: 'Mu', glyphs: 'μ Μ', lower: '\\mu', upper: 'M', upperIsLatin: true, unicode: 'U+03BC / U+039C', use: 'Mean, micro prefix' },
+  { name: 'Nu', glyphs: 'ν Ν', lower: '\\nu', upper: 'N', upperIsLatin: true, unicode: 'U+03BD / U+039D', use: 'Frequency, degrees of freedom' },
+  { name: 'Xi', glyphs: 'ξ Ξ', lower: '\\xi', upper: '\\Xi', unicode: 'U+03BE / U+039E', use: 'Random variable, coordinate' },
+  { name: 'Omicron', glyphs: 'ο Ο', lower: 'o', upper: 'O', upperIsLatin: true, unicode: 'U+03BF / U+039F', use: 'Rarely used (looks like o)' },
+  { name: 'Pi', glyphs: 'π ϖ Π', lower: '\\pi', upper: '\\Pi', variant: '\\varpi', unicode: 'U+03C0, U+03D6 / U+03A0', use: 'Circle constant, product' },
+  { name: 'Rho', glyphs: 'ρ ϱ Ρ', lower: '\\rho', upper: 'P', upperIsLatin: true, variant: '\\varrho', unicode: 'U+03C1, U+03F1 / U+03A1', use: 'Density, correlation' },
+  { name: 'Sigma', glyphs: 'σ ς Σ', lower: '\\sigma', upper: '\\Sigma', variant: '\\varsigma', unicode: 'U+03C3, U+03C2 / U+03A3', use: 'Standard deviation, sum' },
+  { name: 'Tau', glyphs: 'τ Τ', lower: '\\tau', upper: 'T', upperIsLatin: true, unicode: 'U+03C4 / U+03A4', use: 'Torque, time constant' },
+  { name: 'Upsilon', glyphs: 'υ Υ', lower: '\\upsilon', upper: '\\Upsilon', unicode: 'U+03C5 / U+03A5', use: 'Upsilon meson' },
+  { name: 'Phi', glyphs: 'ϕ φ Φ', lower: '\\phi', upper: '\\Phi', variant: '\\varphi', unicode: 'U+03D5, U+03C6 / U+03A6', use: 'Golden ratio, phase, normal CDF' },
+  { name: 'Chi', glyphs: 'χ Χ', lower: '\\chi', upper: 'X', upperIsLatin: true, unicode: 'U+03C7 / U+03A7', use: 'Chi-squared, characteristic function' },
+  { name: 'Psi', glyphs: 'ψ Ψ', lower: '\\psi', upper: '\\Psi', unicode: 'U+03C8 / U+03A8', use: 'Wave function' },
+  { name: 'Omega', glyphs: 'ω Ω', lower: '\\omega', upper: '\\Omega', unicode: 'U+03C9 / U+03A9', use: 'Angular frequency, ohm' },
+]
 
 export default async function GreekLettersMathSymbolsPage() {
   return (
@@ -40,6 +107,7 @@ export default async function GreekLettersMathSymbolsPage() {
         title={page.title}
         description={page.description}
         dateModified={LAST_UPDATED}
+        faq={faq}
       />
       <div className="container">
         <div className="mb-8 max-w-4xl mx-auto">
@@ -52,120 +120,296 @@ export default async function GreekLettersMathSymbolsPage() {
         </div>
 
         <article className="prose prose-lg dark:prose-invert max-w-4xl mx-auto">
-          <h1>Greek Letters and Math Symbols in LaTeX</h1>
+          <h1>Greek Letters in LaTeX: Full Table, Epsilon, Lambda and Math Symbols</h1>
+
+          <div className="not-prose my-6 p-6 rounded-lg border bg-muted/40">
+            <p className="text-sm font-semibold uppercase tracking-wide text-muted-foreground mb-3">Quick answer</p>
+            <ul className="space-y-2 text-base list-disc pl-5">
+              <li>
+                <strong>Greek letters are math-mode commands:</strong> a backslash plus the
+                name, <code>$\alpha$</code>, <code>$\beta$</code>, <code>$\lambda$</code>. No
+                package needed.
+              </li>
+              <li>
+                <strong>Uppercase:</strong> capitalise the name, <code>$\Delta$</code>,{' '}
+                <code>$\Lambda$</code>, <code>$\Omega$</code>. Capitals that look Latin have no
+                command: write <code>A</code>, <code>B</code>, <code>E</code>.
+              </li>
+              <li>
+                <strong>Epsilon:</strong> <code>$\epsilon$</code> gives ϵ,{' '}
+                <code>$\varepsilon$</code> gives the curly ε most books use.
+              </li>
+              <li>
+                <strong>Bold:</strong> <code>{`$\\boldsymbol{\\alpha}$`}</code> (amsmath).{' '}
+                <strong>Upright:</strong> <code>$\upmu$</code> with the <code>upgreek</code>{' '}
+                package.
+              </li>
+              <li>
+                <strong>In plain text</strong> a bare <code>\alpha</code> gives{' '}
+                <em>Missing $ inserted</em>; wrap it in <code>$...$</code>.
+              </li>
+            </ul>
+          </div>
           <p className="lead">
-            Greek letters and math symbols are essential for scientific and mathematical writing.
-            LaTeX provides commands for every Greek letter, operator, relation, arrow, and
-            miscellaneous symbol you will ever need. This complete reference covers them all
-            with copy-paste commands you can use immediately.
+            Every Greek letter in LaTeX is a math-mode command made of a backslash and the
+            letter&apos;s English name: <code>\alpha</code>, <code>\epsilon</code>,{' '}
+            <code>\lambda</code>, <code>\omega</code>. This page has the full table of all 24
+            letters with their uppercase forms, variants and Unicode code points, the difference
+            between <code>\epsilon</code> and <code>\varepsilon</code>, lambda, upright and bold
+            Greek, the errors you will meet, and a reference for the other math symbols:
+            operators, relations, arrows, dots and accents.
           </p>
 
-          {/* ───────────────────────────── Lowercase Greek Letters ───────────────────────────── */}
-          <h2>Lowercase Greek Letters</h2>
+          {/* ───────────────────────────── All 24 Greek Letters ───────────────────────────── */}
+          <h2>All 24 Greek Letters in LaTeX</h2>
           <p>
-            Lowercase Greek letters are used extensively in mathematics, physics, statistics,
-            and engineering. Each letter is produced by a backslash followed by the letter&apos;s
-            English name. All Greek letter commands must be used inside math mode
-            (between <code>$...$</code> or <code>\[...\]</code>).
+            The table lists the letters in alphabetical order. Use the commands inside math mode,{' '}
+            <code>$...$</code> in a sentence or <code>\[...\]</code> on a line of their own.
+            Where the uppercase column shows a plain letter, LaTeX has no separate command
+            because the capital looks the same as the Latin one. <code>\varkappa</code> needs{' '}
+            <code>amssymb</code>; everything else works in a bare <code>article</code>.
           </p>
-          <table>
-            <thead>
-              <tr>
-                <th>Command</th>
-                <th>Letter</th>
-                <th>Common Usage</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr><td><code>\alpha</code></td><td>&#945;</td><td>Angles, coefficients, significance level</td></tr>
-              <tr><td><code>\beta</code></td><td>&#946;</td><td>Angles, coefficients, beta function</td></tr>
-              <tr><td><code>\gamma</code></td><td>&#947;</td><td>Euler-Mascheroni constant, photon</td></tr>
-              <tr><td><code>\delta</code></td><td>&#948;</td><td>Small change, Dirac delta, Kronecker delta</td></tr>
-              <tr><td><code>\epsilon</code></td><td>&#1013;</td><td>Small positive quantity, set membership</td></tr>
-              <tr><td><code>\varepsilon</code></td><td>&#949;</td><td>Preferred epsilon variant in analysis</td></tr>
-              <tr><td><code>\zeta</code></td><td>&#950;</td><td>Riemann zeta function, damping ratio</td></tr>
-              <tr><td><code>\eta</code></td><td>&#951;</td><td>Efficiency, metric tensor component</td></tr>
-              <tr><td><code>\theta</code></td><td>&#952;</td><td>Angles, parameter estimation</td></tr>
-              <tr><td><code>\vartheta</code></td><td>&#977;</td><td>Script-style theta variant</td></tr>
-              <tr><td><code>\iota</code></td><td>&#953;</td><td>Inclusion map, index variable</td></tr>
-              <tr><td><code>\kappa</code></td><td>&#954;</td><td>Curvature, condition number</td></tr>
-              <tr><td><code>\lambda</code></td><td>&#955;</td><td>Eigenvalue, wavelength, rate parameter</td></tr>
-              <tr><td><code>\mu</code></td><td>&#956;</td><td>Mean, micro prefix, measure</td></tr>
-              <tr><td><code>\nu</code></td><td>&#957;</td><td>Frequency, degrees of freedom</td></tr>
-              <tr><td><code>\xi</code></td><td>&#958;</td><td>Random variable, coordinate</td></tr>
-              <tr><td><code>\pi</code></td><td>&#960;</td><td>Circle constant 3.14159...</td></tr>
-              <tr><td><code>\varpi</code></td><td>&#982;</td><td>Variant pi (pomega)</td></tr>
-              <tr><td><code>\rho</code></td><td>&#961;</td><td>Density, correlation coefficient</td></tr>
-              <tr><td><code>\varrho</code></td><td>&#1009;</td><td>Variant rho with curled tail</td></tr>
-              <tr><td><code>\sigma</code></td><td>&#963;</td><td>Standard deviation, stress</td></tr>
-              <tr><td><code>\varsigma</code></td><td>&#962;</td><td>Final sigma (used in Greek text)</td></tr>
-              <tr><td><code>\tau</code></td><td>&#964;</td><td>Torque, time constant, tau function</td></tr>
-              <tr><td><code>\upsilon</code></td><td>&#965;</td><td>Upsilon meson</td></tr>
-              <tr><td><code>\phi</code></td><td>&#981;</td><td>Golden ratio, phase angle</td></tr>
-              <tr><td><code>\varphi</code></td><td>&#966;</td><td>Preferred phi variant, Euler&apos;s totient</td></tr>
-              <tr><td><code>\chi</code></td><td>&#967;</td><td>Chi-squared test, susceptibility</td></tr>
-              <tr><td><code>\psi</code></td><td>&#968;</td><td>Wave function, angle</td></tr>
-              <tr><td><code>\omega</code></td><td>&#969;</td><td>Angular frequency, argument of periapsis</td></tr>
-            </tbody>
-          </table>
+          <div className="overflow-x-auto">
+            <table>
+              <thead>
+                <tr>
+                  <th>Letter</th>
+                  <th>Lowercase</th>
+                  <th>Uppercase</th>
+                  <th>Variant</th>
+                  <th>Unicode</th>
+                  <th>Typical use</th>
+                </tr>
+              </thead>
+              <tbody>
+                {greekLetters.map((row) => (
+                  <tr key={row.name}>
+                    <td>
+                      <span className="whitespace-nowrap">{row.glyphs}</span> {row.name}
+                    </td>
+                    <td><code>{row.lower}</code></td>
+                    <td>{row.upperIsLatin ? <>{row.upper} <span className="text-muted-foreground">(Latin)</span></> : <code>{row.upper}</code>}</td>
+                    <td>{row.variant ? <code>{row.variant}</code> : '–'}</td>
+                    <td className="whitespace-nowrap">{row.unicode}</td>
+                    <td>{row.use}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p>
+            Omicron is the odd one out: it has no command in either case because it is
+            indistinguishable from the letter o, so write <code>o</code> and <code>O</code>.
+            For the alphabet in order with pronunciation and meanings, see{' '}
+            <Link href="/learn/greek-alphabet">the Greek alphabet</Link>.
+          </p>
 
-          <p>Example usage:</p>
-          <pre><code>{`% Lowercase Greek letters in equations
+          <pre><code>{`% Greek letters in equations
 $\\alpha + \\beta = \\gamma$
 
-$\\epsilon > 0$
+$\\lambda_1, \\lambda_2, \\ldots, \\lambda_n$     % eigenvalues
 
-$\\lambda_1, \\lambda_2, \\ldots, \\lambda_n$    % eigenvalues
+$\\theta \\in [0, 2\\pi)$                         % angle range
 
-$\\theta \\in [0, 2\\pi)$                        % angle range
+$\\mu = \\frac{1}{n} \\sum_{i=1}^{n} x_i$        % sample mean
 
-$\\mu = \\frac{1}{n} \\sum_{i=1}^{n} x_i$       % sample mean`}</code></pre>
+$\\Gamma(n) = (n-1)!$                         % Gamma function
 
-          {/* ───────────────────────────── Uppercase Greek Letters ───────────────────────────── */}
-          <h2>Uppercase Greek Letters</h2>
+$\\Delta x = x_2 - x_1$                       % difference
+
+$\\Omega = \\{1, 2, 3, 4, 5, 6\\}$              % sample space
+
+$f(n) = \\Theta(n \\log n)$                     % algorithm complexity`}</code></pre>
+
+          {/* ───────────────────────────── Epsilon ───────────────────────────── */}
+          <h2>Epsilon in LaTeX (\epsilon vs \varepsilon)</h2>
           <p>
-            Not every Greek letter has a distinct uppercase form in LaTeX. Letters
-            like Alpha (A) and Beta (B) look identical to their Latin counterparts,
-            so LaTeX does not provide separate commands for them — simply type the
-            Latin letter instead. The letters below have unique uppercase forms.
+            LaTeX has two lowercase epsilons. <code>\epsilon</code> is the lunate form ϵ, a
+            closed half-moon with a bar; <code>\varepsilon</code> is the open, curly form ε that
+            you will see in most analysis and physics books. Both are built in.
           </p>
-          <table>
-            <thead>
-              <tr>
-                <th>Command</th>
-                <th>Letter</th>
-                <th>Common Usage</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr><td><code>\Gamma</code></td><td>&#915;</td><td>Gamma function, Christoffel symbols</td></tr>
-              <tr><td><code>\Delta</code></td><td>&#916;</td><td>Change/difference, Laplacian</td></tr>
-              <tr><td><code>\Theta</code></td><td>&#920;</td><td>Big-O family, Heaviside function</td></tr>
-              <tr><td><code>\Lambda</code></td><td>&#923;</td><td>Diagonal matrix, cosmological constant</td></tr>
-              <tr><td><code>\Xi</code></td><td>&#926;</td><td>Grand canonical partition function</td></tr>
-              <tr><td><code>\Pi</code></td><td>&#928;</td><td>Product operator, profit function</td></tr>
-              <tr><td><code>\Sigma</code></td><td>&#931;</td><td>Summation, covariance matrix</td></tr>
-              <tr><td><code>\Upsilon</code></td><td>&#933;</td><td>Upsilon particle</td></tr>
-              <tr><td><code>\Phi</code></td><td>&#934;</td><td>Cumulative normal distribution, electric potential</td></tr>
-              <tr><td><code>\Psi</code></td><td>&#936;</td><td>Wave function (quantum mechanics)</td></tr>
-              <tr><td><code>\Omega</code></td><td>&#937;</td><td>Ohm, sample space, solid angle</td></tr>
-            </tbody>
-          </table>
+          <pre><code>{`$\\epsilon$      % ϵ  lunate epsilon (U+03F5)
+$\\varepsilon$   % ε  curly epsilon  (U+03B5)
 
-          <p>Example usage:</p>
-          <pre><code>{`% Uppercase Greek letters
-$\\Gamma(n) = (n-1)!$                     % Gamma function
+% Analysis: the epsilon-delta definition
+For every $\\varepsilon > 0$ there is a $\\delta > 0$ such that
+$|x - a| < \\delta$ implies $|f(x) - L| < \\varepsilon$.
 
-$\\Delta x = x_2 - x_1$                   % difference
+% Physics: vacuum permittivity
+$\\varepsilon_0 \\approx 8.854 \\times 10^{-12}\\,\\mathrm{F/m}$
 
-$\\Sigma = \\begin{pmatrix}
-  \\sigma_1^2 & \\rho\\sigma_1\\sigma_2 \\\\
-  \\rho\\sigma_1\\sigma_2 & \\sigma_2^2
-\\end{pmatrix}$                            % covariance matrix
+% Capital epsilon is a Latin E
+$\\mathrm{E}$
 
-$\\Omega = \\{1, 2, 3, 4, 5, 6\\}$          % sample space
+% Set membership is \\in, not an epsilon
+$x \\in A$`}</code></pre>
+          <p>
+            Which one to use is a matter of style, but be consistent. Most authors prefer{' '}
+            <code>\varepsilon</code> because <code>\epsilon</code> is easy to confuse with the
+            membership sign <code>\in</code> (∈). To switch a whole document without editing
+            every formula, redefine the command once in the preamble:
+          </p>
+          <pre><code>{`\\documentclass{article}
+\\usepackage{amsmath}
+\\renewcommand{\\epsilon}{\\varepsilon}  % every \\epsilon now prints ε
 
-$f(n) = \\Theta(n \\log n)$                 % algorithm complexity`}</code></pre>
+\\begin{document}
+$\\epsilon > 0$
+\\end{document}`}</code></pre>
+          <p>
+            There is no <code>\Epsilon</code>; capital epsilon is written <code>E</code>. More on
+            the symbol itself, outside LaTeX, is in{' '}
+            <Link href="https://www.useoctree.com/blog/epsilon-symbol-meaning-uses-how-to-type">the epsilon symbol: meaning and how to type it</Link>.
+          </p>
+
+          {/* ───────────────────────────── Lambda ───────────────────────────── */}
+          <h2>Lambda in LaTeX</h2>
+          <p>
+            Lowercase lambda is <code>\lambda</code> (λ) and uppercase is <code>\Lambda</code>{' '}
+            (Λ). Both work in math mode with no package. Lambda is the standard letter for
+            eigenvalues, wavelength, rates and the lambda calculus:
+          </p>
+          <pre><code>{`$A\\mathbf{v} = \\lambda \\mathbf{v}$            % eigenvalue equation
+$\\det(A - \\lambda I) = 0$                    % characteristic equation
+$\\lambda_1, \\lambda_2, \\ldots, \\lambda_n$     % eigenvalues
+$\\lambda_{\\max}$                             % largest eigenvalue
+$c = \\lambda \\nu$                            % wavelength and frequency
+$P(X = k) = \\frac{\\lambda^k e^{-\\lambda}}{k!}$ % Poisson distribution
+$\\Lambda = \\operatorname{diag}(\\lambda_1, \\ldots, \\lambda_n)$
+$(\\lambda x.\\, x + 1)\\, 2$                   % lambda calculus
+$\\boldsymbol{\\lambda}$                       % bold lambda (amsmath)
+$\\varLambda$                                 % italic capital lambda (amsmath)`}</code></pre>
+          <p>
+            Note the thin space <code>\,</code> after the dot in lambda-calculus terms; without
+            it the body crowds the binder. For the history and other meanings of the letter, see{' '}
+            <Link href="https://www.useoctree.com/blog/lambda-symbol-meaning-uses-how-to-type">the lambda symbol: meaning and uses</Link>.
+          </p>
+
+          {/* ───────────────────────────── Variants ───────────────────────────── */}
+          <h2>Variant Greek Letters</h2>
+          <p>
+            Six lowercase letters have a second shape, selected with a <code>\var</code>{' '}
+            prefix. Both forms are correct Greek; fields simply settle on one.
+          </p>
+          <div className="overflow-x-auto">
+            <table>
+              <thead>
+                <tr>
+                  <th>Standard</th>
+                  <th>Variant</th>
+                  <th>Where the variant is common</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td><code>\epsilon</code> ϵ</td><td><code>\varepsilon</code> ε</td><td>Analysis, permittivity <code>\varepsilon_0</code></td></tr>
+                <tr><td><code>\theta</code> θ</td><td><code>\vartheta</code> ϑ</td><td>Some physics and astronomy texts</td></tr>
+                <tr><td><code>\pi</code> π</td><td><code>\varpi</code> ϖ</td><td>Longitude of periapsis, rare elsewhere</td></tr>
+                <tr><td><code>\rho</code> ρ</td><td><code>\varrho</code> ϱ</td><td>Density when ρ is already taken</td></tr>
+                <tr><td><code>\sigma</code> σ</td><td><code>\varsigma</code> ς</td><td>Final sigma; rare in math</td></tr>
+                <tr><td><code>\phi</code> ϕ</td><td><code>\varphi</code> φ</td><td>Euler&apos;s totient, angles, potentials</td></tr>
+                <tr><td><code>\kappa</code> κ</td><td><code>\varkappa</code> ϰ</td><td>Needs <code>amssymb</code></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p>
+            amsmath also defines italic capitals, <code>\varGamma</code>,{' '}
+            <code>\varDelta</code> up to <code>\varOmega</code>, for when an uppercase Greek
+            letter is a variable rather than an operator.
+          </p>
+          <pre><code>{`\\usepackage{amsmath, amssymb}
+
+$\\epsilon\\ \\varepsilon \\quad \\theta\\ \\vartheta \\quad \\pi\\ \\varpi \\quad
+ \\rho\\ \\varrho \\quad \\sigma\\ \\varsigma \\quad \\phi\\ \\varphi \\quad \\kappa\\ \\varkappa$
+
+$\\Gamma\\ \\varGamma \\quad \\Omega\\ \\varOmega$`}</code></pre>
+
+          {/* ───────────────────────────── Upright ───────────────────────────── */}
+          <h2>Upright Greek Letters (upgreek and \upmu)</h2>
+          <p>
+            Lowercase Greek letters are italic in math mode. ISO style asks for upright letters
+            when a symbol is a constant or a unit prefix, such as μ in μm or π as the number. The{' '}
+            <code>upgreek</code> package adds an <code>\up</code> version of every letter:
+          </p>
+          <pre><code>{`\\usepackage{upgreek}
+
+$\\upalpha\\ \\upbeta\\ \\upmu\\ \\uppi\\ \\Updelta$
+
+$5\\,\\upmu\\mathrm{m}$          % 5 μm with an upright micro sign`}</code></pre>
+          <p>
+            For units, <code>siunitx</code> handles the micro prefix for you:{' '}
+            <code>{`\\qty{5}{\\micro\\metre}`}</code>. Uppercase Greek is upright by default, so{' '}
+            <code>\Omega</code> is already the right shape for ohms.
+          </p>
+
+          {/* ───────────────────────────── Bold ───────────────────────────── */}
+          <h2>Bold Greek Letters (\boldsymbol)</h2>
+          <p>
+            <code>{`\\mathbf{\\alpha}`}</code> does <em>not</em> make α bold: <code>\mathbf</code>{' '}
+            only changes Latin letters and digits. Use <code>\boldsymbol</code> from amsmath, or{' '}
+            <code>\bm</code> from the <code>bm</code> package, which handles more cases:
+          </p>
+          <pre><code>{`\\usepackage{amsmath}   % \\boldsymbol
+\\usepackage{bm}        % \\bm (optional)
+
+$\\boldsymbol{\\alpha}$  $\\boldsymbol{\\Sigma}$  $\\bm{\\mu}$
+
+$\\boldsymbol{\\mu} = \\mathbb{E}[\\mathbf{x}]$   % mean vector`}</code></pre>
+          <p>
+            Bold Greek is the usual notation for vectors and matrices of parameters, such as{' '}
+            <code>{`\\boldsymbol{\\theta}`}</code> in statistics or{' '}
+            <code>{`\\boldsymbol{\\Sigma}`}</code> for a covariance matrix. The{' '}
+            <Link href="/learn/bold-italics-underline">bold and italics guide</Link> covers bold
+            math in general.
+          </p>
+
+          {/* ───────────────────────────── Text mode and errors ───────────────────────────── */}
+          <h2>Greek Letters in Text and Common Errors</h2>
+          <p>
+            To put a Greek letter in a sentence, the simplest way is inline math:{' '}
+            <code>the $\alpha$ particle</code>. For text-mode letters that follow the
+            surrounding font, load <code>textgreek</code>:
+          </p>
+          <pre><code>{`\\usepackage{textgreek}
+
+The \\textalpha{} particle and a 5\\,\\textmu m wire.`}</code></pre>
+          <div className="overflow-x-auto">
+            <table>
+              <thead>
+                <tr>
+                  <th>Message</th>
+                  <th>Cause</th>
+                  <th>Fix</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><em>Missing $ inserted</em></td>
+                  <td><code>\alpha</code> typed in normal text</td>
+                  <td>Write <code>$\alpha$</code>, or <code>\textalpha</code> with textgreek</td>
+                </tr>
+                <tr>
+                  <td><em>Undefined control sequence</em> at <code>\Alpha</code>, <code>\Epsilon</code>, <code>\omicron</code></td>
+                  <td>These capitals (and omicron) have no command</td>
+                  <td>Use the Latin letters <code>A</code>, <code>E</code>, <code>o</code></td>
+                </tr>
+                <tr>
+                  <td><em>Unicode character α (U+03B1) not set up for use with LaTeX</em></td>
+                  <td>A Greek character pasted into the source under pdfLaTeX</td>
+                  <td>Replace it with <code>$\alpha$</code>, or compile with XeLaTeX/LuaLaTeX and <code>unicode-math</code></td>
+                </tr>
+                <tr>
+                  <td>α is not bold inside <code>\mathbf</code></td>
+                  <td><code>\mathbf</code> ignores Greek</td>
+                  <td><code>{`\\boldsymbol{\\alpha}`}</code> or <code>{`\\bm{\\alpha}`}</code></td>
+                </tr>
+                <tr>
+                  <td><em>Undefined control sequence</em> at <code>\varkappa</code> or <code>\upmu</code></td>
+                  <td>Package not loaded</td>
+                  <td><code>amssymb</code> for <code>\varkappa</code>, <code>upgreek</code> for <code>\up...</code></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
 
           {/* ───────────────────────────── Binary Operators ───────────────────────────── */}
           <h2>Binary Operators</h2>
@@ -174,6 +418,7 @@ $f(n) = \\Theta(n \\log n)$                 % algorithm complexity`}</code></pre
             LaTeX automatically adds the correct spacing around these symbols when
             used in math mode.
           </p>
+          <div className="overflow-x-auto">
           <table>
             <thead>
               <tr>
@@ -194,6 +439,7 @@ $f(n) = \\Theta(n \\log n)$                 % algorithm complexity`}</code></pre
               <tr><td><code>\otimes</code></td><td>&#8855;</td><td>Tensor product, Kronecker product</td></tr>
             </tbody>
           </table>
+          </div>
 
           <p>Example usage:</p>
           <pre><code>{`% Binary operators
@@ -213,6 +459,7 @@ $V = V_1 \\oplus V_2$                           % direct sum`}</code></pre>
             Relation symbols express relationships between mathematical expressions.
             LaTeX spaces them differently from binary operators to preserve readability.
           </p>
+          <div className="overflow-x-auto">
           <table>
             <thead>
               <tr>
@@ -241,6 +488,7 @@ $V = V_1 \\oplus V_2$                           % direct sum`}</code></pre>
               <tr><td><code>\notin</code></td><td>&#8713;</td><td>Not an element of</td></tr>
             </tbody>
           </table>
+          </div>
 
           <p>Example usage:</p>
           <pre><code>{`% Relation symbols
@@ -268,6 +516,7 @@ $0 \\notin \\mathbb{N}$             % not a natural number (by convention)`}</co
             Arrow symbols are used for mappings, implications, limits, and
             many other mathematical constructs.
           </p>
+          <div className="overflow-x-auto">
           <table>
             <thead>
               <tr>
@@ -289,6 +538,7 @@ $0 \\notin \\mathbb{N}$             % not a natural number (by convention)`}</co
               <tr><td><code>\downarrow</code></td><td>&#8595;</td><td>Down arrow</td></tr>
             </tbody>
           </table>
+          </div>
 
           <p>Example usage:</p>
           <pre><code>{`% Arrows in practice
@@ -312,6 +562,7 @@ $\\lim_{n \\to \\infty} a_n = L$      % limit notation (\\to is alias for \\righ
             These symbols appear frequently in advanced mathematics, physics,
             and theoretical computer science.
           </p>
+          <div className="overflow-x-auto">
           <table>
             <thead>
               <tr>
@@ -333,6 +584,7 @@ $\\lim_{n \\to \\infty} a_n = L$      % limit notation (\\to is alias for \\righ
               <tr><td><code>\ell</code></td><td>&#8467;</td><td>Cursive l (often used for length)</td></tr>
             </tbody>
           </table>
+          </div>
 
           <p>Example usage:</p>
           <pre><code>{`% Miscellaneous symbols in context
@@ -356,6 +608,7 @@ $E = \\frac{p^2}{2m} + V(x)$               % using \\hbar: $E = \\hbar\\omega$`}
             LaTeX provides several dot commands for different positions and orientations.
             Choosing the right one improves the visual quality of your equations.
           </p>
+          <div className="overflow-x-auto">
           <table>
             <thead>
               <tr>
@@ -371,6 +624,7 @@ $E = \\frac{p^2}{2m} + V(x)$               % using \\hbar: $E = \\hbar\\omega$`}
               <tr><td><code>\ddots</code></td><td>&#8945;</td><td>Diagonal dots (matrices)</td></tr>
             </tbody>
           </table>
+          </div>
 
           <p>Example usage:</p>
           <pre><code>{`% Dots and ellipses
@@ -392,6 +646,7 @@ $\\begin{pmatrix}
             Math accents add marks above or below symbols to denote vectors, estimates,
             averages, derivatives, and other modifications.
           </p>
+          <div className="overflow-x-auto">
           <table>
             <thead>
               <tr>
@@ -411,6 +666,7 @@ $\\begin{pmatrix}
               <tr><td><code>\widetilde&#123;abc&#125;</code></td><td>abc&#771;</td><td>Wide tilde spanning multiple characters</td></tr>
             </tbody>
           </table>
+          </div>
 
           <p>Example usage:</p>
           <pre><code>{`% Accents in practice
@@ -498,6 +754,7 @@ $\\tilde{f}(\\xi) = \\int_{-\\infty}^{\\infty} f(x) e^{-2\\pi i \\xi x} \\, dx$ 
             hundreds of extra symbols. Load it with <code>\usepackage&#123;amssymb&#125;</code>.
             Here are some of the most useful additions:
           </p>
+          <div className="overflow-x-auto">
           <table>
             <thead>
               <tr>
@@ -525,6 +782,7 @@ $\\tilde{f}(\\xi) = \\int_{-\\infty}^{\\infty} f(x) e^{-2\\pi i \\xi x} \\, dx$ 
               <tr><td><code>\blacksquare</code></td><td>&#9632;</td><td>Filled QED square</td></tr>
             </tbody>
           </table>
+          </div>
 
           <p>Example with number sets:</p>
           <pre><code>{`\\usepackage{amssymb}
@@ -545,6 +803,7 @@ $\\nexists \\, x \\in \\mathbb{R} : x^2 < 0$`}</code></pre>
             The most commonly searched LaTeX symbols in one place. Copy and paste
             the command directly into your document.
           </p>
+          <div className="overflow-x-auto">
           <table>
             <thead>
               <tr>
@@ -588,6 +847,49 @@ $\\nexists \\, x \\in \\mathbb{R} : x^2 < 0$`}</code></pre>
               <tr><td>Real numbers</td><td><code>\mathbb&#123;R&#125;</code></td><td>&#8477;</td></tr>
             </tbody>
           </table>
+          </div>
+
+          {/* ───────────────────────────── FAQ ───────────────────────────── */}
+          <h2>Frequently Asked Questions</h2>
+          <h3>How do you write epsilon in LaTeX?</h3>
+          <p>
+            In math mode, <code>$\epsilon$</code> gives the lunate epsilon ϵ and{' '}
+            <code>$\varepsilon$</code> gives the curly epsilon ε that most textbooks use. Both
+            are built in, no package needed. Capital epsilon has no command because it looks
+            like a Latin E, so write <code>E</code> (or <code>{`\\mathrm{E}`}</code>).
+          </p>
+          <h3>What is the difference between \epsilon and \varepsilon?</h3>
+          <p>
+            They are two shapes of the same letter. <code>\epsilon</code> is the lunate form ϵ,
+            which looks like the set membership sign; <code>\varepsilon</code> is the open,
+            curly form ε used in most analysis and physics texts for small quantities and
+            permittivity. To get ε everywhere, add{' '}
+            <code>{`\\renewcommand{\\epsilon}{\\varepsilon}`}</code> to the preamble.
+          </p>
+          <h3>How do I write lambda in LaTeX?</h3>
+          <p>
+            Use <code>$\lambda$</code> for lowercase λ and <code>$\Lambda$</code> for uppercase
+            Λ, both in math mode with no package. Typical uses are eigenvalues (
+            <code>{`$A\\mathbf{v} = \\lambda\\mathbf{v}$`}</code>), wavelength (
+            <code>$c = \lambda\nu$</code>) and the Poisson rate. For a bold lambda write{' '}
+            <code>{`$\\boldsymbol{\\lambda}$`}</code> with amsmath.
+          </p>
+          <h3>Why is \Alpha an undefined control sequence?</h3>
+          <p>
+            LaTeX only defines capital Greek letters that look different from Latin ones:{' '}
+            <code>\Gamma</code>, <code>\Delta</code>, <code>\Theta</code>, <code>\Lambda</code>,{' '}
+            <code>\Xi</code>, <code>\Pi</code>, <code>\Sigma</code>, <code>\Upsilon</code>,{' '}
+            <code>\Phi</code>, <code>\Psi</code> and <code>\Omega</code>. Capital alpha, beta,
+            epsilon, zeta, eta, iota, kappa, mu, nu, omicron, rho, tau and chi are written with
+            the Latin letters A, B, E, Z, H, I, K, M, N, O, P, T and X.
+          </p>
+          <h3>Why do I get &ldquo;Missing $ inserted&rdquo; when I type \alpha?</h3>
+          <p>
+            Greek letter commands only work in math mode. Typed in a normal sentence,{' '}
+            <code>\alpha</code> makes LaTeX insert a <code>$</code> and stop. Write{' '}
+            <code>$\alpha$</code> instead, or load the <code>textgreek</code> package and use{' '}
+            <code>\textalpha</code> for a Greek letter in running text.
+          </p>
 
           {/* ───────────────────────────── Next Steps ───────────────────────────── */}
           <h2>Next Steps</h2>
@@ -597,6 +899,19 @@ $\\nexists \\, x \\in \\mathbb{R} : x^2 < 0$`}</code></pre>
             <li><Link href="/learn/mathematical-expressions">Mathematical Expressions in LaTeX</Link> – Learn how to write inline and display math, fractions, roots, and more</li>
             <li><Link href="/learn/subscripts-superscripts">Subscripts and Superscripts</Link> – Master sub/superscript positioning and nesting</li>
             <li><Link href="/learn/integrals-sums-limits">Integrals, Sums, and Limits</Link> – Typeset integral signs, summation notation, and limit expressions</li>
+            <li><Link href="/learn/blackboard-bold">Blackboard Bold</Link> – <code>{`\\mathbb{R}`}</code> and the other number sets</li>
+          </ul>
+
+          <h2>Individual Greek Letters</h2>
+          <ul>
+            <li><Link href="https://www.useoctree.com/blog/alpha-symbol-uses-meaning-complete-guide">Alpha (α)</Link> – Meaning and uses in math, statistics and finance</li>
+            <li><Link href="https://www.useoctree.com/blog/delta-symbols-math-science-complete-guide">Delta (δ, Δ)</Link> – Every delta symbol in math and science</li>
+            <li><Link href="https://www.useoctree.com/blog/epsilon-symbol-meaning-uses-how-to-type">Epsilon (ϵ, ε)</Link> – Meaning, uses and how to type it</li>
+            <li><Link href="https://www.useoctree.com/blog/kappa-symbol-greek-letters-latex">Kappa (κ)</Link> – Curvature, Cohen&apos;s kappa and the LaTeX commands</li>
+            <li><Link href="https://www.useoctree.com/blog/lambda-symbol-meaning-uses-how-to-type">Lambda (λ, Λ)</Link> – Eigenvalues, wavelength and how to type it</li>
+            <li><Link href="https://www.useoctree.com/blog/sigma-symbol-meaning-uses-how-to-type">Sigma (σ, Σ)</Link> – Standard deviation, summation and how to type it</li>
+            <li><Link href="https://www.useoctree.com/blog/phi-symbol-latex-greek-letters-physics">Phi (ϕ, φ, Φ)</Link> – Phi in LaTeX, physics and the golden ratio</li>
+            <li><Link href="https://www.useoctree.com/blog/omega-symbol-meaning-uses-math-science">Omega (ω, Ω)</Link> – Angular frequency, ohms and more</li>
           </ul>
 
           {/* ───────────────────────────── Free LaTeX Tools ───────────────────────────── */}
