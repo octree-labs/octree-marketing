@@ -1,7 +1,22 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { revalidatePath, revalidateTag } from 'next/cache'
 
+function isAuthorized(request: NextRequest): boolean {
+  const secret = process.env.CRON_SECRET
+  if (!secret) return false
+  return request.headers.get('authorization') === `Bearer ${secret}`
+}
+
 export async function POST(request: NextRequest) {
+  // Same bearer check as GET: without it anyone could purge the ISR cache
+  // (and make every page re-render against the database) at will.
+  if (!process.env.CRON_SECRET) {
+    return NextResponse.json({ error: 'Server not configured' }, { status: 500 })
+  }
+  if (!isAuthorized(request)) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  }
+
   try {
     const body = await request.json().catch(() => ({}))
     const { paths = [], tags = [] } = body
@@ -66,16 +81,11 @@ export async function POST(request: NextRequest) {
 
 // Also support GET for simple health check
 export async function GET(request: NextRequest) {
-  const authHeader = request.headers.get('authorization')
-  const secret = process.env.CRON_SECRET
-
-  if (!secret) {
+  if (!process.env.CRON_SECRET) {
     return NextResponse.json({ error: 'Server not configured' }, { status: 500 })
   }
 
-  const isAuthorized = authHeader === `Bearer ${secret}`
-
-  if (!isAuthorized) {
+  if (!isAuthorized(request)) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 

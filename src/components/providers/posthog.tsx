@@ -5,9 +5,10 @@ import { usePathname, useSearchParams } from 'next/navigation'
 import posthog from 'posthog-js'
 
 import { BEFORE_NAVIGATION, EVENTS, track } from '@/lib/analytics'
+import { POSTHOG_RELAY_PATH, resolveIngestHost, uiHostFor } from '@/lib/posthogRelay'
+import { isGoogleAppStackOverflow } from '@/utilities/isGoogleAppStackOverflow'
 
 const POSTHOG_KEY = process.env.NEXT_PUBLIC_POSTHOG_KEY
-const POSTHOG_HOST = process.env.NEXT_PUBLIC_POSTHOG_HOST || 'https://us.i.posthog.com'
 const APP_ORIGIN = 'https://app.useoctree.com'
 
 // Initialise once, synchronously, when this client module is first evaluated in
@@ -15,7 +16,10 @@ const APP_ORIGIN = 'https://app.useoctree.com'
 // lost. Without a key (local dev) this is a no-op and every `track()` call is too.
 if (typeof window !== 'undefined' && POSTHOG_KEY && !posthog.__loaded) {
   posthog.init(POSTHOG_KEY, {
-    api_host: POSTHOG_HOST,
+    // First-party relay on this site's own origin (src/lib/posthogRelay.js):
+    // posting to *.posthog.com directly is blocked by common ad blockers.
+    api_host: POSTHOG_RELAY_PATH,
+    ui_host: uiHostFor(resolveIngestHost(process.env.NEXT_PUBLIC_POSTHOG_HOST)),
     person_profiles: 'identified_only',
     // App Router navigations do not reload the page; PostHogPageView captures them.
     capture_pageview: false,
@@ -25,6 +29,17 @@ if (typeof window !== 'undefined' && POSTHOG_KEY && !posthog.__loaded) {
     persistence: 'localStorage+cookie',
     // The contact form collects emails: never record what is typed.
     session_recording: { maskAllInputs: true },
+    // The Google app on iOS injects a script that overflows its own stack on
+    // some pages; it is not our code, so keep it out of error tracking.
+    before_send: (event) => {
+      if (
+        event?.event === '$exception' &&
+        isGoogleAppStackOverflow(navigator.userAgent, event.properties?.$exception_list)
+      ) {
+        return null
+      }
+      return event
+    },
   })
 }
 

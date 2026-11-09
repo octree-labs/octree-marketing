@@ -1,3 +1,5 @@
+import { trailingSlashRedirect } from './src/lib/posthogRelay.js'
+
 const redirects = async () => {
   const internetExplorerRedirect = {
     destination: '/ie-incompatible.html',
@@ -31,11 +33,14 @@ const redirects = async () => {
 
   // The old Compile API page documented a raw compile host and an API key that
   // never existed; the public API and MCP server are documented on /developers.
+  // /docs/compile-api/ is first stripped by trailingSlashRedirect, then lands
+  // here: two hops, no loop.
   const retiredPages = [
     { source: '/docs/compile-api', destination: '/developers', permanent: true },
   ]
 
-  const redirects = [internetExplorerRedirect, ...retiredBlogPosts, ...retiredPages]
+  // trailingSlashRedirect first: see src/lib/posthogRelay.js.
+  const redirects = [trailingSlashRedirect, internetExplorerRedirect, ...retiredBlogPosts, ...retiredPages]
 
   return redirects
 }
