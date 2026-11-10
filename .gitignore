@@ -31,3 +31,6 @@ keywords_gap*.csv
 
 # typescript
 *.tsbuildinfo
+
+# Paradev personal overrides (never committed)
+.paradev/config.local.toml
