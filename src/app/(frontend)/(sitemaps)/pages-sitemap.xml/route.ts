@@ -3,6 +3,7 @@ import { getPayload } from 'payload'
 import config from '@payload-config'
 import { unstable_cache } from 'next/cache'
 import { getServerSideURL } from '@/utilities/getURL'
+import { latexErrors } from '@/data/latex-errors'
 
 const getPagesSitemap = unstable_cache(
   async () => {
@@ -294,6 +295,14 @@ const getPagesSitemap = unstable_cache(
         loc: `${SITE_URL}/learn/languages`,
         lastmod: dateFallback,
       },
+      {
+        loc: `${SITE_URL}/learn/errors`,
+        lastmod: dateFallback,
+      },
+      ...latexErrors.map(({ slug }) => ({
+        loc: `${SITE_URL}/learn/errors/${slug}`,
+        lastmod: dateFallback,
+      })),
       {
         loc: `${SITE_URL}/privacy`,
         lastmod: dateFallback,

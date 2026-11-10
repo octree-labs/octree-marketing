@@ -17,6 +17,12 @@ export interface OpenInOctreeProps {
   source: string
   /** Button text. */
   label?: string
+  /**
+   * Send `latex` exactly as given instead of completing it into a compilable
+   * document. For samples that are meant to fail, such as the broken examples
+   * on /learn/errors.
+   */
+  raw?: boolean
   className?: string
 }
 
@@ -28,7 +34,14 @@ const COPY = 'Try this in Octree \u2014 free LaTeX editor with AI, compiles in y
  * is added to the static HTML beyond the box itself, and without PostHog the
  * analytics calls are no-ops.
  */
-export function OpenInOctree({ latex, title, source, label = 'Open in Octree', className }: OpenInOctreeProps) {
+export function OpenInOctree({
+  latex,
+  title,
+  source,
+  label = 'Open in Octree',
+  raw = false,
+  className,
+}: OpenInOctreeProps) {
   const ref = useRef<HTMLDivElement>(null)
   const [copied, setCopied] = useState(false)
 
@@ -53,8 +66,8 @@ export function OpenInOctree({ latex, title, source, label = 'Open in Octree', c
   const handleOpen = useCallback(() => {
     // The form POST unloads this page: send the event instantly, never await it.
     track(EVENTS.OPEN_IN_OCTREE_CLICKED, { source, title_length: title.length }, BEFORE_NAVIGATION)
-    openInOctree({ latex: wrapLatexDocument(latex, title), title, source })
-  }, [latex, source, title])
+    openInOctree({ latex: raw ? latex : wrapLatexDocument(latex, title), title, source })
+  }, [latex, raw, source, title])
 
   const handleCopy = useCallback(async () => {
     try {

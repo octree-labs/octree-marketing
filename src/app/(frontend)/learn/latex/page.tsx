@@ -563,47 +563,47 @@ l.42 \\textbol
             </thead>
             <tbody>
               <tr>
-                <td><em>Undefined control sequence</em></td>
+                <td><Link href="/learn/errors/undefined-control-sequence"><em>Undefined control sequence</em></Link></td>
                 <td>A misspelled command, or the package that defines it is not loaded</td>
                 <td>Check the spelling; add the <code>\usepackage</code></td>
               </tr>
               <tr>
-                <td><em>Missing $ inserted</em></td>
+                <td><Link href="/learn/errors/missing-dollar-inserted"><em>Missing $ inserted</em></Link></td>
                 <td>A math symbol (<code>^</code>, <code>_</code>, <code>\alpha</code>) outside math mode, or an unescaped <code>_</code> in a URL or file name</td>
                 <td>Wrap in <code>$...$</code>, or write <code>\_</code></td>
               </tr>
               <tr>
-                <td><em>Runaway argument?</em> / <em>File ended while scanning use of ...</em></td>
+                <td><Link href="/learn/errors/runaway-argument"><em>Runaway argument?</em></Link> / <em>File ended while scanning use of ...</em></td>
                 <td>An unclosed brace <code>&#123;</code></td>
                 <td>Find the command named in the message and close its brace</td>
               </tr>
               <tr>
-                <td><em>\begin&#123;itemize&#125; ended by \end&#123;document&#125;</em></td>
+                <td><Link href="/learn/errors/begin-ended-by-end"><em>\begin&#123;itemize&#125; ended by \end&#123;document&#125;</em></Link></td>
                 <td>Mismatched or missing <code>\end</code></td>
                 <td>Pair every <code>\begin</code> with its <code>\end</code></td>
               </tr>
               <tr>
-                <td><em>File `foo.sty&apos; not found</em></td>
+                <td><Link href="/learn/errors/file-not-found"><em>File `foo.sty&apos; not found</em></Link></td>
                 <td>Package not installed</td>
                 <td>Install it with your distribution&apos;s package manager (MiKTeX does it automatically)</td>
               </tr>
               <tr>
-                <td><em>Missing \begin&#123;document&#125;</em></td>
+                <td><Link href="/learn/errors/missing-begin-document"><em>Missing \begin&#123;document&#125;</em></Link></td>
                 <td>Printable text in the preamble, often a stray character after <code>\usepackage</code></td>
                 <td>Move the text after <code>\begin&#123;document&#125;</code></td>
               </tr>
               <tr>
-                <td><em>Misplaced alignment tab character &amp;</em></td>
+                <td><Link href="/learn/errors/misplaced-alignment-tab"><em>Misplaced alignment tab character &amp;</em></Link></td>
                 <td>A literal <code>&amp;</code> in text</td>
                 <td>Write <code>\&amp;</code></td>
               </tr>
               <tr>
-                <td><em>Overfull \hbox</em> (warning)</td>
+                <td><Link href="/learn/errors/overfull-hbox"><em>Overfull \hbox</em></Link> (warning)</td>
                 <td>A line that could not be broken, often a long URL or formula</td>
                 <td>Usually ignorable; otherwise rephrase or allow hyphenation</td>
               </tr>
               <tr>
-                <td><em>LaTeX Warning: Reference `fig:plot&apos; undefined</em></td>
+                <td><Link href="/learn/errors/reference-undefined"><em>LaTeX Warning: Reference `fig:plot&apos; undefined</em></Link></td>
                 <td>Labels are resolved on the next run</td>
                 <td>Compile again; if it persists, the label is misspelled or placed before the caption</td>
               </tr>
@@ -614,7 +614,8 @@ l.42 \\textbol
             Two habits prevent most errors: compile often, so a mistake is in the few lines you
             just wrote, and comment out half the document with <code>\iffalse ... \fi</code>{' '}
             (see <Link href="/learn/comments">LaTeX comments</Link>) to find which half contains a
-            stubborn one.
+            stubborn one. Every message has its own page with causes and a broken and fixed
+            example in <Link href="/learn/errors">LaTeX errors and warnings: meanings and fixes</Link>.
           </p>
 
           {/* ── Next steps ── */}
@@ -697,6 +698,10 @@ l.42 \\textbol
             <li><Link href="/learn/molecular-orbital-diagrams">Molecular Orbital Diagrams</Link> – MO diagrams with TikZ and the modiagram package</li>
             <li><Link href="/learn/beamer">Beamer Presentations</Link> – Frames, themes, overlays and handouts</li>
             <li><Link href="/learn/beamer-footnote">Footnotes in Beamer</Link> – Footnotes on slides</li>
+          </ul>
+          <h3>Errors</h3>
+          <ul>
+            <li><Link href="/learn/errors">LaTeX Errors and Warnings</Link> – What 40 common log messages mean and how to fix them</li>
           </ul>
           <h3>Engines and languages</h3>
           <ul>

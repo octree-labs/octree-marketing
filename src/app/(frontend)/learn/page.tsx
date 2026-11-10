@@ -25,6 +25,12 @@ const learnTopics = [
     color: 'from-blue-500/10 to-blue-600/5',
   },
   {
+    slug: 'errors',
+    title: 'LaTeX Errors and Warnings',
+    description: 'What 40 common LaTeX error messages mean and how to fix them: Undefined control sequence, Missing $ inserted, Missing \\right. inserted, Runaway argument, Overfull \\hbox and more.',
+    color: 'from-red-500/10 to-orange-600/5',
+  },
+  {
     slug: 'tikz',
     title: 'Learn TikZ',
     description: 'Create stunning diagrams, graphs, and illustrations directly in your LaTeX documents with the powerful TikZ package.',
