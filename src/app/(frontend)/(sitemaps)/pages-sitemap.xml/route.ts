@@ -304,6 +304,34 @@ const getPagesSitemap = unstable_cache(
         lastmod: dateFallback,
       })),
       {
+        loc: `${SITE_URL}/learn/line-breaks-blank-spaces`,
+        lastmod: dateFallback,
+      },
+      {
+        loc: `${SITE_URL}/learn/text-alignment`,
+        lastmod: dateFallback,
+      },
+      {
+        loc: `${SITE_URL}/learn/fractions-binomials`,
+        lastmod: dateFallback,
+      },
+      {
+        loc: `${SITE_URL}/learn/bibtex`,
+        lastmod: dateFallback,
+      },
+      {
+        loc: `${SITE_URL}/learn/display-style-math`,
+        lastmod: dateFallback,
+      },
+      {
+        loc: `${SITE_URL}/learn/single-double-sided`,
+        lastmod: dateFallback,
+      },
+      {
+        loc: `${SITE_URL}/learn/cross-referencing`,
+        lastmod: dateFallback,
+      },
+      {
         loc: `${SITE_URL}/privacy`,
         lastmod: dateFallback,
       },
