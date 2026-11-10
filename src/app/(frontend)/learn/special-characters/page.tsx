@@ -26,7 +26,7 @@ const page = {
 }
 
 /** Last content update, used for dateModified in the article schema. */
-const LAST_UPDATED = '2026-10-18'
+const LAST_UPDATED = '2026-11-09'
 
 const faq: FaqItem[] = [
   {
@@ -418,6 +418,28 @@ $\\{ x : \\lvert x \\rvert < 1 \\}$   % prefer : when the condition has bars its
             <Link href="/learn/greek-letters-math-symbols">Greek letters and math symbols guide</Link>{' '}
             and the <Link href="https://tools.useoctree.com/symbols" target="_blank" rel="noopener noreferrer">symbols reference</Link>.
           </p>
+
+          {/* ── Hash symbol ── */}
+          <h2># Symbol in LaTeX (\#)</h2>
+          <p>
+            The # symbol in LaTeX is <code>\#</code>. A bare <code>#</code> marks a macro
+            parameter (<code>#1</code> to <code>#9</code>), so typing it in a sentence stops the
+            run with &ldquo;You can&apos;t use `macro parameter character #&apos; in horizontal
+            mode&rdquo;. <code>\#</code> prints the hash (number sign, pound sign, hashtag) in both
+            text and math mode. Inside <code>{`\\url{...}`}</code> and <code>{`\\href{...}`}</code>{' '}
+            you can type # directly, and in <code>verbatim</code> it needs no escape at all. For
+            the musical sharp ♯ use <code>$\sharp$</code>. The{' '}
+            <Link href="/learn/latex-symbols">LaTeX symbols list</Link> has every other symbol.
+          </p>
+          <pre><code>{`\\documentclass{article}
+\\usepackage{hyperref}
+\\begin{document}
+Issue \\#42, item \\#3 and the hashtag \\#LaTeX.
+
+In math: $\\#S = 5$ for the size of a set, and C$\\sharp$ in music.
+
+A URL keeps its hash: \\url{https://example.com/page#section}.
+\\end{document}`}</code></pre>
 
           {/* ── Ampersand and hash in context ── */}
           <h2>Ampersand and Hash in Tables and Macros</h2>

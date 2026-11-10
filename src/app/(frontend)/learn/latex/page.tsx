@@ -678,7 +678,8 @@ l.42 \\textbol
             <li><Link href="/learn/equation-numbering">Equation Numbering &amp; Referencing</Link> – \label, \eqref, cleveref and custom tags</li>
             <li><Link href="/learn/matrices">Matrices</Link> – pmatrix, bmatrix, determinants and augmented matrices</li>
             <li><Link href="/learn/math-functions">Math Functions</Link> – \sin, \log, \exp and \DeclareMathOperator</li>
-            <li><Link href="/learn/greek-letters-math-symbols">Greek Letters &amp; Math Symbols</Link> – Complete symbol reference</li>
+            <li><Link href="/learn/latex-symbols">LaTeX Symbols</Link> – The complete list: math, Greek, relations, logic, sets, arrows and brackets</li>
+            <li><Link href="/learn/greek-letters-math-symbols">Greek Letters &amp; Math Symbols</Link> – Epsilon vs varepsilon, bold and upright Greek</li>
             <li><Link href="/learn/greek-alphabet">The Greek Alphabet</Link> – All 24 letters with their LaTeX commands</li>
             <li><Link href="/learn/theorems-proofs">Theorems, Lemmas &amp; Proofs</Link> – amsthm and the proof environment</li>
             <li><Link href="/learn/blackboard-bold">Blackboard Bold</Link> – \mathbb&#123;R&#125; and number sets</li>

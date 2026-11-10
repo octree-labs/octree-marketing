@@ -71,6 +71,10 @@ const getPagesSitemap = unstable_cache(
         lastmod: dateFallback,
       },
       {
+        loc: `${SITE_URL}/learn/latex-symbols`,
+        lastmod: dateFallback,
+      },
+      {
         loc: `${SITE_URL}/learn/greek-letters-math-symbols`,
         lastmod: dateFallback,
       },
