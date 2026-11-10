@@ -26,7 +26,7 @@ const page = {
 }
 
 /** Last content update, used for dateModified in the article schema. */
-const LAST_UPDATED = '2026-10-18'
+const LAST_UPDATED = '2026-11-09'
 
 const faq: FaqItem[] = [
   {
@@ -419,6 +419,28 @@ $\\{ x : \\lvert x \\rvert < 1 \\}$   % prefer : when the condition has bars its
             and the <Link href="https://tools.useoctree.com/symbols" target="_blank" rel="noopener noreferrer">symbols reference</Link>.
           </p>
 
+          {/* ── Hash symbol ── */}
+          <h2># Symbol in LaTeX (\#)</h2>
+          <p>
+            The # symbol in LaTeX is <code>\#</code>. A bare <code>#</code> marks a macro
+            parameter (<code>#1</code> to <code>#9</code>), so typing it in a sentence stops the
+            run with &ldquo;You can&apos;t use `macro parameter character #&apos; in horizontal
+            mode&rdquo;. <code>\#</code> prints the hash (number sign, pound sign, hashtag) in both
+            text and math mode. Inside <code>{`\\url{...}`}</code> and <code>{`\\href{...}`}</code>{' '}
+            you can type # directly, and in <code>verbatim</code> it needs no escape at all. For
+            the musical sharp ♯ use <code>$\sharp$</code>. The{' '}
+            <Link href="/learn/latex-symbols">LaTeX symbols list</Link> has every other symbol.
+          </p>
+          <pre><code>{`\\documentclass{article}
+\\usepackage{hyperref}
+\\begin{document}
+Issue \\#42, item \\#3 and the hashtag \\#LaTeX.
+
+In math: $\\#S = 5$ for the size of a set, and C$\\sharp$ in music.
+
+A URL keeps its hash: \\url{https://example.com/page#section}.
+\\end{document}`}</code></pre>
+
           {/* ── Ampersand and hash in context ── */}
           <h2>Ampersand and Hash in Tables and Macros</h2>
           <p>
@@ -574,7 +596,7 @@ Macro: \\texttt{\\textbackslash newcommand\\{\\textbackslash foo\\}[1]\\{\\#1\\}
           <h3>How do I type an underscore in LaTeX?</h3>
           <p>
             Write <code>\_</code> in text or math. A bare <code>_</code> is the subscript
-            operator and gives <em>Missing $ inserted</em> in text. In URLs use{' '}
+            operator and gives &quot;<em>Missing $ inserted</em>&quot; in text. In URLs use{' '}
             <code>\url{'{...}'}</code> from hyperref or url, and in file names or code use{' '}
             <code>\verb|file_name|</code> or <code>\texttt{'{file\\_name}'}</code>.
           </p>
@@ -586,21 +608,21 @@ Macro: \\texttt{\\textbackslash newcommand\\{\\textbackslash foo\\}[1]\\{\\#1\\}
             <code>\~{'{}'}</code> is a small raised tilde accent. With the default OT1 font
             encoding <code>\textasciitilde</code> is defined as <code>\~{'{}'}</code> and prints
             that same accent, which is why T1 matters. In math mode, <code>\sim</code> gives the
-            &ldquo;similar to&rdquo; relation.
+            &quot;similar to&quot; relation.
           </p>
           <h3>How do I get a vertical bar or pipe in LaTeX?</h3>
           <p>
             In math mode type <code>|</code> directly, or use <code>\lvert ... \rvert</code> from
-            amsmath for absolute values and <code>\mid</code> for the &ldquo;such that&rdquo; or
-            &ldquo;divides&rdquo; relation. In text use <code>\textbar</code>; with the default
+            amsmath for absolute values and <code>\mid</code> for the &quot;such that&quot; or
+            &quot;divides&quot; relation. In text use <code>\textbar</code>; with the default
             OT1 font encoding, a bare <code>|</code> in text prints as an em dash.
           </p>
           <h3>Why does a percent sign make my text disappear?</h3>
           <p>
             Because <code>%</code> starts a comment: LaTeX ignores everything from the{' '}
             <code>%</code> to the end of the line. Write <code>\%</code> to print a percent sign.
-            If the comment swallows a closing brace you get <em>Runaway argument?</em> or{' '}
-            <em>File ended while scanning use of ...</em>.
+            If the comment swallows a closing brace you get &quot;<em>Runaway argument?</em>&quot; or{' '}
+            &quot;<em>File ended while scanning use of ...</em>&quot;.
           </p>
           <h3>How do I write less-than and greater-than signs in text?</h3>
           <p>

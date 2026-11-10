@@ -99,6 +99,12 @@ const learnTopics = [
     color: 'from-violet-500/10 to-indigo-600/5',
   },
   {
+    slug: 'latex-symbols',
+    title: 'LaTeX Symbols: The Complete List',
+    description: 'Every common LaTeX symbol with its command and package: math operators, Greek letters, relations, logic and set symbols, arrows, brackets, special characters and big operators.',
+    color: 'from-indigo-500/10 to-violet-600/5',
+  },
+  {
     slug: 'greek-letters-math-symbols',
     title: 'Greek Letters in LaTeX',
     description: 'All 24 Greek letters in LaTeX with uppercase, variants and Unicode, \\epsilon vs \\varepsilon, lambda, bold and upright Greek, plus every common math symbol.',

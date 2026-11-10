@@ -67,6 +67,7 @@ Octree exposes its LaTeX compiler (full TeX Live, latexmk, pdfLaTeX by default) 
 - Page Size & Margins in LaTeX: https://www.useoctree.com/learn/page-size-margins
 - Subscripts & Superscripts in LaTeX: https://www.useoctree.com/learn/subscripts-superscripts
 - LaTeX Lists: https://www.useoctree.com/learn/lists
+- LaTeX Symbols (complete list): https://www.useoctree.com/learn/latex-symbols
 - Greek Letters & Math Symbols: https://www.useoctree.com/learn/greek-letters-math-symbols
 - Using Colors in LaTeX: https://www.useoctree.com/learn/colors
 - Mathematical Expressions in LaTeX: https://www.useoctree.com/learn/mathematical-expressions

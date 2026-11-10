@@ -20,7 +20,7 @@ const breadcrumbSchema = generateBreadcrumbSchema(breadcrumbs)
 const page = {
   slug: 'approximately-equal',
   title: 'Approximately Equal Symbol (≈): Meaning, How to Type It, and LaTeX',
-  seoTitle: 'Approximately Equal Symbol (≈): Meaning, How to Type, LaTeX',
+  seoTitle: 'Approximately Equal Symbol (≈): How to Type, LaTeX',
   description:
     'What the approximately equal symbol ≈ means, how to type it on Windows, Mac, iPhone and in HTML, ≈ vs ~ vs ≃ vs ≅, and \\approx in LaTeX with negated forms.',
   keywords:
@@ -28,7 +28,7 @@ const page = {
 }
 
 /** Last content update, used for dateModified in the article schema. */
-const LAST_UPDATED = '2026-10-21'
+const LAST_UPDATED = '2026-11-09'
 
 const faq: FaqItem[] = [
   {
@@ -326,9 +326,10 @@ export default async function ApproximatelyEqualPage() {
           </p>
 
           {/* ───────────────────────────── LaTeX ───────────────────────────── */}
-          <h2 id="latex">Approximately Equal in LaTeX: \approx</h2>
+          <h2 id="latex">LaTeX Approximately Symbol: \approx</h2>
           <p>
-            The command is <code>\approx</code>. It needs no package and works only in math mode
+            The LaTeX approximately symbol (the &ldquo;about&rdquo; or approximately equal sign) is{' '}
+            <code>\approx</code>. It needs no package and works only in math mode
             (<code>$...$</code>, <code>\( ... \)</code> or a display environment). As a relation
             symbol it gets the same spacing as <code>=</code>, whatever spaces you type.
           </p>
