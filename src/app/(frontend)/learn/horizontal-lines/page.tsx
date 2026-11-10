@@ -26,7 +26,7 @@ const page = {
 }
 
 /** Last content update, used for dateModified in the article schema. */
-const LAST_UPDATED = '2026-11-09'
+const LAST_UPDATED = '2026-11-10'
 
 const faq: FaqItem[] = [
   {
@@ -115,23 +115,11 @@ export default async function LaTeXHorizontalLinesPage() {
             </ul>
           </div>
 
-          <p className="lead">
-            To draw a horizontal line in LaTeX, write{' '}
-            <code>{`\\noindent\\rule{\\linewidth}{0.4pt}`}</code> between two paragraphs.
-            Which command fits best depends on where the line goes: <code>\hrule</code> is a
-            line between paragraphs, <code>\rule</code> is a line of any width and thickness
-            that can also sit inside text, and <code>\hrulefill</code> stretches to fill the rest
-            of a line. This guide covers all three, a horizontal line in text, partial, centred,
-            colored and dashed lines, <code>\hline</code> and <code>booktabs</code> rules in
-            tables, header and footer rules, rules under section titles, signature lines and the
-            errors you are likely to meet.
-          </p>
 
           {/* ── Three commands ── */}
           <h2>LaTeX Horizontal Line: \hrule, \rule and \hrulefill</h2>
           <p>
-            Every horizontal line in LaTeX comes from one of these three commands. They differ in
-            where they are allowed and in what decides their length:
+            These three commands differ in their allowed contexts and how they set the line length:
           </p>
           <div className="overflow-x-auto">
           <table>
@@ -185,7 +173,8 @@ Some text after the line.`}</code></pre>
 \\rule[0.5ex]{2cm}{0.4pt}             % raised half an x-height`}</code></pre>
           <p>
             <code>\linewidth</code> is the width of the current line, which shrinks inside lists,
-            quotes and minipages; <code>\textwidth</code> is always the full text block. In a
+            quotes and minipages; <code>\textwidth</code> stays at the document text width inside
+            a list, but is reset to the local width inside a minipage. In a
             two-column document, <code>\columnwidth</code> is the width of one column. The
             optional first argument raises the rule above the baseline (negative values lower
             it).
@@ -240,14 +229,36 @@ Text before.
 \\end{document}`}</code></pre>
           <p>
             Use <code>\linewidth</code> rather than <code>\textwidth</code> for the width.
-            Inside a list, quote or minipage, <code>\linewidth</code> shrinks to the current
-            line while <code>\textwidth</code> stays at the full text block, so a{' '}
-            <code>\textwidth</code> rule pokes out on the right. <code>\hrule</code> is not affected by the indent,
+            Inside a list or quote, <code>\linewidth</code> shrinks to the current
+            line while <code>\textwidth</code> stays at the document text width, so a{' '}
+            <code>\textwidth</code> rule pokes out on the right. A minipage resets both widths;
+            a list nested inside that minipage narrows only <code>\linewidth</code> again.
+            <code>\hrule</code> is not affected by the paragraph indent,
             but <code>\hrulefill</code> at the start of a paragraph begins after it, so a
             full-width fill also needs <code>\noindent</code>.
           </p>
 
           {/* ── In text ── */}
+          <h3>A divider inside a narrow panel</h3>
+          <p>
+            Use the same command at each nesting level rather than hard-coding the outer
+            page width. This complete example draws one divider across the panel and another
+            across the narrower list item. End the rule paragraph explicitly so the following
+            text cannot join it and overflow the line.
+          </p>
+          <pre><code>{`\\documentclass{article}
+\\begin{document}
+\\noindent\\begin{minipage}{0.6\\linewidth}
+Panel heading
+\\par\\noindent\\rule{\\linewidth}{0.4pt}\\par
+\\begin{itemize}
+  \\item A narrower divider follows this item.
+  \\par\\noindent\\rule{\\linewidth}{0.4pt}\\par
+  Text below the divider stays inside the item.
+\\end{itemize}
+\\end{minipage}
+\\end{document}`}</code></pre>
+
           <h2>Horizontal Line in Text</h2>
           <p>
             For a horizontal line in text, inside a sentence rather than between paragraphs, use{' '}
@@ -317,12 +328,16 @@ Three weeks later, the letter arrived.`}</code></pre>
 \\noindent\\rule{\\linewidth}{0.4pt}
 \\vspace{1em}
 
-% compact form that does not depend on \\parskip
+% compact form with explicit paragraph boundaries
 \\par\\medskip\\noindent\\rule{\\linewidth}{0.4pt}\\par\\medskip`}</code></pre>
           <p>
             <code>\smallskip</code>, <code>\medskip</code> and <code>\bigskip</code> insert
             roughly 3pt, 6pt and 12pt of stretchable space. For a reusable divider, wrap the
             whole thing in a <code>\newcommand</code> so every instance is spaced identically.
+            These skips still interact with <code>\parskip</code> and normal line spacing;
+            they are not a promise of an exact gap. Unstarred <code>\vspace</code> can also
+            disappear at a page boundary. Use <code>\vspace*</code> only when that space must
+            remain at the top of a page.
           </p>
 
           {/* ── Colored ── */}
@@ -612,36 +627,6 @@ A colored dashed rule:
 
 \\end{document}`}</code></pre>
 
-          {/* ── Quick reference ── */}
-          <h2>Quick Reference</h2>
-          <div className="overflow-x-auto">
-          <table>
-            <thead>
-              <tr>
-                <th>Task</th>
-                <th>Command</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr><td>Full-width line between paragraphs</td><td><code>\hrule</code> or <code>{`\\noindent\\rule{\\linewidth}{0.4pt}`}</code></td></tr>
-              <tr><td>Thicker line</td><td><code>{`\\noindent\\rule{\\linewidth}{1pt}`}</code></td></tr>
-              <tr><td>Short line, inline</td><td><code>{`\\rule{3cm}{0.4pt}`}</code></td></tr>
-              <tr><td>Raised line</td><td><code>{`\\rule[0.5ex]{3cm}{0.4pt}`}</code></td></tr>
-              <tr><td>Fill the rest of the line</td><td><code>\hrulefill</code> / <code>\dotfill</code></td></tr>
-              <tr><td>Centred half-width line</td><td><code>{`\\centerline{\\rule{0.5\\linewidth}{0.4pt}}`}</code></td></tr>
-              <tr><td>Colored line</td><td><code>{`{\\color{gray}\\rule{\\linewidth}{0.4pt}}`}</code> (xcolor)</td></tr>
-              <tr><td>Dashed line</td><td><code>{`\\hdashrule{\\linewidth}{0.4pt}{3mm 1mm}`}</code> (dashrule)</td></tr>
-              <tr><td>Dashed line with TikZ</td><td><code>{`\\tikz\\draw[dashed] (0,0) -- (\\linewidth,0);`}</code></td></tr>
-              <tr><td>Table line, full / partial</td><td><code>\hline</code> / <code>{`\\cline{2-3}`}</code></td></tr>
-              <tr><td>Booktabs rules</td><td><code>\toprule</code>, <code>\midrule</code>, <code>{`\\cmidrule(lr){2-3}`}</code>, <code>\bottomrule</code></td></tr>
-              <tr><td>Table rule thickness</td><td><code>{`\\setlength{\\arrayrulewidth}{1pt}`}</code></td></tr>
-              <tr><td>Header / footer rule (fancyhdr)</td><td><code>{`\\renewcommand{\\headrulewidth}{0.4pt}`}</code> / <code>{`\\renewcommand{\\footrulewidth}{0.4pt}`}</code></td></tr>
-              <tr><td>Rule under section titles</td><td><code>{`\\titleformat{\\section}{...}{\\thesection}{1em}{}[\\titlerule]`}</code> (titlesec)</td></tr>
-              <tr><td>Signature line</td><td><code>{`\\rule{6cm}{0.4pt}`}</code></td></tr>
-              <tr><td>Vertical bar</td><td><code>\vrule</code> or <code>{`\\rule{0.4pt}{1cm}`}</code></td></tr>
-            </tbody>
-          </table>
-          </div>
 
           {/* ── FAQ ── */}
           <h2>Frequently Asked Questions</h2>
@@ -700,8 +685,6 @@ A colored dashed rule:
             <li><Link href="/blog/latex-blank-spaces-line-breaks-guide">Blank Spaces and Line Breaks in LaTeX</Link> &ndash; <code>\vspace</code>, <code>\\</code>, <code>\newline</code> and the spacing around your rules</li>
             <li><Link href="/learn/page-numbering">LaTeX Page Numbering</Link> &ndash; fancyhdr headers and footers, page styles and numbering</li>
             <li><Link href="/learn/colors">Using Colors in LaTeX</Link> &ndash; The xcolor names and mixes used for colored rules</li>
-            <li><Link href="/learn/tikz">Learn TikZ</Link> &ndash; Draw lines, arrows and diagrams programmatically</li>
-            <li><Link href="/learn/latex">Learn LaTeX</Link> &ndash; Complete beginner tutorial covering all the basics</li>
           </ul>
 
           {/* ── Free LaTeX Tools ── */}
@@ -717,9 +700,9 @@ A colored dashed rule:
           <div className="not-prose mt-12 p-6 bg-primary/5 rounded-lg border border-primary/10">
             <h3 className="text-lg font-semibold mb-2">Fix layout problems faster with AI</h3>
             <p className="text-muted-foreground mb-4">
-              Octree&apos;s AI editor explains <em>Misplaced \noalign</em> and overfull box
-              warnings in plain language, fixes your tables, and compiles your document in
-              seconds.
+              Open the complete example in Octree, change a rule&apos;s width, and compare the
+              PDF. If your own layout overflows, ask the AI assistant to explain the warning
+              before applying a fix.
             </p>
             <Link
               href="https://app.useoctree.com"

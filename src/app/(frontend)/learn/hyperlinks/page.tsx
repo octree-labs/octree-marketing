@@ -26,13 +26,13 @@ const page = {
 }
 
 /** Last content update, used for dateModified in the article schema. */
-const LAST_UPDATED = '2026-11-09'
+const LAST_UPDATED = '2026-11-10'
 
 const faq: FaqItem[] = [
   {
     question: 'How do you add a link in LaTeX?',
     answer:
-      'Load \\usepackage{hyperref} as the last package in the preamble. Then \\href{https://example.org}{link text} links any text to an address, and \\url{https://example.org} prints the address itself as a clickable link. With hyperref loaded, \\ref, \\cite and the table of contents become clickable too.',
+      'Load \\usepackage{hyperref} near the end of the preamble, before packages such as cleveref and bookmark that extend it. Then \\href{https://example.org}{link text} links any text to an address, and \\url{https://example.org} prints the address itself as a clickable link. With hyperref loaded, \\ref, \\cite and the table of contents become clickable too.',
   },
   {
     question: 'What is the difference between \\url and \\href in LaTeX?',
@@ -92,8 +92,8 @@ export default async function LaTeXHyperlinksPage() {
             <p className="text-sm font-semibold uppercase tracking-wide text-muted-foreground mb-3">Quick answer</p>
             <ul className="space-y-2 text-base list-disc pl-5">
               <li>
-                <strong>Package:</strong> <code>{`\\usepackage{hyperref}`}</code>, loaded last in the
-                preamble.
+                <strong>Package:</strong> <code>{`\\usepackage{hyperref}`}</code>, near the end of the
+                preamble, but before <code>cleveref</code> or <code>bookmark</code>.
               </li>
               <li>
                 <strong>Link with your own text:</strong>{' '}
@@ -117,21 +117,15 @@ export default async function LaTeXHyperlinksPage() {
             </ul>
           </div>
           <p className="lead">
-            Links in LaTeX come from one package: <code>hyperref</code>. Load it and every{' '}
-            <code>\ref</code>, <code>\cite</code> and table-of-contents entry becomes clickable,
-            and you get <code>\url</code> and <code>\href</code> for links to the web. This guide
-            covers loading the package correctly, the three URL commands, internal links, the
-            colored boxes everyone wants to remove, PDF metadata, email links, and the errors
-            hyperref is famous for.
+            Start with the complete example, then adjust package order and link appearance for
+            your document class.
           </p>
 
           {/* ── Loading hyperref ── */}
-          <h2>Links in LaTeX Start with hyperref (Load It Last)</h2>
+          <h2>LaTeX hyperref Package Order: Near the End, Not Always Last</h2>
           <p>
-            hyperref redefines commands from many other packages, so it has to see them first.
-            The rule of thumb: <strong>load hyperref as the last package in the preamble</strong>.
-            Options can go in the square brackets or in a <code>\hypersetup</code> call, which is
-            easier to read:
+            <strong>Load hyperref after most packages, then its extensions.</strong> Put options
+            in square brackets or a <code>\hypersetup</code> call:
           </p>
           <pre><code>{`\\documentclass{article}
 \\usepackage{graphicx}
@@ -146,11 +140,9 @@ export default async function LaTeXHyperlinksPage() {
   urlcolor=blue,
 }`}</code></pre>
           <p>
-            There are a few well-known exceptions that must be loaded <em>after</em> hyperref
-            because they build on it: <code>cleveref</code>, <code>glossaries</code>,{' '}
+            Packages loaded <em>after</em> hyperref include <code>cleveref</code>, <code>glossaries</code>,{' '}
             <code>bookmark</code>, <code>hypcap</code> and <code>algorithm</code> (from the{' '}
-            <code>algorithms</code> bundle). When in doubt, check the package documentation; most
-            packages that need a special position say so on the first page.
+            <code>algorithms</code> bundle). Check the package and class documentation for exceptions.
           </p>
 
           {/* ── url / href / nolinkurl ── */}
@@ -187,16 +179,14 @@ export default async function LaTeXHyperlinksPage() {
 % A target without a scheme is treated as a local file, not a web URL
 \\href{appendix.pdf}{the appendix}   % same as file:appendix.pdf`}</code></pre>
           <p>
-            Links to figures or data hosted online are more robust than file links; if a document
-            is going to be emailed or uploaded, prefer a full <code>https://</code> address.
+            For a document you will email or upload, prefer a full <code>https://</code> address.
           </p>
 
           {/* ── Line breaking ── */}
           <h2>Line-Breaking Long URLs</h2>
           <p>
-            By default a URL may break after <code>/</code>, <code>.</code> and a handful of other
-            characters, but not after hyphens and not inside long alphanumeric runs, which leads to
-            overfull lines. Three fixes, from lightest to heaviest:
+            Default URL breaks exclude hyphens and long alphanumeric runs, which can cause
+            overfull lines. Three fixes:
           </p>
           <pre><code>{`% 1. Allow breaks at hyphens: pass the option to url BEFORE hyperref
 \\usepackage[hyphens]{url}
@@ -234,17 +224,21 @@ export default async function LaTeXHyperlinksPage() {
             to the corresponding <code>\label</code>. hyperref adds three more commands, and{' '}
             <code>cleveref</code> adds <code>\cref</code>:
           </p>
-          <pre><code>{`\\section{Method}\\label{sec:method}
+          <pre><code>{`\\documentclass{article}
+\\usepackage{hyperref}
+\\usepackage{cleveref}
+\\begin{document}
+\\section{Introduction}
+\\section{Method}\\label{sec:method}
 
 See Section~\\ref{sec:method}.            % "Section 2" - only the number is a link
 See \\autoref{sec:method}.               % "section 2" - name + number, all linked
 See \\nameref{sec:method}.               % "Method" - the section title, linked
 See \\hyperref[sec:method]{the method}.  % your own link text
 
-% With cleveref (load after hyperref):
-\\usepackage{cleveref}
 See \\cref{sec:method}.                  % "section 2"
-See \\Cref{sec:method}.                  % "Section 2"`}</code></pre>
+See \\Cref{sec:method}.                  % "Section 2"
+\\end{document}`}</code></pre>
           <p>
             <code>\autoref</code> takes its words from macros such as{' '}
             <code>\sectionautorefname</code> and <code>\figureautorefname</code>. The default for
@@ -256,13 +250,17 @@ See \\Cref{sec:method}.                  % "Section 2"`}</code></pre>
 
           <h3>Anchors for unnumbered sections: \phantomsection</h3>
           <p>
-            <code>\section*</code> creates no anchor, so a link to it jumps to the previous one.
-            Insert <code>\phantomsection</code> right before the <code>\addcontentsline</code>:
+            With standard classes, hyperref creates an anchor for <code>\section*</code>, but
+            no section number. Put <code>\addcontentsline</code> after the heading so it uses
+            that target. Use <code>\nameref</code> or custom link text instead of expecting a
+            numbered <code>\ref</code>. For a custom heading that does not create an anchor,
+            insert <code>\phantomsection</code> at the intended destination before adding the
+            contents entry:
           </p>
           <pre><code>{`\\clearpage
-\\phantomsection
+\\section*{Acknowledgements}\\label{sec:ack}
 \\addcontentsline{toc}{section}{Acknowledgements}
-\\section*{Acknowledgements}\\label{sec:ack}`}</code></pre>
+See \\hyperref[sec:ack]{the acknowledgements}.`}</code></pre>
 
           <h3>Arbitrary targets: \hypertarget and \hyperlink</h3>
           <p>
@@ -293,6 +291,7 @@ As noted \\hyperlink{data-note}{earlier}, the data are recent.`}</code></pre>
 \\usepackage[hidelinks]{hyperref}
 
 % Option B: colored link text instead of boxes (this color DOES print)
+\\usepackage{xcolor}
 \\usepackage{hyperref}
 \\hypersetup{
   colorlinks=true,
@@ -305,7 +304,7 @@ As noted \\hyperlink{data-note}{earlier}, the data are recent.`}</code></pre>
 % Option C: keep boxes but make them invisible
 \\hypersetup{pdfborder={0 0 0}}
 
-% Option D: colored text that still prints black
+% Option D: black link text both on screen and in print
 \\hypersetup{colorlinks=true, allcolors=black}`}</code></pre>
           <p>
             A fourth style, common in theses, is an underline instead of a box or a color:{' '}
@@ -527,11 +526,17 @@ As promised in \\autoref{sec:intro}, see \\nameref{sec:intro} and
 \\hyperref[sec:intro]{the opening section}.
 
 \\clearpage
-\\phantomsection
-\\addcontentsline{toc}{section}{Acknowledgements}
 \\section*{Acknowledgements}
+\\label{sec:ack}
+\\addcontentsline{toc}{section}{Acknowledgements}
 Thanks to everyone who reads the manual before asking.
+See \\hyperref[sec:ack]{the acknowledgements}.
 \\end{document}`}</code></pre>
+          <p>
+            Compile twice, then test the contents and &ldquo;Results&rdquo; links in a PDF viewer.
+            Compilation does not check external websites. Unresolved references need consistent
+            labels and the auxiliary files from the previous run.
+          </p>
 
           {/* ── Quick reference ── */}
           <h2>Quick Reference</h2>
@@ -568,7 +573,8 @@ Thanks to everyone who reads the manual before asking.
           <h2>Frequently Asked Questions</h2>
           <h3>How do you add a link in LaTeX?</h3>
           <p>
-            Load <code>{`\\usepackage{hyperref}`}</code> as the last package in the preamble. Then{' '}
+            Load <code>{`\\usepackage{hyperref}`}</code> near the end of the preamble, before
+            packages such as <code>cleveref</code> and <code>bookmark</code> that extend it. Then{' '}
             <code>{`\\href{https://example.org}{link text}`}</code> links any text to an address,
             and <code>{`\\url{https://example.org}`}</code> prints the address itself as a
             clickable link. With hyperref loaded, <code>\ref</code>, <code>\cite</code> and the
@@ -620,14 +626,11 @@ Thanks to everyone who reads the manual before asking.
 
           {/* ── Next Steps ── */}
           <h2>Next Steps</h2>
-          <p>Links done? Keep polishing the document:</p>
           <ul>
             <li><Link href="/learn/table-of-contents">Table of Contents in LaTeX</Link> &ndash; A clickable contents with <code>linktoc</code>, <code>\phantomsection</code> and <code>\texorpdfstring</code></li>
             <li><Link href="/learn/footnotes">LaTeX Footnotes</Link> &ndash; Footnotes in tables, headings and captions, including the <code>hyperfootnotes</code> option</li>
             <li><Link href="/learn/comments">LaTeX Comments</Link> &ndash; Single-line, multi-line and block comments, plus todo notes</li>
             <li><Link href="/learn/colors">Using Colors in LaTeX</Link> &ndash; Define the xcolor names you use for <code>linkcolor</code> and <code>urlcolor</code></li>
-            <li><Link href="/learn/page-size-margins">Page Size &amp; Margins</Link> &ndash; Page layout with the geometry package</li>
-            <li><Link href="/learn/latex">Learn LaTeX</Link> &ndash; Complete beginner tutorial covering all the basics</li>
           </ul>
 
           {/* ── Free LaTeX Tools ── */}
@@ -643,8 +646,8 @@ Thanks to everyone who reads the manual before asking.
           <div className="not-prose mt-12 p-6 bg-primary/5 rounded-lg border border-primary/10">
             <h3 className="text-lg font-semibold mb-2">Fix hyperref problems faster with AI</h3>
             <p className="text-muted-foreground mb-4">
-              Octree&apos;s AI editor sorts out package order, explains hyperref warnings in plain
-              language, and compiles your document in seconds.
+              Open the example in Octree, compile it, and use AI chat to ask about package order
+              or a warning from your document. Check the resulting PDF links before sharing it.
             </p>
             <Link
               href="https://app.useoctree.com"

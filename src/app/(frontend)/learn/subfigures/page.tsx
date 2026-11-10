@@ -26,7 +26,7 @@ const page = {
 }
 
 /** Last content update, used for dateModified in the article schema. */
-const LAST_UPDATED = '2026-11-09'
+const LAST_UPDATED = '2026-11-10'
 
 const faq: FaqItem[] = [
   {
@@ -42,12 +42,12 @@ const faq: FaqItem[] = [
   {
     question: 'How do I reference a subfigure?',
     answer:
-      'Put \\label after the subfigure’s \\caption, then use \\ref{fig:a}, which prints 1a, or \\subref{fig:a}, which prints only (a). To get 1(a) from \\ref, add \\renewcommand\\thesubfigure{(\\alph{subfigure})} and \\captionsetup[sub]{labelformat=simple} to the preamble.',
+      'Put \\label after the subfigure’s \\caption, then use \\ref{fig:a}, which prints 1a, or \\subref{fig:a}, which prints only a by default. To get 1(a) from \\ref, add \\renewcommand\\thesubfigure{(\\alph{subfigure})} and \\captionsetup[sub]{labelformat=simple} to the preamble.',
   },
   {
     question: 'Should I use subfigure, subfig or subcaption?',
     answer:
-      'Use subcaption. The subfigure package is obsolete, and subfig has not been updated since 2005. subcaption is maintained together with the caption package. The packages cannot be combined: loading subcaption together with subfig or subfigure stops with an error.',
+      'Use subcaption for new documents whose class supports caption. The subfigure package is obsolete. Keep subfig when a publisher template requires it; some classes, including IEEEtran, prescribe their own caption setup. The packages cannot be combined: loading subcaption together with subfig or subfigure stops with an error.',
   },
   {
     question: 'Why are my subfigures stacked instead of side by side?',
@@ -106,7 +106,7 @@ export default async function LearnSubfiguresPage() {
               </li>
               <li>
                 <strong>References:</strong> <code>{`\\ref{fig:a}`}</code> prints 1a,{' '}
-                <code>{`\\subref{fig:a}`}</code> prints (a).
+                <code>{`\\subref{fig:a}`}</code> prints a by default.
               </li>
             </ul>
             <pre className="mt-4 overflow-x-auto rounded-md bg-background p-4 text-sm"><code>{`\\documentclass{article}
@@ -117,13 +117,13 @@ export default async function LearnSubfiguresPage() {
 \\begin{figure}[htbp]
   \\centering
   \\begin{subfigure}[b]{0.45\\linewidth}
-    \\includegraphics[width=\\linewidth]{example-image-a}
+    \\rule{\\linewidth}{30mm}
     \\caption{Before}
     \\label{fig:a}
   \\end{subfigure}
   \\hfill
   \\begin{subfigure}[b]{0.45\\linewidth}
-    \\includegraphics[width=\\linewidth]{example-image-b}
+    \\rule{\\linewidth}{30mm}
     \\caption{After}
     \\label{fig:b}
   \\end{subfigure}
@@ -132,6 +132,7 @@ export default async function LearnSubfiguresPage() {
 \\end{figure}
 
 Figure~\\ref{fig:both} has two panels: \\ref{fig:a} and \\ref{fig:b}.
+Panel letters alone: \\subref{fig:a} and \\subref{fig:b}.
 \\end{document}`}</code></pre>
           </div>
           <p className="lead">
@@ -140,9 +141,10 @@ Figure~\\ref{fig:both} has two panels: \\ref{fig:a} and \\ref{fig:b}.
             modern way to make them in LaTeX. This guide covers two figures side by side, the
             options that control widths and alignment, a 2&times;2 grid, referencing single
             panels, customizing the subcaptions, the older <code>subfig</code> package and the
-            errors that come up most. Every snippet compiles as shown; the{' '}
-            <code>example-image</code> placeholders come with TeX Live, so replace them with
-            your own file names.
+            errors that come up most. The first example and the grid use built-in rules as
+            placeholders, so they need no image files. Other complete examples use the{' '}
+            <code>example-image</code> files supplied by the <code>mwe</code> package;
+            install it if those files are missing, or substitute your own images.
           </p>
 
           {/* ── subcaption ── */}
@@ -260,26 +262,26 @@ Figure~\\ref{fig:both} has two panels: \\ref{fig:a} and \\ref{fig:b}.
 \\begin{figure}[htbp]
   \\centering
   \\begin{subfigure}[b]{0.48\\linewidth}
-    \\includegraphics[width=\\linewidth]{example-image-a}
+    \\rule{\\linewidth}{30mm}
     \\caption{Top left}
     \\label{fig:tl}
   \\end{subfigure}
   \\hfill
   \\begin{subfigure}[b]{0.48\\linewidth}
-    \\includegraphics[width=\\linewidth]{example-image-b}
+    \\rule{\\linewidth}{30mm}
     \\caption{Top right}
     \\label{fig:tr}
   \\end{subfigure}
 
   \\medskip
   \\begin{subfigure}[b]{0.48\\linewidth}
-    \\includegraphics[width=\\linewidth]{example-image-c}
+    \\rule{\\linewidth}{30mm}
     \\caption{Bottom left}
     \\label{fig:bl}
   \\end{subfigure}
   \\hfill
   \\begin{subfigure}[b]{0.48\\linewidth}
-    \\includegraphics[width=\\linewidth]{example-image}
+    \\rule{\\linewidth}{30mm}
     \\caption{Bottom right}
     \\label{fig:br}
   \\end{subfigure}
@@ -333,10 +335,18 @@ Panels \\subref{fig:tl} and \\subref{fig:br} of Figure~\\ref{fig:grid}.
               <tbody>
                 <tr><td><code>{`\\ref{fig:both}`}</code></td><td>1</td><td>The whole figure</td></tr>
                 <tr><td><code>{`\\ref{fig:a}`}</code></td><td>1a</td><td>A panel, in running text</td></tr>
-                <tr><td><code>{`\\subref{fig:a}`}</code></td><td>(a)</td><td>A panel, when the figure number is already clear</td></tr>
+                <tr><td><code>{`\\subref{fig:a}`}</code></td><td>a</td><td>A panel, when the figure number is already clear</td></tr>
               </tbody>
             </table>
           </div>
+          <p>
+            These outputs assume the default settings and the first figure. Compile twice so
+            labels resolve; a first pass may show <code>??</code>. The parentheses in a printed
+            subcaption are not part of the default <code>\subref</code> output. Add{' '}
+            <code>{`\\captionsetup{subrefformat=parens}`}</code> to make{' '}
+            <code>\subref</code> print (a), without changing <code>\ref</code>. Then{' '}
+            <code>{`Figure~\\ref{fig:both}\\subref{fig:a}`}</code> prints Figure 1(a).
+          </p>
           <p>
             Many journals prefer &ldquo;Figure 1(a)&rdquo;. Changing the subfigure counter
             format gives that from <code>\ref</code>, and switching the caption label format to{' '}
@@ -368,8 +378,10 @@ Panels \\subref{fig:tl} and \\subref{fig:br} of Figure~\\ref{fig:grid}.
 See Figure~\\ref{fig:left} and Figure~\\ref{fig:right}.
 \\end{document}`}</code></pre>
           <p>
-            With <code>hyperref</code> loaded, the references become links that jump to the
-            panel; see <Link href="/learn/hyperlinks">hyperlinks in LaTeX</Link>.
+            With <code>hyperref</code> loaded, references become links. The landing point
+            depends on the caption anchor settings; <code>{`\\captionsetup[sub]{hypcap=true}`}</code>
+            requests an anchor at the start of each panel. Test the PDF links rather than
+            assuming they jump to the image; see <Link href="/learn/hyperlinks">hyperlinks in LaTeX</Link>.
           </p>
 
           {/* ── customizing ── */}
@@ -446,7 +458,11 @@ See Figure~\\ref{fig:left} and Figure~\\ref{fig:right}.
             which takes the caption as an optional argument. It still works, but{' '}
             <code>subcaption</code> is the maintained choice for new documents, and the two
             cannot be loaded together. The even older <code>subfigure</code> package is
-            obsolete.
+            obsolete. The environment named <code>subfigure</code> used throughout this guide
+            belongs to <code>subcaption</code>; it is not a reason to load that obsolete package.
+            For publisher templates, check the class instructions first. IEEEtran commonly uses{' '}
+            <code>subfig</code> with <code>caption=false</code> to preserve its caption formatting.
+            Do not replace a template&apos;s caption system just to modernize the package name.
           </p>
           <pre><code>{`\\documentclass{article}
 \\usepackage{graphicx}
@@ -465,7 +481,8 @@ See Figure~\\ref{fig:left} and Figure~\\ref{fig:right}.
 \\end{document}`}</code></pre>
           <p>
             <code>subcaption</code> has a <code>\subcaptionbox</code> command that takes the
-            same two pieces, caption and content, so porting old <code>\subfloat</code> code is easy:{' '}
+            same two pieces, caption and content. Check optional arguments and caption settings
+            when replacing an old <code>\subfloat</code> call:{' '}
             <code>{`\\subcaptionbox{Left panel\\label{fig:a}}{\\includegraphics[width=0.45\\linewidth]{img}}`}</code>.
           </p>
 
@@ -543,15 +560,16 @@ See Figure~\\ref{fig:left} and Figure~\\ref{fig:right}.
           <p>
             Put <code>\label</code> after the subfigure&rsquo;s <code>\caption</code>, then use{' '}
             <code>{`\\ref{fig:a}`}</code>, which prints 1a, or <code>{`\\subref{fig:a}`}</code>,
-            which prints only (a). To get 1(a) from <code>\ref</code>, add{' '}
+            which prints only a by default. To get 1(a) from <code>\ref</code>, add{' '}
             <code>{`\\renewcommand\\thesubfigure{(\\alph{subfigure})}`}</code> and{' '}
             <code>{`\\captionsetup[sub]{labelformat=simple}`}</code> to the preamble.
           </p>
           <h3>Should I use subfigure, subfig or subcaption?</h3>
           <p>
-            Use <code>subcaption</code>. The <code>subfigure</code> package is obsolete, and{' '}
-            <code>subfig</code> has not been updated since 2005. <code>subcaption</code> is maintained together with
-            the <code>caption</code> package. The packages cannot be combined: loading{' '}
+            Use <code>subcaption</code> for new documents whose class supports{' '}
+            <code>caption</code>. The <code>subfigure</code> package is obsolete. Keep{' '}
+            <code>subfig</code> when a publisher template requires it; some classes, including
+            IEEEtran, prescribe their own caption setup. The packages cannot be combined: loading{' '}
             <code>subcaption</code> together with <code>subfig</code> or{' '}
             <code>subfigure</code> stops with an error.
           </p>
@@ -578,13 +596,11 @@ See Figure~\\ref{fig:left} and Figure~\\ref{fig:right}.
             <li><Link href="/learn/tikz">TikZ in LaTeX</Link> &ndash; Draw the diagrams that go into your panels</li>
             <li><Link href="/learn/pgfplots">pgfplots</Link> &ndash; Plots that can sit inside subfigures</li>
             <li><Link href="/learn/hyperlinks">Hyperlinks in LaTeX</Link> &ndash; Clickable references with hyperref</li>
-            <li><Link href="/learn/page-size-margins">Page Size &amp; Margins</Link> &ndash; More room for wide figures</li>
-            <li><Link href="/learn/latex">Learn LaTeX: Tutorial for Beginners</Link> &ndash; Figures, graphics and the basics</li>
           </ul>
 
           <h2>Free LaTeX Tools</h2>
           <ul>
-            <li><Link href="https://tools.useoctree.com/tools/latex-preview" target="_blank" rel="noopener noreferrer">LaTeX Preview</Link> &ndash; Check a subfigure layout instantly</li>
+            <li><Link href="https://tools.useoctree.com/tools/latex-preview" target="_blank" rel="noopener noreferrer">LaTeX Preview</Link> &ndash; Compile and check a subfigure layout</li>
             <li><Link href="https://tools.useoctree.com/tools/image-to-tikz" target="_blank" rel="noopener noreferrer">Image to TikZ</Link> &ndash; Turn a sketch into a TikZ figure</li>
             <li><Link href="https://tools.useoctree.com/tools/pgfplots-generator" target="_blank" rel="noopener noreferrer">pgfplots Generator</Link> &ndash; Generate plots for your panels</li>
           </ul>
@@ -594,9 +610,8 @@ See Figure~\\ref{fig:left} and Figure~\\ref{fig:right}.
           <div className="not-prose mt-12 p-6 bg-primary/5 rounded-lg border border-primary/10">
             <h3 className="text-lg font-semibold mb-2">Arrange figures with AI</h3>
             <p className="text-muted-foreground mb-4">
-              Tell Octree&apos;s AI how the panels should be arranged and it writes the{' '}
-              <code>subcaption</code> code, fixes overflowing widths and broken references,
-              with the PDF compiled next to your code.
+              Ask Octree&apos;s AI chat for help arranging the panels, then compile the suggested{' '}
+              <code>subcaption</code> code. Check panel widths, captions and references in the PDF.
             </p>
             <Link
               href="https://app.useoctree.com"
