@@ -39,7 +39,7 @@ const faq: FaqItem[] = [
   {
     question: 'Which package do I need for math symbols in LaTeX?',
     answer:
-      'The basic operators, relations, arrows and Greek letters are built into LaTeX. Load \\usepackage{amssymb} for the AMS symbol fonts (\\mathbb, \\therefore, \\nexists, \\varnothing, \\lesssim) and \\usepackage{amsmath} for \\implies, \\iff, \\iint, \\text and \\xrightarrow. Loading both in every document that has math is the usual habit.',
+      'The basic operators, relations, arrows and Greek letters are built into LaTeX. Load \\usepackage{amssymb} for the AMS symbol fonts (\\mathbb, \\therefore, \\nexists, \\varnothing, \\lesssim) and \\usepackage{amsmath} for \\implies, \\iint, \\text and \\xrightarrow (\\iff is built in). Loading both in every document that has math is the usual habit.',
   },
   {
     question: 'What is the LaTeX approximately symbol?',
@@ -162,7 +162,7 @@ const logicSetRows: SymbolRow[] = [
   { glyph: '∨', cmd: String.raw`\lor`, pkg: '', meaning: 'Logical OR (same as \\vee)', tool: 'logic/logical-or' },
   { glyph: '¬', cmd: String.raw`\neg`, pkg: '', meaning: 'Logical NOT (same as \\lnot)', tool: 'logic/negation' },
   { glyph: '⟹', cmd: String.raw`\implies`, pkg: 'amsmath', meaning: 'Implies (short form: \\Rightarrow)', tool: 'math/implies' },
-  { glyph: '⟺', cmd: String.raw`\iff`, pkg: 'amsmath', meaning: 'If and only if (short form: \\Leftrightarrow)', tool: 'math/if-and-only-if' },
+  { glyph: '⟺', cmd: String.raw`\iff`, pkg: '', meaning: 'If and only if (short form: \\Leftrightarrow)', tool: 'math/if-and-only-if' },
   { glyph: '∀', cmd: String.raw`\forall`, pkg: '', meaning: 'For all', tool: 'math/for-all' },
   { glyph: '∃', cmd: String.raw`\exists`, pkg: '', meaning: 'There exists', tool: 'math/exists' },
   { glyph: '∄', cmd: String.raw`\nexists`, pkg: 'amssymb', meaning: 'There does not exist', tool: 'logic/not-exists' },
@@ -171,7 +171,7 @@ const logicSetRows: SymbolRow[] = [
   { glyph: '⊢', cmd: String.raw`\vdash`, pkg: '', meaning: 'Proves, entails', tool: 'logic/proves' },
   { glyph: '∈', cmd: String.raw`\in`, pkg: '', meaning: 'Element of', tool: 'math/element-of' },
   { glyph: '∉', cmd: String.raw`\notin`, pkg: '', meaning: 'Not an element of', tool: 'math/not-element-of' },
-  { glyph: '⊂', cmd: String.raw`\subset`, pkg: '', meaning: 'Proper subset', tool: 'math/subset' },
+  { glyph: '⊂', cmd: String.raw`\subset`, pkg: '', meaning: 'Subset (proper subset in many texts)', tool: 'math/subset' },
   { glyph: '⊆', cmd: String.raw`\subseteq`, pkg: '', meaning: 'Subset or equal', tool: 'relations/subset-or-equal' },
   { glyph: '∪', cmd: String.raw`\cup`, pkg: '', meaning: 'Union', tool: 'math/union' },
   { glyph: '∩', cmd: String.raw`\cap`, pkg: '', meaning: 'Intersection', tool: 'math/intersection' },
@@ -208,8 +208,8 @@ const bracketRows: SymbolRow[] = [
   { glyph: '[ ]', cmd: String.raw`\left[ x \right]`, pkg: '', meaning: 'Square brackets, closed interval', tool: 'brackets/square-brackets' },
   { glyph: '{ }', cmd: String.raw`\left\{ x \right\}`, pkg: '', meaning: 'Curly braces, sets (escape with \\)', tool: 'brackets/curly-braces' },
   { glyph: '⟨ ⟩', cmd: String.raw`\langle x \rangle`, pkg: '', meaning: 'Angle brackets, inner product', tool: 'brackets/angle-brackets' },
-  { glyph: '| |', cmd: String.raw`\left| x \right|`, pkg: '', meaning: 'Absolute value (or \\lvert x \\rvert)', tool: 'brackets/vertical-bar' },
-  { glyph: '‖ ‖', cmd: String.raw`\| x \|`, pkg: '', meaning: 'Norm (or \\lVert x \\rVert)', tool: 'brackets/norm' },
+  { glyph: '| |', cmd: String.raw`\left| x \right|`, pkg: '', meaning: 'Absolute value (or \\lvert x \\rvert with amsmath)', tool: 'brackets/vertical-bar' },
+  { glyph: '‖ ‖', cmd: String.raw`\| x \|`, pkg: '', meaning: 'Norm (or \\lVert x \\rVert with amsmath)', tool: 'brackets/norm' },
   { glyph: '⌊ ⌋', cmd: String.raw`\lfloor x \rfloor`, pkg: '', meaning: 'Floor', tool: 'brackets/floor' },
   { glyph: '⌈ ⌉', cmd: String.raw`\lceil x \rceil`, pkg: '', meaning: 'Ceiling', tool: 'brackets/ceiling' },
   { glyph: '⟦ ⟧', cmd: String.raw`\llbracket x \rrbracket`, pkg: 'stmaryrd', meaning: 'Double brackets, semantics', tool: 'brackets/double-brackets' },
@@ -363,7 +363,7 @@ Inline: $x \\approx 3.14$, $\\alpha \\leq \\beta$, $A \\subseteq B$.
 
 Displayed:
 \\[
-  \\forall \\varepsilon > 0 \; \\exists \\delta > 0 :
+  \\forall \\varepsilon > 0 \\; \\exists \\delta > 0 :
   |x - a| < \\delta \\implies |f(x) - f(a)| < \\varepsilon
 \\]
 
@@ -386,7 +386,7 @@ Text mode: 50\\% off, R\\&D, item \\#3, a\\_b.
             the two. Math symbols (<code>\pm</code>, <code>\leq</code>, <code>\alpha</code>,{' '}
             <code>\rightarrow</code>) must be inside <code>$...$</code>, <code>{`\\( ... \\)`}</code>,{' '}
             <code>{`\\[ ... \\]`}</code> or an <code>equation</code>/<code>align</code> environment.
-            Text symbols (<code>\#</code>, <code>\S</code>, <code>\textdegree</code>) belong in
+            Text symbols (<code>\textbackslash</code>, <code>\textasciitilde</code>, <code>\textdegree</code>) belong in
             ordinary paragraphs. A few, such as <code>\$</code>, <code>\%</code>, <code>\#</code>{' '}
             and <code>\&amp;</code>, work in both. Using a math command in text is the cause of the
             &ldquo;Missing $ inserted&rdquo; error; see{' '}
@@ -491,8 +491,8 @@ $\\alpha, \\beta, \\gamma, \\Gamma, \\delta, \\Delta, \\epsilon, \\varepsilon,
           {/* ── Relations ── */}
           <h2>Relation Symbols</h2>
           <p>
-            Relations compare two expressions, and LaTeX spaces them more widely than operators,
-            so <code>a\leq b</code> and <code>a \leq b</code> look the same. The LaTeX
+            Relations compare two expressions, and LaTeX spaces them more widely than operators.
+            Spaces you type in math are ignored, so <code>a\leq b</code> and <code>a \leq b</code> look the same. The LaTeX
             approximately symbol is <code>\approx</code> (≈); it is also what people mean by the
             &ldquo;about&rdquo; symbol, and the{' '}
             <Link href="/learn/approximately-equal">approximately equal guide</Link> compares it with{' '}
@@ -535,8 +535,8 @@ $f(n) \\coloneqq n^2$, \\quad $u \\perp v$, \\quad $x \\not\\approx y$
             The LaTeX and symbol is <code>\land</code> (or <code>\wedge</code>), which prints the
             logical AND ∧; OR is <code>\lor</code> (<code>\vee</code>) and NOT is{' '}
             <code>\neg</code> (<code>\lnot</code>). For the ampersand character &amp; itself, write{' '}
-            <code>\&amp;</code>. The long arrows <code>\implies</code> and <code>\iff</code> come
-            from <code>amsmath</code>, and <code>\therefore</code>, <code>\nexists</code>,{' '}
+            <code>\&amp;</code>. The long arrow <code>\implies</code> comes
+            from <code>amsmath</code> (<code>\iff</code> is built in), and <code>\therefore</code>, <code>\nexists</code>,{' '}
             <code>\varnothing</code> and <code>\mathbb</code> from <code>amssymb</code>. Browse the{' '}
             <ExtLink href={`${TOOLS}/logic`}>logic symbols</ExtLink> and{' '}
             <ExtLink href={`${TOOLS}/set-theory`}>set theory symbols</ExtLink> references for the
@@ -553,7 +553,7 @@ $f(n) \\coloneqq n^2$, \\quad $u \\perp v$, \\quad $x \\not\\approx y$
   p \\implies q \\iff \\neg q \\implies \\neg p
 \\]
 \\[
-  \\forall x \\in \\mathbb{R} \; \\exists n \\in \\mathbb{N} : n > x, \\qquad
+  \\forall x \\in \\mathbb{R} \\; \\exists n \\in \\mathbb{N} : n > x, \\qquad
   A \\cap B = \\varnothing, \\qquad
   A \\setminus B \\subseteq A \\cup B
 \\]
@@ -579,7 +579,7 @@ $x \\notin \\emptyset$, therefore $\\therefore$ and because $\\because$.
 \\[
   f \\colon \\mathbb{R} \\to \\mathbb{R}, \\quad x \\mapsto x^2, \\qquad
   \\lim_{n \\to \\infty} a_n, \\qquad
-  A \\xrightarrow{\;f\;} B \\xrightarrow[\\text{onto}]{g} C
+  A \\xrightarrow{\\;f\\;} B \\xrightarrow[\\text{onto}]{g} C
 \\]
 \\[
   \\mathrm{N_2 + 3H_2 \\rightleftharpoons 2NH_3}, \\qquad
@@ -694,7 +694,7 @@ Display:
                   <td><code>{`\\usepackage{amssymb}`}</code> in the preamble</td>
                 </tr>
                 <tr>
-                  <td><em>Undefined control sequence</em> on <code>\implies</code>, <code>\iff</code> (long form), <code>\iint</code> or <code>\xrightarrow</code></td>
+                  <td><em>Undefined control sequence</em> on <code>\implies</code>, <code>\iint</code>, <code>\iiint</code> or <code>\xrightarrow</code></td>
                   <td>These come from <code>amsmath</code></td>
                   <td><code>{`\\usepackage{amsmath}`}</code></td>
                 </tr>
@@ -752,8 +752,8 @@ Math mode: an angle of $90^\\circ$ and $\\theta = 45^{\\circ}$.
             <code>{`\\usepackage{amssymb}`}</code> for the AMS symbol fonts (<code>\mathbb</code>,{' '}
             <code>\therefore</code>, <code>\nexists</code>, <code>\varnothing</code>,{' '}
             <code>\lesssim</code>) and <code>{`\\usepackage{amsmath}`}</code> for{' '}
-            <code>\implies</code>, <code>\iff</code>, <code>\iint</code>, <code>\text</code> and{' '}
-            <code>\xrightarrow</code>. Loading both in every document that has math is the usual
+            <code>\implies</code>, <code>\iint</code>, <code>\text</code> and{' '}
+            <code>\xrightarrow</code> (<code>\iff</code> is built in). Loading both in every document that has math is the usual
             habit.
           </p>
           <h3>What is the LaTeX approximately symbol?</h3>

@@ -20,7 +20,7 @@ const breadcrumbSchema = generateBreadcrumbSchema(breadcrumbs)
 const page = {
   slug: 'approximately-equal',
   title: 'Approximately Equal Symbol (≈): Meaning, How to Type It, and LaTeX',
-  seoTitle: 'Approximately Equal Symbol (≈): Meaning, How to Type, LaTeX',
+  seoTitle: 'Approximately Equal Symbol (≈): How to Type, LaTeX',
   description:
     'What the approximately equal symbol ≈ means, how to type it on Windows, Mac, iPhone and in HTML, ≈ vs ~ vs ≃ vs ≅, and \\approx in LaTeX with negated forms.',
   keywords:

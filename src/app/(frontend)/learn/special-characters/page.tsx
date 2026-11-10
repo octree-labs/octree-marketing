@@ -596,7 +596,7 @@ Macro: \\texttt{\\textbackslash newcommand\\{\\textbackslash foo\\}[1]\\{\\#1\\}
           <h3>How do I type an underscore in LaTeX?</h3>
           <p>
             Write <code>\_</code> in text or math. A bare <code>_</code> is the subscript
-            operator and gives <em>Missing $ inserted</em> in text. In URLs use{' '}
+            operator and gives &quot;<em>Missing $ inserted</em>&quot; in text. In URLs use{' '}
             <code>\url{'{...}'}</code> from hyperref or url, and in file names or code use{' '}
             <code>\verb|file_name|</code> or <code>\texttt{'{file\\_name}'}</code>.
           </p>
@@ -608,21 +608,21 @@ Macro: \\texttt{\\textbackslash newcommand\\{\\textbackslash foo\\}[1]\\{\\#1\\}
             <code>\~{'{}'}</code> is a small raised tilde accent. With the default OT1 font
             encoding <code>\textasciitilde</code> is defined as <code>\~{'{}'}</code> and prints
             that same accent, which is why T1 matters. In math mode, <code>\sim</code> gives the
-            &ldquo;similar to&rdquo; relation.
+            &quot;similar to&quot; relation.
           </p>
           <h3>How do I get a vertical bar or pipe in LaTeX?</h3>
           <p>
             In math mode type <code>|</code> directly, or use <code>\lvert ... \rvert</code> from
-            amsmath for absolute values and <code>\mid</code> for the &ldquo;such that&rdquo; or
-            &ldquo;divides&rdquo; relation. In text use <code>\textbar</code>; with the default
+            amsmath for absolute values and <code>\mid</code> for the &quot;such that&quot; or
+            &quot;divides&quot; relation. In text use <code>\textbar</code>; with the default
             OT1 font encoding, a bare <code>|</code> in text prints as an em dash.
           </p>
           <h3>Why does a percent sign make my text disappear?</h3>
           <p>
             Because <code>%</code> starts a comment: LaTeX ignores everything from the{' '}
             <code>%</code> to the end of the line. Write <code>\%</code> to print a percent sign.
-            If the comment swallows a closing brace you get <em>Runaway argument?</em> or{' '}
-            <em>File ended while scanning use of ...</em>.
+            If the comment swallows a closing brace you get &quot;<em>Runaway argument?</em>&quot; or{' '}
+            &quot;<em>File ended while scanning use of ...</em>&quot;.
           </p>
           <h3>How do I write less-than and greater-than signs in text?</h3>
           <p>
