@@ -123,6 +123,7 @@ export default async function LatexErrorPage({ params }: Args) {
             title={entry.shortName}
             source={`www:learn:errors:${entry.slug}`}
             label="Open the broken example"
+            raw
           />
           <h3>Fixed: compiles cleanly</h3>
           <pre><code>{entry.fixed}</code></pre>

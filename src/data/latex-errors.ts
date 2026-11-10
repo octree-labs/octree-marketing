@@ -347,7 +347,7 @@ l.5 The term $x_{i$
       'An unclosed brace in a formula: «$x_{i$» or «$e^{-x$». (If the open brace belongs to a command argument such as «\\frac{a}{b», TeX keeps reading and reports «File ended while scanning use of \\frac» instead.)',
       'A brace opened in one table cell or align column and closed in the next one, across «&».',
       'Verbatim material (verbatim, lstlisting) inside a command argument or a Beamer frame without the «[fragile]» option.',
-      'A brace inside «\\left\\{» or a set written as «{...}» instead of «\\{...\\}».',
+      'A brace opened inside «\\left( ... \\right)» and not closed before «\\right», as in «\\left( x_{i \\right)».',
     ],
     fix: [
       'Count the braces in the formula on the reported line and close the open group before the formula ends. Editors that highlight matching braces make this quick.',
@@ -460,7 +460,7 @@ The value \textbf{$x = 3$} is important.
     group: 'commands',
     summary: 'A closing brace at the outer level of the document that closes nothing.',
     quickAnswer:
-      "TeX found a «}» when no group was open at all. It almost always comes from deleting the beginning of a command such as «\\textit{» or «\\begin{center}» replacement braces and leaving its closing brace behind. Delete the stray «}» on the line shown after «l.», or put back the command it belonged to.",
+      "TeX found a «}» when no group was open at all. It almost always comes from deleting the start of a command such as «\\textit{» but leaving its closing brace behind. Delete the stray «}» on the line shown after «l.», or put back the command it belonged to.",
     log: r`! Too many }'s.
 l.5 This sentence is fine.}
                            `,
@@ -492,7 +492,7 @@ This sentence is fine.
       {
         question: "Why do I get Too many }'s instead of Extra }?",
         answer:
-          "Which message you get depends on where the brace is. Between paragraphs, at the outer level, TeX says «Too many }'s»; inside a paragraph or formula it usually says «Extra }, or forgotten $».",
+          "Which message you get depends on where the brace is. When no group is open at all (in the body of the document) TeX says «Too many }'s»; inside a formula it says «Extra }, or forgotten $», and inside an environment such as itemize it says «Extra }, or forgotten \\endgroup».",
       },
       {
         question: "Does Too many }'s break the PDF?",
@@ -1157,7 +1157,7 @@ l.4   Name & Age &
       r`The column specification has fewer columns than the rows, typically after adding a column to the data and not to «\begin{tabular}{...}».`,
       r`A missing «\\» at the end of a row, so two rows run together into one with too many cells.`,
       r`A literal «&» in cell text that should have been «\&».`,
-      r`In amsmath environments: more than two columns per pair in «cases», or too many «&» for the number of columns of a «matrix» (default 10) or «alignat».`,
+      r`In amsmath environments: more than one «&» per row in «cases», or too many «&» for the number of columns of a «matrix» (default 10) or «alignat».`,
     ],
     fix: [
       r`Count the «&» on the row named on the «l.» line and compare with the number of column letters in the specification. Add a column letter, or remove the extra separator.`,
@@ -1400,7 +1400,7 @@ l.5   \hrule`,
     causes: [
       'A multi-character index typed without braces, such as «a_i_j» for the matrix entry a with indices i and j.',
       'A nested script (a subscript of a subscript) written as «x_n_k» instead of «x_{n_k}».',
-      'A macro that already adds a subscript, used with another «_» after it, for example «\\newcommand{\\xi}{x_i}» followed by «\\xi_j».',
+      'A macro that already adds a subscript, used with another «_» after it, for example «\\newcommand{\\xs}{x_i}» followed by «\\xs_j».',
       'A prime after a superscript, as in «f^2\'»: the prime is itself a superscript. Write «f\'^2», which LaTeX merges into one superscript, or «{f^2}\'».',
     ],
     fix: [
@@ -1598,13 +1598,13 @@ l.6 \end{split}`,
 l.4 \vspace{2}`,
     causes: [
       'A number with no unit in a length argument: «\\vspace{2}», «\\hspace{1}», «\\setlength{\\parindent}{0}».',
-      'An unsupported unit such as «px» or «%», or a misspelling like «2 cms».',
+      'An unsupported unit such as «px» or «%», or a misspelled unit like «2 mn».',
       'A «[» at the start of the line after «\\\\»: LaTeX reads «\\\\[...]» as an optional spacing, so «\\\\ [1, 2]» is taken as a length «1,» with a bad unit.',
       'A key such as «width=» or «height=» in «\\includegraphics» or TikZ given a bare number.',
     ],
     fix: [
       'Add the unit to the length. Absolute units (cm, mm, in, pt) are fine for fixed space; relative ones (em, ex, «\\textwidth», «\\linewidth») scale with the font or the page.',
-      'Zero is the one value that still needs a unit: write «0pt» (or «\\z@» in package code), not «0».',
+      'Even zero needs a unit: write «0pt» (or «\\z@» in package code), not «0».',
     ],
     broken: r`\documentclass{article}
 \begin{document}
@@ -1835,7 +1835,7 @@ See Section~\ref{sec:intro}.
     quickAnswer:
       '"Emergency stop" is not a cause in itself: TeX prints it when it cannot continue in non-interactive mode. Read the line marked «***» below it. "no legal \\end found" means the file ended without «\\end{document}»; "file error in nonstop mode" means a file could not be found; "cannot \\read from terminal" means LaTeX wanted to ask you something, usually a missing package. Fix the error printed just above, then compile again.',
     log: r`! Emergency stop.
-<*> broken.tex
+<*> main.tex
           
 *** (job aborted, no legal \end found)`,
     causes: [
@@ -2082,7 +2082,7 @@ l.4 \begin
 (babel)                  version of the required files in your system`,
     causes: [
       'A typo in the language name: «engish», «englsh», «portugese».',
-      'A name babel does not use: «german» is the old spelling (use «ngerman»), «chinese» and «arabic» need «\\babelprovide» or the ini-based loader, «en» is not a language option.',
+      'A name babel does not use: «en» or «english-us» instead of «english» or «american», «brasil» instead of «brazilian».',
       'The language is spelled correctly but not installed: TeX Live and MiKTeX ship many languages as separate packages (for example «babel-spanish»).',
       'An option meant for another package, such as «utf8» or «T1», was passed to babel or given as a global class option that babel picked up.',
     ],
@@ -2146,7 +2146,7 @@ l.4 The result is ≈
                     3.14.`,
     causes: [
       'Math symbols typed or pasted as Unicode in text: ≈, ≤, →, ±, ×, Greek letters.',
-      'Invisible characters copied from a PDF or web page: zero-width space (U+200B), soft hyphen, or a non-breaking space in a place where it matters.',
+      'Invisible characters copied from a PDF or web page: zero-width space (U+200B), thin space (U+2009) or a narrow no-break space (U+202F).',
       'Emoji, CJK or other scripts that need a different engine and font.',
       'An older TeX Live in which the same problem is reported as «Package inputenc Error: Unicode character ... not set up for use with LaTeX».',
     ],
@@ -2180,7 +2180,7 @@ The result is ≈ 3.14, or $\approx 3.14$ written as a command.
       {
         question: 'How do I find the invisible character LaTeX complains about?',
         answer:
-          'The message gives its code point, for example U+200B (zero-width space) or U+00A0 (no-break space). Search for it in your editor (many accept \\u200B in a regular-expression search) or retype the words around the position shown after «l.» in the log.',
+          'The message gives its code point, for example U+200B (zero-width space) or U+2009 (thin space). Search for it in your editor (many accept \\u200B in a regular-expression search) or retype the words around the position shown after «l.» in the log.',
       },
       {
         question: 'Does XeLaTeX fix "Unicode character not set up for use with LaTeX"?',
@@ -2210,7 +2210,7 @@ The result is ≈ 3.14, or $\approx 3.14$ written as a command.
     quickAnswer:
       'A LaTeX font shape is encoding/family/series/shape, for example «OT1/cmr/bx/sc» is Computer Modern, bold, small caps. If the font has no file for that combination, LaTeX prints this warning and uses the nearest shape it has, usually upright bold, so the text silently looks wrong. Read the four parts of the message to see what was missing and switch to a font family that has it, add «\\usepackage[T1]{fontenc}», or drop the combination (for example use «\\textsc» without bold).',
     log: `LaTeX Font Warning: Font shape ${q('OT1/cmr/bx/sc')} undefined
-(Font)              using ${q('OT1/cmr/bx/n')} instead on input line 5.
+(Font)              using ${q('OT1/cmr/bx/n')} instead on input line 3.
 
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.`,
     causes: [
@@ -2359,7 +2359,7 @@ l.6 ...s[width=0.6\textwidth]{figures/results.png}`,
       'The image is in a different folder from the one in the path, or the path is written relative to a chapter file in a subfolder; LaTeX always resolves it from the folder of the main document.',
       'The name differs in case or extension: «Results.PNG» on disk versus «results.png» in the source works on macOS and Windows but fails on Linux and on online compilers.',
       'The image was never uploaded to the online project, or the file name contains spaces or extra dots that the driver misreads.',
-      'With XeLaTeX the same problem is reported as «LaTeX Error: File `figures/results.png\' not found», and an unsupported format (such as «.eps» with pdfLaTeX on an old TeX Live) gives "Unknown graphics extension" instead.',
+      'With XeLaTeX the same problem is reported as «Unable to load picture or PDF file \'figures/results.png\'», and an unsupported format (such as «.eps» with pdfLaTeX on an old TeX Live) gives "Unknown graphics extension" instead.',
     ],
     fix: [
       'Check the exact path and name of the file next to your main «.tex» file and copy it into «\\includegraphics». You can leave out the extension and let graphicx try «.pdf», «.png» and «.jpg» in turn. If all figures live in one folder, add «\\graphicspath{{figures/}}» to the preamble and refer to them by file name only.',
@@ -2547,7 +2547,7 @@ LaTeX Warning: There were multiply-defined labels.`,
   },
   {
     slug: 'overfull-hbox',
-    message: 'Overfull \\hbox (51.91441pt too wide) in paragraph at lines 3--4',
+    message: 'Overfull \\hbox (51.91441pt too wide) in paragraph at lines 3--5',
     shortName: 'Overfull \\hbox',
     title: 'LaTeX warning: Overfull \\hbox (too wide) in paragraph',
     description:
@@ -2559,7 +2559,7 @@ LaTeX Warning: There were multiply-defined labels.`,
     summary: 'A line could not be broken and sticks out into the right margin.',
     quickAnswer:
       'LaTeX could not find a good place to break a line, so it set the line too wide and it sticks into the margin by the amount shown. The usual culprits are long words it cannot hyphenate: URLs, file paths, code in «\\texttt», long formulas. Let the text break (load «xurl» for URLs, rephrase, or add a hyphenation hint with «\\-»), move the long item onto its own line, or load «microtype», which removes many small overfull boxes. A few points too wide is invisible and can be ignored.',
-    log: r`Overfull \hbox (51.91441pt too wide) in paragraph at lines 3--4
+    log: r`Overfull \hbox (51.91441pt too wide) in paragraph at lines 3--5
 []\OT1/cmr/m/n/10 Install the pack-age with \OT1/cmtt/m/n/10 pip install transformers-accelerate-datasets-evaluate
  []`,
     causes: [
@@ -2615,7 +2615,7 @@ and restart the kernel before you run the notebook.
       {
         question: 'How do I find where the overfull box is in the PDF?',
         answer:
-          'The warning gives the source line numbers ("at lines 3--4"). Adding «\\overfullrule=5pt» to the preamble also draws a black bar next to every overfull line in the PDF.',
+          'The warning gives the source line numbers ("at lines 3--5"). Adding «\\overfullrule=5pt» to the preamble also draws a black bar next to every overfull line in the PDF.',
       },
     ],
   },
