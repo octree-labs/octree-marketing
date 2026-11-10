@@ -23,7 +23,11 @@ export const GitHubStars: React.FC<GitHubStarsProps> = ({ repo, stars, className
       <div className="flex items-center gap-1">
         <Star className="w-3 h-3 fill-current" />
         <span className="font-mono text-xs whitespace-nowrap">
-          {stars !== null ? stars.toLocaleString() : '280'}
+          {/* Fixed locale: this renders on the server (en-US) and hydrates in the
+              visitor's locale, so a default toLocaleString() turns 301 into ٣٠١
+              for Arabic/Persian visitors (and 1,301 into 1.301 for German ones)
+              and React throws hydration error #418. */}
+          {stars !== null ? stars.toLocaleString('en-US') : '280'}
         </span>
       </div>
     </Link>
