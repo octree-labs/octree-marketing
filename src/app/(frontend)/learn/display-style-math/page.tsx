@@ -174,9 +174,10 @@ Unnumbered with amsmath:
           <p>
             <code>$$</code> is the display syntax of plain TeX, which LaTeX is built on, so it
             still compiles. But LaTeX&apos;s own display code never runs. The visible
-            consequences: the <code>fleqn</code> option no longer sets equations flush left, the
-            space above a display that starts a new paragraph comes out as an extra empty line, and{' '}
-            <code>amsmath</code> features such as <code>\tag</code> are unavailable. Replacing{' '}
+            consequences: the <code>fleqn</code> option no longer sets equations flush left, a
+            display placed after a paragraph break gets the smaller &ldquo;short&rdquo; skip above
+            it (<code>{`\\[`}</code> forces the normal one), and <code>amsmath</code> features
+            such as <code>\tag</code> give an error. Replacing{' '}
             <code>$$</code> with <code>{`\\[`}</code> and <code>{`\\]`}</code> costs nothing and
             avoids all of them. More on choosing an environment in the{' '}
             <Link href="/learn/mathematical-expressions">mathematical expressions guide</Link>.
@@ -317,8 +318,8 @@ And the reverse, in a display:
                 </tr>
                 <tr>
                   <td><em>Limit controls must follow a math operator</em></td>
-                  <td><code>\limits</code> after something that is not an operator, such as a letter or a macro defined with <code>\newcommand</code></td>
-                  <td>Use it only after <code>\sum</code>, <code>\int</code>, <code>\lim</code> or a <code>\DeclareMathOperator*</code> operator</td>
+                  <td><code>\limits</code> after something that is not an operator, such as a letter or <code>{`\\mathrm{max}`}</code></td>
+                  <td>Use it only after <code>\sum</code>, <code>\int</code>, <code>\lim</code> or an operator declared with <code>\DeclareMathOperator</code></td>
                 </tr>
                 <tr>
                   <td>Small fractions in <code>cases</code></td>

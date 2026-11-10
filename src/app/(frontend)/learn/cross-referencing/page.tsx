@@ -221,7 +221,7 @@ LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.`}
             <code>latexmk</code>, Octree and Overleaf rerun automatically until the labels settle.
             If a <code>??</code> survives a second compile, the label does not exist under that
             name: check the spelling (keys are case-sensitive) and that the{' '}
-            <code>\label</code> is not in a file left out with <code>\include</code> or a comment.
+            <code>\label</code> is not commented out or in a file the document never inputs.
             Citations work the same way; see <Link href="/learn/bibtex">BibTeX</Link>.
           </p>
 
@@ -249,10 +249,16 @@ LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.`}
   a^2 + b^2 = c^2 \\label{eq:pythagoras}
 \\end{equation}
 
-\\autoref{sec:background} (\\nameref{sec:background}) states
-\\autoref{eq:pythagoras}.
+The theorem in \\autoref{sec:background} (\\nameref{sec:background})
+is \\autoref{eq:pythagoras}.
 
 \\end{document}`}</code></pre>
+          <p>
+            That prints &ldquo;The theorem in section 1 (Background) is Equation 1&rdquo;:{' '}
+            <code>hyperref</code> names sections in lower case and equations without
+            parentheses. Change a name with{' '}
+            <code>{`\\renewcommand{\\sectionautorefname}{Section}`}</code>.
+          </p>
           <p>
             Without <code>colorlinks</code>, links get coloured boxes that show on screen but not
             in print. Link styles, <code>\url</code> and <code>\href</code> are covered in the{' '}

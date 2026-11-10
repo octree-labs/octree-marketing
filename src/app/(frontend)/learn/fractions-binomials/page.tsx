@@ -30,11 +30,6 @@ const LAST_UPDATED = '2026-11-09'
 
 const faq: FaqItem[] = [
   {
-    question: 'How do you write a fraction in LaTeX?',
-    answer:
-      'Use \\frac{numerator}{denominator} in math mode, for example $\\frac{a}{b}$ inline or \\[ \\frac{x+1}{x-1} \\] on its own line. Both arguments can hold any math, including other fractions, roots and sums.',
-  },
-  {
     question: 'What is the difference between \\frac, \\dfrac and \\tfrac?',
     answer:
       '\\frac picks its size from the surroundings: small in inline math, full size in a display. \\dfrac always uses the full display size and \\tfrac always uses the small inline size. \\dfrac and \\tfrac come from the amsmath package.',
@@ -45,14 +40,19 @@ const faq: FaqItem[] = [
       'Load amsmath and write \\binom{n}{k}. Like \\frac it adapts to inline or display math, and \\dbinom and \\tbinom force the display or inline size. The plain TeX form {n \\choose k} also works but is not recommended in LaTeX documents.',
   },
   {
-    question: 'How do I write a fraction without a line in LaTeX?',
+    question: 'How do I write a continued fraction in LaTeX?',
     answer:
-      'Use \\genfrac from amsmath with a rule thickness of 0pt: \\genfrac{}{}{0pt}{}{a}{b}. The first two arguments are optional delimiters and the fourth is the size (0 to 3, or empty for automatic). For stacked limits under a sum, \\substack is usually the better tool.',
+      'Use \\cfrac from amsmath and nest it: 1 + \\cfrac{1}{2 + \\cfrac{1}{2 + \\dotsb}}. Unlike nested \\frac, every level stays full size and the denominators line up. \\cfrac[l] and \\cfrac[r] set the numerator flush left or right.',
   },
   {
-    question: 'How do I write a fraction in normal text?',
+    question: 'Why does {n \\choose k} give a warning in LaTeX?',
     answer:
-      'For a simple ratio, type a slash: 1/2. For a typeset fraction in a sentence, load xfrac and write \\sfrac{1}{2}, which works in text and math. The symbols ½, ¼ and ¾ are available as \\textonehalf, \\textonequarter and \\textthreequarters.',
+      '\\choose, \\atop and \\over are plain TeX commands. amsmath logs “Foreign command \\atopwithdelims” (or \\atop, \\over) for them, and they take everything in the surrounding group as their arguments, which is easy to get wrong. Replace {n \\choose k} with \\binom{n}{k} and {a \\over b} with \\frac{a}{b}.',
+  },
+  {
+    question: 'Why is a fraction inside another fraction so small?',
+    answer:
+      'Each level of a fraction drops one math style: in a display the parts of a fraction are set in text style, and a fraction inside them in script style. Write the inner one as \\dfrac to keep it full size, or use \\cfrac for continued fractions.',
   },
 ]
 
@@ -121,7 +121,10 @@ Inline: $\\frac{1}{2}$ and $\\binom{n}{k}$.
             small in a sentence, too big in a line of text, cramped when nested, or needed without
             a line at all. This guide covers the three fraction sizes, nested and continued
             fractions, binomial coefficients, <code>\genfrac</code> for custom fractions, and
-            fractions in ordinary text. Every example compiles with pdfLaTeX.
+            fractions in ordinary text, with a table of mistakes at the end. For worked formulas
+            (quadratic formula, derivatives, partial fractions), see the{' '}
+            <Link href="/blog/fractions-latex-mathematical-notation-guide">fractions in LaTeX post
+            on the blog</Link>. Every example compiles with pdfLaTeX.
           </p>
 
           {/* ── \frac ── */}
@@ -355,13 +358,6 @@ Ready-made symbols: \\textonehalf, \\textonequarter, \\textthreequarters.
 
           {/* ── FAQ ── */}
           <h2>Frequently Asked Questions</h2>
-          <h3>How do you write a fraction in LaTeX?</h3>
-          <p>
-            Use <code>{`\\frac{numerator}{denominator}`}</code> in math mode, for example{' '}
-            <code>{`$\\frac{a}{b}$`}</code> inline or <code>{`\\[ \\frac{x+1}{x-1} \\]`}</code> on
-            its own line. Both arguments can hold any math, including other fractions, roots and
-            sums.
-          </p>
           <h3>What is the difference between \frac, \dfrac and \tfrac?</h3>
           <p>
             <code>\frac</code> picks its size from the surroundings: small in inline math, full
@@ -376,19 +372,29 @@ Ready-made symbols: \\textonehalf, \\textonequarter, \\textthreequarters.
             <code>\tbinom</code> force the display or inline size. The plain TeX form{' '}
             <code>{`{n \\choose k}`}</code> also works but is not recommended in LaTeX documents.
           </p>
-          <h3>How do I write a fraction without a line in LaTeX?</h3>
+          <h3>How do I write a continued fraction in LaTeX?</h3>
           <p>
-            Use <code>\genfrac</code> from <code>amsmath</code> with a rule thickness of 0pt:{' '}
-            <code>{`\\genfrac{}{}{0pt}{}{a}{b}`}</code>. The first two arguments are optional
-            delimiters and the fourth is the size (0 to 3, or empty for automatic). For stacked
-            limits under a sum, <code>\substack</code> is usually the better tool.
+            Use <code>\cfrac</code> from <code>amsmath</code> and nest it:{' '}
+            <code>{`1 + \\cfrac{1}{2 + \\cfrac{1}{2 + \\dotsb}}`}</code>. Unlike nested{' '}
+            <code>\frac</code>, every level stays full size and the denominators line up.{' '}
+            <code>\cfrac[l]</code> and <code>\cfrac[r]</code> set the numerator flush left or
+            right.
           </p>
-          <h3>How do I write a fraction in normal text?</h3>
+          <h3>Why does {'{n \\choose k}'} give a warning in LaTeX?</h3>
           <p>
-            For a simple ratio, type a slash: 1/2. For a typeset fraction in a sentence, load{' '}
-            <code>xfrac</code> and write <code>{`\\sfrac{1}{2}`}</code>, which works in text and
-            math. The symbols ½, ¼ and ¾ are available as <code>\textonehalf</code>,{' '}
-            <code>\textonequarter</code> and <code>\textthreequarters</code>.
+            <code>\choose</code>, <code>\atop</code> and <code>\over</code> are plain TeX
+            commands. <code>amsmath</code> logs &ldquo;Foreign command \atopwithdelims&rdquo; (or{' '}
+            <code>\atop</code>, <code>\over</code>) for them, and they take everything in the
+            surrounding group as their arguments, which is easy to get wrong. Replace{' '}
+            <code>{`{n \\choose k}`}</code> with <code>{`\\binom{n}{k}`}</code> and{' '}
+            <code>{`{a \\over b}`}</code> with <code>{`\\frac{a}{b}`}</code>.
+          </p>
+          <h3>Why is a fraction inside another fraction so small?</h3>
+          <p>
+            Each level of a fraction drops one math style: in a display the parts of a fraction
+            are set in text style, and a fraction inside them in script style. Write the inner one
+            as <code>\dfrac</code> to keep it full size, or use <code>\cfrac</code> for continued
+            fractions.
           </p>
 
           {/* ── Next Steps ── */}

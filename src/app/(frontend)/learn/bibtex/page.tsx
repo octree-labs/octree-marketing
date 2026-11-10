@@ -42,7 +42,7 @@ const faq: FaqItem[] = [
   {
     question: 'Why is my bibliography empty?',
     answer:
-      'BibTeX only lists entries that are cited. An empty list, or the error “Empty thebibliography environment”, means no \\cite or \\nocite reached BibTeX, BibTeX was not run, or it could not open the .bib file. Add \\nocite{*} to list every entry in the file without citing it.',
+      'BibTeX only lists entries that are cited. An empty list, or the warning “Empty thebibliography environment”, means no \\cite or \\nocite reached BibTeX, BibTeX was not run, or it could not open the .bib file. Add \\nocite{*} to list every entry in the file without citing it.',
   },
   {
     question: 'Should I use BibTeX, natbib or biblatex?',
@@ -115,7 +115,7 @@ Knuth designed \\TeX{} for high-quality typesetting \\cite{knuth1984}.
           <p className="lead">
             BibTeX keeps your references in a separate database file and formats only the ones
             you cite, in whatever style the journal asks for. You write each source once, cite it
-            by a short key, and switch from numbered to author-year citations by changing one line.
+            by a short key, and switch citation styles by changing one line.
             This guide covers the <code>.bib</code> file and its entry types, citing, choosing a
             style, the compile order, natbib and biblatex, and the errors that leave you with{' '}
             <code>[?]</code> in the text. Ready-made entries for APA, MLA, Chicago and IEEE are in
@@ -316,8 +316,8 @@ markup on top of it \\cite{lamport1987}. Several sources at once
             </table>
           </div>
           <p>
-            Do not load both, and do not mix their commands. APA and MLA styles are built on
-            biblatex; see <Link href="/learn/mla-in-text-citation">MLA in-text citations</Link>{' '}
+            Do not load both, and do not mix their commands. The usual APA and MLA styles
+            (biblatex-apa, biblatex-mla) are biblatex styles; see <Link href="/learn/mla-in-text-citation">MLA in-text citations</Link>{' '}
             and the <Link href="/learn/ama-citation-format">AMA citation format</Link>.
           </p>
 
@@ -339,14 +339,14 @@ markup on top of it \\cite{lamport1987}. Several sources at once
                   <td>Run the full sequence; check the key&apos;s spelling and case</td>
                 </tr>
                 <tr>
-                  <td><em>Empty &lsquo;thebibliography&rsquo; environment</em></td>
+                  <td><em>LaTeX Warning: Empty &lsquo;thebibliography&rsquo; environment</em></td>
                   <td>No citations reached BibTeX, or BibTeX failed</td>
                   <td>Add a <code>\cite</code> or <code>{`\\nocite{*}`}</code>; read the <code>.blg</code> log</td>
                 </tr>
                 <tr>
-                  <td><em>I couldn&apos;t open database file refs.bib.bib</em></td>
-                  <td><code>.bib</code> written in <code>\bibliography</code></td>
-                  <td><code>{`\\bibliography{refs}`}</code></td>
+                  <td><em>I couldn&apos;t open database file refs.bib</em></td>
+                  <td>The name in <code>\bibliography</code> is misspelled, or the file is in another folder</td>
+                  <td>Match the file name exactly (case included) and give a relative path, e.g. <code>{`\\bibliography{bib/refs}`}</code></td>
                 </tr>
                 <tr>
                   <td><em>I found no \bibdata command</em> / <em>no \bibstyle command</em></td>
@@ -359,7 +359,7 @@ markup on top of it \\cite{lamport1987}. Several sources at once
                   <td>Check the entry on the line the <code>.blg</code> names</td>
                 </tr>
                 <tr>
-                  <td>Acronyms print as &ldquo;Dna&rdquo; or &ldquo;latex&rdquo;</td>
+                  <td>Acronyms print in lower case, such as &ldquo;dna&rdquo;</td>
                   <td>The style lower-cases titles</td>
                   <td>Protect them: <code>{`{DNA}`}</code>, <code>{`{\\LaTeX}`}</code></td>
                 </tr>
@@ -392,7 +392,7 @@ markup on top of it \\cite{lamport1987}. Several sources at once
           </p>
           <h3>Why is my bibliography empty?</h3>
           <p>
-            BibTeX only lists entries that are cited. An empty list, or the error &ldquo;Empty
+            BibTeX only lists entries that are cited. An empty list, or the warning &ldquo;Empty
             thebibliography environment&rdquo;, means no <code>\cite</code> or{' '}
             <code>\nocite</code> reached BibTeX, BibTeX was not run, or it could not open the{' '}
             <code>.bib</code> file. Add <code>{`\\nocite{*}`}</code> to list every entry in the

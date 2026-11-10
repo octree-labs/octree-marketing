@@ -100,7 +100,7 @@ const learnTopics = [
   },
   {
     slug: 'line-breaks-blank-spaces',
-    title: 'Line Breaks and Blank Spaces: \\\\, \\newline, \\vspace and \\hspace',
+    title: 'LaTeX Line Break Commands: \\\\, \\newline, \\linebreak, \\vspace and \\hfill',
     description: 'New lines in LaTeX: \\\\ vs \\newline vs \\linebreak, paragraph breaks, blank lines with \\vspace and \\bigskip, \\hspace and \\hfill, page breaks and the errors they cause.',
     color: 'from-stone-500/10 to-zinc-600/5',
   },

@@ -135,7 +135,7 @@ Odd pages have the wide margin on the left.
               </thead>
               <tbody>
                 <tr><td>Margins</td><td>Same on every page</td><td>Inner and outer margins swap on even pages</td></tr>
-                <tr><td>Running heads (<code>headings</code> style)</td><td>One mark on every page</td><td>Chapter on even pages, section on odd pages</td></tr>
+                <tr><td>Running heads (<code>headings</code> style)</td><td>One mark on every page</td><td>Chapter on even pages, section on odd pages (<code>article</code>: section and subsection)</td></tr>
                 <tr><td>Page numbers in headers</td><td>Same corner</td><td>Outer corner</td></tr>
                 <tr><td><code>\marginpar</code> notes</td><td>Right margin</td><td>Outer margin</td></tr>
                 <tr><td>Page bottoms</td><td><code>\raggedbottom</code></td><td><code>\flushbottom</code>: every page filled to the same height</td></tr>
@@ -213,7 +213,8 @@ Odd pages have the wide margin on the left.
             <code>\cleardoublepage</code> moves to the next odd page in <code>twoside</code> mode
             and acts like <code>\clearpage</code> in <code>oneside</code>. Use it before the table
             of contents, the first chapter and the bibliography if those must start on the right.
-            Without <code>emptypage</code>, the inserted blank pages still carry a running header.
+            Without <code>emptypage</code>, the inserted blank pages still carry the running header
+            or page number of the current page style.
           </p>
 
           {/* ── headers ── */}
@@ -291,7 +292,7 @@ Odd pages have the wide margin on the left.
                 <tr>
                   <td><code>\cleardoublepage</code> does not skip a page</td>
                   <td>It only does so in <code>twoside</code> mode</td>
-                  <td>Use <code>twoside</code>, or add <code>{`\\null\\newpage`}</code> by hand</td>
+                  <td>Use <code>twoside</code>, or add <code>{`\\clearpage\\null\\newpage`}</code> by hand</td>
                 </tr>
                 <tr>
                   <td>Binding margin on the wrong side</td>

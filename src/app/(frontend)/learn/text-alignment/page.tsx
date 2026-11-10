@@ -131,7 +131,7 @@ export default async function LearnTextAlignmentPage() {
             for changing that: the three alignment environments, their declaration forms, the{' '}
             <code>ragged2e</code> package, and alignment in the places it causes trouble (figures,
             table cells, equations and the vertical centre of a page). For a step-by-step
-            walkthrough with screenshots, read the{' '}
+            walkthrough, read the{' '}
             <Link href="/blog/text-alignment-latex-centering-flushing">text alignment
             walkthrough on the blog</Link>. Every example compiles with pdfLaTeX.
           </p>
@@ -202,7 +202,7 @@ before the closing brace, so it is followed by a par.\\par}
 \\begin{figure}[ht]
   \\centering
   \\includegraphics[width=0.5\\linewidth]{example-image}
-  \\caption{Centred with \\texttt{\\textbackslash centering}.}
+  \\caption{A centred figure.}
 \\end{figure}
 
 \\begin{table}[ht]
@@ -226,7 +226,7 @@ before the closing brace, so it is followed by a par.\\par}
           <p>
             <code>\raggedright</code> turns off hyphenation in practice and removes the paragraph
             indent, so long ragged passages get a very uneven right edge. The{' '}
-            <code>ragged2e</code> package adds versions that keep hyphenation and the indent, plus{' '}
+            <code>ragged2e</code> package adds versions that keep hyphenation, plus{' '}
             <code>\justifying</code> to return to justified text:
           </p>
           <pre><code>{`\\documentclass{article}
@@ -235,7 +235,7 @@ before the closing brace, so it is followed by a par.\\par}
 
 \\RaggedRight
 This paragraph is ragged right, but unlike plain raggedright it still
-hyphenates long words such as internationalization and keeps its indent.
+hyphenates long words such as internationalization.
 
 \\justifying
 This paragraph is justified again, with both edges straight.
@@ -377,9 +377,9 @@ Right-aligned with ragged2e.
                   <td><code>\RaggedRight</code> from <code>ragged2e</code></td>
                 </tr>
                 <tr>
-                  <td><em>Undefined control sequence \justify</em></td>
-                  <td>The command is <code>\justifying</code></td>
-                  <td>Load <code>ragged2e</code> and write <code>\justifying</code></td>
+                  <td><em>Undefined control sequence</em> on <code>\justifying</code></td>
+                  <td>Plain LaTeX has no justify command; it comes from <code>ragged2e</code></td>
+                  <td><code>{`\\usepackage{ragged2e}`}</code></td>
                 </tr>
               </tbody>
             </table>
@@ -437,7 +437,6 @@ Right-aligned with ragged2e.
           {/* ── Next Steps ── */}
           <h2>Next Steps</h2>
           <ul>
-            <li><Link href="/blog/text-alignment-latex-centering-flushing">Text Alignment in LaTeX (blog)</Link> &ndash; A step-by-step walkthrough of centring and flushing</li>
             <li><Link href="/learn/tables">Tables in LaTeX</Link> &ndash; Column types, widths and booktabs</li>
             <li><Link href="/learn/images">Figures in LaTeX</Link> &ndash; Centred images, captions and placement</li>
             <li><Link href="/learn/paragraphs-indentation">Paragraphs and Indentation</Link> &ndash; \noindent, \parindent and parskip</li>

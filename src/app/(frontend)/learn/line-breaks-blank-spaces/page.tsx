@@ -19,9 +19,9 @@ const breadcrumbSchema = generateBreadcrumbSchema(breadcrumbs)
 
 const page = {
   slug: 'line-breaks-blank-spaces',
-  title: 'Line Breaks and Blank Spaces in LaTeX: \\\\, \\newline, \\vspace and \\hspace',
-  seoTitle: 'LaTeX Line Break and New Line: \\\\, \\newline',
-  description: 'New lines in LaTeX: \\\\ vs \\newline vs \\linebreak, paragraph breaks, blank lines with \\vspace, \\hspace and \\hfill, a line across the text, and the errors.',
+  title: 'LaTeX Line Break Commands: \\\\, \\newline, \\linebreak, \\vspace and \\hfill',
+  seoTitle: 'LaTeX Line Break: \\\\ vs \\newline vs \\linebreak',
+  description: 'Line break commands in LaTeX compared: \\\\ vs \\newline vs \\linebreak, \\par, \\vspace and \\bigskip, \\hspace and \\hfill, \\newpage vs \\clearpage, and the errors.',
   keywords: 'latex line break, latex new line, new line latex, line break latex, latex newline, latex \\\\, latex linebreak, newline vs linebreak, latex blank line, latex empty line, latex vspace, latex hspace, latex hfill, latex vfill, latex paragraph break, latex new paragraph, latex par, latex bigskip, latex medskip, latex horizontal line in text, latex hrulefill, there\'s no line here to end, latex underfull hbox, latex non-breaking space, latex space between words, latex new page, latex pagebreak, latex clearpage',
 }
 
@@ -30,29 +30,29 @@ const LAST_UPDATED = '2026-11-09'
 
 const faq: FaqItem[] = [
   {
-    question: 'How do I make a new line in LaTeX?',
-    answer:
-      'Type \\\\ (two backslashes) or \\newline where the line should end. The text continues on the next line inside the same paragraph, with no indent. To start a new paragraph instead, leave a blank line in the source or write \\par; the new paragraph gets the normal first-line indent.',
-  },
-  {
     question: 'What is the difference between \\\\, \\newline and \\linebreak?',
     answer:
       '\\\\ and \\newline end the line and leave the rest of it empty (ragged), and \\\\ also takes an optional space such as \\\\[6pt]. \\linebreak ends the line but stretches the words to fill the full width, as in a justified paragraph, which often looks gappy and triggers an Underfull \\hbox warning.',
   },
   {
-    question: 'How do I add a blank line in LaTeX?',
-    answer:
-      'A blank line in the source only starts a new paragraph; it never prints an empty line. To leave vertical space, use \\vspace{\\baselineskip} for exactly one empty line, \\bigskip, \\medskip or \\smallskip for standard gaps, or \\\\[\\baselineskip] at the end of a line.',
-  },
-  {
     question: 'Why do I get “There\'s no line here to end”?',
     answer:
-      'LaTeX raises it when \\\\ or \\newline appears where no line of text has started: at the very beginning of a paragraph, right after a blank line, or twice in a row to fake a blank line. Delete the extra \\\\ and use \\vspace or \\bigskip for the space you wanted.',
+      'LaTeX raises it when \\\\ or \\newline appears where no line of text has started: at the very beginning of a paragraph or right after a blank line. Delete that \\\\ and use \\vspace or \\bigskip for the space you wanted. A doubled \\\\ \\\\ in the middle of a paragraph does not raise it, but leaves an empty line and an Underfull \\hbox warning.',
   },
   {
-    question: 'How do I add horizontal space in LaTeX?',
+    question: 'Why does \\vspace not work at the top of a page?',
     answer:
-      'Use \\hspace{1cm} for a fixed gap, \\quad and \\qquad for 1em and 2em, ~ for a space that never breaks, and \\hfill to push the following text to the right margin. At the start of a line, \\hspace* keeps space that \\hspace would drop.',
+      'LaTeX discards vertical space at a page break, so \\vspace at the top of a page, or right after \\newpage, disappears. Use the starred form, \\vspace*{2cm}, to keep it. In the middle of a paragraph, \\vspace takes effect only after the current line ends.',
+  },
+  {
+    question: 'How do I put text on the left and right of the same line in LaTeX?',
+    answer:
+      'Put \\hfill between the two pieces: Name \\hfill Date. \\hfill takes all the free space on the line, so the second piece is pushed to the right margin. With two \\hfill commands, the text between them is centred.',
+  },
+  {
+    question: 'What is the difference between \\newpage and \\clearpage?',
+    answer:
+      '\\newpage ends the current page, or the current column in a two-column document. \\clearpage also ends the page, but first places every figure and table still waiting to be placed, on extra pages if needed. Use \\clearpage before a new part of the document so floats do not drift past it.',
   },
 ]
 
@@ -81,7 +81,7 @@ export default async function LearnLineBreaksBlankSpacesPage() {
         </div>
 
         <article className="prose prose-lg dark:prose-invert max-w-4xl mx-auto">
-          <h1>Line Breaks and Blank Spaces in LaTeX: \\, \newline, \vspace and \hspace</h1>
+          <h1>LaTeX Line Break Commands: \\, \newline, \linebreak, \vspace and \hfill</h1>
 
           <div className="not-prose my-6 p-6 rounded-lg border bg-muted/40 break-words">
             <p className="text-sm font-semibold uppercase tracking-wide text-muted-foreground mb-3">Quick answer</p>
@@ -125,11 +125,13 @@ Left text \\hfill right text
             LaTeX decides where lines end on its own, and most of the time you should let it. When
             you do need a break (an address, a poem, a signature block, a gap before a heading),
             the right command depends on what you want: a new line inside a paragraph, a new
-            paragraph, or empty space. This guide covers <code>\\</code>,{' '}
-            <code>\newline</code> and <code>\linebreak</code>, paragraph breaks, vertical space
-            with <code>\vspace</code>, horizontal space with <code>\hspace</code> and{' '}
-            <code>\hfill</code>, a line drawn across the text, and the errors that come from
-            fighting the line breaker. Every example compiles with pdfLaTeX.
+            paragraph, or empty space. This reference compares the commands side by side:{' '}
+            <code>\\</code>, <code>\newline</code> and <code>\linebreak</code>, paragraph breaks,
+            vertical space with <code>\vspace</code>, horizontal space with <code>\hspace</code>{' '}
+            and <code>\hfill</code>, page breaks, and the errors that come from fighting the line
+            breaker. For a gentler introduction with a copy-and-paste cheat sheet, read the{' '}
+            <Link href="/blog/latex-blank-spaces-line-breaks-guide">line breaks and blank spaces
+            post on the blog</Link>. Every example compiles with pdfLaTeX.
           </p>
 
           {/* ── New line ── */}
@@ -210,7 +212,7 @@ So is the third, which starts after \\verb|\\par|.
           <h2>Blank Lines and Vertical Space: \vspace, \bigskip and \vfill</h2>
           <p>
             To leave empty space between lines, ask for it by size. <code>\vspace</code> takes any
-            length, and the skip commands give standard gaps that scale with the font:
+            length, and the skip commands give standard gaps that can stretch or shrink a little:
           </p>
           <pre><code>{`\\documentclass{article}
 \\begin{document}
@@ -328,7 +330,9 @@ Signature: \\hrulefill \\quad Date: \\rule{3cm}{0.4pt}
             <code>\clearpage</code> does the same after placing every figure and table still
             waiting, and <code>\cleardoublepage</code> also skips to an odd page in two-sided
             documents. <code>\pagebreak</code> is the page-level <code>\linebreak</code>: it
-            breaks the page but stretches the text to fill it.
+            breaks the page, and in a <code>\flushbottom</code> document (the default with{' '}
+            <code>twoside</code>) it stretches the vertical space so the text still reaches the
+            bottom of the page.
           </p>
 
           {/* ── Mistakes ── */}
@@ -345,13 +349,13 @@ Signature: \\hrulefill \\quad Date: \\rule{3cm}{0.4pt}
               <tbody>
                 <tr>
                   <td><em>LaTeX Error: There&apos;s no line here to end.</em></td>
-                  <td><code>\\</code> right after a blank line, at the start of a paragraph or environment, or <code>\\ \\</code> to fake a blank line</td>
+                  <td><code>\\</code> right after a blank line or at the start of a paragraph</td>
                   <td>Delete it; use <code>{`\\vspace{\\baselineskip}`}</code> or <code>\bigskip</code></td>
                 </tr>
                 <tr>
                   <td><em>Underfull \hbox (badness 10000) in paragraph</em></td>
-                  <td><code>\\</code> at the end of a paragraph, or <code>\linebreak</code> on a short line</td>
-                  <td>End the paragraph with a blank line only; prefer <code>\\</code> to <code>\linebreak</code></td>
+                  <td><code>\\</code> at the end of a paragraph, <code>\\ \\</code> to fake a blank line, or <code>\linebreak</code> on a short line</td>
+                  <td>End the paragraph with a blank line only; use <code>{`\\vspace{\\baselineskip}`}</code> for an empty line; prefer <code>\\</code> to <code>\linebreak</code></td>
                 </tr>
                 <tr>
                   <td>Every paragraph ends with <code>\\</code> to get space between paragraphs</td>
@@ -379,13 +383,6 @@ Signature: \\hrulefill \\quad Date: \\rule{3cm}{0.4pt}
 
           {/* ── FAQ ── */}
           <h2>Frequently Asked Questions</h2>
-          <h3>How do I make a new line in LaTeX?</h3>
-          <p>
-            Type <code>\\</code> (two backslashes) or <code>\newline</code> where the line should
-            end. The text continues on the next line inside the same paragraph, with no indent. To
-            start a new paragraph instead, leave a blank line in the source or write{' '}
-            <code>\par</code>; the new paragraph gets the normal first-line indent.
-          </p>
           <h3>What is the difference between \\, \newline and \linebreak?</h3>
           <p>
             <code>\\</code> and <code>\newline</code> end the line and leave the rest of it empty
@@ -394,26 +391,35 @@ Signature: \\hrulefill \\quad Date: \\rule{3cm}{0.4pt}
             words to fill the full width, as in a justified paragraph, which often looks gappy and
             triggers an Underfull <code>\hbox</code> warning.
           </p>
-          <h3>How do I add a blank line in LaTeX?</h3>
-          <p>
-            A blank line in the source only starts a new paragraph; it never prints an empty line.
-            To leave vertical space, use <code>{`\\vspace{\\baselineskip}`}</code> for exactly one
-            empty line, <code>\bigskip</code>, <code>\medskip</code> or <code>\smallskip</code> for
-            standard gaps, or <code>{`\\\\[\\baselineskip]`}</code> at the end of a line.
-          </p>
           <h3>Why do I get &ldquo;There&apos;s no line here to end&rdquo;?</h3>
           <p>
             LaTeX raises it when <code>\\</code> or <code>\newline</code> appears where no line of
-            text has started: at the very beginning of a paragraph, right after a blank line, or
-            twice in a row to fake a blank line. Delete the extra <code>\\</code> and use{' '}
-            <code>\vspace</code> or <code>\bigskip</code> for the space you wanted.
+            text has started: at the very beginning of a paragraph or right after a blank line.
+            Delete that <code>\\</code> and use <code>\vspace</code> or <code>\bigskip</code> for
+            the space you wanted. A doubled <code>\\ \\</code> in the middle of a paragraph does
+            not raise it, but leaves an empty line and an Underfull <code>\hbox</code> warning.
           </p>
-          <h3>How do I add horizontal space in LaTeX?</h3>
+          <h3>Why does \vspace not work at the top of a page?</h3>
           <p>
-            Use <code>{`\\hspace{1cm}`}</code> for a fixed gap, <code>\quad</code> and{' '}
-            <code>\qquad</code> for 1em and 2em, <code>~</code> for a space that never breaks, and{' '}
-            <code>\hfill</code> to push the following text to the right margin. At the start of a
-            line, <code>\hspace*</code> keeps space that <code>\hspace</code> would drop.
+            LaTeX discards vertical space at a page break, so <code>\vspace</code> at the top of a
+            page, or right after <code>\newpage</code>, disappears. Use the starred form,{' '}
+            <code>{`\\vspace*{2cm}`}</code>, to keep it. In the middle of a paragraph,{' '}
+            <code>\vspace</code> takes effect only after the current line ends.
+          </p>
+          <h3>How do I put text on the left and right of the same line in LaTeX?</h3>
+          <p>
+            Put <code>\hfill</code> between the two pieces: <code>Name \hfill Date</code>.{' '}
+            <code>\hfill</code> takes all the free space on the line, so the second piece is
+            pushed to the right margin. With two <code>\hfill</code> commands, the text between
+            them is centred.
+          </p>
+          <h3>What is the difference between \newpage and \clearpage?</h3>
+          <p>
+            <code>\newpage</code> ends the current page, or the current column in a two-column
+            document. <code>\clearpage</code> also ends the page, but first places every figure
+            and table still waiting to be placed, on extra pages if needed. Use{' '}
+            <code>\clearpage</code> before a new part of the document so floats do not drift past
+            it.
           </p>
 
           {/* ── Next Steps ── */}
