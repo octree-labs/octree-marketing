@@ -82,7 +82,8 @@ export function LearnOpenInOctree() {
 
   useEffect(() => {
     const match = pathname?.match(/^\/learn\/([^/]+)\/?$/)
-    if (!match) return
+    // /learn/errors is an index without a sample; its error pages carry their own box.
+    if (!match || match[1] === 'errors') return
     const article = document.querySelector<HTMLElement>('article.prose')
     if (!article || article.querySelector(`[${MARKER}]`)) return
 
