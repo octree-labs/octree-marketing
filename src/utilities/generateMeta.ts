@@ -13,7 +13,7 @@ const isAbsoluteURL = (url: string) => url.startsWith('http://') || url.startsWi
 export const getImageURL = (image?: Media | Config['db']['defaultIDType'] | null) => {
   const serverUrl = getServerSideURL()
 
-  let url = serverUrl + '/website-template-OG.webp'
+  let url = serverUrl + '/images/homepage-og.png'
 
   if (image && typeof image === 'object' && 'url' in image) {
     const chosen = image.sizes?.og?.url || image.url

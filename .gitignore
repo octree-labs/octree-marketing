@@ -23,7 +23,8 @@ node_modules/
 /blob-report/
 /playwright/.cache/
 
-scripts/
+scripts/*
+!scripts/generate-llms.mjs
 
 # SEO analysis files
 seo_analysis.py

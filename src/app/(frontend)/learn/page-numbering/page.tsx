@@ -26,7 +26,7 @@ const page = {
 }
 
 /** Last content update, used for dateModified in the article schema. */
-const LAST_UPDATED = '2026-11-09'
+const LAST_UPDATED = '2026-11-10'
 
 const faq: FaqItem[] = [
   {
@@ -120,20 +120,11 @@ export default async function LaTeXPageNumberingPage() {
               </li>
             </ul>
           </div>
-          <p className="lead">
-            LaTeX numbers pages automatically, but almost every real document needs more than the
-            default: roman numerals for the front matter, no number on the title page, a number
-            that starts at a given value, or &ldquo;Page 3 of 12&rdquo; in the footer. This guide
-            covers <code>\pagenumbering</code>, <code>\setcounter</code>, the built-in page
-            styles, the <code>fancyhdr</code> package, chapter-based numbering, Beamer frame
-            numbers, and the errors people run into along the way.
-          </p>
 
           {/* ── Defaults ── */}
           <h2>How Page Numbering in LaTeX Works by Default</h2>
           <p>
-            Every page has a counter called <code>page</code>, and the command{' '}
-            <code>\thepage</code> prints it. In <code>article</code> the first page is 1, the
+            <code>\thepage</code> prints the <code>page</code> counter. In <code>article</code> the first page is 1, the
             number is printed centred in the footer (page style <code>plain</code>), and the
             title made by <code>\maketitle</code> is numbered like any other page. In{' '}
             <code>book</code> and <code>report</code> the title page is a page of its own without
@@ -379,9 +370,12 @@ The number sits in the bottom right corner of every page.
 \\pagestyle{fancy}
 \\fancyfoot[C]{Page \\thepage\\ of \\pageref*{LastPage}}`}</code></pre>
           <p>
-            <code>LastPage</code> reports the number <em>as printed</em> on the last page. If
-            the back matter is numbered differently from the body, the total will reflect that,
-            so place the switch to arabic before the first page that shows &ldquo;of Y&rdquo;.
+            <code>LastPage</code> reports the number <em>as printed</em> on the last page,
+            not the physical PDF page count. A book with six roman front-matter pages and
+            twenty arabic pages ends at 20, not 26. Show only the roman page number in the
+            front matter and enable &ldquo;Page X of Y&rdquo; in the main matter, as in the
+            complete example below. This assumes arabic numbering continues through the
+            final page; resetting it for an appendix makes LastPage unsuitable as a body total.
           </p>
 
           <h3>\headheight</h3>
@@ -484,11 +478,6 @@ The number sits in the bottom right corner of every page.
 
           {/* ── Errors ── */}
           <h2>Common Errors</h2>
-          <p>
-            Most page numbering problems are not errors at all: the document compiles and the
-            number is simply missing, wrong or in the wrong place. These are the ones that come up
-            most, with the log message where there is one:
-          </p>
           <div className="overflow-x-auto">
           <table>
             <thead>
@@ -505,39 +494,14 @@ The number sits in the bottom right corner of every page.
                 <td>Redefine <code>plain</code> with <code>\fancypagestyle</code>, or write <code>{`\\thispagestyle{fancy}`}</code> after <code>\maketitle</code></td>
               </tr>
               <tr>
-                <td>Numbering restarts at 1 after changing the style</td>
-                <td><code>\pagenumbering</code> always resets the counter</td>
-                <td>Redefine <code>\thepage</code> instead, or add <code>{`\\setcounter{page}{n}`}</code> afterwards</td>
-              </tr>
-              <tr>
-                <td><em>\headheight is too small</em> warning, header overlaps text</td>
-                <td>Multi-line or large-font header in <code>fancyhdr</code></td>
-                <td><code>{`\\setlength{\\headheight}{15pt}`}</code> or <code>headheight=15pt</code> in <code>geometry</code></td>
-              </tr>
-              <tr>
                 <td>Title page shows a number although <code>{`\\thispagestyle{empty}`}</code> is present</td>
                 <td>The command came before <code>\maketitle</code>, which sets <code>plain</code> afterwards</td>
                 <td>Move it after <code>\maketitle</code></td>
               </tr>
               <tr>
-                <td><code>{`\\pageref{LastPage}`}</code> prints <strong>??</strong></td>
-                <td>The label is written at the end of the run</td>
-                <td>Compile twice</td>
-              </tr>
-              <tr>
                 <td><em>destination with the same identifier (name{'{'}page.1{'}'}) has been already used</em></td>
                 <td>Two pages print the same <code>\thepage</code>, typically a counted title page and body page 1</td>
                 <td>Use roman numbering for the front matter, or <code>{`\\hypersetup{pageanchor=false}`}</code> on the unnumbered pages</td>
-              </tr>
-              <tr>
-                <td>Chapter opener numbered 0</td>
-                <td><code>{`\\counterwithin{page}{chapter}`}</code></td>
-                <td>Use <code>chappg</code> or the <code>\pretocmd</code> hook above</td>
-              </tr>
-              <tr>
-                <td>Page number on the wrong side in a two-sided book</td>
-                <td>Roman and arabic sections start on even pages, or <code>twoside</code> is missing</td>
-                <td>Use <code>\cleardoublepage</code> before each switch and check the class option</td>
               </tr>
             </tbody>
           </table>
@@ -555,6 +519,7 @@ The number sits in the bottom right corner of every page.
 \\usepackage{lastpage}
 \\usepackage{hyperref}
 
+\\newcommand{\\pagefooter}{\\thepage}
 \\pagestyle{fancy}
 % fancyhdr's \\chaptermark ignores \\frontmatter, so front-matter chapters
 % would get "Chapter 0." in the running head; this version checks it
@@ -565,13 +530,13 @@ The number sits in the bottom right corner of every page.
 \\fancyhf{}
 \\fancyhead[LE]{\\nouppercase{\\leftmark}}     % chapter title on even pages
 \\fancyhead[RO]{\\nouppercase{\\rightmark}}    % section title on odd pages
-\\fancyfoot[C]{Page \\thepage\\ of \\pageref*{LastPage}}
+\\fancyfoot[C]{\\pagefooter}
 \\renewcommand{\\headrulewidth}{0.4pt}
 
 % Chapter opening pages: footer only, no header rule
 \\fancypagestyle{plain}{%
   \\fancyhf{}%
-  \\fancyfoot[C]{Page \\thepage\\ of \\pageref*{LastPage}}%
+  \\fancyfoot[C]{\\pagefooter}%
   \\renewcommand{\\headrulewidth}{0pt}%
 }
 
@@ -586,6 +551,7 @@ The number sits in the bottom right corner of every page.
 Front-matter pages carry lowercase roman numerals.
 
 \\mainmatter                  % 1, 2, 3 ...
+\\renewcommand{\\pagefooter}{Page \\thepage\\ of \\pageref*{LastPage}}
 \\chapter{Introduction}
 The opening page of each chapter uses the redefined \\texttt{plain}
 style; every other page uses \\texttt{fancy}.
@@ -597,36 +563,6 @@ Even pages show the chapter, odd pages show the section.
 Appendix pages continue the arabic sequence.
 \\end{document}`}</code></pre>
 
-          {/* ── Quick reference ── */}
-          <h2>Quick Reference</h2>
-          <div className="overflow-x-auto">
-          <table>
-            <thead>
-              <tr>
-                <th>Task</th>
-                <th>Command</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr><td>Roman numerals (resets to i)</td><td><code>{`\\pagenumbering{roman}`}</code></td></tr>
-              <tr><td>Arabic numerals (resets to 1)</td><td><code>{`\\pagenumbering{arabic}`}</code></td></tr>
-              <tr><td>Start at page 5</td><td><code>{`\\setcounter{page}{5}`}</code></td></tr>
-              <tr><td>No number on this page</td><td><code>{`\\thispagestyle{empty}`}</code> (after <code>\maketitle</code>)</td></tr>
-              <tr><td>No numbers anywhere</td><td><code>{`\\pagestyle{empty}`}</code></td></tr>
-              <tr><td>Number only, centred footer</td><td><code>{`\\pagestyle{plain}`}</code></td></tr>
-              <tr><td>Running heads with number</td><td><code>{`\\pagestyle{headings}`}</code></td></tr>
-              <tr><td>Front/main matter switch (book)</td><td><code>\frontmatter</code> / <code>\mainmatter</code></td></tr>
-              <tr><td>Number in footer with fancyhdr</td><td><code>{`\\fancyhf{} \\fancyfoot[C]{\\thepage}`}</code></td></tr>
-              <tr><td>Number on the outer edge (twoside)</td><td><code>{`\\fancyhead[LE,RO]{\\thepage}`}</code></td></tr>
-              <tr><td>Page X of Y</td><td><code>{`\\fancyfoot[C]{Page \\thepage\\ of \\pageref{LastPage}}`}</code> with <code>lastpage</code></td></tr>
-              <tr><td>Blank chapter openers</td><td><code>{`\\fancypagestyle{plain}{\\fancyhf{}\\renewcommand{\\headrulewidth}{0pt}}`}</code></td></tr>
-              <tr><td>Change format without reset</td><td><code>{`\\renewcommand{\\thepage}{\\Roman{page}}`}</code></td></tr>
-              <tr><td>Per-chapter numbering 2-1, 2-2</td><td><code>{`\\usepackage{chappg}`}</code></td></tr>
-              <tr><td>Fix header height warning</td><td><code>{`\\setlength{\\headheight}{15pt}`}</code></td></tr>
-              <tr><td>Beamer frame numbers</td><td><code>{`\\setbeamertemplate{footline}[frame number]`}</code></td></tr>
-            </tbody>
-          </table>
-          </div>
 
           {/* ── FAQ ── */}
           <h2>Frequently Asked Questions</h2>
@@ -687,9 +623,7 @@ Appendix pages continue the arabic sequence.
             <li><Link href="/learn/table-of-contents">Table of Contents in LaTeX</Link> &ndash; <code>\tableofcontents</code>, depth, roman-numbered contents pages and tocloft styling</li>
             <li><Link href="/learn/page-size-margins">Page Size &amp; Margins</Link> &ndash; Paper size, margins and <code>headheight</code> with the geometry package</li>
             <li><Link href="/learn/horizontal-lines">Horizontal Lines in LaTeX</Link> &ndash; Header and footer rules, <code>\hrule</code>, <code>\rule</code> and table rules</li>
-            <li><Link href="/learn/footnotes">LaTeX Footnotes</Link> &ndash; Footnotes in tables, headings and captions</li>
             <li><Link href="/learn/hyperlinks">LaTeX Hyperlinks</Link> &ndash; hyperref, link colors and the duplicate page anchor warning</li>
-            <li><Link href="/learn/latex">Learn LaTeX</Link> &ndash; Complete beginner tutorial covering all the basics</li>
           </ul>
 
           {/* ── Free LaTeX Tools ── */}
@@ -705,8 +639,9 @@ Appendix pages continue the arabic sequence.
           <div className="not-prose mt-12 p-6 bg-primary/5 rounded-lg border border-primary/10">
             <h3 className="text-lg font-semibold mb-2">Fix page numbering faster with AI</h3>
             <p className="text-muted-foreground mb-4">
-              Octree&apos;s AI editor sets up front matter, fancyhdr headers and page styles for
-              you, explains the warnings, and compiles your document in seconds.
+              Open the complete example in Octree and compare the roman front matter with the
+              arabic body pages. Ask the AI assistant to explain a numbering warning, then
+              check the title page, chapter openers and final footer in the compiled PDF.
             </p>
             <Link
               href="https://app.useoctree.com"

@@ -1,6 +1,6 @@
 import type { Metadata } from 'next/types'
 
-import { learnMetadata } from '@/utilities/learnMetadata'
+import { learnMetadata, type FaqItem } from '@/utilities/learnMetadata'
 import Link from 'next/link'
 import { buttonVariants } from '@/components/ui/button'
 import React from 'react'
@@ -25,7 +25,30 @@ const page = {
 }
 
 /** Last content update, used for dateModified in the article schema. */
-const LAST_UPDATED = '2026-10-17'
+const LAST_UPDATED = '2026-11-10'
+
+const faq: FaqItem[] = [
+  {
+    question: 'How do I add a footnote in LaTeX?',
+    answer:
+      'Put \\footnote{text} immediately after the relevant word or punctuation, without a preceding space. LaTeX inserts the mark and places the note at the bottom of the page.',
+  },
+  {
+    question: 'How do I add notes to a LaTeX table?',
+    answer:
+      'Use threeparttable for notes attached beneath a floating table. These are table notes, not page footnotes. For a nonfloating tabular, put \\footnotemark in the cell and \\footnotetext immediately after the tabular.',
+  },
+  {
+    question: 'Where do minipage footnotes appear?',
+    answer:
+      'A footnote inside a minipage appears at the bottom of that minipage, not at the page bottom. It uses the separate mpfootnote counter, normally printed as letters.',
+  },
+  {
+    question: 'Why does a footnote link go to the wrong place?',
+    answer:
+      'With hyperref, manually numbered or repeated marks and separated mark/text commands need care: matching printed numbers do not guarantee matching PDF destinations. Check the compiled links; hyperfootnotes=false disables footnote links without disabling other hyperlinks.',
+  },
+]
 
 export default async function LaTeXFootnotesPage() {
   return (
@@ -39,6 +62,7 @@ export default async function LaTeXFootnotesPage() {
         title={page.title}
         description={page.description}
         dateModified={LAST_UPDATED}
+        faq={faq}
       />
       <div className="container">
         <div className="mb-8 max-w-4xl mx-auto">
@@ -55,7 +79,8 @@ export default async function LaTeXFootnotesPage() {
           <p className="lead">
             A footnote in LaTeX takes one command: <code>{`\\footnote{text}`}</code>. LaTeX
             numbers it, places the mark in the text, and typesets the note at the bottom of the
-            page. This guide covers the basics and then the cases that actually cause trouble
+            page. For notes attached to a floating table, use <code>threeparttable</code> instead:
+            those notes belong beneath the table, not at the bottom of the page. This guide covers the basics and then the cases that actually cause trouble
             &ndash; footnotes inside tables, section headings and captions, symbols instead of
             numbers, footnotes without a number, and how to change their size and spacing.
           </p>
@@ -84,10 +109,10 @@ for mathematical typesetting.
 
           <h3>Where the footnote mark goes</h3>
           <p>
-            Place the command after punctuation if the note applies to the whole sentence
-            (<code>{`sentence.\\footnote{...}`}</code>) and before punctuation if it applies to a
-            single word (<code>{`word\\footnote{...},`}</code>). Avoid a space before{' '}
-            <code>\footnote</code>; it would separate the mark from the text.
+            Follow your publisher&apos;s punctuation rules. Many English styles put the mark
+            after a comma or period even when the note concerns one word; other styles differ.
+            For a sentence-level note, <code>{`sentence.\\footnote{...}`}</code> is common.
+            Avoid a space before <code>\footnote</code>; it separates the mark from the text.
           </p>
 
           {/* ── footnotemark / footnotetext ── */}
@@ -103,10 +128,13 @@ for mathematical typesetting.
 \\footnotetext{Preliminary data; see Section 4 for the full analysis.}`}</code></pre>
           <p>
             The short title in square brackets matters: without it the heading, including the
-            fragile <code>\footnotemark</code>, is written to the table of contents and breaks the
-            build. Both commands share the same counter, so they stay in sync as long as you keep
-            them in order. If you need several marks before their texts, pass the number explicitly:{' '}
-            <code>\footnotemark[2]</code> and <code>{`\\footnotetext[2]{...}`}</code>.
+            mark can be copied to the table of contents and running headers.
+            An unnumbered <code>\footnotemark</code> advances the footnote counter;
+            <code>\footnotetext</code> uses its current value without advancing it. Keep the
+            pair together, before another footnote changes the counter. Explicit forms such as{' '}
+            <code>\footnotemark[2]</code> and <code>{`\\footnotetext[2]{...}`}</code> print
+            that number without advancing the counter, so hard-coded numbers can collide with
+            later automatic notes.
           </p>
 
           {/* ── Footnotes in tables ── */}
@@ -120,31 +148,30 @@ for mathematical typesetting.
 
           <h3>1. footnotemark in the table, footnotetext after it</h3>
           <p>
-            Keep the mark in the cell and emit the text right after the table. This works with a
-            plain <code>table</code> float and needs no extra packages:
+            For an actual page footnote, keep the mark in the cell and emit the text immediately
+            after a nonfloating <code>tabular</code>. This complete example needs no packages:
           </p>
-          <pre><code>{`\\begin{table}[htbp]
-  \\centering
-  \\begin{tabular}{lrr}
-    \\hline
-    Method & Accuracy & Time (s) \\\\
-    \\hline
-    Baseline & 91.2 & 14 \\\\
-    Ours\\footnotemark & 94.7 & 9 \\\\
-    \\hline
-  \\end{tabular}
-  \\caption{Comparison of methods}
-\\end{table}
-\\footnotetext{Averaged over five runs.}`}</code></pre>
+          <pre><code>{`\\documentclass{article}
+\\begin{document}
+\\noindent
+\\begin{tabular}{lr}
+  Method & Accuracy \\\\
+  Baseline & 91.2 \\\\
+  Ours\\footnotemark & 94.7 \\\\
+\\end{tabular}
+\\footnotetext{Averaged over five runs.}
+\\end{document}`}</code></pre>
           <p>
-            The drawback: if the float moves to another page, the note ends up on the page where
-            the <code>\footnotetext</code> command sits, not under the table.
+            Do not assume the same technique keeps a floating <code>table</code> and its
+            footnote together. The note belongs to the page where <code>\footnotetext</code>
+            is processed; the float may move elsewhere. Use attached table notes when that is
+            the intended meaning, rather than moving the text command until one draft looks right.
           </p>
 
           <h3>2. threeparttable: notes directly under the table (recommended)</h3>
           <p>
             For table-specific notes, the <code>threeparttable</code> package puts the notes
-            under the table itself, which is what most journals expect. Use{' '}
+            under the table itself, without creating page footnotes. Follow the journal&apos;s template if it prescribes another format. Use{' '}
             <code>\tnote</code> for the mark and a <code>tablenotes</code> environment for the
             text:
           </p>
@@ -183,13 +210,17 @@ for mathematical typesetting.
             of the minipage, lettered <em>a</em>, <em>b</em>, <em>c</em> by the{' '}
             <code>mpfootnote</code> counter:
           </p>
-          <pre><code>{`\\begin{minipage}{\\linewidth}
+          <pre><code>{`\\documentclass{article}
+\\begin{document}
+\\noindent
+\\begin{minipage}{\\linewidth}
   \\centering
   \\begin{tabular}{lr}
     Item & Value\\footnote{In thousands.} \\\\
     A & 12 \\\\
   \\end{tabular}
-\\end{minipage}`}</code></pre>
+\\end{minipage}
+\\end{document}`}</code></pre>
           <p>
             To use numbers instead of letters inside a minipage, add{' '}
             <code>{`\\renewcommand{\\thempfootnote}{\\arabic{mpfootnote}}`}</code> to the preamble.
@@ -213,8 +244,10 @@ for mathematical typesetting.
 \\end{figure}
 \\footnotetext[1]{Smoothed with a window of 50 steps.}`}</code></pre>
           <p>
-            Give the number explicitly here: a caption longer than one line is typeset twice, which
-            would otherwise step the counter twice.
+            Captions may be measured and typeset more than once, so avoid a counter-advancing
+            mark inside them. The explicit number above is illustrative, not an automatic
+            numbering scheme. Prefer a short explanatory sentence in the caption itself for a
+            floating figure; separating mark and text does not guarantee they land on the same page.
           </p>
           <p>
             The optional short title in square brackets keeps the footnote out of the table of
@@ -321,10 +354,18 @@ for mathematical typesetting.
           {/* ── hyperref ── */}
           <h2>Footnotes and hyperref</h2>
           <p>
-            With <code>hyperref</code> loaded, every footnote mark becomes a clickable link to its
-            text. This occasionally clashes with <code>footmisc</code> options and with footnotes
-            in tables. If you see <em>&ldquo;Hyper reference ... undefined&rdquo;</em> warnings or
-            broken links, disable footnote links only:
+            With <code>hyperref</code>, ordinary footnote marks normally link to their text.
+            Manually numbered marks, repeated marks, and separated mark/text pairs need testing:
+            the printed counter and the internal hyperlink destination are not the same thing.
+            Matching numbers alone do not prove the link is correct. Compile twice and click
+            the marks in the PDF, especially after rearranging notes.
+          </p>
+          <p>
+            A short section title keeps marks out of the table of contents, but PDF bookmarks
+            are a separate concern. Use <code>\texorpdfstring</code> to provide plain bookmark
+            text if necessary. Follow your installed <code>footmisc</code> and document class
+            documentation for compatibility. If footnote links remain unreliable, disable
+            only those links, leaving ordinary references and URLs clickable:
           </p>
           <pre><code>{`\\usepackage[hyperfootnotes=false]{hyperref}`}</code></pre>
 
@@ -367,7 +408,7 @@ for mathematical typesetting.
               <tr>
                 <td>Footnote text lands on the wrong page</td>
                 <td><code>\footnotetext</code> placed far from where the float ends up</td>
-                <td>Move the <code>\footnotetext</code> or switch to <code>threeparttable</code></td>
+                <td>Avoid a floating mark/text split or use table notes with <code>threeparttable</code></td>
               </tr>
             </tbody>
           </table>
@@ -385,7 +426,7 @@ for mathematical typesetting.
   \\endgroup
 }
 
-\\title{Footnotes in Practice\\thanks{Draft of 17 October 2026.}}
+\\title{Footnotes in Practice\\thanks{Draft of 10 November 2026.}}
 \\author{A. Author\\thanks{Department of Examples, Sample University}}
 
 \\begin{document}
@@ -430,7 +471,7 @@ interrupting the argument.
             <tbody>
               <tr><td>Basic footnote</td><td><code>{`\\footnote{text}`}</code></td></tr>
               <tr><td>Mark only / text only</td><td><code>\footnotemark</code> / <code>{`\\footnotetext{text}`}</code></td></tr>
-              <tr><td>Footnote in a table</td><td><code>threeparttable</code> with <code>{`\\tnote{a}`}</code> and <code>tablenotes</code></td></tr>
+              <tr><td>Notes attached to a table</td><td><code>threeparttable</code> with <code>{`\\tnote{a}`}</code> and <code>tablenotes</code></td></tr>
               <tr><td>Footnote in a heading</td><td><code>{`\\section[short]{Title\\protect\\footnote{text}}`}</code></td></tr>
               <tr><td>Symbols instead of numbers</td><td><code>{`\\renewcommand{\\thefootnote}{\\fnsymbol{footnote}}`}</code></td></tr>
               <tr><td>No number</td><td><code>{`\\blfootnote{text}`}</code> (helper above)</td></tr>
@@ -441,17 +482,20 @@ interrupting the argument.
             </tbody>
           </table>
 
+          <h2>Frequently Asked Questions</h2>
+          {faq.map(({ question, answer }) => (
+            <React.Fragment key={question}>
+              <h3>{question}</h3>
+              <p>{answer}</p>
+            </React.Fragment>
+          ))}
+
           {/* ── Related Guides ── */}
           <h2>Related Guides</h2>
           <ul>
             <li><Link href="/learn/tables">LaTeX Tables</Link> &ndash; booktabs, multicolumn, longtable and colored tables</li>
             <li><Link href="/learn/hyperlinks">LaTeX Hyperlinks</Link> &ndash; hyperref, \url, \href and the hyperfootnotes option</li>
             <li><Link href="/learn/quotes">Quotes in LaTeX</Link> &ndash; Quotation marks, csquotes and block quotes with attribution</li>
-            <li><Link href="/learn/comments">LaTeX Comments</Link> &ndash; Single-line and block comments, todo notes</li>
-            <li><Link href="/learn/page-size-margins">Page Size &amp; Margins</Link> &ndash; Control page layout with the geometry package</li>
-            <li><Link href="/learn/bold-italics-underline">Bold, Italics &amp; Underline</Link> &ndash; Text formatting commands and packages</li>
-            <li><Link href="/learn/lists">LaTeX Lists</Link> &ndash; Itemize, enumerate and description lists</li>
-            <li><Link href="/learn/latex">Learn LaTeX</Link> &ndash; Complete beginner tutorial covering all the basics</li>
           </ul>
 
           {/* ── Free LaTeX Tools ── */}
@@ -468,8 +512,8 @@ interrupting the argument.
           <div className="not-prose mt-12 p-6 bg-primary/5 rounded-lg border border-primary/10">
             <h3 className="text-lg font-semibold mb-2">Fix footnote problems faster with AI</h3>
             <p className="text-muted-foreground mb-4">
-              Octree&apos;s AI editor spots footnotes that vanish inside tables and headings,
-              suggests the right package, and compiles your document in seconds.
+              Open an example in Octree, compile it, and ask AI chat about a missing footnote.
+              Check the PDF placement and links after applying a suggested change.
             </p>
             <Link
               href="https://app.useoctree.com"

@@ -1,6 +1,19 @@
-# Payload Website Template
+# Octree website and LaTeX learning guides
 
-This is the official [Payload Website Template](https://github.com/payloadcms/payload/blob/main/templates/website). Use it to power websites, blogs, or portfolios from small to enterprise. This repo includes a fully-working backend, enterprise-grade admin panel, and a beautifully designed, production-ready website.
+Source for [www.useoctree.com](https://www.useoctree.com), the website for the
+[Octree LaTeX editor](https://app.useoctree.com). The site includes a Payload CMS
+blog and code-based [LaTeX guides](https://www.useoctree.com/learn).
+
+- [Free LaTeX tools](https://tools.useoctree.com)
+- [Compiler API and MCP documentation](https://www.useoctree.com/developers)
+- Regenerate the learning inventory in `public/llms.txt` and `public/llms-full.txt`
+  with `node scripts/generate-llms.mjs` after updating the learn hub or error registry.
+
+## Upstream template setup reference
+
+This project started from the [Payload Website Template](https://github.com/payloadcms/payload/blob/main/templates/website).
+The following sections describe that template; use an isolated database for local
+development and builds, not the production CMS database.
 
 You can deploy to Vercel, using Neon and Vercel Blob Storage with one click:
 
