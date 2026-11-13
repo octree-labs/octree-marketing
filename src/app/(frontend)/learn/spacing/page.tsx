@@ -26,7 +26,7 @@ const page = {
 }
 
 /** Last content update, used for dateModified in the article schema. */
-const LAST_UPDATED = '2026-11-09'
+const LAST_UPDATED = '2026-11-13'
 
 const faq: FaqItem[] = [
   {
@@ -42,12 +42,12 @@ const faq: FaqItem[] = [
   {
     question: 'What do \\, \\: \\; and \\! do in LaTeX?',
     answer:
-      'They are the math spaces. \\, is a thin space (3mu), \\: a medium space (4mu), \\; a thick space (5mu) and \\! a negative thin space (-3mu) that pulls symbols together. One mu is 1/18 of an em, so \\quad is 18mu and \\qquad 36mu. \\, also works in text, for example between a number and its unit.',
+      'They are the math spaces. \\, is a thin space (3mu), \\: a medium space (4mu), \\; a thick space (5mu) and \\! a negative thin space (-3mu) that pulls symbols together. One mu is 1/18 of the current math symbol font quad. \\quad and \\qquad use text em units, so they do not shrink like mu spaces in subscripts. \\, also works in text, for example between a number and its unit.',
   },
   {
     question: 'How do I set double spacing or 1.5 line spacing in LaTeX?',
     answer:
-      'Load the setspace package and write \\doublespacing or \\onehalfspacing in the preamble, or \\setstretch{1.5} for a custom factor. setspace keeps footnotes, captions and tables single-spaced. \\linespread{1.5} also works but scales everything, and it gives noticeably more than one-and-a-half spacing, close to double.',
+      'Load the setspace package and write \\doublespacing or \\onehalfspacing in the preamble, or \\setstretch{1.5} for a custom factor. setspace resets ordinary footnotes and figure/table floats to single spacing. Captions outside floats and standalone tabular environments are not universally covered. \\linespread{1.5} also works but scales everything, and it gives noticeably more than one-and-a-half spacing, close to double.',
   },
   {
     question: 'How do I add space between paragraphs instead of indenting them?',
@@ -138,8 +138,7 @@ Math: $a\\,b \\quad a\\:b \\quad a\\;b \\quad a\\!b$
             that spacing commands produce.
           </p>
 
-          {/* ── Horizontal ── */}
-          <h2>Horizontal Spacing</h2>
+          <h2>Horizontal Spacing: Fixed Gaps and Nonbreaking Spaces</h2>
           <p>
             Spaces in the source are collapsed: one space, ten spaces and a single line break all
             produce one interword space, and spaces at the start of a line are ignored. To get
@@ -186,7 +185,8 @@ Chapter 1 \\dotfill 7                  % dotted leader, as in a contents line
 \\end{document}`}</code></pre>
           <p>
             Two details catch people out. First, <code>\hspace</code> at the very start of a line
-            is discarded like any other space there; use <code>\hspace*</code> to keep it.
+            can disappear at a line break; use <code>\hspace*</code> when the gap must survive.
+            At the start of a new paragraph, <code>\noindent</code> separately removes the normal indent.
             Second, a command name eats the space after it, so <code>\LaTeX is</code> prints
             &ldquo;LaTeXis&rdquo;. Write <code>{`\\LaTeX{} is`}</code> or{' '}
             <code>{`\\LaTeX\\ is`}</code>.
@@ -201,7 +201,6 @@ Chapter 1 \\dotfill 7                  % dotted leader, as in a contents line
             turns the wider space off altogether, which many style guides now prefer.
           </p>
 
-          {/* ── Vertical ── */}
           <h2>Vertical Spacing</h2>
           <p>
             Vertical space goes between paragraphs. <code>\vspace</code> adds an exact amount;
@@ -252,20 +251,21 @@ Third paragraph, one and a half blank lines further down.
 \\end{document}`}</code></pre>
           <p>
             Use units that scale with the font for spacing in running text: <code>em</code>{' '}
-            (the width of an M), <code>ex</code> (the height of an x) or{' '}
+            (the font&apos;s em quad, usually its nominal size), <code>ex</code> (its x-height) or{' '}
             <code>\baselineskip</code> (one line). Fixed units such as <code>cm</code> and{' '}
             <code>pt</code> suit title pages and forms. Do not use repeated <code>{`\\\\`}</code>{' '}
-            or empty lines to make vertical space: they produce <em>Underfull \hbox</em> warnings
-            or the error <em>There&apos;s no line here to end</em>.
+            to make blank paragraphs: that can produce <em>Underfull \hbox</em> warnings or
+            <em>There&apos;s no line here to end</em>. Multiple blank source lines still make just
+            one paragraph break; they do not accumulate vertical space.
           </p>
 
-          {/* ── Math ── */}
           <h2>Spacing in Math Mode</h2>
           <p>
             In math mode, spaces in the source are ignored completely; TeX decides the spacing
             from what each symbol is (operator, relation, punctuation). To adjust it, use the
             math spacing commands. Their widths are given in <em>mu</em> (math units): 1mu is
-            1/18 of an em in the current math font, so the spaces scale correctly in subscripts.
+            1/18 of the math symbol font&apos;s quad at the current style. Explicit mu spaces
+            scale in subscripts; <code>\quad</code> and <code>\qquad</code> instead use text em units.
           </p>
           <div className="overflow-x-auto">
             <table>
@@ -283,8 +283,8 @@ Third paragraph, one and a half blank lines further down.
                 <tr><td><code>\:</code> (also <code>\&gt;</code>)</td><td><code>\medspace</code></td><td>4mu plus 2mu minus 4mu</td><td>The space around <code>+</code> and <code>&minus;</code></td></tr>
                 <tr><td><code>\;</code></td><td><code>\thickspace</code></td><td>5mu plus 5mu</td><td>The space around <code>=</code>; before a condition</td></tr>
                 <tr><td><code>{`\\ `}</code> (backslash space)</td><td>&mdash;</td><td>one interword space (about 6mu)</td><td>A word-sized gap</td></tr>
-                <tr><td><code>\quad</code></td><td>&mdash;</td><td>1em = 18mu</td><td>Between an equation and a condition</td></tr>
-                <tr><td><code>\qquad</code></td><td>&mdash;</td><td>2em = 36mu</td><td>Between two equations on one line</td></tr>
+                <tr><td><code>\quad</code></td><td>&mdash;</td><td>1 text em</td><td>Between an equation and a condition</td></tr>
+                <tr><td><code>\qquad</code></td><td>&mdash;</td><td>2 text em</td><td>Between two equations on one line</td></tr>
                 <tr><td><code>{`\\mspace{5mu}`}</code></td><td>&mdash;</td><td>Any amount in mu</td><td>Fine-tuning (amsmath)</td></tr>
                 <tr><td><code>{`\\hspace{1em}`}</code></td><td>&mdash;</td><td>Any text length</td><td>Works in math too</td></tr>
               </tbody>
@@ -309,19 +309,21 @@ Third paragraph, one and a half blank lines further down.
             spaces inside the braces; they are kept because <code>\text</code> switches back to
             text mode. Spacing around relations and operators that looks wrong is usually a sign
             of the wrong symbol: <code>&lt;</code> instead of <code>\langle</code> (see{' '}
-            <Link href="/learn/brackets">brackets</Link>), or <code>|</code> instead of{' '}
+            brackets), or <code>|</code> instead of{' '}
             <code>\mid</code> in set notation. For operator names, <code>\sin</code> and{' '}
             <code>\DeclareMathOperator</code> add the correct space automatically (see{' '}
-            <Link href="/learn/math-functions">math functions</Link>).
+            math functions).
           </p>
 
-          {/* ── Line spacing ── */}
-          <h2>Line Spacing</h2>
+          <h2>LaTeX Line Spacing: Single, 1.5 and Double</h2>
           <p>
             Line spacing (the distance between baselines, <code>\baselineskip</code>) is set by
             the font size. To change it for the whole document, the <code>setspace</code>{' '}
-            package is the reliable way: it scales the body text but keeps footnotes, captions,
-            and floats such as tables single-spaced, as most thesis rules require.
+            package provides named settings for body text and resets ordinary footnotes and
+            figure/table floats to single spacing. A caption inside a float normally inherits that
+            reset; a caption outside a float or a standalone <code>tabular</code> is not
+            automatically covered. Classes and caption packages may apply their own settings,
+            so check the final PDF against your institution&apos;s rules.
           </p>
           <pre><code>{`\\documentclass[12pt]{article}
 \\usepackage{setspace}
@@ -337,10 +339,19 @@ A single-spaced block quotation or code listing, inside a
 one-and-a-half spaced document.
 \\end{singlespace}
 
-\\begin{spacing}{2}
-A double-spaced passage.
-\\end{spacing}
+\\begin{doublespace}
+This passage uses the named double-spacing setting. It has enough
+text to wrap onto a second line so you can inspect the baseline spacing.
+\\end{doublespace}
 \\end{document}`}</code></pre>
+          <p>
+            Use <code>onehalfspace</code> or <code>doublespace</code> environments for a local
+            named setting. The <code>spacing</code> environment instead takes a literal baseline
+            multiplier: <code>{`\\begin{spacing}{2}`}</code> doubles the normal baseline skip,
+            which is not the same as <code>\doublespacing</code>. Likewise,{' '}
+            <code>{`\\setstretch{1.5}`}</code> is not an alias for <code>\onehalfspacing</code>.
+            The named commands use factors adjusted for the standard base font sizes.
+          </p>
           <p>
             Without a package, <code>{`\\linespread{1.3}`}</code> in the preamble multiplies the
             baseline skip everywhere, including footnotes and tables. The factor is not the
@@ -358,8 +369,7 @@ A double-spaced passage.
             <Link href="/learn/tables">tables guide</Link> has more on both.
           </p>
 
-          {/* ── Paragraph spacing ── */}
-          <h2>Paragraph Spacing</h2>
+          <h2>Paragraph Spacing and Indentation</h2>
           <p>
             A blank line in the source starts a new paragraph. By default LaTeX marks new
             paragraphs with an indent (<code>\parindent</code>) and no extra space (
@@ -395,10 +405,9 @@ Second paragraph, 6pt lower.
             Spacing inside lists is a separate setting; the <code>enumitem</code> package&apos;s{' '}
             <code>nosep</code> and <code>itemsep</code> options are covered in{' '}
             <Link href="/learn/lists">lists</Link>, and space around headings in{' '}
-            <Link href="/learn/sections">sections</Link>.
+            sections.
           </p>
 
-          {/* ── Errors ── */}
           <h2>Common Errors and Fixes</h2>
           <div className="overflow-x-auto">
             <table>
@@ -469,7 +478,6 @@ The interval is\\\\ \\relax
 [a, b].
 \\end{document}`}</code></pre>
 
-          {/* ── FAQ ── */}
           <h2>Frequently Asked Questions</h2>
           <h3>How do I add a space in LaTeX?</h3>
           <p>
@@ -492,15 +500,18 @@ The interval is\\\\ \\relax
           <p>
             They are the math spaces. <code>\,</code> is a thin space (3mu), <code>\:</code> a
             medium space (4mu), <code>\;</code> a thick space (5mu) and <code>\!</code> a
-            negative thin space (-3mu) that pulls symbols together. One mu is 1/18 of an em, so{' '}
-            <code>\quad</code> is 18mu and <code>\qquad</code> 36mu. <code>\,</code> also works
+            negative thin space (-3mu) that pulls symbols together. One mu is 1/18 of the current
+            math symbol font quad. <code>\quad</code> and <code>\qquad</code> use text em units
+            instead, so they do not shrink like mu spaces in subscripts. <code>\,</code> also works
             in text, for example between a number and its unit.
           </p>
           <h3>How do I set double spacing or 1.5 line spacing in LaTeX?</h3>
           <p>
             Load the <code>setspace</code> package and write <code>\doublespacing</code> or{' '}
             <code>\onehalfspacing</code> in the preamble, or <code>{`\\setstretch{1.5}`}</code>{' '}
-            for a custom factor. setspace keeps footnotes, captions and tables single-spaced.{' '}
+            for a custom factor. setspace resets ordinary footnotes and figure/table floats
+            to single spacing. Captions outside floats and standalone <code>tabular</code>
+            environments are not universally covered.{' '}
             <code>{`\\linespread{1.5}`}</code> also works but scales everything, and it gives
             noticeably more than one-and-a-half spacing, close to double.
           </p>
@@ -524,32 +535,25 @@ The interval is\\\\ \\relax
             gives &ldquo;Illegal unit of measure (pt inserted)&rdquo; instead.
           </p>
 
-          {/* ── Next Steps ── */}
           <h2>Next Steps</h2>
           <ul>
             <li><Link href="/learn/font-size">LaTeX Font Size</Link> &ndash; Size commands, baseline skip and \linespread</li>
-            <li><Link href="/learn/page-size-margins">Page Size &amp; Margins</Link> &ndash; The geometry package for page-level spacing</li>
-            <li><Link href="/learn/mathematical-expressions">Mathematical Expressions</Link> &ndash; Display math and amsmath environments</li>
             <li><Link href="/learn/multiline-equations">Multiline Equations</Link> &ndash; Alignment and spacing in align and split</li>
             <li><Link href="/learn/lists">Lists</Link> &ndash; Item spacing with enumitem</li>
-            <li><Link href="/learn/latex">Learn LaTeX: Tutorial for Beginners</Link> &ndash; The basics, from the first document up</li>
           </ul>
 
           <h2>Free LaTeX Tools</h2>
           <ul>
             <li><Link href="https://tools.useoctree.com/tools/latex-preview" target="_blank" rel="noopener noreferrer">LaTeX Preview</Link> &ndash; Try spacing commands with a live PDF preview</li>
-            <li><Link href="https://tools.useoctree.com/tools/ai-latex-generator" target="_blank" rel="noopener noreferrer">AI LaTeX Generator</Link> &ndash; Generate LaTeX from text descriptions</li>
-            <li><Link href="https://tools.useoctree.com/symbols" target="_blank" rel="noopener noreferrer">LaTeX Symbols Reference</Link> &ndash; Browse math operators and special characters</li>
           </ul>
 
           <RelatedPosts searchTerm="LaTeX" title="Related Articles" />
 
           <div className="not-prose mt-12 p-6 bg-primary/5 rounded-lg border border-primary/10">
-            <h3 className="text-lg font-semibold mb-2">Fix spacing problems faster with AI</h3>
+            <h3 className="text-lg font-semibold mb-2">Try your spacing settings in Octree</h3>
             <p className="text-muted-foreground mb-4">
-              Octree&apos;s AI editor explains &ldquo;Missing number&rdquo; and underfull box
-              warnings, sets up thesis line spacing for you, and compiles your document in
-              seconds.
+              Compile a complete example in Octree, change one spacing setting at a time,
+              and compare the PDF before applying the change to your main document.
             </p>
             <Link
               href="https://app.useoctree.com"
