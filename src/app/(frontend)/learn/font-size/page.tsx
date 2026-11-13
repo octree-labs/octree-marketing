@@ -26,7 +26,7 @@ const page = {
 }
 
 /** Last content update, used for dateModified in the article schema. */
-const LAST_UPDATED = '2026-11-09'
+const LAST_UPDATED = '2026-11-13'
 
 /** The ten size commands: point size and baseline skip at 10pt, 11pt and 12pt. */
 const sizes: { cmd: string; pt10: string; pt11: string; pt12: string; render: number }[] = [
@@ -51,7 +51,7 @@ const faq: FaqItem[] = [
   {
     question: 'What are the font sizes in LaTeX?',
     answer:
-      'From smallest to largest: \\tiny, \\scriptsize, \\footnotesize, \\small, \\normalsize, \\large, \\Large, \\LARGE, \\huge and \\Huge. In a 10pt document they are 5, 7, 8, 9, 10, 12, 14.4, 17.28, 20.74 and 24.88pt. They are relative to the body size, so in a 12pt document each one is larger.',
+      'From smallest to largest: \\tiny, \\scriptsize, \\footnotesize, \\small, \\normalsize, \\large, \\Large, \\LARGE, \\huge and \\Huge. In a 10pt document they are 5, 7, 8, 9, 10, 12, 14.4, 17.28, 20.74 and 24.88pt. Their values depend on the class and base size, but not every command increases: \\Huge is 24.88pt in all three standard base sizes.',
   },
   {
     question: 'How do I get 14pt or larger text in LaTeX?',
@@ -127,16 +127,12 @@ export default async function LaTeXFontSizePage() {
             </ul>
           </div>
           <p className="lead">
-            LaTeX font size works at two levels. The class option (<code>10pt</code>,{' '}
-            <code>11pt</code>, <code>12pt</code>) sets the body size for the whole document, and
-            ten commands from <code>\tiny</code> to <code>\Huge</code> scale a passage up or down
-            from that body size. For anything off that scale, <code>\fontsize</code> sets an exact
-            size. This guide gives the point value of every command, shows how to size captions,
-            footnotes, headers, section titles, math and Beamer slides, and fixes the errors you
-            will hit along the way.
+            Use a class option for the document, a grouped size declaration for a passage,
+            and <code>\fontsize</code> for an exact size. Start with the command table, then
+            copy a complete example to check the result in a PDF. Keep a publisher&apos;s
+            class settings unless its instructions explicitly allow changes.
           </p>
 
-          {/* ── Size commands ── */}
           <h2>Text Size in LaTeX: The Ten Size Commands</h2>
           <p>
             To change text size in LaTeX, use one of the ten size commands. They are{' '}
@@ -155,8 +151,9 @@ export default async function LaTeXFontSizePage() {
           <p>
             The commands are relative: <code>\large</code> means one step above the body size, so
             its point size depends on the class option. The table shows each size rendered at its
-            10pt value, then the exact numbers for the standard classes (<code>article</code>,{' '}
-            <code>report</code>, <code>book</code>). The second number in each cell is the baseline
+            10pt value using your browser font, not a LaTeX rendering. The numeric columns give
+            the standard class definitions for <code>article</code>,{' '}
+            <code>report</code> and <code>book</code>. The second number in each cell is the baseline
             skip, the distance from one line to the next.
           </p>
           <div className="overflow-x-auto">
@@ -164,7 +161,7 @@ export default async function LaTeXFontSizePage() {
             <thead>
               <tr>
                 <th>Command</th>
-                <th>Rendered (10pt document)</th>
+                <th>Browser approximation</th>
                 <th>10pt (default)</th>
                 <th>11pt</th>
                 <th>12pt</th>
@@ -191,7 +188,6 @@ export default async function LaTeXFontSizePage() {
             at 24.88pt.
           </p>
 
-          {/* ── Class options ── */}
           <h2>LaTeX Font Size for the Whole Document: Class Options</h2>
           <p>
             The document font size is a class option. The standard classes accept{' '}
@@ -204,8 +200,8 @@ export default async function LaTeXFontSizePage() {
 Body text is 12pt; headings and footnotes scale with it.
 \\end{document}`}</code></pre>
           <p>
-            Changing this one option rescales everything at once: body text, headings, footnotes,
-            captions and the relative size commands. For most documents this is the only
+            Changing this option updates the class-defined sizes for body text, headings,
+            footnotes and captions, although some large sizes stay unchanged. For most documents this is the only
             font-size setting that needs to change. Anything other than those three values is
             ignored by the standard classes with only an <em>Unused global option(s)</em> warning, which is the source of many &ldquo;why is my
             14pt option not working&rdquo; questions.
@@ -221,24 +217,25 @@ Body text is 12pt; headings and footnotes scale with it.
           </p>
           <pre><code>{`\\documentclass[14pt]{extarticle}
 \\begin{document}
-Body text is now 14pt, and \\large, \\Large and friends scale with it.
+Body text is now 14pt. {\\large This passage is larger.}
 \\end{document}`}</code></pre>
           <p>
             The KOMA-Script classes (<code>scrartcl</code>, <code>scrreprt</code>,{' '}
             <code>scrbook</code>) accept any size through the <code>fontsize=</code> option, not
             just fixed steps:
           </p>
-          <pre><code>{`\\documentclass[fontsize=13pt]{scrartcl}
+          <pre><code>{`\\RequirePackage{fix-cm}
+\\documentclass[fontsize=13pt,DIV=12]{scrartcl}
 \\usepackage{lmodern}
 \\begin{document}
-Body text is 13pt. KOMA computes \\small, \\large and the rest from it.
+Body text is 13pt. {\\small This passage uses the smaller size.}
 \\end{document}`}</code></pre>
           <p>
-            The <code>memoir</code> class accepts 9pt to 60pt through its own options. If you
+            The <code>memoir</code> class provides additional size options, with its larger sizes
+            requiring the <code>extrafontsizes</code> option. If you
             already use KOMA-Script or memoir, prefer their option over <code>extsizes</code>.
           </p>
 
-          {/* ── Scoping ── */}
           <h2>Scoping a Size Change: Braces vs Environments</h2>
           <p>
             Because the size commands are declarations, how far they reach depends on where you put
@@ -281,7 +278,6 @@ The environment form needs the blank line too.
 
 \\end{Large}`}</code></pre>
 
-          {/* ── fontsize ── */}
           <h2>Custom Size of the LaTeX Font: \fontsize and \selectfont</h2>
           <p>
             When you need a size that is not on the ten-step scale, use{' '}
@@ -324,7 +320,6 @@ baseline, and it wraps correctly across lines.\\par}
             <code>\linespread</code> does not.
           </p>
 
-          {/* ── Elements ── */}
           <h2>Font Size for Specific Elements</h2>
           <p>
             Most parts of a document have a size baked into the class. Each one has a clean way to
@@ -334,15 +329,18 @@ baseline, and it wraps correctly across lines.\\par}
           <h3>Captions</h3>
           <p>
             Load the <code>caption</code> package and pass the size as an option. Separate
-            settings exist for the label (&ldquo;Figure 1:&rdquo;) and the text:
+            settings exist for the label (&ldquo;Figure 1:&rdquo;) and the text. This complete
+            example uses a rectangle, so no image file is needed:
           </p>
-          <pre><code>{`\\usepackage[font=small, labelfont=bf]{caption}
-
-% Different sizes for the label and the text
-\\usepackage[font=footnotesize, labelfont={bf,small}]{caption}
-
-% Or change it later with \\captionsetup
-\\captionsetup{font=scriptsize}`}</code></pre>
+          <pre><code>{`\\documentclass{article}
+\\usepackage[font=small, labelfont=bf]{caption}
+\\begin{document}
+\\begin{figure}[htbp]
+\\centering
+\\rule{4cm}{1cm}
+\\caption{A small caption with a bold label.}
+\\end{figure}
+\\end{document}`}</code></pre>
 
           <h3>Footnotes</h3>
           <p>
@@ -352,8 +350,8 @@ baseline, and it wraps correctly across lines.\\par}
           <pre><code>{`\\renewcommand{\\footnotesize}{\\small}   % larger footnotes
 \\renewcommand{\\footnotesize}{\\scriptsize}  % smaller footnotes`}</code></pre>
           <p>
-            Be aware that <code>\footnotesize</code> is also the default size for captions in
-            some classes and for <code>\tablenotes</code>, so this change may reach further than
+            Be aware that <code>\footnotesize</code> is also used elsewhere by some classes and
+            packages, so this change may reach further than
             the footnotes. See <Link href="/learn/footnotes">LaTeX Footnotes</Link> for the other
             footnote settings.
           </p>
@@ -398,7 +396,6 @@ baseline, and it wraps correctly across lines.\\par}
             a tidier hook, <code>{`\\pretitle{\\begin{center}\\LARGE}`}</code>.
           </p>
 
-          {/* ── Math ── */}
           <h2>Font Size in Math Mode</h2>
           <p>
             Math has its own size system. Every math expression is set in one of four styles:{' '}
@@ -428,83 +425,6 @@ $\\scriptstyle x + y$                % script-size math`}</code></pre>
 % Must be declared for each body size you use, e.g. in a 12pt document:
 \\DeclareMathSizes{12}{12}{8}{6}`}</code></pre>
 
-          {/* ── Beamer ── */}
-          <h2>Font Size in Beamer</h2>
-          <p>
-            Beamer frames are 128&times;96&nbsp;mm, so the point sizes are small on paper but large
-            on screen. The class accepts <code>8pt</code>, <code>9pt</code>, <code>10pt</code>,{' '}
-            <code>11pt</code> (the default), <code>12pt</code>, <code>14pt</code>,{' '}
-            <code>17pt</code> and <code>20pt</code>, with the same relative commands inside frames:
-          </p>
-          <pre><code>{`\\documentclass[14pt]{beamer}
-\\begin{document}
-\\begin{frame}{Font sizes}
-  Normal 14pt text.
-
-  {\\small A smaller remark.}
-
-  {\\tiny Source: fine print that nobody reads.}
-\\end{frame}
-\\end{document}`}</code></pre>
-          <p>
-            Beamer also sizes its own elements through fonts you can set in the preamble:{' '}
-            <code>{`\\setbeamerfont{frametitle}{size=\\Large}`}</code>,{' '}
-            <code>{`\\setbeamerfont{footnote}{size=\\tiny}`}</code> and so on. For a one-off slide
-            with a lot of text, <code>{`\\begin{frame}[shrink=10]`}</code> scales the content down
-            by 10 percent.
-          </p>
-
-          {/* ── relsize ── */}
-          <h2>Relative Changes with relsize</h2>
-          <p>
-            The <code>relsize</code> package changes size relative to the <em>current</em> size
-            instead of relative to the body size. <code>{`\\relsize{n}`}</code> moves <em>n</em>{' '}
-            steps up or down the ten-step scale; <code>\smaller</code> and <code>\larger</code>{' '}
-            are one step each. This is what you want inside macros that may be called at any size:
-          </p>
-          <pre><code>{`\\usepackage{relsize}
-
-\\newcommand{\\unitlabel}[1]{{\\smaller #1}}   % one step smaller than its number
-10\\,\\unitlabel{kg} and {\\Large 10\\,\\unitlabel{kg}}
-
-{\\relsize{2} two steps larger} {\\relsize{-1} one step smaller}
-\\textlarger{inline form} and \\textsmaller{its opposite}`}</code></pre>
-          <p>
-            For a scale factor rather than steps, <code>{`\\relscale{1.25}`}</code> from the same
-            package multiplies the current size by 1.25, and the small <code>scalefnt</code>{' '}
-            package does the same with <code>{`\\scalefont{1.25}`}</code>.
-          </p>
-
-          {/* ── Whole document ── */}
-          <h2>Scaling the Whole Document</h2>
-          <p>
-            From largest effect to smallest, these are the ways to make an entire document bigger
-            or smaller:
-          </p>
-          <ol>
-            <li>
-              Change the class option: <code>{`\\documentclass[12pt]{article}`}</code>, or switch to{' '}
-              <code>extarticle</code> for 8&ndash;20pt. This keeps every element in proportion and
-              is the right answer 90% of the time.
-            </li>
-            <li>
-              With a KOMA-Script class, or the <code>scrextend</code> package in a standard
-              class, <code>{`\\changefontsizes{13pt}`}</code> sets an arbitrary body size and
-              recomputes the relative commands.
-            </li>
-            <li>
-              Issue <code>{`\\fontsize{13}{16}\\selectfont`}</code> right after{' '}
-              <code>{`\\begin{document}`}</code>. Body text changes, but headings, footnotes and
-              captions keep their own sizes, so they may look out of proportion.
-            </li>
-            <li>
-              Leave the font alone and scale the page: a <code>12pt</code> document printed on a
-              smaller paper size, or the <code>geometry</code> package with narrower margins,
-              changes how big the text looks without changing the font.
-            </li>
-          </ol>
-
-          {/* ── Errors ── */}
           <h2>Common Errors</h2>
           <div className="overflow-x-auto">
           <table>
@@ -555,7 +475,6 @@ $\\scriptstyle x + y$                % script-size math`}</code></pre>
           </table>
           </div>
 
-          {/* ── Complete example ── */}
           <h2>Complete Example</h2>
           <pre><code>{`\\documentclass[12pt]{article}
 \\usepackage{lmodern}
@@ -588,7 +507,7 @@ $\\scriptstyle x + y$                % script-size math`}</code></pre>
 \\section{Relative sizes}
 The body is 12pt. {\\small This sentence is small,} {\\large this one is
 large,} and this one is back to normal. A footnote keeps its own
-size.\\footnote{Set in \\texttt{\\textbackslash footnotesize}, 10pt here.}
+size.\\footnote{Set in the footnotesize setting, 10pt here.}
 
 \\begin{footnotesize}
 A whole paragraph in footnote size, with the matching line spacing,
@@ -620,7 +539,6 @@ $\\displaystyle \\sum_{k=1}^{n} k = \\frac{n(n+1)}{2}$ with display-size limits.
 
 \\end{document}`}</code></pre>
 
-          {/* ── Quick reference ── */}
           <h2>Quick Reference</h2>
           <div className="overflow-x-auto">
           <table>
@@ -651,7 +569,6 @@ $\\displaystyle \\sum_{k=1}^{n} k = \\frac{n(n+1)}{2}$ with display-size limits.
           </table>
           </div>
 
-          {/* ── FAQ ── */}
           <h2>Frequently Asked Questions</h2>
           <h3>How do you change the font size in LaTeX?</h3>
           <p>
@@ -667,8 +584,8 @@ $\\displaystyle \\sum_{k=1}^{n} k = \\frac{n(n+1)}{2}$ with display-size limits.
             <code>\footnotesize</code>, <code>\small</code>, <code>\normalsize</code>,{' '}
             <code>\large</code>, <code>\Large</code>, <code>\LARGE</code>, <code>\huge</code> and{' '}
             <code>\Huge</code>. In a 10pt document they are 5, 7, 8, 9, 10, 12, 14.4, 17.28, 20.74
-            and 24.88pt. They are relative to the body size, so in a 12pt document each one is
-            larger.
+            and 24.88pt. Their values depend on the class and base size, but not every command
+            increases: <code>\Huge</code> stays at 24.88pt in all three standard base sizes.
           </p>
           <h3>How do I get 14pt or larger text in LaTeX?</h3>
           <p>
@@ -701,33 +618,27 @@ $\\displaystyle \\sum_{k=1}^{n} k = \\frac{n(n+1)}{2}$ with display-size limits.
             <code>\scriptstyle</code> or <code>\scriptscriptstyle</code>.
           </p>
 
-          {/* ── Next Steps ── */}
           <h2>Next Steps</h2>
-          <p>With the size settled, the rest of the typography is next:</p>
+          <p>For baseline spacing, see <Link href="/learn/spacing">spacing in LaTeX</Link>.
+            Continue with these related typography settings:</p>
           <ul>
             <li><Link href="/learn/bold-italics-underline">Bold, Italics &amp; Underline</Link> &ndash; Font weight and shape commands that combine with the size commands</li>
             <li><Link href="/learn/page-size-margins">Page Size &amp; Margins</Link> &ndash; Paper size and margins with the geometry package</li>
             <li><Link href="/learn/footnotes">LaTeX Footnotes</Link> &ndash; Footnote numbering, placement and spacing</li>
-            <li><Link href="/learn/mathematical-expressions">Inline and Display Math</Link> &ndash; Math mode, display styles and the equation environment</li>
-            <li><Link href="/learn/colors">Using Colors in LaTeX</Link> &ndash; Colored text with xcolor</li>
-            <li><Link href="/learn/latex">Learn LaTeX</Link> &ndash; Complete beginner tutorial covering all the basics</li>
           </ul>
 
-          {/* ── Free LaTeX Tools ── */}
           <h2>Free LaTeX Tools</h2>
           <ul>
             <li><Link href="https://tools.useoctree.com/tools/latex-preview" target="_blank" rel="noopener noreferrer">LaTeX Preview</Link> &ndash; Compare font sizes with a live PDF preview</li>
-            <li><Link href="https://tools.useoctree.com/tools/ai-latex-generator" target="_blank" rel="noopener noreferrer">AI LaTeX Generator</Link> &ndash; Generate LaTeX from text descriptions</li>
-            <li><Link href="https://tools.useoctree.com/symbols" target="_blank" rel="noopener noreferrer">LaTeX Symbols Reference</Link> &ndash; Browse math operators and special characters</li>
           </ul>
 
           <RelatedPosts searchTerm="LaTeX" title="Related Articles" />
 
           <div className="not-prose mt-12 p-6 bg-primary/5 rounded-lg border border-primary/10">
-            <h3 className="text-lg font-semibold mb-2">Fix font size problems faster with AI</h3>
+            <h3 className="text-lg font-semibold mb-2">Try your font size settings in Octree</h3>
             <p className="text-muted-foreground mb-4">
-              Octree&apos;s AI editor explains font substitution warnings, suggests the right
-              package for the size you want, and compiles your document in seconds.
+              Try these complete examples in Octree, then compare the compiled PDF before and
+              after changing the class option or a local size declaration.
             </p>
             <Link
               href="https://app.useoctree.com"

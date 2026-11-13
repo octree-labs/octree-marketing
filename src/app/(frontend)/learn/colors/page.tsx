@@ -26,7 +26,7 @@ const page = {
 }
 
 /** Last content update, used for dateModified in the article schema. */
-const LAST_UPDATED = '2026-11-08'
+const LAST_UPDATED = '2026-11-13'
 
 const faq: FaqItem[] = [
   {
@@ -52,7 +52,7 @@ const faq: FaqItem[] = [
   {
     question: 'How do I colour a table row or cell in LaTeX?',
     answer:
-      'Load \\usepackage[table]{xcolor}, which loads colortbl. Then start a row with \\rowcolor{gray!20}, colour one cell with \\cellcolor{green!30}, colour a column with >{\\columncolor{blue!10}}l in the column spec, or alternate rows with \\rowcolors{2}{gray!15}{white} before the tabular.',
+      'Load \\usepackage[table]{xcolor}, which loads colortbl. Then start a row with \\rowcolor{gray!20}, colour one cell with \\cellcolor{green!30}, colour a column with >{\\columncolor{blue!10}}l in the column spec, or alternate rows with \\rowcolors{2}{white}{gray!15} before the tabular; its second argument colors odd rows and its third colors even rows.',
   },
 ]
 
@@ -356,7 +356,8 @@ The term $\\colorbox{yellow}{$x^2$}$ is highlighted.
             The most common use of color in LaTeX is to change text color. There are
             several ways to do this:
           </p>
-          <pre><code>{`\\usepackage{xcolor}
+          <pre><code>{`\\documentclass{article}
+\\usepackage{xcolor}
 
 \\begin{document}
 
@@ -423,18 +424,21 @@ Normal text, {\\color{green} green text here}, back to normal.
             One of <code>xcolor</code>&apos;s most powerful features is color mixing
             using the <code>!</code> operator:
           </p>
-          <pre><code>{`% Mix two colors: color1!percentage!color2
-\\textcolor{blue!50!red}{50% blue + 50% red = purple}
-\\textcolor{red!70!blue}{70% red + 30% blue}
-\\textcolor{green!30!yellow}{30% green + 70% yellow}
+          <pre><code>{`\\documentclass{article}
+\\usepackage{xcolor}
+\\begin{document}
+% Mix two colors: color1!percentage!color2
+\\textcolor{blue!50!red}{50\\% blue + 50\\% red = purple}
+\\textcolor{red!70!blue}{70\\% red + 30\\% blue}
+\\textcolor{green!30!yellow}{30\\% green + 70\\% yellow}
 
 % Tinting: color!percentage (mixes with white)
-\\textcolor{red!30}{30% red + 70% white = light red}
-\\textcolor{blue!80}{80% blue + 20% white = light blue}
+\\textcolor{red!30}{30\\% red + 70\\% white = light red}
+\\textcolor{blue!80}{80\\% blue + 20\\% white = light blue}
 \\textcolor{red!10}{Very light red / pink}
 
 % Shading: color!percentage!black
-\\textcolor{blue!50!black}{Dark blue (50% blue + 50% black)}
+\\textcolor{blue!50!black}{Dark blue (50\\% blue + 50\\% black)}
 \\textcolor{red!70!black}{Dark red}
 
 % Chain mixing
@@ -442,7 +446,8 @@ Normal text, {\\color{green} green text here}, back to normal.
 
 % Using in colorbox
 \\colorbox{yellow!20}{Soft yellow highlight}
-\\colorbox{red!10}{Very light red background}`}</code></pre>
+\\colorbox{red!10}{Very light red background}
+\\end{document}`}</code></pre>
           <p>
             The expression <code>red!30</code> means &quot;30% red mixed with 70% white&quot; —
             when only one color is specified with a percentage, it&apos;s mixed with white
@@ -481,7 +486,9 @@ Normal text, {\\color{green} green text here}, back to normal.
           <p>
             Using colors in math mode is especially useful for teaching materials,
             presentations, and anywhere you need to visually distinguish different parts
-            of a formula.
+            of a formula. Load <code>amsmath</code> for <code>align</code> and <code>\text</code>
+            in this snippet. When coloring a relation, preserve its operator spacing with
+            <code>{`a \\mathrel{\\textcolor{red}{=}} b`}</code>.
           </p>
 
           <h2 id="colored-boxes-and-frames">Colored Boxes and Frames</h2>
@@ -564,11 +571,14 @@ Normal text, {\\color{green} green text here}, back to normal.
 % Set default text color for the entire document
 \\color{darkgray}
 
-% Reset page color back to white
+% Remove the page background
 \\nopagecolor`}</code></pre>
           <p>
-            Using <code>\pagecolor</code> sets the background color for all pages. Use
-            very light tints (like <code>yellow!5</code>) to avoid readability issues.
+            <code>\pagecolor</code> sets the background used when a page is shipped out;
+            it is not restricted by ordinary braces. Use <code>\clearpage</code> before changing
+            it when the change must start on a new page. <code>\nopagecolor</code> removes the
+            background rather than painting it white. The snippet shows alternatives: do not
+            immediately reset the background if you want the tint to appear in the PDF.
             The <code>titlesec</code> package lets you customize how section headings are
             formatted, including their color.
           </p>
@@ -583,7 +593,7 @@ Normal text, {\\color{green} green text here}, back to normal.
 % Alternating row colors
 \\begin{table}[h]
   \\centering
-  \\rowcolors{2}{gray!15}{white}  % Start at row 2, alternate gray and white
+  \\rowcolors{2}{white}{gray!15}  % Start at row 2, alternate gray and white
   \\begin{tabular}{lcc}
     \\hline
     \\rowcolor{blue!30} \\textbf{Name} & \\textbf{Score} & \\textbf{Grade} \\\\
@@ -774,6 +784,36 @@ Normal text, {\\color{green} green text here}, back to normal.
             0–255 range.
           </p>
 
+          <h2>Readable colors and clickable links</h2>
+          <p>
+            Choose dark text on a light background and check the PDF at normal reading size.
+            A pale tint that works behind a table row is usually too faint for the text itself.
+            Do not distinguish results only by red versus green: add a word such as “failed” or
+            “passed”, or use different line styles in a plot. Print a grayscale sample when
+            readers may photocopy the document.
+          </p>
+          <p>
+            Define a small palette with descriptive names such as <code>accent</code> and
+            <code>warning</code>, then reuse those names. That lets you change the whole document
+            without searching for dozens of numerical color values. Load xcolor before hyperref
+            and pass the same named color to its link settings:
+          </p>
+          <pre><code>{`\\documentclass{article}
+\\usepackage{xcolor}
+\\definecolor{accent}{HTML}{174A7E}
+\\usepackage[colorlinks=true,linkcolor=accent,urlcolor=accent]{hyperref}
+\\begin{document}
+\\section{Results}\\label{sec:results}
+\\textcolor{accent}{A readable accent color.}
+See Section~\\ref{sec:results} or
+\\href{https://www.useoctree.com/learn}{the learning hub}.
+\\end{document}`}</code></pre>
+          <p>
+            Compile twice to resolve the section reference, then click both links in the PDF.
+            For a publisher that wants uncolored text, use hyperref&apos;s <code>hidelinks</code>
+            option instead. It hides link decoration without removing the links.
+          </p>
+
           {/* ── Common errors ── */}
           <h2>Common Errors</h2>
           <div className="overflow-x-auto">
@@ -868,7 +908,7 @@ Normal text, {\\color{green} green text here}, back to normal.
             with <code>{`\\rowcolor{gray!20}`}</code>, colour one cell with{' '}
             <code>{`\\cellcolor{green!30}`}</code>, colour a column with{' '}
             <code>{`>{\\columncolor{blue!10}}l`}</code> in the column spec, or alternate rows with{' '}
-            <code>{`\\rowcolors{2}{gray!15}{white}`}</code> before the tabular.
+            <code>{`\\rowcolors{2}{white}{gray!15}`}</code> before the tabular.
           </p>
 
           <h2>Next Steps</h2>
@@ -877,8 +917,6 @@ Normal text, {\\color{green} green text here}, back to normal.
             <li><Link href="/learn/tables">Tables in LaTeX</Link> – Create tables with colored rows and cells</li>
             <li><Link href="https://www.useoctree.com/blog/colored-boxes-latex-tcolorbox-guide">Colored Boxes with tcolorbox</Link> – Titled, rounded and breakable boxes</li>
             <li><Link href="/learn/framebox">Framed Boxes in LaTeX</Link> – \fbox, \framebox and boxes without colour</li>
-            <li><Link href="/learn/latex">Learn LaTeX Basics</Link> – Review fundamentals</li>
-            <li><Link href="/learn/tikz">Learn TikZ</Link> – Create diagrams with colorful graphics</li>
           </ul>
 
           <h2>Free LaTeX Tools</h2>
@@ -893,7 +931,8 @@ Normal text, {\\color{green} green text here}, back to normal.
           <div className="not-prose mt-12 p-6 bg-primary/5 rounded-lg border border-primary/10">
             <h3 className="text-lg font-semibold mb-2">Write LaTeX with AI assistance</h3>
             <p className="text-muted-foreground mb-4">
-              Octree&apos;s AI can help you write LaTeX with beautiful colors, formatting, and more. Just describe what you want!
+              Open a color example in Octree and ask AI chat about package options or a color
+              definition. Compile the result and check contrast, table shading and PDF links.
             </p>
             <Link
               href="https://app.useoctree.com"

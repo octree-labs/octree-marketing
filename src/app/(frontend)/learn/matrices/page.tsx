@@ -26,7 +26,7 @@ const page = {
 }
 
 /** Last content update, used for dateModified in the article schema. */
-const LAST_UPDATED = '2026-11-09'
+const LAST_UPDATED = '2026-11-13'
 
 const faq: FaqItem[] = [
   {
@@ -67,7 +67,7 @@ const faq: FaqItem[] = [
   {
     question: 'How do I write the transpose of a matrix?',
     answer:
-      'Add a superscript to the matrix or its name: A^{\\mathsf{T}} (upright sans-serif T, the ISO recommendation), A^\\top (the ⊤ symbol), or plainly A^{T}. Use the same form throughout the document.',
+      'Add a superscript to the matrix or its name: A^{\\mathsf{T}} (upright sans-serif T, a common convention), A^\\top (the ⊤ symbol), or plainly A^{T}. Use the same form throughout the document.',
   },
 ]
 
@@ -126,15 +126,9 @@ export default async function MatricesPage() {
             </ul>
           </div>
           <p className="lead">
-            Matrices in LaTeX come from the <code>amsmath</code> package: write the entries with{' '}
-            <code>&amp;</code> between columns and <code>\\</code> between rows, and pick the
-            environment by the matrix brackets you want &mdash; <code>pmatrix</code> for
-            parentheses, <code>bmatrix</code> for square brackets, <code>vmatrix</code> for a
-            determinant. This guide compares all six environments, then covers inline{' '}
-            <code>smallmatrix</code>, augmented matrices with a vertical line, dots for large
-            matrices, identity and zero matrices, transpose and determinant notation, matrices
-            inside fractions, the column limit, the <code>nicematrix</code> package, and the
-            errors you will meet.
+            Write a LaTeX matrix with <code>amsmath</code>: separate columns with <code>&amp;</code>
+            and rows with <code>\\</code>. Choose <code>pmatrix</code> for parentheses,
+            <code>bmatrix</code> for square brackets, or <code>vmatrix</code> for a determinant.
           </p>
 
           {/* ── Matrix brackets ── */}
@@ -219,185 +213,16 @@ export default async function MatricesPage() {
             The <Link href="/learn/brackets">brackets guide</Link> lists every delimiter.
           </p>
 
-          <h3>Other matrix environments</h3>
-          <div className="overflow-x-auto">
-          <table>
-            <thead>
-              <tr>
-                <th>Environment</th>
-                <th>Brackets</th>
-                <th>Use it for</th>
-                <th>Package</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td><code>matrix</code></td>
-                <td>none</td>
-                <td>Bare grid; add your own delimiters with <code>\left</code> and <code>\right</code></td>
-                <td>amsmath</td>
-              </tr>
-              <tr>
-                <td><code>smallmatrix</code></td>
-                <td>none (add <code>\left(</code>)</td>
-                <td>Inline matrices in running text</td>
-                <td>amsmath</td>
-              </tr>
-              <tr>
-                <td><code>psmallmatrix</code>, <code>bsmallmatrix</code>, &hellip;</td>
-                <td>( ), [ ], &hellip;</td>
-                <td>Inline matrices without typing <code>\left</code></td>
-                <td>mathtools</td>
-              </tr>
-              <tr>
-                <td><code>array</code></td>
-                <td>none (add <code>\left[</code>)</td>
-                <td>Augmented matrices, column alignment, internal rules</td>
-                <td>LaTeX kernel</td>
-              </tr>
-            </tbody>
-          </table>
-          </div>
-
-          {/* ── Basic ── */}
-          <h2>Basic Matrix with amsmath</h2>
-          <p>
-            The most basic matrix environment is <code>matrix</code>, provided by the
-            <code>amsmath</code> package. Entries in each row are separated by <code>&amp;</code>,
-            and rows are terminated by <code>\\</code>. The environment must be placed inside
-            a math environment such as <code>\[...\]</code> or <code>equation</code>.
-          </p>
-
-          <pre><code>{`\\usepackage{amsmath}
-
-\\[
-\\begin{matrix}
-  1 & 2 & 3 \\\\
-  4 & 5 & 6 \\\\
-  7 & 8 & 9
-\\end{matrix}
-\\]`}</code></pre>
-
-          <p>
-            This produces a plain grid of numbers with no surrounding brackets or delimiters.
-            Each column is automatically centred. You do not need to specify the number of
-            columns &mdash; LaTeX infers it from the content. Do not put <code>\\</code> after
-            the last row; it adds an empty row and extra height to the brackets.
-          </p>
-
-          <pre><code>{`% A 2x2 matrix
-\\[
-\\begin{matrix}
-  a & b \\\\
-  c & d
-\\end{matrix}
-\\]
-
-% Row and column vectors
-\\[
-\\begin{pmatrix} x_1 & x_2 & x_3 \\end{pmatrix}
-\\qquad
-\\begin{pmatrix} x_1 \\\\ x_2 \\\\ x_3 \\end{pmatrix}
-\\]
-
-% Bare matrix with hand-picked brackets
-\\[
-\\left(\\begin{matrix} a & b \\\\ c & d \\end{matrix}\\right)
-\\]`}</code></pre>
-
-          {/* ── pmatrix ── */}
-          <h2>Parenthesized Matrices (pmatrix)</h2>
-          <p>
-            The <code>pmatrix</code> environment is perhaps the most widely used matrix type.
-            It wraps the matrix in round parentheses and is the standard choice for vectors,
-            transformation matrices, and general-purpose linear algebra notation.
-          </p>
-
-          <pre><code>{`% A 3x3 matrix in parentheses
-\\[
-A = \\begin{pmatrix}
-  1 & 0 & 0 \\\\
-  0 & 1 & 0 \\\\
-  0 & 0 & 1
-\\end{pmatrix}
-\\]
-
-% A column vector
-\\[
-\\mathbf{v} = \\begin{pmatrix}
-  x \\\\
-  y \\\\
-  z
-\\end{pmatrix}
-\\]
-
-% A row vector
-\\[
-\\mathbf{w}^{\\mathsf{T}} = \\begin{pmatrix}
-  w_1 & w_2 & w_3
-\\end{pmatrix}
-\\]
-
-% Rotation matrix applied to a vector
-\\[
-R\\mathbf{v} = \\begin{pmatrix}
-  \\cos\\theta & -\\sin\\theta \\\\
-  \\sin\\theta & \\cos\\theta
-\\end{pmatrix}
-\\begin{pmatrix} x \\\\ y \\end{pmatrix}
-\\]`}</code></pre>
-
-          {/* ── bmatrix ── */}
-          <h2>Bracketed Matrices (bmatrix)</h2>
-          <p>
-            The <code>bmatrix</code> environment surrounds the matrix with square brackets.
-            This style is standard in many linear algebra textbooks and is commonly used
-            for coefficient matrices and augmented matrices.
-          </p>
-
-          <pre><code>{`% A 3x3 matrix in square brackets
-\\[
-A = \\begin{bmatrix}
-  2 & -1 & 0 \\\\
-  -1 & 2 & -1 \\\\
-  0 & -1 & 2
-\\end{bmatrix}
-\\]
-
-% The zero vector
-\\[
-\\mathbf{0} = \\begin{bmatrix}
-  0 \\\\
-  0 \\\\
-  0
-\\end{bmatrix}
-\\]
-
-% A matrix equation
-\\[
-\\begin{bmatrix}
-  a_{11} & a_{12} \\\\
-  a_{21} & a_{22}
-\\end{bmatrix}
-\\begin{bmatrix}
-  x_1 \\\\
-  x_2
-\\end{bmatrix}
-=
-\\begin{bmatrix}
-  b_1 \\\\
-  b_2
-\\end{bmatrix}
-\\]`}</code></pre>
-
           {/* ── 2x2, 3x3, 4x4 ── */}
           <h2>2x2, 3x3 and 4x4 Matrices: Worked Examples</h2>
           <p>
-            The syntax does not change with the size: a 2x2 matrix in LaTeX has two entries per
+            Each row should contain the same number of entries. Missing entries can silently
+            leave blank cells rather than producing an error, so count the separators when a
+            matrix looks uneven. The syntax does not change with the size: a 2x2 matrix in LaTeX has two entries per
             row and two rows, a 4x4 matrix has four of each. The examples below use{' '}
             <code>bmatrix</code>; swap in <code>pmatrix</code> for parentheses. Each size comes
             with its determinant, written with <code>vmatrix</code> and <code>\det</code> (the next
-            section), and the 2x2 case shows the inverse and transpose that the{' '}
+            section), and the 2x2 case shows the inverse (assuming ad − bc is nonzero) and transpose that the{' '}
             <em>Matrix Operations</em> section covers in full.
           </p>
 
@@ -796,8 +621,9 @@ A^{-\\mathsf{T}} = (A^{-1})^{\\mathsf{T}}
 
           <h3>Inverse and matrices inside \frac</h3>
           <p>
-            A matrix environment is just a box, so it can go anywhere a symbol can: inside a
-            fraction, under a root, raised to a power.
+            A matrix can appear in a fraction or carry a superscript, but the notation must
+            make mathematical sense. The inverse below exists only when the determinant is
+            nonzero. LaTeX typesets the formula; it does not check invertibility or calculate entries.
           </p>
           <pre><code>{`% 2x2 inverse formula: a matrix inside \\frac
 \\[
@@ -828,6 +654,10 @@ A A^{-1} = A^{-1} A = I \\qquad (AB)^{-1} = B^{-1} A^{-1}
 \\]`}</code></pre>
 
           <h3>Matrix multiplication</h3>
+          <p>
+            Matrix products require matching inner dimensions. Load <code>amssymb</code> as well
+            as amsmath for the real-number symbol <code>\mathbb</code> in the last display.
+          </p>
           <pre><code>{`\\[
 \\begin{pmatrix}
   a & b \\\\
@@ -969,6 +799,10 @@ M = \\begin{pmatrix}
           {/* ── Sizing ── */}
           <h2>Matrix Sizing: More Than 10 Columns</h2>
           <p>
+            Matrix entries are centered by default. For right-aligned negative numbers,
+            load <code>mathtools</code> and use <code>{`\\begin{bmatrix*}[r]`}</code>, closing
+            with <code>{`\\end{bmatrix*}`}</code>. For a different alignment in each column,
+            use an <code>array</code> specification such as <code>rc</code> instead.
             amsmath limits its matrix environments to 10 columns. An 11th column fails with{' '}
             <em>Extra alignment tab has been changed to \cr</em>. Raise the limit with the{' '}
             <code>MaxMatrixCols</code> counter in the preamble:
@@ -984,7 +818,8 @@ M = \\begin{pmatrix}
           <p>
             A wide matrix may still overflow the line; reduce the font with{' '}
             <code>\small</code> before the display, use <code>\cdots</code> to abbreviate, or
-            switch to <code>array</code>, which has no column limit.
+            use fewer displayed columns. Switching to <code>array</code> removes the amsmath
+            limit but does not shrink the result: its column specification still determines its width.
           </p>
 
           {/* ── nicematrix ── */}
@@ -1062,12 +897,12 @@ M = \\begin{pmatrix}
               <tr>
                 <td><em>Illegal character in array arg</em></td>
                 <td>Wrong column spec, e.g. <code>{`\\begin{array}{2}`}</code> or a typo such as <code>cc:c</code></td>
-                <td>Use <code>l</code>, <code>c</code>, <code>r</code> and <code>|</code> only</td>
+                <td>For this example use <code>cc|c</code>; each letter declares a column, while <code>|</code> adds a rule</td>
               </tr>
               <tr>
                 <td>Brackets too tall, empty row at the bottom</td>
-                <td><code>\\</code> after the last row</td>
-                <td>Remove the trailing <code>\\</code></td>
+                <td>An extra empty row or excessive row spacing</td>
+                <td>Remove doubled row breaks and unnecessary optional spacing</td>
               </tr>
               <tr>
                 <td>Inline matrix spreads the lines apart</td>
@@ -1083,112 +918,6 @@ M = \\begin{pmatrix}
                 <td>Dots do not line up along the diagonal</td>
                 <td>Mixed <code>\cdots</code>, <code>\vdots</code> and <code>\ddots</code> in the wrong cells</td>
                 <td><code>\ddots</code> only on the diagonal cell; <code>\hdotsfor</code> for a full row</td>
-              </tr>
-            </tbody>
-          </table>
-          </div>
-
-          {/* ── Quick ref ── */}
-          <h2>Quick Reference Table</h2>
-          <div className="overflow-x-auto">
-          <table>
-            <thead>
-              <tr>
-                <th>Command / Environment</th>
-                <th>Output</th>
-                <th>Notes</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td><code>\begin&#123;matrix&#125;</code></td>
-                <td>Plain matrix (no delimiters)</td>
-                <td>Requires <code>amsmath</code></td>
-              </tr>
-              <tr>
-                <td><code>\begin&#123;pmatrix&#125;</code></td>
-                <td>Parenthesized matrix ( )</td>
-                <td>Most common for vectors</td>
-              </tr>
-              <tr>
-                <td><code>\begin&#123;bmatrix&#125;</code></td>
-                <td>Bracketed matrix [ ]</td>
-                <td>Common in linear algebra texts</td>
-              </tr>
-              <tr>
-                <td><code>\begin&#123;Bmatrix&#125;</code></td>
-                <td>Braced matrix &#123; &#125;</td>
-                <td>Set-theoretic notation</td>
-              </tr>
-              <tr>
-                <td><code>\begin&#123;vmatrix&#125;</code></td>
-                <td>Determinant | |</td>
-                <td>Standard determinant notation</td>
-              </tr>
-              <tr>
-                <td><code>\begin&#123;Vmatrix&#125;</code></td>
-                <td>Norm &#8214; &#8214;</td>
-                <td>Double vertical bars</td>
-              </tr>
-              <tr>
-                <td><code>\begin&#123;smallmatrix&#125;</code></td>
-                <td>Compact inline matrix</td>
-                <td>Wrap with <code>\left(\right)</code>, or <code>psmallmatrix</code> from mathtools</td>
-              </tr>
-              <tr>
-                <td><code>\begin&#123;array&#125;&#123;cc|c&#125;</code></td>
-                <td>Augmented matrix</td>
-                <td>Use <code>|</code> for the vertical line; add <code>\left[</code> <code>\right]</code></td>
-              </tr>
-              <tr>
-                <td><code>&amp;</code></td>
-                <td>Column separator</td>
-                <td>Separates entries in a row</td>
-              </tr>
-              <tr>
-                <td><code>\\</code></td>
-                <td>Row separator</td>
-                <td>Ends the current row; none after the last</td>
-              </tr>
-              <tr>
-                <td><code>\cdots</code>, <code>\vdots</code>, <code>\ddots</code></td>
-                <td>Horizontal, vertical, diagonal dots</td>
-                <td>Show the pattern of a large matrix</td>
-              </tr>
-              <tr>
-                <td><code>\hdotsfor&#123;n&#125;</code></td>
-                <td>Row of dots across n columns</td>
-                <td>amsmath</td>
-              </tr>
-              <tr>
-                <td><code>A^&#123;\mathsf&#123;T&#125;&#125;</code>, <code>A^\top</code>, <code>A^&#123;T&#125;</code></td>
-                <td>Transpose</td>
-                <td>Pick one form per document</td>
-              </tr>
-              <tr>
-                <td><code>A^&#123;-1&#125;</code></td>
-                <td>Inverse</td>
-                <td>Superscript -1</td>
-              </tr>
-              <tr>
-                <td><code>\det A</code>, <code>|A|</code></td>
-                <td>Determinant</td>
-                <td>Upright &quot;det&quot; operator, or <code>vmatrix</code> for the explicit form</td>
-              </tr>
-              <tr>
-                <td><code>\operatorname&#123;diag&#125;</code>, <code>\operatorname&#123;tr&#125;</code></td>
-                <td>Diagonal, trace operators</td>
-                <td>Upright operator names</td>
-              </tr>
-              <tr>
-                <td><code>\setcounter&#123;MaxMatrixCols&#125;&#123;20&#125;</code></td>
-                <td>Allow more than 10 columns</td>
-                <td>Preamble, amsmath</td>
-              </tr>
-              <tr>
-                <td><code>\begin&#123;pNiceMatrix&#125;</code></td>
-                <td>Matrix with labels, blocks, rules</td>
-                <td>nicematrix</td>
               </tr>
             </tbody>
           </table>
@@ -1252,7 +981,7 @@ M = \\begin{pmatrix}
           <h3>How do I write the transpose of a matrix?</h3>
           <p>
             Add a superscript to the matrix or its name: <code>{`A^{\\mathsf{T}}`}</code> (upright
-            sans-serif T, the ISO recommendation), <code>A^\top</code> (the &#8868; symbol), or
+            sans-serif T, a common convention), <code>A^\top</code> (the &#8868; symbol), or
             plainly <code>{`A^{T}`}</code>. Use the same form throughout the document.
           </p>
 
@@ -1266,13 +995,7 @@ M = \\begin{pmatrix}
               <Link href="/learn/mathematical-expressions">Mathematical Expressions</Link> &ndash; Comprehensive guide to writing math in LaTeX
             </li>
             <li>
-              <Link href="/learn/integrals-sums-limits">Integrals, Sums &amp; Limits</Link> &ndash; Typeset calculus and analysis notation
-            </li>
-            <li>
               <Link href="/learn/multiline-equations">Multiline Equations</Link> &ndash; align, split and matrix equations over several lines
-            </li>
-            <li>
-              <Link href="/learn/greek-letters-math-symbols">Greek Letters &amp; Math Symbols</Link> &ndash; Complete reference for mathematical symbols
             </li>
             <li>
               <Link href="/learn/tables">LaTeX Tables</Link> &ndash; When the grid is data rather than a matrix
@@ -1283,10 +1006,6 @@ M = \\begin{pmatrix}
           <ul>
             <li><Link href="https://tools.useoctree.com/tools/latex-preview" target="_blank" rel="noopener noreferrer">LaTeX Preview</Link> &ndash; Test your LaTeX code with live PDF preview</li>
             <li><Link href="https://tools.useoctree.com/tools/math-to-latex" target="_blank" rel="noopener noreferrer">Math to LaTeX</Link> &ndash; Convert handwritten equations to LaTeX</li>
-            <li><Link href="https://tools.useoctree.com/tools/table-to-latex" target="_blank" rel="noopener noreferrer">Excel to LaTeX</Link> &ndash; Convert spreadsheets to LaTeX tables</li>
-            <li><Link href="https://tools.useoctree.com/tools/citation-generator" target="_blank" rel="noopener noreferrer">Citation Generator</Link> &ndash; Generate BibTeX citations from DOIs</li>
-            <li><Link href="https://tools.useoctree.com/tools/ai-latex-generator" target="_blank" rel="noopener noreferrer">AI LaTeX Generator</Link> &ndash; Generate LaTeX from text descriptions</li>
-            <li><Link href="https://tools.useoctree.com/symbols" target="_blank" rel="noopener noreferrer">LaTeX Symbols Reference</Link> &ndash; Browse math operators and Greek letters</li>
           </ul>
 
           <RelatedPosts searchTerm="LaTeX matrix" title="Related Articles" />
@@ -1294,8 +1013,8 @@ M = \\begin{pmatrix}
           <div className="not-prose mt-12 p-6 bg-primary/5 rounded-lg border border-primary/10">
             <h3 className="text-lg font-semibold mb-2">Ready to start writing?</h3>
             <p className="text-muted-foreground mb-4">
-              Try Octree &ndash; the AI-powered LaTeX editor that turns &ldquo;3 by 3 identity
-              matrix in square brackets&rdquo; into compiled LaTeX in seconds.
+              Open a matrix example in Octree, ask AI chat about alignment or a compiler error,
+              and check the entries and brackets in the resulting PDF.
             </p>
             <Link
               href="https://app.useoctree.com"
