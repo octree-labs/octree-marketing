@@ -175,8 +175,8 @@ $e^{i\\pi} + 1 = 0$.
             <li><Link href="/learn/mathematical-expressions">Mathematical expressions</Link> &ndash; inline and display math, fractions, roots</li>
             <li><Link href="/learn/subscripts-superscripts">Subscripts and superscripts</Link> and <Link href="/learn/greek-letters-math-symbols">Greek letters</Link></li>
             <li><Link href="/learn/tables">Tables</Link> &ndash; tabular and booktabs</li>
-            <li><Link href="/learn/equation-numbering">Equation numbering and cross-references</Link> &ndash; <code>\label</code>, <code>\ref</code>, <code>\eqref</code></li>
-            <li><Link href="/learn/bibliography-examples">Bibliographies and citations</Link> &ndash; BibTeX and biblatex styles</li>
+            <li><Link href="/learn/cross-referencing">Cross-references</Link> and <Link href="/learn/equation-numbering">equation numbering</Link> &ndash; <code>\label</code>, <code>\ref</code>, <code>\eqref</code></li>
+            <li><Link href="/learn/bibtex">Bibliographies with BibTeX</Link> and <Link href="/learn/bibliography-examples">citation style examples</Link> &ndash; BibTeX and biblatex styles</li>
             <li><Link href="/learn/page-size-margins">Page size and margins</Link> and <Link href="/learn/hyperlinks">hyperlinks</Link></li>
             <li><Link href="/learn/tikz">TikZ diagrams</Link> and <Link href="/learn/pgfplots">pgfplots charts</Link></li>
           </ol>
@@ -648,6 +648,9 @@ l.42 \\textbol
             <li><Link href="/learn/framebox">Framebox and Boxed Text</Link> – \fbox, \framebox, boxed equations and colored frames</li>
             <li><Link href="/learn/spacing">Spacing</Link> – \hspace, \vspace, math spaces, line and paragraph spacing</li>
             <li><Link href="/learn/paragraphs-indentation">Paragraphs and Indentation</Link> – \noindent, \parindent, parskip and hanging indents</li>
+            <li><Link href="/learn/line-breaks-blank-spaces">Line Breaks and Blank Spaces</Link> – \\, \newline, \vspace, \hspace and \hfill</li>
+            <li><Link href="/learn/text-alignment">Text Alignment</Link> – center, flushleft, flushright, \centering and ragged2e</li>
+            <li><Link href="/learn/cross-referencing">Cross-Referencing</Link> – \label, \ref, \pageref, \autoref and cleveref</li>
             <li><Link href="/learn/code-listings">Code Listings</Link> – listings, minted and verbatim</li>
             <li><Link href="/learn/algorithms">Algorithms and Pseudocode</Link> – algpseudocode, algorithm2e and algorithmic</li>
           </ul>
@@ -657,9 +660,11 @@ l.42 \\textbol
             <li><Link href="/learn/page-numbering">Page Numbering</Link> – Roman and arabic numbers, fancyhdr and &ldquo;Page X of Y&rdquo;</li>
             <li><Link href="/learn/horizontal-lines">Horizontal Lines</Link> – \hrule, \rule and table rules</li>
             <li><Link href="/learn/multiple-columns">Two Columns</Link> – twocolumn, multicol and \multicolumn in tables</li>
+            <li><Link href="/learn/single-double-sided">Single- and Double-Sided Documents</Link> – oneside, twoside, openright and binding offset</li>
           </ul>
           <h3>Citations and academic formats</h3>
           <ul>
+            <li><Link href="/learn/bibtex">Bibliography Management with BibTeX</Link> – .bib files, \cite, styles and the compile order</li>
             <li><Link href="/learn/bibliography-examples">Bibliography Examples</Link> – APA, MLA, Chicago and IEEE with the LaTeX that produces them</li>
             <li><Link href="/learn/apa-title-page">APA Title Page</Link> – APA 7 title pages and the apa7 class</li>
             <li><Link href="/learn/apa-headings">APA Headings</Link> – The five APA 7 heading levels</li>
@@ -670,6 +675,8 @@ l.42 \\textbol
           <h3>Mathematics</h3>
           <ul>
             <li><Link href="/learn/mathematical-expressions">Mathematical Expressions</Link> – Inline and display math, fractions, roots, cases and amsmath</li>
+            <li><Link href="/learn/fractions-binomials">Fractions and Binomials</Link> – \frac, \dfrac, \tfrac, \cfrac and \binom</li>
+            <li><Link href="/learn/display-style-math">Display Style</Link> – \displaystyle, \textstyle and inline vs display math</li>
             <li><Link href="/learn/piecewise-functions">Piecewise Functions</Link> – The cases environment, conditions and dcases</li>
             <li><Link href="/learn/subscripts-superscripts">Subscripts &amp; Superscripts</Link> – ^, _, exponents and text-mode scripts</li>
             <li><Link href="/learn/brackets">Brackets and Parentheses</Link> – \left, \right and every delimiter</li>

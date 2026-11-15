@@ -75,6 +75,12 @@ const learnTopics = [
     color: 'from-blue-500/10 to-sky-600/5',
   },
   {
+    slug: 'single-double-sided',
+    title: 'Single- and Double-Sided Documents: oneside, twoside and openright',
+    description: 'oneside vs twoside in LaTeX, mirrored inner and outer margins, binding offset with geometry, openright and \\cleardoublepage, alternating fancyhdr headers and thesis printing.',
+    color: 'from-blue-500/10 to-indigo-600/5',
+  },
+  {
     slug: 'title-page',
     title: 'Title Page in LaTeX: \\maketitle, titlepage and Custom Designs',
     description: 'Make a title page in LaTeX: \\title, \\author, \\date and \\maketitle, the titlepage environment for custom designs with a logo, a thesis example and fixes.',
@@ -91,6 +97,18 @@ const learnTopics = [
     title: 'Indentation in LaTeX: \\indent, \\noindent, parindent and Tabs',
     description: 'Indent in LaTeX: the default first-line indent, \\noindent, \\parindent and parskip, \\indent, hanging indents, indented blocks and tabs with \\hspace.',
     color: 'from-stone-500/10 to-stone-600/5',
+  },
+  {
+    slug: 'line-breaks-blank-spaces',
+    title: 'LaTeX Line Break Commands: \\\\, \\newline, \\linebreak, \\vspace and \\hfill',
+    description: 'New lines in LaTeX: \\\\ vs \\newline vs \\linebreak, paragraph breaks, blank lines with \\vspace and \\bigskip, \\hspace and \\hfill, page breaks and the errors they cause.',
+    color: 'from-stone-500/10 to-zinc-600/5',
+  },
+  {
+    slug: 'text-alignment',
+    title: 'Text Alignment in LaTeX: Center, Flush Left, Flush Right and Justify',
+    description: 'Align text in LaTeX: \\centering vs the center environment, flushleft and flushright, ragged2e, alignment in table cells, left-aligned equations and vertical centring.',
+    color: 'from-sky-500/10 to-cyan-600/5',
   },
   {
     slug: 'environments',
@@ -133,6 +151,18 @@ const learnTopics = [
     title: 'Inline and Display Math in LaTeX',
     description: 'Inline math with $...$ and \\(...\\), display math with \\[...\\] and equation, why $$ is discouraged, \\text in math, fractions, roots and common math errors.',
     color: 'from-violet-500/10 to-violet-600/5',
+  },
+  {
+    slug: 'fractions-binomials',
+    title: 'Fractions and Binomials in LaTeX: \\frac, \\dfrac, \\tfrac and \\binom',
+    description: 'Fractions in LaTeX: \\frac, \\dfrac and \\tfrac sizes, nested and continued fractions with \\cfrac, \\binom, \\genfrac fractions without a line, and \\sfrac in text.',
+    color: 'from-violet-500/10 to-fuchsia-600/5',
+  },
+  {
+    slug: 'display-style-math',
+    title: 'Display Style in Math: \\displaystyle, \\textstyle and Inline vs Display',
+    description: 'Inline vs display math, why $$ is discouraged, the four math styles, \\displaystyle and \\limits for sums and integrals in a line of text, dcases and common mistakes.',
+    color: 'from-indigo-500/10 to-violet-600/5',
   },
   {
     slug: 'piecewise-functions',
@@ -273,6 +303,12 @@ const learnTopics = [
     color: 'from-lime-500/10 to-green-600/5',
   },
   {
+    slug: 'cross-referencing',
+    title: 'Cross-Referencing in LaTeX: \\label, \\ref, \\eqref, \\autoref and \\cref',
+    description: '\\label and \\ref for sections, figures, tables and equations, \\pageref and \\eqref, the ?? two-pass rule, hyperref links and colours, cleveref and varioref.',
+    color: 'from-lime-500/10 to-emerald-600/5',
+  },
+  {
     slug: 'appendix',
     title: 'Appendix in LaTeX: \\appendix, Numbering and the appendix Package',
     description: 'Appendix in LaTeX: \\appendix for lettered sections and chapters, the appendix package, appendices in the table of contents, equation numbering and errors.',
@@ -349,6 +385,12 @@ const learnTopics = [
     title: 'MLA Book Citation',
     description: 'The Works Cited pattern for a book, examples for one or more authors, edited, translated, later-edition, e-book, multivolume and no-author books with their in-text forms, and a generated Works Cited in LaTeX.',
     color: 'from-rose-500/10 to-red-600/5',
+  },
+  {
+    slug: 'bibtex',
+    title: 'Bibliography Management with BibTeX',
+    description: 'The .bib file and its entry types, \\cite and \\nocite, \\bibliographystyle styles, the LaTeX-BibTeX-LaTeX-LaTeX compile order, natbib vs biblatex, and citation errors.',
+    color: 'from-rose-500/10 to-pink-600/5',
   },
   {
     slug: 'bibliography-examples',
