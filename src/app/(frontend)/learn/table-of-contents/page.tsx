@@ -4,11 +4,7 @@ import { learnMetadata, type FaqItem } from '@/utilities/learnMetadata'
 import Link from 'next/link'
 import { buttonVariants } from '@/components/ui/button'
 import React from 'react'
-import {
-  generateBreadcrumbSchema,
-  getLearnBreadcrumbs,
-} from '@/utilities/generateBreadcrumbs'
-import { RelatedPosts } from '@/components/Learn/related-posts'
+import { generateBreadcrumbSchema, getLearnBreadcrumbs } from '@/utilities/generateBreadcrumbs'
 import { LearnSchema } from '@/components/Learn/schema'
 
 export const dynamic = 'force-static'
@@ -28,13 +24,13 @@ const page = {
 }
 
 /** Last content update, used for dateModified in the article schema. */
-const LAST_UPDATED = '2026-11-09'
+const LAST_UPDATED = '2026-11-16'
 
 const faq: FaqItem[] = [
   {
     question: 'How do I make a table of contents in LaTeX?',
     answer:
-      'Put \\tableofcontents where the contents should appear, usually right after \\maketitle, and use \\chapter, \\section and \\subsection for your headings. Compile twice: the first run writes the headings to a .toc file and the second run prints them. latexmk and online editors such as Octree repeat the run automatically.',
+      'Put \\tableofcontents where the contents should appear, usually right after \\maketitle, and use \\chapter, \\section and \\subsection for your headings. Compile twice: the first run writes the headings to a .toc file and the second run prints them. latexmk repeats runs until auxiliary files stabilize; check the build log if your editor still shows stale entries.',
   },
   {
     question: 'Why is my LaTeX table of contents empty?',
@@ -59,7 +55,7 @@ const faq: FaqItem[] = [
   {
     question: 'How do I add dots to the table of contents in LaTeX?',
     answer:
-      'Sections, subsections and lower levels already have dotted leaders in the standard classes; only the top level (parts, chapters, and sections in article) has none. Load tocloft and redefine the leader, for example \\renewcommand{\\cftsecleader}{\\cftdotfill{\\cftdotsep}} for sections in article, or \\cftchapleader for chapters in report and book.',
+      'In article, subsections and lower levels have dotted leaders by default, but sections and parts do not. In report and book, sections have dots but chapters and parts do not. Load tocloft and redefine the leader, for example \\renewcommand{\\cftsecleader}{\\cftdotfill{\\cftdotsep}} for sections in article, or \\cftchapleader for chapters in report and book.',
   },
 ]
 
@@ -74,6 +70,7 @@ export default async function TableOfContentsPage() {
         slug={page.slug}
         title={page.title}
         description={page.description}
+        datePublished="2026-11-09"
         dateModified={LAST_UPDATED}
         faq={faq}
       />
@@ -91,42 +88,48 @@ export default async function TableOfContentsPage() {
           <h1>Table of Contents in LaTeX: \tableofcontents, Depth and Styling</h1>
 
           <div className="not-prose my-6 p-6 rounded-lg border bg-muted/40">
-            <p className="text-sm font-semibold uppercase tracking-wide text-muted-foreground mb-3">Quick answer</p>
+            <p className="text-sm font-semibold uppercase tracking-wide text-muted-foreground mb-3">
+              Quick answer
+            </p>
             <ul className="space-y-2 text-base list-disc pl-5">
               <li>
-                <strong>Command:</strong> <code>\tableofcontents</code> after <code>\maketitle</code>,
-                then <strong>compile twice</strong> (the first run only writes the <code>.toc</code> file).
+                <strong>Command:</strong> <code>\tableofcontents</code> after{' '}
+                <code>\maketitle</code>, then <strong>compile twice</strong> (the first run only
+                writes the <code>.toc</code> file).
               </li>
               <li>
-                <strong>Depth:</strong> <code>{`\\setcounter{tocdepth}{1}`}</code> lists sections only;{' '}
-                <code>2</code> adds subsections.
+                <strong>Depth:</strong> <code>{`\\setcounter{tocdepth}{1}`}</code> lists sections
+                only; <code>2</code> adds subsections.
               </li>
               <li>
                 <strong>Unnumbered entries:</strong> <code>{`\\section*{Preface}`}</code> then{' '}
                 <code>{`\\addcontentsline{toc}{section}{Preface}`}</code>.
               </li>
               <li>
-                <strong>Lists and links:</strong> <code>\listoffigures</code>, <code>\listoftables</code>;{' '}
-                <code>{`\\usepackage{hyperref}`}</code> makes every entry clickable.
+                <strong>Lists and links:</strong> <code>\listoffigures</code>,{' '}
+                <code>\listoftables</code>; <code>{`\\usepackage{hyperref}`}</code> makes every
+                entry clickable.
               </li>
               <li>
-                <strong>Styling and title:</strong> <code>tocloft</code> or <code>titletoc</code> for fonts, dots
-                and spacing; <code>{`\\renewcommand{\\contentsname}{Table of Contents}`}</code> renames
+                <strong>Styling and title:</strong> <code>tocloft</code> or <code>titletoc</code>{' '}
+                for fonts, dots and spacing;{' '}
+                <code>{`\\renewcommand{\\contentsname}{Table of Contents}`}</code> renames
                 &ldquo;Contents&rdquo;.
               </li>
             </ul>
-            <pre className="mt-4 overflow-x-auto rounded-md bg-background p-4 text-sm"><code>{`\\documentclass{article}
-\\usepackage{hyperref}                  % clickable entries
-\\setcounter{tocdepth}{2}               % sections and subsections
+            <pre className="mt-4 overflow-x-auto rounded-md bg-background p-4 text-sm">
+              <code>{`\\documentclass{article}
+\\usepackage{hyperref}
+\\setcounter{tocdepth}{2}
 \\renewcommand{\\contentsname}{Table of Contents}
 
 \\begin{document}
 
-\\tableofcontents                       % compile twice to fill it
+\\tableofcontents
 \\listoffigures
 
-\\section*{Preface}                     % unnumbered...
-\\addcontentsline{toc}{section}{Preface} % ...but listed
+\\section*{Preface}
+\\addcontentsline{toc}{section}{Preface}
 
 \\section{Introduction}
 \\subsection{Background}
@@ -137,24 +140,21 @@ export default async function TableOfContentsPage() {
   \\caption{A placeholder figure}
 \\end{figure}
 
-\\end{document}`}</code></pre>
+\\end{document}`}</code>
+            </pre>
           </div>
           <p className="lead">
             A <strong>table of contents</strong> (TOC) lists the chapters and sections of a document
             with their page numbers. In LaTeX you never type the TOC by hand: one command,{' '}
             <code>\tableofcontents</code>, builds it from your headings and keeps the page numbers
-            right as the document grows. This guide starts with a three-line version and a
-            complete table of contents example, then covers depth, unnumbered entries, clickable
-            links, renaming, styling with tocloft, lists of figures and tables, and Beamer
-            outlines. Every example was compiled on TeX Live 2025.
+            right as the document grows. This guide starts with a three-line version and complete
+            examples, then covers depth, unnumbered entries, clickable links, renaming, styling with
+            tocloft, lists of figures and tables, and troubleshooting.
           </p>
-
-          {/* ───────────────────────────── Minimal ───────────────────────────── */}
           <h2 id="minimal">A Table of Contents in Three Lines</h2>
-          <p>
-            The smallest working document needs only the command itself and a few headings:
-          </p>
-          <pre><code>{`\\documentclass{article}
+          <p>The smallest working document needs only the command itself and a few headings:</p>
+          <pre>
+            <code>{`\\documentclass{article}
 \\begin{document}
 \\tableofcontents
 
@@ -164,123 +164,89 @@ The table of contents above lists this section.
 And this subsection.
 \\section{Method}
 And this one.
-\\end{document}`}</code></pre>
+\\end{document}`}</code>
+          </pre>
           <p>
             The result is a &ldquo;Contents&rdquo; heading followed by three entries: section 1 in
             bold with its page number, subsection 1.1 indented with a dotted leader, and section 2.
-            There is one catch:{' '}
-            <strong>you have to compile twice</strong>.
+            There is one catch: <strong>you have to compile twice</strong>.
           </p>
           <p>
-            LaTeX reads the source once from top to bottom. When it reaches{' '}
-            <code>\tableofcontents</code> it has not seen the headings yet, so it cannot know their
-            titles or page numbers. Instead, every <code>\section</code> writes a line to an
-            auxiliary file called <code>main.toc</code> (named after your <code>.tex</code> file),
-            and <code>\tableofcontents</code> reads that file on the <em>next</em> run. On the very
-            first compile the file does not exist yet, so the log says{' '}
-            <code>No file main.toc.</code> and the contents are blank. That message is
-            informational, not an error. The second run prints the entries; if the contents
-            themselves push the body onto a later page, a third run settles the page numbers.
+            LaTeX stores headings and page numbers in auxiliary files. The contents read the
+            previous run&apos;s .toc file, so an empty first pass is normal. Compile again before
+            diagnosing missing entries.
           </p>
           <p>
-            You rarely do this by hand. <code>latexmk -pdf main.tex</code> reruns LaTeX until the
-            auxiliary files stop changing, and online editors, Octree included, do the same on
-            every compile.
+            Use <code>latexmk -pdf main.tex</code> to rerun LaTeX until the auxiliary files
+            stabilize. Two runs usually populate a small contents page; a larger contents page may
+            need another pass because its new height changes later page numbers.
           </p>
-
-          {/* ───────────────────────────── Full example ───────────────────────────── */}
-          <h2 id="example">Table of Contents Example</h2>
-          <p>
-            Here is a complete, compilable report with a title page, four chapters, sections and
-            subsections. It uses the <code>lipsum</code> package for filler text so the chapters
-            span several pages and the page numbers in the contents are realistic:
-          </p>
-          <pre><code>{`\\documentclass[11pt]{report}
-\\usepackage[T1]{fontenc}
-\\usepackage{lipsum}   % dummy text
-
-\\title{Soil Moisture Sensing on a Budget}
-\\author{A. Student}
-\\date{October 2026}
-
-\\begin{document}
-\\maketitle
-\\tableofcontents
-
-\\chapter{Introduction}
-\\lipsum[1-2]
-\\section{Motivation}
-\\lipsum[3]
-\\section{Contributions}
-\\lipsum[4]
-
-\\chapter{Related Work}
-\\section{Capacitive Sensors}
-\\lipsum[5-6]
-\\subsection{Calibration}
-\\lipsum[7]
-\\subsection{Temperature Drift}
-\\lipsum[8]
-\\section{Resistive Sensors}
-\\lipsum[9-10]
-
-\\chapter{Method}
-\\section{Hardware}
-\\lipsum[11-12]
-\\section{Firmware}
-\\lipsum[13]
-\\subsection{Sampling}
-\\lipsum[14]
-\\subsubsection{Not in the contents}
-Report sets tocdepth to 2, so this level is left out.
-
-\\chapter{Conclusion}
-\\lipsum[15]
-\\end{document}`}</code></pre>
-          <p>
-            The compiled PDF has nine pages. The title page comes first, then a page headed
-            &ldquo;Contents&rdquo; in large bold type. It reads, top to bottom: <em>1 Introduction
-            &hellip; 2</em>, with the chapter in bold and its page number flush right but no dots;
-            then <em>1.1 Motivation</em> and <em>1.2 Contributions</em>, indented, with dotted
-            leaders to pages 2 and 3; then <em>2 Related Work &hellip; 4</em> with sections 2.1
-            and 2.2 and, indented one step further, subsections 2.1.1 Calibration and 2.1.2
-            Temperature Drift; then <em>3 Method &hellip; 6</em> with 3.1, 3.2 and 3.2.1
-            Sampling; and finally <em>4 Conclusion &hellip; 8</em>. The subsubsection
-            &ldquo;Not in the contents&rdquo; is missing, and it is also printed without a number,
-            because the report and book classes stop numbering and listing at the subsection
-            level. The next section shows how to change that.
-          </p>
-          <p>
-            The contents get a page of their own because <code>\chapter</code> always starts a
-            new page. In <code>article</code> the top-level entries are sections, which are bold
-            and have no dots.
-          </p>
-
-          {/* ───────────────────────────── Depth ───────────────────────────── */}
           <h2 id="depth">Controlling Depth: tocdepth and secnumdepth</h2>
           <p>
             Each heading command has a level number. The counter <code>tocdepth</code> decides the
             deepest level that appears in the contents:
           </p>
           <div className="overflow-x-auto">
-          <table>
-            <thead>
-              <tr>
-                <th scope="col">Command</th>
-                <th scope="col">Level</th>
-                <th scope="col">Classes</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr><td><code>\part</code></td><td>&minus;1 (0 in article)</td><td>all</td></tr>
-              <tr><td><code>\chapter</code></td><td>0</td><td>report, book</td></tr>
-              <tr><td><code>\section</code></td><td>1</td><td>all</td></tr>
-              <tr><td><code>\subsection</code></td><td>2</td><td>all</td></tr>
-              <tr><td><code>\subsubsection</code></td><td>3</td><td>all</td></tr>
-              <tr><td><code>\paragraph</code></td><td>4</td><td>all</td></tr>
-              <tr><td><code>\subparagraph</code></td><td>5</td><td>all</td></tr>
-            </tbody>
-          </table>
+            <table>
+              <thead>
+                <tr>
+                  <th scope="col">Command</th>
+                  <th scope="col">Level</th>
+                  <th scope="col">Classes</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    <code>\part</code>
+                  </td>
+                  <td>&minus;1 (0 in article)</td>
+                  <td>all</td>
+                </tr>
+                <tr>
+                  <td>
+                    <code>\chapter</code>
+                  </td>
+                  <td>0</td>
+                  <td>report, book</td>
+                </tr>
+                <tr>
+                  <td>
+                    <code>\section</code>
+                  </td>
+                  <td>1</td>
+                  <td>all</td>
+                </tr>
+                <tr>
+                  <td>
+                    <code>\subsection</code>
+                  </td>
+                  <td>2</td>
+                  <td>all</td>
+                </tr>
+                <tr>
+                  <td>
+                    <code>\subsubsection</code>
+                  </td>
+                  <td>3</td>
+                  <td>all</td>
+                </tr>
+                <tr>
+                  <td>
+                    <code>\paragraph</code>
+                  </td>
+                  <td>4</td>
+                  <td>all</td>
+                </tr>
+                <tr>
+                  <td>
+                    <code>\subparagraph</code>
+                  </td>
+                  <td>5</td>
+                  <td>all</td>
+                </tr>
+              </tbody>
+            </table>
           </div>
           <p>
             The defaults are <code>tocdepth</code> 3 in article (down to subsubsections) and 2 in
@@ -289,9 +255,10 @@ Report sets tocdepth to 2, so this level is left out.
             are independent: you can number subsubsections but leave them out of the contents, or
             list headings that have no number.
           </p>
-          <pre><code>{`\\documentclass{report}
-\\setcounter{tocdepth}{1}     % chapters and sections only
-\\setcounter{secnumdepth}{3}  % but number down to subsubsections
+          <pre>
+            <code>{`\\documentclass{report}
+\\setcounter{tocdepth}{1}
+\\setcounter{secnumdepth}{3}
 \\begin{document}
 \\tableofcontents
 \\chapter{Main Part}
@@ -299,17 +266,14 @@ Report sets tocdepth to 2, so this level is left out.
 \\subsection{Numbered, not listed}
 \\subsubsection{Numbered as 1.1.1.1}
 \\appendix
-\\addtocontents{toc}{\\protect\\setcounter{tocdepth}{0}}  % appendices: chapters only
+\\addtocontents{toc}{\\protect\\setcounter{tocdepth}{0}}
 \\chapter{Raw Data}
 \\section{Hidden from the contents}
-\\end{document}`}</code></pre>
+\\end{document}`}</code>
+          </pre>
           <p>
-            The contents of this document show <em>1 Main Part</em>, <em>1.1 A section</em> and{' '}
-            <em>A Raw Data</em>, while the body numbers the subsubsection 1.1.1.1. The value that
-            counts is the one in force when <code>\tableofcontents</code> runs, so put{' '}
-            <code>\setcounter{'{tocdepth}'}</code> in the preamble: a{' '}
-            <code>\setcounter{'{tocdepth}'}{'{1}'}</code> placed after{' '}
-            <code>\tableofcontents</code> has no effect on the table.
+            The contents show Main Part, A section and Raw Data. Set the overall depth before
+            printing the contents; changing it afterward cannot alter entries already read.
           </p>
           <p>
             To change the depth for one part of the document only, the last trick in the example
@@ -320,20 +284,18 @@ Report sets tocdepth to 2, so this level is left out.
             The <code>\protect</code> is harmless with the current LaTeX kernel and keeps the line
             working on older installations.
           </p>
-
-          {/* ───────────────────────────── Unnumbered ───────────────────────────── */}
           <h2 id="unnumbered">Adding Unnumbered Sections, the Bibliography and Appendices</h2>
           <p>
             Starred headings such as <code>\section*</code> and <code>\chapter*</code> are
-            unnumbered <em>and</em> never written to the contents. To list one anyway, add the
-            entry yourself with{' '}
-            <code>\addcontentsline{'{toc}{level}{text}'}</code> right after the heading. The
-            bibliography, index and lists of figures are unnumbered chapters or sections too, and
-            the <code>tocbibind</code> package adds them for you:
+            unnumbered <em>and</em> never written to the contents. To list one anyway, add the entry
+            yourself with <code>\addcontentsline{'{toc}{level}{text}'}</code> right after the
+            heading. The bibliography, index and lists of figures are unnumbered chapters or
+            sections too, and the <code>tocbibind</code> package adds them for you:
           </p>
-          <pre><code>{`\\documentclass{report}
-\\usepackage[nottoc]{tocbibind}   % bibliography (and index, lists) in the TOC
-\\usepackage{hyperref}            % load last
+          <pre>
+            <code>{`\\documentclass{report}
+\\usepackage[nottoc]{tocbibind}
+\\usepackage{hyperref}
 
 \\begin{document}
 \\tableofcontents
@@ -357,62 +319,70 @@ Appendix chapters are lettered A, B, \\ldots{} in the contents.
 \\begin{thebibliography}{9}
 \\bibitem{knuth84} D. E. Knuth, \\emph{The \\TeX book}, Addison-Wesley, 1984.
 \\end{thebibliography}
-\\end{document}`}</code></pre>
+\\end{document}`}</code>
+          </pre>
           <p>The contents of this document read:</p>
-          <pre><code>{`Contents
+          <pre>
+            <code>{`Contents
 Preface                                  2
 1 Introduction                           3
     A note on notation . . . . . . . .   3
 A Proofs                                 4
-Bibliography                             5`}</code></pre>
+Bibliography                             5`}</code>
+          </pre>
           <ul>
             <li>
-              <strong><code>\phantomsection</code></strong> matters only with hyperref. It drops
-              an invisible link target at the current spot. Current hyperref already gives{' '}
-              <code>\section*</code> and <code>\chapter*</code> a target of their own, but older
-              installations do not, and an <code>\addcontentsline</code> that is not right after
-              a heading never has one: the entry then links to the previous target, often on the
-              wrong page. Keeping <code>\phantomsection</code> costs nothing.
+              <strong>
+                <code>\phantomsection</code>
+              </strong>{' '}
+              matters only with hyperref. It drops an invisible link target at the current spot.
+              Current hyperref already gives <code>\section*</code> and <code>\chapter*</code> a
+              target of their own, but older installations do not, and an{' '}
+              <code>\addcontentsline</code> that is not right after a heading never has one: the
+              entry then links to the previous target, often on the wrong page. Keeping{' '}
+              <code>\phantomsection</code> costs nothing.
             </li>
             <li>
-              <strong><code>\appendix</code></strong> switches chapter numbering to letters (or
-              section numbering in article) from that point on, so appendix entries show up as
-              A, B, C with no extra work.
+              <strong>
+                <code>\appendix</code>
+              </strong>{' '}
+              switches chapter numbering to letters (or section numbering in article) from that
+              point on, so appendix entries show up as A, B, C with no extra work.
             </li>
             <li>
-              <strong><code>tocbibind</code></strong> adds the bibliography, index, list of
-              figures and list of tables. The <code>nottoc</code> option stops it from also
-              listing the table of contents inside itself, which is almost never wanted. It works
-              with <code>thebibliography</code> and BibTeX but not with biblatex, whose{' '}
-              <code>\printbibliography</code> ignores it; there, write{' '}
-              <code>\printbibliography[heading=bibintoc]</code> instead.
+              <strong>
+                <code>tocbibind</code>
+              </strong>{' '}
+              adds the bibliography, index, list of figures and list of tables. The{' '}
+              <code>nottoc</code> option stops it from also listing the table of contents inside
+              itself, which is almost never wanted. It works with <code>thebibliography</code> and
+              BibTeX but not with biblatex, whose <code>\printbibliography</code> ignores it; there,
+              write <code>\printbibliography[heading=bibintoc]</code> instead.
             </li>
           </ul>
           <p>
-            For a document with no section numbers at all, starring every heading is the wrong
-            tool. Keep the normal commands and lower <code>secnumdepth</code> instead:{' '}
-            <code>0</code> removes the section numbers in article, <code>-1</code> also removes
-            the chapter numbers in report and book, and{' '}
-            <code>{`\\setcounter{secnumdepth}{-2}`}</code> switches off every number, parts
-            included. The numbers disappear but every heading stays in the contents. The{' '}
-            <Link href="/learn/sections">sections guide</Link> covers the heading commands
-            themselves in more detail.
+            For a document with no section numbers at all, starring every heading is the wrong tool.
+            Keep the normal commands and lower <code>secnumdepth</code> instead: <code>0</code>{' '}
+            removes the section numbers in article, <code>-1</code> also removes the chapter numbers
+            in report and book, and <code>{`\\setcounter{secnumdepth}{-2}`}</code> switches off
+            every number, parts included. The numbers disappear but every heading stays in the
+            contents. The <Link href="/learn/sections">sections guide</Link> covers the heading
+            commands themselves in more detail.
           </p>
-
-          {/* ───────────────────────────── hyperref ───────────────────────────── */}
           <h2 id="hyperref">Clickable Table of Contents with hyperref</h2>
           <p>
             Loading <code>hyperref</code> is all it takes to turn every contents entry into a link
             and to fill the bookmark panel of the PDF viewer. Load it after the other packages; it
             redefines many commands and most packages expect to come before it.
           </p>
-          <pre><code>{`\\documentclass{article}
+          <pre>
+            <code>{`\\documentclass{article}
 \\usepackage{hyperref}
 \\hypersetup{
   colorlinks = true,
-  linkcolor  = blue,     % colour of TOC entries and \\ref
+  linkcolor  = blue,
   urlcolor   = cyan,
-  linktoc    = all,      % title and page number are both links
+  linktoc    = all,
   bookmarksnumbered = true,
   pdftitle   = {Clickable contents}
 }
@@ -422,127 +392,76 @@ Bibliography                             5`}</code></pre>
 Text.
 \\section{Discussion}
 Text.
-\\end{document}`}</code></pre>
+\\end{document}`}</code>
+          </pre>
           <p>
             By default hyperref draws a red box around each link, visible on screen and not in
             print. <code>colorlinks</code> colours the text instead; <code>linkcolor</code> is the
             option that controls the contents and cross-references. <code>linktoc</code> chooses
-            what is clickable: <code>section</code> (the default, the title only),{' '}
-            <code>page</code>, <code>all</code> or <code>none</code>. For a version that will be
-            printed, or a thesis whose rules forbid coloured text, keep the links but hide them:
+            what is clickable: <code>section</code> (the default, the title only), <code>page</code>
+            , <code>all</code> or <code>none</code>. For a version that will be printed, or a thesis
+            whose rules forbid coloured text, keep the links but hide them:
           </p>
-          <pre><code>{`\\usepackage[hidelinks]{hyperref}`}</code></pre>
+          <pre>
+            <code>{`\\usepackage[hidelinks]{hyperref}`}</code>
+          </pre>
           <p>
             The <code>\texorpdfstring</code> in the first heading is there because a PDF bookmark
-            can only hold plain text. Math or formatting commands in a heading make hyperref
-            print <em>Package hyperref Warning: Token not allowed in a PDF string (Unicode)</em>{' '}
-            and drop the offending part from the bookmark;{' '}
+            can only hold plain text. Math or formatting commands in a heading make hyperref print{' '}
+            <em>Package hyperref Warning: Token not allowed in a PDF string (Unicode)</em> and drop
+            the offending part from the bookmark;{' '}
             <code>\texorpdfstring{'{TeX version}{plain version}'}</code> gives it a plain
-            alternative. More link options, including URL styling and{' '}
-            <code>\autoref</code>, are in the <Link href="/learn/hyperlinks">hyperlinks guide</Link>.
+            alternative. More link options, including URL styling and <code>\autoref</code>, are in
+            the <Link href="/learn/hyperlinks">hyperlinks guide</Link>.
           </p>
-
-          {/* ───────────────────────────── Renaming / placing ───────────────────────────── */}
-          <h2 id="rename">Renaming and Placing the Table of Contents</h2>
+          <h2 id="rename">Renaming and placing the contents</h2>
           <p>
-            The heading is stored in <code>\contentsname</code>, &ldquo;Contents&rdquo; by
-            default. Redefine it in the preamble:
+            Redefine <code>\contentsname</code> in the preamble to change the title. With babel, put
+            the redefinition inside the active language caption hook, such as
+            <code>\addto\captionsenglish</code>, so language selection does not overwrite it. In
+            article, the contents continue on the current page; use <code>\clearpage</code>
+            afterward if the body should begin on a fresh page. Report and book start the contents
+            with a chapter-style heading on a new page.
           </p>
-          <pre><code>{`\\renewcommand{\\contentsname}{Table of Contents}`}</code></pre>
-          <p>
-            If you load <code>babel</code>, that line is overwritten at{' '}
-            <code>\begin{'{document}'}</code>, when babel sets the captions for the language.
-            Hook the change into the language&apos;s caption list instead (use{' '}
-            <code>\captionsngerman</code>, <code>\captionsfrench</code> and so on for other
-            languages). This complete article also puts the title and the contents on their own
-            unnumbered pages and starts the body at page 1:
-          </p>
-          <pre><code>{`\\documentclass{article}
-\\usepackage[english]{babel}
-\\addto\\captionsenglish{\\renewcommand{\\contentsname}{Table of Contents}}
-\\begin{document}
-\\title{Lab Report}\\author{A. Student}\\maketitle
-\\thispagestyle{empty}
-\\clearpage
-\\tableofcontents
-\\thispagestyle{empty}
-\\clearpage
-\\setcounter{page}{1}
-\\section{Aim}
-Text.
-\\section{Results}
-Text.
-\\end{document}`}</code></pre>
-          <p>
-            In <code>article</code> the contents simply continue on the current page, so a{' '}
-            <code>\clearpage</code> (or <code>\newpage</code>) after them moves the body to a fresh
-            page; <code>\clearpage</code> also flushes pending figures, which is usually what you
-            want. <code>\thispagestyle{'{empty}'}</code> after <code>\tableofcontents</code> removes
-            the page number from the contents page (if the contents run over several pages, only
-            the last one is affected). In report and book the contents are a chapter of their
-            own and always start on a new page.
-          </p>
-          <p>
-            Books and theses usually number the front matter in roman numerals. The{' '}
-            <code>book</code> class does that with <code>\frontmatter</code> and{' '}
-            <code>\mainmatter</code>:
-          </p>
-          <pre><code>{`\\documentclass{book}
+          <pre>
+            <code>{`\\documentclass{book}
 \\renewcommand{\\contentsname}{Table of Contents}
 \\begin{document}
-\\frontmatter            % roman page numbers, unnumbered chapters
-\\begin{titlepage}
-  \\centering\\Huge My Thesis
-\\end{titlepage}
+\\frontmatter
 \\tableofcontents
 \\chapter{Acknowledgements}
-Thanks.
-
-\\mainmatter             % arabic numbers restart at 1
+Thanks to the laboratory team.
+\\mainmatter
 \\chapter{Introduction}
 \\section{Background}
-Text.
-\\chapter{Results}
-Text.
-\\end{document}`}</code></pre>
+The main text starts here.
+\\end{document}`}</code>
+          </pre>
           <p>
-            The contents land on page iii, list <em>Acknowledgements &hellip; v</em> without a
-            number, and then <em>1 Introduction &hellip; 1</em>. In the front matter{' '}
-            <code>\chapter</code> behaves like <code>\chapter*</code> for numbering but still
-            writes a contents entry. Report and article do not have these commands; use{' '}
-            <code>{`\\pagenumbering{roman}`}</code> before the contents and{' '}
-            <code>{`\\pagenumbering{arabic}`}</code> after them, as shown in the{' '}
-            <Link href="/learn/page-numbering">page numbering guide</Link>. Nothing forces the
-            contents to the front, either: <code>\tableofcontents</code> works anywhere,
-            including at the end of the document.
+            In book, <code>\frontmatter</code> uses Roman page numbers and unnumbered chapters that
+            still appear in the contents. <code>\mainmatter</code> restarts Arabic page numbers and
+            chapter numbering. Article and report do not provide these commands; use{' '}
+            <code>\pagenumbering</code> with roman and arabic instead, placing a page break before
+            each switch. Hiding a printed page number does not change its underlying value or
+            prevent duplicate PDF destinations when numbering is reset.
           </p>
 
-          {/* ───────────────────────────── tocloft ───────────────────────────── */}
           <h2 id="tocloft">Styling with tocloft</h2>
           <p>
-            The <code>tocloft</code> package exposes the look of every contents entry as a set of
-            macros and lengths whose names follow one pattern: <code>\cft</code> + the level
-            (<code>part</code>, <code>chap</code>, <code>sec</code>, <code>subsec</code>,{' '}
-            <code>subsubsec</code>, also <code>fig</code> and <code>tab</code> for the lists) + the
-            property. The ones you will use most:
+            Use <code>tocloft</code> to adjust entry fonts, indents and dotted leaders. This report
+            gives chapters bold sans-serif text and sections italic text with tighter dots.
           </p>
-          <ul>
-            <li><code>\cftsecfont</code> and <code>\cftsecpagefont</code>: the font of the title and of the page number</li>
-            <li><code>\cftsecleader</code>: what fills the gap between them (dots or blank space)</li>
-            <li><code>\cftbeforesecskip</code>: vertical space above each entry</li>
-            <li><code>\cftsecindent</code> and <code>\cftsecnumwidth</code>: the indent of the entry and the room reserved for its number</li>
-            <li><code>\cftdotsep</code>: the spacing of the dots, 4.5 by default; larger is sparser</li>
-          </ul>
-          <pre><code>{`\\documentclass{report}
+          <pre>
+            <code>{`\\documentclass{report}
 \\usepackage{tocloft}
 
-% Chapter entries: sans-serif bold, no dots, a little more space above
+
 \\renewcommand{\\cftchapfont}{\\sffamily\\bfseries}
 \\renewcommand{\\cftchappagefont}{\\sffamily\\bfseries}
 \\setlength{\\cftbeforechapskip}{1.2em}
 
-% Section entries: dotted leaders (the default for sections in report),
-% wider dot spacing and a deeper indent
+
+
 \\renewcommand{\\cftsecleader}{\\cftdotfill{\\cftdotsep}}
 \\renewcommand{\\cftdotsep}{3}
 \\renewcommand{\\cftsecfont}{\\itshape}
@@ -550,7 +469,7 @@ Text.
 \\setlength{\\cftsecindent}{2em}
 \\setlength{\\cftbeforesecskip}{0.3em}
 
-% Title of the contents
+
 \\renewcommand{\\cfttoctitlefont}{\\hfill\\Large\\bfseries}
 \\renewcommand{\\cftaftertoctitle}{\\hfill}
 
@@ -562,43 +481,35 @@ Text.
 \\chapter{Theory}
 \\section{Model}
 \\subsection{Assumptions}
-\\end{document}`}</code></pre>
+\\end{document}`}</code>
+          </pre>
           <p>
-            The most common request is dots after the top-level entries, which the standard
-            classes leave out: chapters in report and book, sections in article. One line adds
-            them. In article:
+            The most common request is dots after the top-level entries, which the standard classes
+            leave out: chapters in report and book, sections in article. One line adds them. In
+            article:
           </p>
-          <pre><code>{`\\usepackage{tocloft}
-\\renewcommand{\\cftsecleader}{\\cftdotfill{\\cftdotsep}}  % dots for sections`}</code></pre>
+          <pre>
+            <code>{`\\usepackage{tocloft}
+\\renewcommand{\\cftsecleader}{\\cftdotfill{\\cftdotsep}}`}</code>
+          </pre>
           <p>
-            and <code>\cftchapleader</code> in the same way for chapters. To remove dots
-            everywhere, set <code>{`\\renewcommand{\\cftdotsep}{\\cftnodots}`}</code>. Do not
-            combine tocloft with <code>memoir</code>, which has the same commands built in, or
-            with the KOMA-Script classes, which style their contents through{' '}
-            <code>tocbasic</code>.
+            and <code>\cftchapleader</code> in the same way for chapters. To remove dots everywhere,
+            set <code>{`\\renewcommand{\\cftdotsep}{\\cftnodots}`}</code>. Do not combine tocloft
+            with <code>memoir</code>, which has the same commands built in, or with the KOMA-Script
+            classes, which style their contents through <code>tocbasic</code>.
           </p>
-          <p>
-            If you already format headings with <code>titlesec</code>, its companion{' '}
-            <code>titletoc</code> is the alternative. Its <code>\titlecontents</code> command
-            describes a whole entry at once (indent, label, title, filler and page) and{' '}
-            <code>\dottedcontents</code> is a shortcut for the usual dotted line, for example{' '}
-            <code>{`\\dottedcontents{section}[3.8em]{}{2.3em}{1pc}`}</code>. It is more flexible
-            than tocloft for unusual layouts, such as entries that run into one paragraph, but
-            for changing fonts, spacing and dots tocloft is simpler.
-          </p>
-
-          {/* ───────────────────────────── LOF/LOT ───────────────────────────── */}
           <h2 id="lists">List of Figures and Tables</h2>
           <p>
             <code>\listoffigures</code> and <code>\listoftables</code> work exactly like{' '}
-            <code>\tableofcontents</code>, only their entries come from the{' '}
-            <code>\caption</code> of each <code>figure</code> and <code>table</code> and are stored
-            in the <code>.lof</code> and <code>.lot</code> files. Long captions make poor list
-            entries, so give a short version in the optional argument:
+            <code>\tableofcontents</code>, only their entries come from the <code>\caption</code> of
+            each <code>figure</code> and <code>table</code> and are stored in the <code>.lof</code>{' '}
+            and <code>.lot</code> files. Long captions make poor list entries, so give a short
+            version in the optional argument:
           </p>
-          <pre><code>{`\\documentclass{article}
+          <pre>
+            <code>{`\\documentclass{article}
 \\usepackage{graphicx}
-\\usepackage[nottoc]{tocbibind}   % adds the lists to the TOC
+\\usepackage[nottoc]{tocbibind}
 \\begin{document}
 \\tableofcontents
 \\listoffigures
@@ -608,7 +519,7 @@ Text.
 \\section{Data}
 \\begin{figure}[ht]
   \\centering
-  \\rule{4cm}{2cm}   % stand-in for \\includegraphics
+  \\rule{4cm}{2cm}
   \\caption[Sensor layout]{Sensor layout in the test field, with the three
     depth levels marked and the reference probe at the centre.}
 \\end{figure}
@@ -622,218 +533,148 @@ Text.
     30 cm & 27\\,\\% \\\\
   \\end{tabular}
 \\end{table}
-\\end{document}`}</code></pre>
+\\end{document}`}</code>
+          </pre>
           <p>
             The list of figures shows only &ldquo;1 Sensor layout&rdquo;, while the figure itself
             keeps the full caption. Thanks to <code>tocbibind</code> the table of contents now
             starts with <em>List of Figures</em> and <em>List of Tables</em> entries. Without that
             package, add them by hand with{' '}
             <code>{`\\addcontentsline{toc}{section}{\\listfigurename}`}</code> directly before{' '}
-            <code>\listoffigures</code> (use <code>chapter</code> as the level in report and
-            book, after a <code>\cleardoublepage</code> so the page number is right). See the{' '}
+            <code>\listoffigures</code> (use <code>chapter</code> as the level in report and book,
+            after a <code>\cleardoublepage</code> so the page number is right). See the{' '}
             <Link href="/blog/insert-images-latex-complete-guide">guide to figures and images</Link>{' '}
             and the <Link href="/learn/tables">tables guide</Link> for the floats themselves.
           </p>
-
-          {/* ───────────────────────────── Beamer ───────────────────────────── */}
-          <h2 id="beamer">Table of Contents in Beamer</h2>
-          <p>
-            Beamer slides use the same <code>\tableofcontents</code>, placed inside a frame. Its
-            optional argument filters and highlights the entries, which is how most talks get an
-            outline slide at the start of every section:
-          </p>
-          <pre><code>{`\\documentclass{beamer}
-\\usetheme{Madrid}
-\\title{Soil Moisture Sensing}
-\\author{A. Student}
-
-\\AtBeginSection[]{
-  \\begin{frame}{Outline}
-    \\tableofcontents[currentsection, hideallsubsections]
-  \\end{frame}
-}
-
-\\begin{document}
-\\frame{\\titlepage}
-
-\\begin{frame}{Outline}
-  \\tableofcontents
-\\end{frame}
-
-\\section{Introduction}
-\\subsection{Motivation}
-\\begin{frame}{Why measure moisture?}
-  Irrigation scheduling.
-\\end{frame}
-
-\\section{Method}
-\\subsection{Hardware}
-\\begin{frame}{The sensor}
-  A capacitive probe.
-\\end{frame}
-
-\\section{Results}
-\\begin{frame}{Findings}
-  It works.
-\\end{frame}
-\\end{document}`}</code></pre>
-          <p>
-            The result is eight slides: the title, a full outline with sections and subsections,
-            and before each of the three sections an &ldquo;Outline&rdquo; slide that shows the
-            section titles only, with the current one highlighted and the others shaded. The
-            options that matter most:
-          </p>
-          <ul>
-            <li><code>currentsection</code>: highlight the current section and shade the rest</li>
-            <li><code>hideallsubsections</code> / <code>hideothersubsections</code>: drop all subsections, or all except those of the current section</li>
-            <li><code>sections={'{2-3}'}</code>: show only some sections, useful to split a long outline over two slides</li>
-            <li><code>pausesections</code>: reveal the outline one section at a time</li>
-          </ul>
-          <p>
-            The empty <code>[]</code> after <code>\AtBeginSection</code> is the code used for
-            starred sections, so <code>\section*</code> gets no outline slide. Frame titles do not
-            appear in the outline; only <code>\section</code> and <code>\subsection</code> do,
-            and they must sit outside frames. Beamer also needs two runs before the outline
-            appears.
-          </p>
-
-          {/* ───────────────────────────── Errors ───────────────────────────── */}
           <h2 id="errors">Common Errors</h2>
           <div className="overflow-x-auto">
-          <table>
-            <thead>
-              <tr>
-                <th scope="col">Symptom or message</th>
-                <th scope="col">Cause</th>
-                <th scope="col">Fix</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>Table of contents is empty or shows old titles</td>
-                <td>The contents come from the <code>.toc</code> file of the previous run</td>
-                <td>Compile again (three times with hyperref if pages shift), or use <code>latexmk</code></td>
-              </tr>
-              <tr>
-                <td><em>No file main.toc.</em> in the log</td>
-                <td>Normal on the first run: the file has not been written yet</td>
-                <td>Nothing; it goes away on the second run</td>
-              </tr>
-              <tr>
-                <td>A section is missing</td>
-                <td>Starred heading (<code>\section*</code>), or a level deeper than <code>tocdepth</code></td>
-                <td><code>\addcontentsline</code> after the heading, or raise <code>tocdepth</code></td>
-              </tr>
-              <tr>
-                <td>Page numbers in the contents are off by one or two after edits</td>
-                <td>The contents grew or shrank and moved the body, but only one run happened since</td>
-                <td>Run LaTeX once more; latexmk detects this and reruns by itself</td>
-              </tr>
-              <tr>
-                <td><em>Package hyperref Warning: Token not allowed in a PDF string (Unicode)</em></td>
-                <td>Math or a formatting command in a heading that goes into a PDF bookmark</td>
-                <td><code>\texorpdfstring{'{tex}{plain text}'}</code> in the heading</td>
-              </tr>
-              <tr>
-                <td>Contents link jumps to the wrong page</td>
-                <td><code>\addcontentsline</code> with no link target before it (older hyperref, or an entry not tied to a heading)</td>
-                <td><code>\phantomsection</code> right before <code>\addcontentsline</code></td>
-              </tr>
-              <tr>
-                <td><code>tocdepth</code> seems to be ignored</td>
-                <td>Set after <code>\tableofcontents</code>, which is too late for that table</td>
-                <td>Move <code>\setcounter</code> to the preamble, or use <code>\addtocontents</code> as shown above</td>
-              </tr>
-              <tr>
-                <td>Renamed or deleted headings still listed</td>
-                <td>A stale <code>.toc</code> file from an earlier run, often after a failed compile</td>
-                <td>Delete the auxiliary files (<code>latexmk -c</code>, or <code>.aux</code>, <code>.toc</code>, <code>.out</code>) and compile again</td>
-              </tr>
-              <tr>
-                <td><code>\renewcommand{'{\\contentsname}'}</code> has no effect</td>
-                <td>babel resets the caption at <code>\begin{'{document}'}</code></td>
-                <td><code>{`\\addto\\captionsenglish{...}`}</code> as shown above</td>
-              </tr>
-            </tbody>
-          </table>
+            <table>
+              <thead>
+                <tr>
+                  <th scope="col">Symptom or message</th>
+                  <th scope="col">Cause</th>
+                  <th scope="col">Fix</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Table of contents is empty or shows old titles</td>
+                  <td>
+                    The contents come from the <code>.toc</code> file of the previous run
+                  </td>
+                  <td>
+                    Compile again until page numbers settle, or use <code>latexmk</code>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <em>No file main.toc.</em> in the log
+                  </td>
+                  <td>Normal on the first run: the file has not been written yet</td>
+                  <td>Nothing; it goes away on the second run</td>
+                </tr>
+                <tr>
+                  <td>A section is missing</td>
+                  <td>
+                    Starred heading (<code>\section*</code>), or a level deeper than{' '}
+                    <code>tocdepth</code>
+                  </td>
+                  <td>
+                    <code>\addcontentsline</code> after the heading, or raise <code>tocdepth</code>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Page numbers in the contents are off by one or two after edits</td>
+                  <td>
+                    The contents grew or shrank and moved the body, but only one run happened since
+                  </td>
+                  <td>Run LaTeX once more; latexmk detects this and reruns by itself</td>
+                </tr>
+                <tr>
+                  <td>
+                    <em>Package hyperref Warning: Token not allowed in a PDF string (Unicode)</em>
+                  </td>
+                  <td>Math or a formatting command in a heading that goes into a PDF bookmark</td>
+                  <td>
+                    <code>\texorpdfstring{'{tex}{plain text}'}</code> in the heading
+                  </td>
+                </tr>
+                <tr>
+                  <td>Contents link jumps to the wrong page</td>
+                  <td>
+                    <code>\addcontentsline</code> with no link target before it (older hyperref, or
+                    an entry not tied to a heading)
+                  </td>
+                  <td>
+                    <code>\phantomsection</code> right before <code>\addcontentsline</code>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <code>tocdepth</code> seems to be ignored
+                  </td>
+                  <td>
+                    Set after <code>\tableofcontents</code>, which is too late for that table
+                  </td>
+                  <td>
+                    Move <code>\setcounter</code> to the preamble, or use{' '}
+                    <code>\addtocontents</code> as shown above
+                  </td>
+                </tr>
+                <tr>
+                  <td>Renamed or deleted headings still listed</td>
+                  <td>
+                    A stale <code>.toc</code> file from an earlier run, often after a failed compile
+                  </td>
+                  <td>
+                    Delete the auxiliary files (<code>latexmk -c</code>, or <code>.aux</code>,{' '}
+                    <code>.toc</code>, <code>.out</code>) and compile again
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <code>\renewcommand{'{\\contentsname}'}</code> has no effect
+                  </td>
+                  <td>
+                    babel resets the caption at <code>\begin{'{document}'}</code>
+                  </td>
+                  <td>
+                    <code>{`\\addto\\captionsenglish{...}`}</code> as shown above
+                  </td>
+                </tr>
+              </tbody>
+            </table>
           </div>
-
-          {/* ───────────────────────────── FAQ ───────────────────────────── */}
           <h2>Frequently Asked Questions</h2>
-          <h3>How do I make a table of contents in LaTeX?</h3>
-          <p>
-            Put <code>\tableofcontents</code> where the contents should appear, usually right
-            after <code>\maketitle</code>, and use <code>\chapter</code>, <code>\section</code>{' '}
-            and <code>\subsection</code> for your headings. Compile twice: the first run writes the
-            headings to a <code>.toc</code> file and the second run prints them. latexmk and online
-            editors such as Octree repeat the run automatically.
-          </p>
-          <h3>Why is my LaTeX table of contents empty?</h3>
-          <p>
-            The contents are read from the <code>.toc</code> file written by the previous run, so
-            after a single compile the table is empty or out of date. Compile again, or use
-            latexmk. If it stays empty, check that your headings are not starred{' '}
-            (<code>\section*</code> never goes to the contents) and that <code>tocdepth</code> is
-            not set too low.
-          </p>
-          <h3>How do I add an unnumbered section to the table of contents?</h3>
-          <p>
-            Follow the starred heading with <code>\addcontentsline</code>:{' '}
-            <code>{`\\section*{Preface}`}</code> then{' '}
-            <code>{`\\addcontentsline{toc}{section}{Preface}`}</code>. With hyperref, put{' '}
-            <code>\phantomsection</code> before <code>\addcontentsline</code> so the link jumps to
-            the right page.
-          </p>
-          <h3>How do I limit the table of contents to chapters and sections?</h3>
-          <p>
-            Set the <code>tocdepth</code> counter in the preamble:{' '}
-            <code>{`\\setcounter{tocdepth}{1}`}</code> lists parts, chapters and sections only.
-            The levels are part -1 (0 in article), chapter 0, section 1, subsection 2,
-            subsubsection 3, paragraph 4 and subparagraph 5. The setting must come before{' '}
-            <code>\tableofcontents</code>.
-          </p>
-          <h3>How do I make the table of contents clickable?</h3>
-          <p>
-            Load hyperref, normally as the last package:{' '}
-            <code>{`\\usepackage{hyperref}`}</code>. Every entry becomes a link and the PDF gets
-            bookmarks. Add <code>linktoc=all</code> to make the page numbers clickable too,{' '}
-            <code>colorlinks</code> to colour the text instead of drawing boxes, or{' '}
-            <code>hidelinks</code> for a print version with no visible link styling.
-          </p>
-          <h3>How do I add dots to the table of contents in LaTeX?</h3>
-          <p>
-            Sections, subsections and lower levels already have dotted leaders in the standard
-            classes; only the top level (parts, chapters, and sections in article) has none. Load
-            tocloft and redefine the leader, for example{' '}
-            <code>{`\\renewcommand{\\cftsecleader}{\\cftdotfill{\\cftdotsep}}`}</code> for sections
-            in article, or <code>\cftchapleader</code> for chapters in report and book.
-          </p>
+          {faq.map(({ question, answer }) => (
+            <React.Fragment key={question}>
+              <h3>{question}</h3>
+              <p>{answer}</p>
+            </React.Fragment>
+          ))}
 
-          {/* ───────────────────────────── Next Steps ───────────────────────────── */}
-          <h2>Next Steps</h2>
-          <p>The guides that usually come next when you structure a long document:</p>
+          <h2>Related guides and a place to test</h2>
           <ul>
-            <li><Link href="/learn/sections">Sections &amp; Subsections</Link> &ndash; The heading commands that feed the contents, numbering styles and titlesec</li>
-            <li><Link href="/learn/page-numbering">LaTeX Page Numbering</Link> &ndash; Roman front matter, arabic body and page styles around the contents</li>
-            <li><Link href="/learn/hyperlinks">LaTeX Hyperlinks</Link> &ndash; hyperref options, link colours, bookmarks and cross-references</li>
-            <li><Link href="/learn/footnotes">LaTeX Footnotes</Link> &ndash; Footnotes in headings without breaking the contents</li>
-            <li><Link href="/blog/insert-images-latex-complete-guide">Inserting Images in LaTeX</Link> &ndash; Figures and captions for the list of figures</li>
-            <li><Link href="/learn/bibliography-examples">Bibliography Examples</Link> &ndash; The reference list that tocbibind adds to the contents</li>
+            <li>
+              <Link href="/learn/sections">Sections and chapters</Link>
+            </li>
+            <li>
+              <Link href="/learn/appendix">Appendices</Link>
+            </li>
+            <li>
+              <Link href="/learn/page-numbering">Page numbering</Link>
+            </li>
           </ul>
+          <p>
+            Paste a complete example into the{' '}
+            <Link href="https://tools.useoctree.com/tools/latex-preview">LaTeX preview tool</Link>{' '}
+            to inspect the PDF before adding it to your project.
+          </p>
 
-          {/* ───────────────────────────── Free LaTeX Tools ───────────────────────────── */}
-          <h2>Free LaTeX Tools</h2>
-          <ul>
-            <li><Link href="https://tools.useoctree.com/tools/latex-preview" target="_blank" rel="noopener noreferrer">LaTeX Preview</Link> &ndash; Paste any example above and see the compiled table of contents without installing TeX</li>
-            <li><Link href="https://tools.useoctree.com/symbols" target="_blank" rel="noopener noreferrer">LaTeX Symbols Reference</Link> &ndash; Every symbol by category with its LaTeX command</li>
-          </ul>
-
-          {/* ───────────────────────────── Related Posts ───────────────────────────── */}
-          <RelatedPosts searchTerm="LaTeX document structure" title="Related Articles" />
-
-          {/* ───────────────────────────── CTA Box ───────────────────────────── */}
           <div className="not-prose mt-12 p-6 bg-primary/5 rounded-lg border border-primary/10">
-            <h3 className="text-lg font-semibold mb-2">A table of contents that is never out of date</h3>
+            <h3 className="text-lg font-semibold mb-2">
+              A table of contents that is never out of date
+            </h3>
             <p className="text-muted-foreground mb-4">
               Octree is an AI-powered LaTeX editor with TeX Live already set up and every compile
               run to completion, so the contents, page numbers and links are always current. Paste
