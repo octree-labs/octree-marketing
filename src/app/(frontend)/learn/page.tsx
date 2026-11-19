@@ -47,7 +47,7 @@ const learnTopics = [
   {
     slug: 'bold-italics-underline',
     title: 'Bold, Italics & Underline',
-    description: 'Bold, italic and underlined text in LaTeX with \\textbf, \\textit, \\emph and \\underline, plus small caps, monospace, font sizes and the soul and ulem packages.',
+    description: 'Bold, italic and underlined text in LaTeX: built-in commands, breakable underlines with ulem and soul, semantic emphasis, math formatting and common fixes.',
     color: 'from-rose-500/10 to-rose-600/5',
   },
   {
@@ -221,7 +221,7 @@ const learnTopics = [
   {
     slug: 'quotes',
     title: 'Quotes in LaTeX',
-    description: 'The ``double\'\' and `single\' convention, csquotes \\enquote and \\textquote, German and French quotes, quote and quotation environments, block quotes with attribution and Beamer.',
+    description: 'Opening and closing quotation marks, nested quotes with csquotes, language-aware styles, quote and quotation environments, attribution, verse and literal code quotes.',
     color: 'from-neutral-500/10 to-neutral-600/5',
   },
   {
@@ -494,4 +494,3 @@ export function generateMetadata(): Metadata {
     },
   }
 }
-
