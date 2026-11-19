@@ -71,7 +71,7 @@ const learnTopics = [
   {
     slug: 'document-classes',
     title: 'LaTeX Document Classes: article, report, book and Options',
-    description: 'LaTeX document classes compared: article, report, book, KOMA-Script and memoir, and the options 12pt, a4paper, twoside, twocolumn, draft and landscape.',
+    description: 'LaTeX document classes compared: article, report, book, KOMA-Script and memoir, and the options 12pt, a4paper, twoside, twocolumn, draft and openany.',
     color: 'from-blue-500/10 to-sky-600/5',
   },
   {
