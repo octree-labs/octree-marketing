@@ -1,67 +1,117 @@
 import type { Metadata } from 'next/types'
-
 import { learnMetadata, type FaqItem } from '@/utilities/learnMetadata'
 import Link from 'next/link'
 import { buttonVariants } from '@/components/ui/button'
 import React from 'react'
-import {
-  generateBreadcrumbSchema,
-  getLearnBreadcrumbs,
-} from '@/utilities/generateBreadcrumbs'
-import { RelatedPosts } from '@/components/Learn/related-posts'
+import { generateBreadcrumbSchema, getLearnBreadcrumbs } from '@/utilities/generateBreadcrumbs'
 import { LearnSchema } from '@/components/Learn/schema'
 
 export const dynamic = 'force-static'
 export const revalidate = 3600
 
-const breadcrumbs = getLearnBreadcrumbs('Theorems and Proofs in LaTeX', 'theorems-proofs')
-const breadcrumbSchema = generateBreadcrumbSchema(breadcrumbs)
-
 const page = {
   slug: 'theorems-proofs',
-  title: 'Theorems and Proofs in LaTeX: amsthm, \\newtheorem and the QED Symbol',
-  seoTitle: 'End of Proof Symbol and Theorems in LaTeX (amsthm)',
-  description: 'End of proof symbol in LaTeX with amsthm: \\qed, \\qedhere, a filled \\blacksquare. Define a theorem with \\newtheorem, styles plain, definition, remark.',
-  keywords: 'end of proof symbol latex, latex end of proof symbol, define theorem latex, theorem definition latex, latex theorem, latex definition environment, latex qed, qedsymbol, latex newtheorem, amsthm, latex proof environment, latex qed symbol, qedhere, latex lemma, latex theorem numbering, latex theoremstyle, latex blacksquare, latex proof box, latex corollary, latex definition environment, thmtools, tcolorbox theorem, latex reference theorem',
+  title: 'LaTeX Theorems and Proofs: amsthm, Numbering, and QED',
+  seoTitle: 'LaTeX Theorem and Proof Environments with amsthm',
+  description:
+    'Define a LaTeX theorem, lemma or definition with amsthm, share numbering, write proofs, and place the QED symbol correctly in equations.',
+  keywords:
+    'latex theorem, latex proof, amsthm, newtheorem, latex qed symbol, theorem numbering, definition environment',
 }
-
-/** Last content update, used for dateModified in the article schema. */
-const LAST_UPDATED = '2026-11-09'
-
+const breadcrumbSchema = generateBreadcrumbSchema(getLearnBreadcrumbs(page.title, page.slug))
+const LAST_UPDATED = '2026-11-19'
 const faq: FaqItem[] = [
   {
-    question: 'How do I put the QED symbol in LaTeX?',
+    question: 'How do I define a theorem in LaTeX?',
     answer:
-      'Load amsthm and write the proof inside \\begin{proof} ... \\end{proof}; the end of proof symbol (a hollow square) is added flush right on the last line automatically. For a filled square load amssymb and put \\renewcommand{\\qedsymbol}{$\\blacksquare$} in the preamble. Outside a proof environment, type \\qed (amsthm) or \\hfill$\\square$ (amssymb).',
+      'Load amsthm and declare \\newtheorem{theorem}{Theorem} in the preamble. Put the statement inside the theorem environment. amsthm supplies proof automatically, but you declare theorem-like statement environments yourself.',
   },
   {
-    question: 'Why does the QED box appear on the wrong line?',
+    question: 'How do I share numbering between theorems and lemmas?',
     answer:
-      'When a proof ends with a displayed equation, an align or a list, amsthm puts the symbol on a new line below it. Write \\qedhere at the end of the last equation line or list item to move the symbol up onto that line. Load amsmath before amsthm, or \\qedhere may not work in displays.',
+      'Declare the theorem first, then use \\newtheorem{lemma}[theorem]{Lemma}. The middle optional argument reuses the theorem counter. A final [section] on the theorem declaration resets that shared sequence by section.',
   },
   {
-    question: 'How do you define a theorem in LaTeX?',
+    question: 'Why is the QED square below my equation?',
     answer:
-      'Load amsthm in the preamble and declare the environment with \\newtheorem{theorem}{Theorem}: the first argument is the environment name, the second the word that is printed. Then write \\begin{theorem} ... \\end{theorem} in the document. Add [section] at the end, \\newtheorem{theorem}{Theorem}[section], to number theorems 1.1, 1.2 within each section.',
+      'The automatic end mark is being placed after the display. Load amsmath before amsthm and put \\qedhere inside the last display at the intended location. Inspect the PDF, especially for multi-line or numbered equations.',
   },
   {
-    question: 'How do I create a definition environment in LaTeX?',
+    question: 'How do I make an upright definition environment?',
     answer:
-      'Switch to the definition style before declaring it: \\theoremstyle{definition} followed by \\newtheorem{definition}{Definition}[section]. The definition style prints a bold heading and an upright body, so the defined term can be set in italics with \\emph. Use \\newtheorem{definition}[theorem]{Definition} instead if definitions should share the theorem numbering.',
+      'Issue \\theoremstyle{definition} before declaring the definition with \\newtheorem. The style is selected at declaration time. Use the theorem counter in the declaration if definitions should share the result sequence.',
+  },
+]
+const sections: { title: string; paragraphs: string[]; code?: string }[] = [
+  {
+    title: 'Start with a complete theorem and proof',
+    paragraphs: [
+      'amsthm supplies the proof environment and theorem-formatting tools, but it does not automatically create an environment named theorem. The \\newtheorem declaration belongs in the preamble. Its first argument is the environment name used in the source; its second argument is the heading printed in the PDF.',
+      'The statement and proof are separate blocks. A theorem states the result, while a proof explains why the result follows from its assumptions. Do not define proof with \\newtheorem: the existing proof environment has different behavior, including its automatic end mark and optional heading.',
+      'The minimal example uses a single global theorem counter. It prints Theorem 1 followed by a proof whose last line ends with a hollow square. No special symbol package is required for that default mark. Keep this version working before adding shared counters, custom styles, or decorative boxes.',
+    ],
+    code: '\\documentclass{article}\n\\usepackage{amsmath}\n\\usepackage{amsthm}\n\\newtheorem{theorem}{Theorem}\n\\begin{document}\n\\begin{theorem}\nThe sum of two even integers is even.\n\\end{theorem}\n\\begin{proof}\nLet $a=2r$ and $b=2s$ for integers $r$ and $s$.\nThen $a+b=2(r+s)$, which is even.\n\\end{proof}\n\\end{document}',
   },
   {
-    question: 'What is the end of proof symbol called?',
-    answer:
-      'It is called the QED symbol, the tombstone, or the Halmos (after Paul Halmos, who introduced it to mathematics). Unicode encodes the filled version as ∎ (U+220E END OF PROOF). In LaTeX the amsthm proof environment prints a hollow square □ by default, and \\renewcommand{\\qedsymbol}{$\\blacksquare$} switches it to the filled ∎ style.',
+    title: 'Choose global, section, or shared numbering',
+    paragraphs: [
+      'With no optional counter argument, each declared environment receives its own counter. A theorem and a lemma can therefore both be numbered 1. That is valid, but a single shared sequence is often easier for readers because the next result always has the next number, regardless of its kind.',
+      'Put [section] at the end of the theorem declaration to number results within sections. Theorems in section 2 then become 2.1, 2.2, and so on. Put [theorem] between the environment name and printed heading when declaring a lemma to make it share the existing theorem counter.',
+      'These optional arguments have different positions and purposes. A final [section] creates a counter that resets with the section; a middle [theorem] reuses another counter. Do not declare independent section-based counters if you actually want theorems and lemmas to advance one sequence.',
+      'In report or book, a chapter-based counter may be appropriate. Standard article has no chapter counter, so [chapter] produces an error there. Also, a section-based result before the first numbered section can be numbered 0.1. Add the intended numbered heading rather than manually changing each displayed result number.',
+    ],
   },
   {
-    question: 'How do I number theorems, lemmas and corollaries in one sequence?',
-    answer:
-      'Declare the theorem first and give the others its counter in square brackets between the two names: \\newtheorem{theorem}{Theorem}[section], then \\newtheorem{lemma}[theorem]{Lemma} and \\newtheorem{corollary}[theorem]{Corollary}. Theorem 2.1 is then followed by Lemma 2.2 and Corollary 2.3.',
+    title: 'Use theorem styles for definitions and remarks',
+    paragraphs: [
+      'amsthm provides three standard styles. plain uses a bold heading and italic body, suitable for theorems, lemmas, and corollaries. definition uses a bold heading with upright body text, useful for definitions and worked examples. remark uses an italic heading with an upright body.',
+      'Apply \\theoremstyle before the declarations it should affect. The selected style is stored when an environment is defined; switching styles immediately before using an already-defined environment does not restyle that environment. Group related declarations in the preamble so the intended formatting is easy to audit.',
+      'Use \\newtheorem* for an unnumbered environment, such as an informal remark. An unnumbered result does not provide a new result number for a normal cross-reference. If readers need to cite that remark elsewhere, a numbered declaration is usually the simpler and more robust choice.',
+      'An optional argument on a theorem instance adds a name or attribution, such as [Euclid]. It is not the same as the counter options on the declaration. Keep the title short enough to fit a heading, and place lengthy historical notes or citations in the surrounding text when necessary.',
+    ],
+    code: '\\documentclass{article}\n\\usepackage{amsmath}\n\\usepackage{amsthm}\n\\newtheorem{theorem}{Theorem}[section]\n\\newtheorem{lemma}[theorem]{Lemma}\n\\theoremstyle{definition}\n\\newtheorem{definition}[theorem]{Definition}\n\\theoremstyle{remark}\n\\newtheorem*{remark}{Remark}\n\\begin{document}\n\\section{Integers}\n\\begin{definition}\nAn integer $n$ is even if $n=2k$ for some integer $k$.\n\\end{definition}\n\\begin{lemma}\nEvery multiple of four is even.\n\\end{lemma}\n\\begin{proof}\nIf $n=4k$, then $n=2(2k)$.\n\\end{proof}\n\\begin{theorem}[Closure under addition]\nThe sum of two even integers is even.\n\\end{theorem}\n\\begin{proof}\nWrite the integers as $2r$ and $2s$, and add them.\n\\end{proof}\n\\begin{remark}\nThe definition, lemma, and theorem share one counter.\n\\end{remark}\n\\end{document}',
+  },
+  {
+    title: 'Reference a theorem without hard-coding its number',
+    paragraphs: [
+      'Place \\label just inside the theorem environment, after its opening command. At that point the result counter has advanced, so the label records the correct number. A label before the environment can capture the preceding section or another counter instead, even though the source still compiles.',
+      'Write Theorem~\\ref{thm:main} to produce a named reference with a nonbreaking space. Choose descriptive label keys rather than embedding the current number in the key. Then inserting a new lemma earlier in the file updates references without renaming labels or editing prose by hand.',
+      'Compile twice after adding or moving labels. The first run writes the number to the auxiliary file, and the next run reads it. If question marks remain, check the exact label spelling, duplicate-label warnings, and whether the labeled material is actually included in the document.',
+      'hyperref makes references clickable when loaded appropriately for the template. cleveref can add names automatically, but shared-counter naming deserves a check in the resulting PDF. For a small document, explicit wording plus \\ref avoids adding another package merely to save a few characters.',
+    ],
+    code: '\\documentclass{article}\n\\usepackage{amsmath}\n\\usepackage{amsthm}\n\\usepackage[hidelinks]{hyperref}\n\\newtheorem{theorem}{Theorem}\n\\begin{document}\n\\begin{theorem}[Euclid]\n\\label{thm:primes}\nThere are infinitely many primes.\n\\end{theorem}\n\\begin{proof}[Proof of Theorem~\\ref{thm:primes}]\nSuppose the primes form a finite list $p_1,\\ldots,p_n$.\nThe integer $p_1\\cdots p_n+1$ has a prime divisor\ndifferent from every prime on the list, a contradiction.\n\\end{proof}\nTheorem~\\ref{thm:primes} rules out a largest prime.\n\\end{document}',
+  },
+  {
+    title: 'Place the QED symbol after a displayed equation',
+    paragraphs: [
+      'The proof environment places its end mark automatically when it closes. If the proof ends with ordinary text, this normally gives the expected result. If it ends with displayed mathematics, the square can land on a separate line below the display instead of next to the final mathematical step.',
+      'Use \\qedhere inside the final display to place the automatic mark there. Load amsmath before amsthm so the proof package can cooperate with the math environments. The example below uses an unnumbered equation, which is a straightforward choice when the final identity does not need its own reference.',
+      'In a multi-line align environment, place \\qedhere on the final relevant row, before the environment closes. Numbered or unusually nested displays can need additional care; inspect the actual output rather than assuming the same placement works for every equation structure. A proof ending in a list similarly needs its mark checked on the last item.',
+      'Do not add \\qed manually inside a normal proof just to move the square. That can leave both a manually inserted mark and the automatic closing mark. Use \\qedhere for placement, and avoid an empty paragraph immediately before \\end{proof}, which can also create an unwanted final line.',
+    ],
+    code: '\\documentclass{article}\n\\usepackage{amsmath}\n\\usepackage{amsthm}\n\\begin{document}\n\\begin{proof}\nFor any real number $x$,\n\\begin{equation*}\n(x+1)^2-x^2=2x+1. \\qedhere\n\\end{equation*}\n\\end{proof}\n\n\\begin{proof}\nExpanding and collecting terms gives\n\\begin{align*}\n(x+1)^2 &= x^2+2x+1,\\\\\n(x+1)^2-x^2 &= 2x+1. \\qedhere\n\\end{align*}\n\\end{proof}\n\\end{document}',
+  },
+  {
+    title: 'Change the proof heading or end symbol',
+    paragraphs: [
+      'An optional argument changes the proof heading, for example \\begin{proof}[Proof of the lemma] or [Proof sketch]. The heading is descriptive text, not a label declaration. A proof sketch should make clear which steps are omitted; the formatting cannot make an incomplete argument into a complete proof.',
+      'The default square is controlled by \\qedsymbol. To use a filled square, load amssymb and redefine it to a math-mode \\blacksquare. Put the redefinition in the preamble for a document-wide change. Avoid inserting the raw Unicode square into a pdfLaTeX source file when a supported command is available.',
+      "Outside a proof, amsthm's \\qed command can add an end mark to an informal solution. Inside a proof, let the environment manage it. If a journal requires no end mark, an empty \\qedsymbol redefinition removes it, but follow the publisher's style rather than changing it solely for decoration.",
+    ],
+    code: '\\documentclass{article}\n\\usepackage{amsmath}\n\\usepackage{amssymb}\n\\usepackage{amsthm}\n\\renewcommand{\\qedsymbol}{$\\blacksquare$}\n\\begin{document}\n\\begin{proof}[Proof sketch]\nApply the preceding identity and simplify.\n\\end{proof}\n\\end{document}',
+  },
+  {
+    title: 'Fix common errors and respect existing templates',
+    paragraphs: [
+      'Environment theorem undefined means the environment was not declared, or its source name differs from the declaration. Environment proof undefined usually means amsthm is missing and the class does not supply an equivalent. Check the template first: AMS classes already include theorem support, so avoid defining a second proof environment.',
+      'If a command is already defined, look for duplicate declarations or competing theorem packages. amsthm and ntheorem are alternative systems, not packages to stack indiscriminately. A publisher may already define theorem names and counters; reuse its definitions or follow its documented customization interface.',
+      'For boxed results, a package such as tcolorbox can provide a separate presentation layer, but its counters and labels must be configured deliberately. Establish correct statements, numbering, and references with the plain environment first. Then test the styling on a long theorem that crosses a page, not only a one-line example.',
+      'Before delivery, inspect every theorem heading, the first result after each section, all references, and every proof-ending display. A clean compile does not catch a wrong label location, an unintended independent lemma counter, or a square that sits awkwardly below the last equation.',
+    ],
   },
 ]
 
-export default async function LaTeXTheoremsProofsPage() {
+export default async function LearnPage() {
   return (
     <div className="pt-24 pb-24">
       <script
@@ -72,6 +122,7 @@ export default async function LaTeXTheoremsProofsPage() {
         slug={page.slug}
         title={page.title}
         description={page.description}
+        datePublished="2026-10-17"
         dateModified={LAST_UPDATED}
         faq={faq}
       />
@@ -84,703 +135,50 @@ export default async function LaTeXTheoremsProofsPage() {
             ← Back to Learn
           </Link>
         </div>
-
         <article className="prose prose-lg dark:prose-invert max-w-4xl mx-auto">
-          <h1>Theorems and Proofs in LaTeX: amsthm, \newtheorem and the QED Symbol</h1>
-
-          <div className="not-prose my-6 p-6 rounded-lg border bg-muted/40 break-words">
-            <p className="text-sm font-semibold uppercase tracking-wide text-muted-foreground mb-3">Quick answer</p>
-            <ul className="space-y-2 text-base list-disc pl-5">
-              <li>
-                <strong>Package:</strong> <code>{`\\usepackage{amsthm}`}</code>, loaded after{' '}
-                <code>amsmath</code>.
-              </li>
-              <li>
-                <strong>Define a theorem:</strong> <code>{`\\newtheorem{theorem}{Theorem}[section]`}</code>{' '}
-                in the preamble, then <code>{`\\begin{theorem} ... \\end{theorem}`}</code>. Lemmas
-                sharing its numbers: <code>{`\\newtheorem{lemma}[theorem]{Lemma}`}</code>.
-              </li>
-              <li>
-                <strong>Styles:</strong> <code>{`\\theoremstyle{plain}`}</code> (italic body,
-                theorems), <code>definition</code> (upright, definitions and examples),{' '}
-                <code>remark</code> (italic heading), each placed before its{' '}
-                <code>\newtheorem</code>.
-              </li>
-              <li>
-                <strong>Proof:</strong> <code>{`\\begin{proof} ... \\end{proof}`}</code> ends with the
-                end of proof symbol □ automatically.
-              </li>
-              <li>
-                <strong>Filled QED square:</strong>{' '}
-                <code>{`\\renewcommand\\qedsymbol{$\\blacksquare$}`}</code> (needs{' '}
-                <code>amssymb</code>).
-              </li>
-              <li>
-                <strong>Symbol after an equation:</strong> <code>\qedhere</code> at the end of the
-                last line; outside a proof, <code>\qed</code>.
-              </li>
-            </ul>
-          </div>
+          <h1>{page.title}</h1>
           <p className="lead">
-            LaTeX has no built-in <code>theorem</code> environment. You create one with{' '}
-            <code>\newtheorem</code>, and the <code>amsthm</code> package adds the styles, the{' '}
-            <code>proof</code> environment and the end-of-proof symbol. This guide sets that up
-            step by step: numbered and unnumbered theorems, lemmas that share the theorem counter,
-            the three built-in styles, proofs that end with the QED box in the right place (even
-            after an equation or a list), changing the symbol, referencing theorems with{' '}
-            <code>\ref</code> and <code>cleveref</code>, colored theorem boxes with{' '}
-            <code>tcolorbox</code>, and the errors that come up along the way.
+            {
+              'For a LaTeX theorem and proof, load amsmath followed by amsthm, declare the theorem with \\newtheorem{theorem}{Theorem}, and write the statement inside a theorem environment. Write its argument in the separate proof environment. amsthm adds the proof heading and an end-of-proof square automatically.'
+            }
           </p>
-
-          {/* ── Setup ── */}
-          <h2>How to Define a Theorem in LaTeX: amsthm and \newtheorem</h2>
-          <p>
-            Load <code>amsmath</code> first, then <code>amsthm</code>, then declare the
-            environments you need. The second argument of <code>\newtheorem</code> is the word that
-            is printed; the first is the name you use in <code>\begin</code>:
-          </p>
-          <pre><code>{`\\documentclass{article}
-\\usepackage{amsmath}
-\\usepackage{amsthm}
-
-\\newtheorem{theorem}{Theorem}
-
-\\begin{document}
-
-\\begin{theorem}
-  Every bounded monotone sequence of real numbers converges.
-\\end{theorem}
-
-\\begin{proof}
-  Let $(a_n)$ be increasing and bounded above, and let $L = \\sup_n a_n$.
-  For any $\\varepsilon > 0$ there is an $N$ with $a_N > L - \\varepsilon$,
-  and then $L - \\varepsilon < a_n \\le L$ for all $n \\ge N$.
-\\end{proof}
-
-\\end{document}`}</code></pre>
-          <p>
-            This prints <strong>Theorem 1.</strong> followed by the statement in italics, then{' '}
-            <em>Proof.</em> and the argument in upright type, ending with a hollow square (□) at
-            the right margin. An optional argument adds a name or attribution to the heading:{' '}
-            <code>{`\\begin{theorem}[Monotone Convergence]`}</code> prints{' '}
-            <strong>Theorem 1</strong> (Monotone Convergence).
-          </p>
-          <p>
-            The AMS classes (<code>amsart</code>, <code>amsbook</code>) already load{' '}
-            <code>amsthm</code>; with any other class you load it yourself. The order matters: if{' '}
-            <code>amsmath</code> is loaded <em>after</em> <code>amsthm</code>, the proof
-            environment&apos;s handling of the QED symbol in displayed equations breaks
-            (&ldquo;The \qedhere command may not work correctly here&rdquo;).
-          </p>
-
-          {/* ── Numbering ── */}
-          <h2>Numbering: Within Sections and Shared Counters</h2>
-          <p>
-            A bare <code>{`\\newtheorem{theorem}{Theorem}`}</code> numbers theorems 1, 2, 3 across
-            the whole document. Most papers number within sections (Theorem 2.1, 2.2) and most
-            books within chapters. The optional argument after the printed name does this:
-          </p>
-          <pre><code>{`\\newtheorem{theorem}{Theorem}[section]   % Theorem 1.1, 1.2, 2.1, ...
-% \\newtheorem{theorem}{Theorem}[chapter] % per chapter, in book/report`}</code></pre>
-          <p>
-            The second question is whether lemmas, propositions and corollaries get their own
-            sequence or share the theorem counter. Sharing is the norm in mathematics: it lets a
-            reader find &ldquo;Lemma 2.3&rdquo; between Theorem 2.2 and Corollary 2.4 without
-            searching. An optional argument <em>before</em> the printed name makes an environment
-            use another environment&apos;s counter:
-          </p>
-          <pre><code>{`\\newtheorem{theorem}{Theorem}[section]
-\\newtheorem{lemma}[theorem]{Lemma}               % shares the theorem counter
-\\newtheorem{proposition}[theorem]{Proposition}
-\\newtheorem{corollary}[theorem]{Corollary}
-
-% Definitions and examples often get their own counters
-\\newtheorem{definition}{Definition}[section]
-\\newtheorem{example}{Example}[section]`}</code></pre>
-          <p>
-            You cannot use both optional arguments at once: an environment either shares a counter
-            or defines its own, and the shared one inherits the <code>[section]</code> reset from
-            the environment it follows.
-          </p>
-
-          <h3>Unnumbered theorems</h3>
-          <p>
-            The starred form defines an environment with no number at all, used for famous named
-            results and for remarks:
-          </p>
-          <pre><code>{`\\newtheorem*{fermat}{Fermat's Last Theorem}
-\\newtheorem*{remark}{Remark}
-
-\\begin{fermat}
-  No three positive integers $a$, $b$, $c$ satisfy $a^n + b^n = c^n$
-  for any integer $n > 2$.
-\\end{fermat}`}</code></pre>
-          <p>
-            To put the number before the name (&ldquo;2.1 Theorem&rdquo; instead of &ldquo;Theorem
-            2.1&rdquo;), issue <code>\swapnumbers</code> before the <code>\newtheorem</code>{' '}
-            declarations it should affect.
-          </p>
-
-          {/* ── Styles ── */}
-          <h2>Theorem and Definition Styles: plain, definition and remark</h2>
-          <p>
-            amsthm ships three styles. <code>\theoremstyle</code> switches the current style, and
-            each <code>\newtheorem</code> that follows picks it up:
-          </p>
-          <div className="overflow-x-auto">
-          <table>
-            <thead>
-              <tr>
-                <th>Style</th>
-                <th>Heading</th>
-                <th>Body</th>
-                <th>Use for</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr><td><code>plain</code> (default)</td><td>Bold</td><td>Italic</td><td>Theorem, Lemma, Proposition, Corollary, Conjecture</td></tr>
-              <tr><td><code>definition</code></td><td>Bold</td><td>Upright</td><td>Definition, Example, Problem, Exercise</td></tr>
-              <tr><td><code>remark</code></td><td>Italic</td><td>Upright</td><td>Remark, Note, Notation, Case</td></tr>
-            </tbody>
-          </table>
-          </div>
-          <pre><code>{`\\theoremstyle{plain}
-\\newtheorem{theorem}{Theorem}[section]
-\\newtheorem{lemma}[theorem]{Lemma}
-\\newtheorem{corollary}[theorem]{Corollary}
-
-\\theoremstyle{definition}
-\\newtheorem{definition}[theorem]{Definition}
-\\newtheorem{example}[theorem]{Example}
-
-\\theoremstyle{remark}
-\\newtheorem*{remark}{Remark}
-\\newtheorem*{notation}{Notation}`}</code></pre>
-          <p>
-            The italic body of the <code>plain</code> style is why definitions get their own
-            style: a definition full of italic text with italic variables is hard to read, and
-            the word being defined cannot be emphasised. Inside an italic theorem, use{' '}
-            <code>\textup</code> or <code>\emph</code> (which toggles back to upright) for text
-            that should not be slanted.
-          </p>
-
-          <h3>A definition environment</h3>
-          <p>
-            A definition is declared exactly like a theorem, only under the{' '}
-            <code>definition</code> style, so the body is upright and the term being defined can
-            stand out in italics:
-          </p>
-          <pre><code>{`\\documentclass{article}
-\\usepackage{amsmath}
-\\usepackage{amsthm}
-
-\\theoremstyle{definition}
-\\newtheorem{definition}{Definition}[section]
-
-\\begin{document}
-\\section{Groups}
-
-\\begin{definition}[Group]
-  A \\emph{group} is a set $G$ with an associative operation
-  $G \\times G \\to G$, an identity element and an inverse for
-  every element.
-\\end{definition}
-
-\\end{document}`}</code></pre>
-          <p>
-            This prints <strong>Definition 1.1</strong> (Group). with the body in upright type.
-            Without the <code>\theoremstyle</code> line the body would be italic and the
-            emphasised word <em>group</em> would flip to upright, which reads backwards.
-          </p>
-
-          <h3>Custom styles with \newtheoremstyle</h3>
-          <p>
-            For a journal that wants, say, small caps headings or a line break after the heading,
-            define your own style. The nine arguments are: name, space above, space below, body
-            font, indent, heading font, punctuation after the heading, space after the heading
-            (or <code>\newline</code>), and a heading specification (leave empty for the default):
-          </p>
-          <pre><code>{`\\newtheoremstyle{scthm}   % name
-  {\\topsep}               % space above
-  {\\topsep}               % space below
-  {\\itshape}              % body font
-  {}                      % indent
-  {\\scshape}              % heading font
-  {.}                     % punctuation after heading
-  {\\newline}              % space after heading: \\newline or a length
-  {}                      % heading spec (empty = default)
-
-\\theoremstyle{scthm}
-\\newtheorem{claim}{Claim}`}</code></pre>
-
-          {/* ── Proofs ── */}
-          <h2>The proof Environment</h2>
-          <p>
-            <code>proof</code> prints an italic <em>Proof.</em> heading, sets the argument in
-            upright type and ends it with the end-of-proof symbol (covered in the next section).
-            Change the heading for one proof with the optional argument. This is the standard way
-            to prove a theorem stated earlier, or to split a proof into parts:
-          </p>
-          <pre><code>{`\\begin{proof}[Proof of Theorem~\\ref{thm:main}]
-  ...
-\\end{proof}
-
-\\begin{proof}[Sketch of proof]
-  ...
-\\end{proof}
-
-% The default word, for all proofs (e.g. for another language)
-\\renewcommand{\\proofname}{Beweis}`}</code></pre>
-
-          {/* ── End of proof symbol ── */}
-          <h2>End of Proof Symbol in LaTeX (∎, □): \qedsymbol, \blacksquare and \qedhere</h2>
-          <p>
-            The end of proof symbol is the small square that marks where a proof finishes. It is
-            also called the QED symbol (after <em>quod erat demonstrandum</em>), the tombstone, or
-            the Halmos, after the mathematician who popularised it. In amsthm it is stored in{' '}
-            <code>\qedsymbol</code>, and the <code>proof</code> environment prints it flush right on
-            the last line automatically. The default is a hollow square, <code>\openbox</code> (□).
-          </p>
-          <div className="overflow-x-auto">
-          <table>
-            <thead>
-              <tr>
-                <th>You want</th>
-                <th>Write</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr><td>Hollow square □ (default)</td><td>nothing: <code>{`\\begin{proof} ... \\end{proof}`}</code></td></tr>
-              <tr><td>Filled square ■</td><td><code>{`\\renewcommand{\\qedsymbol}{$\\blacksquare$}`}</code> (amssymb)</td></tr>
-              <tr><td>The letters QED</td><td><code>{`\\renewcommand{\\qedsymbol}{QED}`}</code></td></tr>
-              <tr><td>Symbol on the last line of an equation or list</td><td><code>\qedhere</code> at the end of that line</td></tr>
-              <tr><td>Symbol outside a proof environment</td><td><code>\qed</code> (amsthm) or <code>{`\\hfill$\\square$`}</code> (amssymb)</td></tr>
-            </tbody>
-          </table>
-          </div>
-
-          <h3>Changing the QED symbol to a filled square</h3>
-          <p>
-            Redefine <code>\qedsymbol</code> once in the preamble and every proof uses the new
-            symbol. A filled square from <code>amssymb</code> is the most common replacement:
-          </p>
-          <pre><code>{`\\usepackage{amssymb}
-
-\\renewcommand{\\qedsymbol}{$\\blacksquare$}        % filled square
-\\renewcommand{\\qedsymbol}{$\\square$}             % hollow square from amssymb
-\\renewcommand{\\qedsymbol}{\\rule{0.5em}{0.5em}}   % filled square, no package
-\\renewcommand{\\qedsymbol}{QED}                    % the letters
-\\renewcommand{\\qedsymbol}{}                       % no symbol at all`}</code></pre>
-          <p>
-            Use only one of these lines. The amsthm default, <code>\openbox</code>, and the
-            amssymb <code>\square</code> look almost the same; <code>\blacksquare</code> is the
-            filled version.
-          </p>
-
-          <h3>\qedhere: the symbol after an equation or a list</h3>
-          <p>
-            If a proof ends with a displayed equation, an <code>align</code> or a list, the box
-            lands on its own line below it, which looks wrong. Put <code>\qedhere</code> at the
-            end of the last line and amsthm moves the symbol onto that line instead:
-          </p>
-          <pre><code>{`\\begin{proof}
-  Expanding the square and collecting terms,
-  \\begin{align*}
-    (a+b)^2 &= a^2 + ab + ba + b^2 \\\\
-            &= a^2 + 2ab + b^2. \\qedhere
-  \\end{align*}
-\\end{proof}
-
-\\begin{proof}
-  Both directions are immediate:
-  \\begin{itemize}
-    \\item If $x \\in A$ then $x \\in A \\cup B$.
-    \\item If $x \\in A \\cup B$ and $x \\notin B$ then $x \\in A$. \\qedhere
-  \\end{itemize}
-\\end{proof}`}</code></pre>
-          <p>
-            <code>\qedhere</code> works in <code>equation</code>, <code>align</code>,{' '}
-            <code>gather</code>, their starred forms, <code>{`\\[ ... \\]`}</code>, and in the last
-            item of a list. Numbered displays are the awkward case: in <code>equation</code> the
-            symbol drops below the equation number, and in a numbered <code>align</code> it takes
-            the place of the last line&rsquo;s number. If a proof ends with a numbered display, use
-            the starred form or close with a short sentence after it. If the proof simply ends
-            with text, you need nothing: the symbol appears automatically.
-          </p>
-
-          <h3>The symbol without a proof environment</h3>
-          <p>
-            With amsthm loaded, <code>\qed</code> prints <code>\qedsymbol</code> flush right at the
-            point where you type it, for example after a solution or a worked example. Without
-            amsthm there is no <code>\qedsymbol</code>; push a square to the right margin with{' '}
-            <code>\hfill</code> instead:
-          </p>
-          <pre><code>{`% amsthm loaded: same symbol as in proof environments
-\\noindent\\textit{Solution.} The answer is $x = 2$. \\qed
-
-% no amsthm: amssymb for \\square or \\blacksquare
-\\noindent\\textit{Proof.} Immediate from the definition. \\hfill$\\square$`}</code></pre>
-
-          <h3>The ∎ character, ntheorem and thmtools</h3>
-          <p>
-            In Unicode the end of proof symbol is ∎, U+220E &ldquo;END OF PROOF&rdquo;; the
-            hollow square □ is U+25A1 &ldquo;WHITE SQUARE&rdquo;. You can type either character
-            directly with XeLaTeX or LuaLaTeX and a font that contains it, but in pdfLaTeX use the
-            commands above. <code>thmtools</code> builds on amsthm, so <code>\qedsymbol</code>,{' '}
-            <code>\qed</code> and <code>\qedhere</code> work unchanged, and{' '}
-            <code>{`\\declaretheorem[qed=$\\blacksquare$]{example}`}</code> adds an end mark to other
-            environments. <code>ntheorem</code> with the <code>thmmarks</code> option places end
-            marks itself, set per environment with <code>{`\\theoremsymbol{$\\blacksquare$}`}</code>.
-          </p>
-
-          {/* ── Referencing ── */}
-          <h2>Referencing Theorems</h2>
-          <p>
-            A <code>\label</code> inside the environment (after <code>\begin</code>) records the
-            theorem number, exactly as for equations and figures. <code>\ref</code> prints the
-            number; <code>cleveref</code> adds the environment&apos;s name:
-          </p>
-          <pre><code>{`\\usepackage{hyperref}   % optional, for clickable references
-\\usepackage{cleveref}   % after hyperref and amsthm
-
-\\begin{theorem}[Pythagoras]
-  \\label{thm:pythagoras}
-  In a right triangle, $a^2 + b^2 = c^2$.
-\\end{theorem}
-
-\\begin{lemma}
-  \\label{lem:aux}
-  ...
-\\end{lemma}
-
-By Theorem~\\ref{thm:pythagoras} ...        % Theorem 1.1
-By \\cref{thm:pythagoras} ...               % theorem 1.1
-\\Cref{thm:pythagoras,lem:aux} show ...     % Theorem 1.1 and Lemma 1.2`}</code></pre>
-          <p>
-            cleveref learns the name of each environment from its <code>\newtheorem</code>{' '}
-            declaration. To change the wording or capitalise it everywhere, set it once:{' '}
-            <code>{`\\crefname{theorem}{Theorem}{Theorems}`}</code>, or load cleveref with the{' '}
-            <code>capitalise</code> option. The same labels work with{' '}
-            <code>\autoref</code> from hyperref, which prints &ldquo;Theorem 1.1&rdquo; using{' '}
-            <code>\theoremautorefname</code>.
-          </p>
-
-          {/* ── Alternatives ── */}
-          <h2>thmtools, ntheorem and Theorem Boxes with tcolorbox</h2>
-
-          <h3>thmtools</h3>
-          <p>
-            <code>thmtools</code> is a layer on top of amsthm with a key&ndash;value interface. It
-            is handy when you want many environments with slightly different settings, and it
-            adds a list of theorems:
-          </p>
-          <pre><code>{`\\usepackage{amsthm}
-\\usepackage{thmtools}
-
-\\declaretheorem[name=Theorem, numberwithin=section]{theorem}
-\\declaretheorem[name=Lemma, numberwithin=section]{lemma}
-\\declaretheorem[name=Remark, style=remark, numbered=no]{remark}
-
-\\listoftheorems   % like \\listoffigures, for theorems`}</code></pre>
-          <p>
-            The <code>sibling=theorem</code> key is thmtools&apos; equivalent of the{' '}
-            <code>[theorem]</code> optional argument for sharing a counter. Note that thmtools has
-            not kept pace with recent LaTeX kernel releases: on the newest TeX Live, shared
-            counters fail with <em>Command \c@lemma already defined</em> as soon as thmtools is
-            loaded. If you hit that, drop thmtools and use plain amsthm, which handles everything in
-            this guide.
-          </p>
-
-          <h3>ntheorem</h3>
-          <p>
-            <code>ntheorem</code> is an older alternative to amsthm with its own styles and
-            automatic end marks (<code>{`\\usepackage[thmmarks, amsmath]{ntheorem}`}</code>). It
-            works, but it is not compatible with amsthm; pick one package per document. New
-            documents should use amsthm, which every journal class understands.
-          </p>
-
-          <h3>Colored theorem boxes with tcolorbox</h3>
-          <p>
-            For lecture notes and textbooks, <code>tcolorbox</code> can draw each theorem in a
-            framed, shaded box. <code>\newtcbtheorem</code> defines a numbered environment that
-            takes a title and a label suffix as arguments:
-          </p>
-          <pre><code>{`\\usepackage[most]{tcolorbox}
-
-\\newtcbtheorem[number within=section]{boxthm}{Theorem}{%
-  colback=blue!5, colframe=blue!60!black,
-  fonttitle=\\bfseries, separator sign={.}
-}{thm}
-
-\\begin{boxthm}{Pythagoras}{pyth}
-  In a right triangle, $a^2 + b^2 = c^2$.
-\\end{boxthm}
-
-See Theorem~\\ref{thm:pyth}.   % the label is prefix:suffix`}</code></pre>
-          <p>
-            Use an empty first argument, <code>{`\\begin{boxthm}{}{pyth}`}</code>, for a theorem with
-            no name. tcolorbox theorems have their own counters, so if you mix them with amsthm
-            environments, give them the amsthm counter with{' '}
-            <code>use counter*=theorem</code> in the options (<code>use counter=</code> without the star would overwrite amsthm&apos;s numbering format).
-          </p>
-
-          {/* ── Errors ── */}
-          <h2>Common Errors</h2>
-          <div className="overflow-x-auto">
-          <table>
-            <thead>
-              <tr>
-                <th>Message or symptom</th>
-                <th>Cause</th>
-                <th>Fix</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td><em>Environment theorem undefined</em></td>
-                <td>No <code>\newtheorem</code> in the preamble; amsthm provides <code>proof</code> only</td>
-                <td>Add <code>{`\\newtheorem{theorem}{Theorem}`}</code> before <code>{`\\begin{document}`}</code></td>
-              </tr>
-              <tr>
-                <td><em>Environment proof undefined</em></td>
-                <td><code>amsthm</code> not loaded</td>
-                <td><code>{`\\usepackage{amsthm}`}</code></td>
-              </tr>
-              <tr>
-                <td><em>Command \proof already defined</em></td>
-                <td><code>{`\\newtheorem{proof}{Proof}`}</code> with amsthm loaded, or an AMS class that already defines it</td>
-                <td>Delete the <code>\newtheorem</code>; use the built-in <code>proof</code> environment</td>
-              </tr>
-              <tr>
-                <td>QED box on its own line after an equation</td>
-                <td>The proof ends with a display and nothing after it</td>
-                <td>Add <code>\qedhere</code> inside the last display or list item</td>
-              </tr>
-              <tr>
-                <td>Two QED symbols</td>
-                <td><code>\qed</code> written manually inside a <code>proof</code> environment</td>
-                <td>Remove <code>\qed</code>; use <code>\qedhere</code> if placement is the issue</td>
-              </tr>
-              <tr>
-                <td>Theorems numbered 0.1, 0.2 in an <code>article</code></td>
-                <td><code>[section]</code> used but no <code>\section</code> precedes the theorem</td>
-                <td>Add a section, or number without <code>[section]</code></td>
-              </tr>
-              <tr>
-                <td>Lemma numbering restarts at 1</td>
-                <td>Lemma has its own counter</td>
-                <td><code>{`\\newtheorem{lemma}[theorem]{Lemma}`}</code> to share the theorem counter</td>
-              </tr>
-              <tr>
-                <td>&ldquo;The \qedhere command may not work correctly here&rdquo;, QED in the wrong place</td>
-                <td><code>amsthm</code> loaded before <code>amsmath</code></td>
-                <td>Load <code>amsmath</code> first, then <code>amsthm</code></td>
-              </tr>
-              <tr>
-                <td><em>No counter &apos;chapter&apos; defined</em></td>
-                <td><code>{`\\newtheorem{theorem}{Theorem}[chapter]`}</code> in an <code>article</code>, which has no chapters</td>
-                <td>Use <code>[section]</code> in <code>article</code>; <code>[chapter]</code> only in <code>book</code> and <code>report</code></td>
-              </tr>
-              <tr>
-                <td><code>\theoremstyle</code> has no effect</td>
-                <td>It was issued after the <code>\newtheorem</code> it was meant for</td>
-                <td>Put <code>\theoremstyle</code> before the declarations it applies to</td>
-              </tr>
-              <tr>
-                <td><code>\cref</code> prints <strong>??</strong> or the wrong name</td>
-                <td>Not compiled twice, or <code>\label</code> placed before <code>\begin</code></td>
-                <td>Compile twice; put <code>\label</code> inside the environment</td>
-              </tr>
-            </tbody>
-          </table>
-          </div>
-
-          {/* ── Complete example ── */}
-          <h2>Complete Example</h2>
-          <pre><code>{`\\documentclass{article}
-\\usepackage{amsmath}
-\\usepackage{amssymb}
-\\usepackage{amsthm}
-\\usepackage[hidelinks]{hyperref}
-\\usepackage{cleveref}
-
-\\theoremstyle{plain}
-\\newtheorem{theorem}{Theorem}[section]
-\\newtheorem{lemma}[theorem]{Lemma}
-\\newtheorem{corollary}[theorem]{Corollary}
-
-\\theoremstyle{definition}
-\\newtheorem{definition}[theorem]{Definition}
-
-\\theoremstyle{remark}
-\\newtheorem*{remark}{Remark}
-
-\\renewcommand{\\qedsymbol}{$\\blacksquare$}
-
-\\begin{document}
-
-\\section{Divisibility}
-
-\\begin{definition}
-  \\label{def:even}
-  An integer $n$ is \\emph{even} if $n = 2k$ for some integer $k$.
-\\end{definition}
-
-\\begin{lemma}
-  \\label{lem:square}
-  If $n$ is even, then $n^2$ is even.
-\\end{lemma}
-
-\\begin{proof}
-  Write $n = 2k$ as in \\cref{def:even}. Then
-  \\[
-    n^2 = 4k^2 = 2(2k^2),
-  \\]
-  which is even. \\qedhere
-\\end{proof}
-
-\\begin{theorem}[Euclid]
-  \\label{thm:euclid}
-  There are infinitely many primes.
-\\end{theorem}
-
-\\begin{proof}[Proof of \\Cref{thm:euclid}]
-  Suppose $p_1, \\dots, p_n$ are all the primes and let
-  $N = p_1 p_2 \\cdots p_n + 1$. No $p_i$ divides $N$, so $N$ has a
-  prime factor not in the list, a contradiction.
-\\end{proof}
-
-\\begin{corollary}
-  \\label{cor:unbounded}
-  The set of primes is unbounded.
-\\end{corollary}
-
-\\begin{remark}
-  \\Cref{cor:unbounded} follows from \\cref{thm:euclid} because a finite
-  set of integers is bounded. \\Cref{lem:square} was not needed.
-\\end{remark}
-
-\\end{document}`}</code></pre>
-          <p>
-            Compile twice. Definition 1.1, Lemma 1.2, Theorem 1.3 and Corollary 1.4 share one
-            counter, the remark is unnumbered, and every proof ends with a filled square.
-          </p>
-
-          {/* ── Quick reference ── */}
-          <h2>Quick Reference</h2>
-          <div className="overflow-x-auto">
-          <table>
-            <thead>
-              <tr>
-                <th>Task</th>
-                <th>Command</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr><td>Load the package</td><td><code>{`\\usepackage{amsmath}`}</code> then <code>{`\\usepackage{amsthm}`}</code></td></tr>
-              <tr><td>Numbered theorem</td><td><code>{`\\newtheorem{theorem}{Theorem}`}</code></td></tr>
-              <tr><td>Numbered within sections</td><td><code>{`\\newtheorem{theorem}{Theorem}[section]`}</code></td></tr>
-              <tr><td>Share the theorem counter</td><td><code>{`\\newtheorem{lemma}[theorem]{Lemma}`}</code></td></tr>
-              <tr><td>Unnumbered</td><td><code>{`\\newtheorem*{remark}{Remark}`}</code></td></tr>
-              <tr><td>Style</td><td><code>{`\\theoremstyle{plain}`}</code> / <code>definition</code> / <code>remark</code> before <code>\newtheorem</code></td></tr>
-              <tr><td>Named theorem</td><td><code>{`\\begin{theorem}[Pythagoras]`}</code></td></tr>
-              <tr><td>Proof</td><td><code>{`\\begin{proof} ... \\end{proof}`}</code></td></tr>
-              <tr><td>Custom proof heading</td><td><code>{`\\begin{proof}[Proof of Theorem~\\ref{thm:main}]`}</code></td></tr>
-              <tr><td>QED after an equation or list item</td><td><code>\qedhere</code> at the end of the display or item</td></tr>
-              <tr><td>Filled QED square</td><td><code>{`\\renewcommand{\\qedsymbol}{$\\blacksquare$}`}</code> (amssymb)</td></tr>
-              <tr><td>No QED symbol</td><td><code>{`\\renewcommand{\\qedsymbol}{}`}</code></td></tr>
-              <tr><td>Manual QED symbol</td><td><code>\qed</code></td></tr>
-              <tr><td>Reference a theorem</td><td><code>{`\\label{thm:x}`}</code> inside; <code>{`\\ref{thm:x}`}</code> or <code>{`\\cref{thm:x}`}</code></td></tr>
-              <tr><td>Number before name</td><td><code>\swapnumbers</code> before <code>\newtheorem</code></td></tr>
-              <tr><td>Boxed theorem</td><td><code>{`\\newtcbtheorem{boxthm}{Theorem}{options}{thm}`}</code> (tcolorbox)</td></tr>
-              <tr><td>List of theorems</td><td><code>\listoftheorems</code> (thmtools)</td></tr>
-            </tbody>
-          </table>
-          </div>
-
-          {/* ── FAQ ── */}
-          <h2>Frequently Asked Questions</h2>
-          <h3>How do I put the QED symbol in LaTeX?</h3>
-          <p>
-            Load <code>amsthm</code> and write the proof inside{' '}
-            <code>{`\\begin{proof} ... \\end{proof}`}</code>; the end of proof symbol (a hollow
-            square) is added flush right on the last line automatically. For a filled square load{' '}
-            <code>amssymb</code> and put <code>{`\\renewcommand{\\qedsymbol}{$\\blacksquare$}`}</code>{' '}
-            in the preamble. Outside a proof environment, type <code>\qed</code> (amsthm) or{' '}
-            <code>{`\\hfill$\\square$`}</code> (amssymb).
-          </p>
-          <h3>Why does the QED box appear on the wrong line?</h3>
-          <p>
-            When a proof ends with a displayed equation, an <code>align</code> or a list, amsthm
-            puts the symbol on a new line below it. Write <code>\qedhere</code> at the end of the
-            last equation line or list item to move the symbol up onto that line. Load{' '}
-            <code>amsmath</code> before <code>amsthm</code>, or <code>\qedhere</code> may not
-            work in displays.
-          </p>
-
-          <h3>How do you define a theorem in LaTeX?</h3>
-          <p>
-            Load <code>amsthm</code> in the preamble and declare the environment with{' '}
-            <code>{`\\newtheorem{theorem}{Theorem}`}</code>: the first argument is the environment
-            name, the second the word that is printed. Then write{' '}
-            <code>{`\\begin{theorem} ... \\end{theorem}`}</code> in the document. Add{' '}
-            <code>[section]</code> at the end,{' '}
-            <code>{`\\newtheorem{theorem}{Theorem}[section]`}</code>, to number theorems 1.1, 1.2
-            within each section.
-          </p>
-          <h3>How do I create a definition environment in LaTeX?</h3>
-          <p>
-            Switch to the definition style before declaring it:{' '}
-            <code>{`\\theoremstyle{definition}`}</code> followed by{' '}
-            <code>{`\\newtheorem{definition}{Definition}[section]`}</code>. The definition style
-            prints a bold heading and an upright body, so the defined term can be set in italics
-            with <code>\emph</code>. Use <code>{`\\newtheorem{definition}[theorem]{Definition}`}</code>{' '}
-            instead if definitions should share the theorem numbering.
-          </p>
-          <h3>What is the end of proof symbol called?</h3>
-          <p>
-            It is called the QED symbol, the tombstone, or the Halmos (after Paul Halmos, who
-            introduced it to mathematics). Unicode encodes the filled version as ∎ (U+220E END OF
-            PROOF). In LaTeX the amsthm <code>proof</code> environment prints a hollow square □ by
-            default, and <code>{`\\renewcommand{\\qedsymbol}{$\\blacksquare$}`}</code> switches
-            it to the filled ∎ style.
-          </p>
-          <h3>How do I number theorems, lemmas and corollaries in one sequence?</h3>
-          <p>
-            Declare the theorem first and give the others its counter in square brackets between
-            the two names: <code>{`\\newtheorem{theorem}{Theorem}[section]`}</code>, then{' '}
-            <code>{`\\newtheorem{lemma}[theorem]{Lemma}`}</code> and{' '}
-            <code>{`\\newtheorem{corollary}[theorem]{Corollary}`}</code>. Theorem 2.1 is then
-            followed by Lemma 2.2 and Corollary 2.3.
-          </p>
-
-          {/* ── Next Steps ── */}
-          <h2>Next Steps</h2>
-          <p>Theorems in place? These guides cover what goes inside them:</p>
+          {sections.map(({ title, paragraphs, code }) => (
+            <section key={title}>
+              <h2>{title}</h2>
+              {paragraphs.map((paragraph) => (
+                <p key={paragraph}>{paragraph}</p>
+              ))}
+              {code && (
+                <pre>
+                  <code>{code}</code>
+                </pre>
+              )}
+            </section>
+          ))}
+          <h2>Frequently asked questions</h2>
+          {faq.map(({ question, answer }) => (
+            <section key={question}>
+              <h3>{question}</h3>
+              <p>{answer}</p>
+            </section>
+          ))}
+          <h2>Related guides</h2>
           <ul>
-            <li><Link href="/learn/equation-numbering">Equation Numbering and Referencing</Link> &ndash; \label, \eqref, align and split for the equations in your proofs</li>
-            <li><Link href="/learn/mathematical-expressions">Mathematical Expressions</Link> &ndash; Fractions, roots, operators and the amsmath environments</li>
-            <li><Link href="/learn/greek-letters-math-symbols">Greek Letters &amp; Math Symbols</Link> &ndash; Set notation, logic symbols and arrows for theorem statements</li>
-            <li><Link href="/learn/integrals-sums-limits">Integrals, Sums &amp; Limits</Link> &ndash; Big operators and limits in displayed math</li>
-            <li><Link href="/learn/hyperlinks">LaTeX Hyperlinks</Link> &ndash; Clickable theorem references with hyperref and cleveref</li>
-            <li><Link href="/learn/latex">Learn LaTeX</Link> &ndash; Complete beginner tutorial covering all the basics</li>
+            <li>
+              <Link href="/learn/equation-numbering">Equation numbering</Link>
+            </li>
+            <li>
+              <Link href="/learn/mathematical-expressions">Mathematical expressions</Link>
+            </li>
+            <li>
+              <Link href="/learn/environments">LaTeX environments</Link>
+            </li>
           </ul>
-
-          {/* ── Free LaTeX Tools ── */}
-          <h2>Free LaTeX Tools</h2>
-          <ul>
-            <li><Link href="https://tools.useoctree.com/tools/latex-preview" target="_blank" rel="noopener noreferrer">LaTeX Preview</Link> &ndash; Test theorem styles with a live PDF preview</li>
-            <li><Link href="https://tools.useoctree.com/tools/math-to-latex" target="_blank" rel="noopener noreferrer">Math to LaTeX Converter</Link> &ndash; Turn handwritten or typed math into LaTeX</li>
-            <li><Link href="https://tools.useoctree.com/symbols" target="_blank" rel="noopener noreferrer">LaTeX Symbols Reference</Link> &ndash; Browse math operators and special characters</li>
-          </ul>
-
-          <RelatedPosts searchTerm="LaTeX" title="Related Articles" />
-
           <div className="not-prose mt-12 p-6 bg-primary/5 rounded-lg border border-primary/10">
-            <h3 className="text-lg font-semibold mb-2">Write proofs faster with AI</h3>
+            <h2 className="text-lg font-semibold mb-2">Test the example in your own document</h2>
             <p className="text-muted-foreground mb-4">
-              Octree&apos;s AI editor sets up amsthm for you, places the QED symbol correctly,
-              and compiles your document in seconds.
+              Open a small project in Octree, paste a complete example, and compile it before moving
+              the changes into your main document. Check the PDF as well as the error log.
             </p>
             <Link
               href="https://app.useoctree.com"
