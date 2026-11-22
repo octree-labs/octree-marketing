@@ -1,67 +1,113 @@
 import type { Metadata } from 'next/types'
-
 import { learnMetadata, type FaqItem } from '@/utilities/learnMetadata'
 import Link from 'next/link'
 import { buttonVariants } from '@/components/ui/button'
 import React from 'react'
-import {
-  generateBreadcrumbSchema,
-  getLearnBreadcrumbs,
-} from '@/utilities/generateBreadcrumbs'
-import { RelatedPosts } from '@/components/Learn/related-posts'
+import { generateBreadcrumbSchema, getLearnBreadcrumbs } from '@/utilities/generateBreadcrumbs'
 import { LearnSchema } from '@/components/Learn/schema'
 
 export const dynamic = 'force-static'
 export const revalidate = 3600
 
-const breadcrumbs = getLearnBreadcrumbs('Two Columns in LaTeX', 'multiple-columns')
-const breadcrumbSchema = generateBreadcrumbSchema(breadcrumbs)
-
 const page = {
   slug: 'multiple-columns',
-  title: 'Two Columns in LaTeX: twocolumn, multicol and \\multicolumn in Tables',
-  seoTitle: 'Two Columns in LaTeX: twocolumn, multicol, Tables',
-  description: 'Two columns in LaTeX: the twocolumn option, the multicol package with \\columnbreak and \\columnsep, figure* across columns, and \\multicolumn in tables.',
-  keywords: 'two column latex, latex two column, two columns latex, latex multicol, multicol latex, multicolumn latex, latex multicolumn, latex multicols, twocolumn latex, latex columnbreak, latex columnsep, latex columnseprule, latex figure across two columns, latex figure star, latex table across two columns, latex three columns, latex multicolumn table, latex multicolumn multirow, latex merge cells, latex onecolumn abstract twocolumn, misplaced omit, floats not allowed inside multicols',
+  title: 'LaTeX Two Columns: twocolumn, multicol and Tables',
+  seoTitle: 'LaTeX Two Columns: twocolumn vs multicol',
+  description:
+    'Create two-column LaTeX documents or local multicol sections, control breaks and widths, span figures, and distinguish table multicolumn commands.',
+  keywords:
+    'latex two columns, latex twocolumn, latex multicol, latex multicolumn, latex columnbreak',
 }
-
-/** Last content update, used for dateModified in the article schema. */
-const LAST_UPDATED = '2026-11-09'
-
+const breadcrumbSchema = generateBreadcrumbSchema(getLearnBreadcrumbs(page.title, page.slug))
+const LAST_UPDATED = '2026-11-22'
 const faq: FaqItem[] = [
   {
-    question: 'How do I make a two-column document in LaTeX?',
+    question: 'How do I make a LaTeX document two columns?',
     answer:
-      'Add the twocolumn option to the document class: \\documentclass[twocolumn]{article}. Every page is then set in two columns. To put only part of the document in columns, load the multicol package and wrap that part in \\begin{multicols}{2} … \\end{multicols} instead.',
+      'Use \\documentclass[twocolumn]{article}, unless your publisher class already controls the layout. For a selected region instead, load multicol and use \\begin{multicols}{2} ... \\end{multicols}.',
   },
   {
-    question: 'What is the difference between twocolumn and multicol?',
+    question: 'What is the difference between multicol and multicolumn?',
     answer:
-      'The twocolumn class option makes the whole document two columns; columns are not balanced on the last page and figure and table floats work normally. The multicol package makes columns for a part of a page, supports 2 or more columns, balances them at the end and lets you switch between one and several columns on the same page, but ordinary floats are not allowed inside.',
+      'multicol is a package for flowing text columns through multicols environments. \\multicolumn is a table command that merges a specified number of adjacent cells. It does not change page layout.',
   },
   {
-    question: 'How do I make a figure span two columns in LaTeX?',
+    question: 'How do I make a figure span both columns?',
     answer:
-      'Use the starred environment: \\begin{figure*} … \\end{figure*}, with \\includegraphics[width=\\textwidth]. The same works for tables with table*. A spanning float can only go at the top of a page or on a float page, so it appears at the top of the next page at the earliest; [h] is not supported.',
+      'Use figure* in a standard two-column document and size the content to the full text width. Its placement is constrained, normally to a later page top or float page; it is not an exact-position command.',
   },
   {
-    question: 'How do I force a column break in LaTeX?',
+    question: 'How do I force the next column?',
     answer:
-      'Inside a multicols environment, write \\columnbreak where the new column should start; it needs the multicol package. In a document with the twocolumn option, \\newpage ends the current column and \\clearpage ends the page.',
+      'Use \\columnbreak inside multicols. In standard twocolumn mode, \\newpage ends the current column, while \\clearpage also flushes pending floats and finishes the page.',
+  },
+]
+const sections: { title: string; paragraphs: string[]; code?: string }[] = [
+  {
+    title: 'Choose the column mechanism before formatting',
+    paragraphs: [
+      "The twocolumn class option makes the document's main text flow down the left column and then the right. It is appropriate when the whole paper follows a two-column layout. A publisher's class may already enable or manage this mode, so begin with the supplied template rather than layering another column system on top.",
+      'The multicol package provides the multicols environment for a selected region. It supports more than two columns and can return to one-column text on the same page. At the end of the environment, it normally balances the columns. This makes it useful for a compact handout, glossary-like prose, or a short newspaper-style section.',
+      'Neither mechanism is a way to keep two independent paragraphs aligned side by side row by row. For parallel independent material, use an appropriate table or side-by-side boxes; for synchronized parallel text, consider a package designed for that workflow. Flowing columns have a reading order, and text moves as preceding content changes.',
+    ],
+    code: '\\documentclass[twocolumn]{article}\n\\setlength{\\columnsep}{20pt}\n\\begin{document}\n\\section{Introduction}\nThis text belongs to the first column of a two-column paper.\nThe next column is filled when the first one runs out of room.\n\n\\newpage\nThis paragraph begins in the next column.\n\\end{document}',
   },
   {
-    question: 'How do I merge cells across columns in a LaTeX table?',
-    answer:
-      'Use \\multicolumn{number}{alignment}{content} in place of the cells to merge, for example \\multicolumn{2}{c}{Results} spans two columns with centred text. It must be the first thing in its cell, and the merged cells count toward the total, so a row still adds up to the number of columns in the table. Merging rows needs \\multirow from the multirow package.',
+    title: 'Put only one section into multiple columns',
+    paragraphs: [
+      'Load multicol in the preamble, then supply the number of columns as the required argument to multicols. Text before and after the environment stays in the surrounding layout. The environment can span pages; it is not inherently a single-page box. Its final balancing redistributes content to make the ending columns similar in height.',
+      'The optional argument immediately after the column count supplies material above the columns, such as a heading spanning the region. This is different from putting a heading inside the first column. Keep that full-width introduction concise enough to leave useful space for the column text below.',
+      'If the last columns should remain unbalanced, multicol also provides the multicols* environment. Choose it deliberately rather than trying to defeat balancing with empty lines or invisible filler. Very short examples can exaggerate balancing effects; test representative paragraphs and headings before judging the final appearance.',
+    ],
+    code: '\\documentclass{article}\n\\usepackage{multicol}\n\\begin{document}\nThis introduction spans the normal text width.\n\n\\begin{multicols}{2}[\\section*{Two-column summary}]\nThe first topic introduces the purpose of the handout.\nEach paragraph flows within the narrower column width.\n\n\\columnbreak\nThe second topic begins in the next column.\nIts text remains part of the same multicols environment.\n\\end{multicols}\n\nThis closing paragraph returns to one column.\n\\end{document}',
   },
   {
-    question: 'How do I change the space between columns?',
-    answer:
-      'Set \\columnsep in the preamble: \\setlength{\\columnsep}{1cm}. A vertical rule between the columns comes from \\setlength{\\columnseprule}{0.4pt}. Both work for twocolumn and multicol. In tables the gap between cells is a different length, \\tabcolsep.',
+    title: 'Control the gap, rule, and available width',
+    paragraphs: [
+      '\\columnsep sets the horizontal gap between text columns. \\columnseprule sets the thickness of a vertical rule in that gap; zero means no rule. Make these assignments before entering the column layout. A rule can separate dense reference material, but it is not necessary for an ordinary research paper.',
+      'Increasing the gap while keeping the page margins fixed makes each column narrower. That can increase hyphenation, overfull lines, and the height of paragraphs. Do not diagnose these effects as a font problem without checking the geometry. Paper size, margins, font size, column count, and gap jointly determine the usable line width.',
+      'Use \\linewidth when sizing an object to its immediate container. In ordinary two-column text, \\columnwidth describes one column while \\textwidth describes the full text block. Inside nested lists or boxes, the local line width can be smaller still. A graphic sized to \\textwidth in a single-column float can extend into its neighbor.',
+    ],
+    code: '\\documentclass{article}\n\\usepackage{multicol}\n\\setlength{\\columnsep}{24pt}\n\\setlength{\\columnseprule}{0.4pt}\n\\begin{document}\n\\begin{multicols}{2}\n\\noindent\\rule{\\linewidth}{0.4pt}\n\nA rule using the local line width fits this column.\n\\columnbreak\n\\noindent\\rule{\\linewidth}{0.4pt}\n\nThe same command fits the second column.\n\\end{multicols}\n\\end{document}',
+  },
+  {
+    title: 'Column breaks are not always page breaks',
+    paragraphs: [
+      'Inside multicols, use \\columnbreak when the following material must start in the next column. The package normally distributes text automatically, so manual breaks are most useful for intentional topic divisions. Too many forced breaks can leave poor spacing or become wrong after a small edit earlier in the document.',
+      'In standard twocolumn mode, \\newpage ends the current column. From the first column it moves to the second; from the second it moves to the next page. \\clearpage also flushes pending floats and finishes the page. These commands are not interchangeable when figures are waiting to be placed.',
+      "The \\onecolumn and \\twocolumn commands switch document modes but start a new page. They are not suitable for a full-width paragraph halfway down an existing two-column page. For same-page switching, use a local multicol region when its limitations fit your content, or follow the specialist class's supported mechanism.",
+    ],
+  },
+  {
+    title: 'Figures and tables across two columns',
+    paragraphs: [
+      "In standard two-column mode, an ordinary figure or table float occupies one column. A figure* or table* spans the full text width. The star changes the float's width and placement rules; it does not simply stretch a one-column object at the current source position. Size the content to the width of the chosen float.",
+      'Under the standard output routine, full-width floats normally appear at the top of a later page or on a float page, rather than exactly where their source occurs. The h placement request is not a promise of placement here. Packages and publisher classes can alter these rules, so avoid adding float-control packages before reading the template documentation.',
+      "Ordinary single-column figure and table floats are not supported inside multicols. For a small nonfloating illustration, place the content directly within the column and use an appropriate caption mechanism if needed. For a floating full-width object, consult multicol's documented starred-float behavior or move the object outside the local column region. Do not silence float errors by randomly moving environment endings.",
+    ],
+    code: '\\documentclass[twocolumn]{article}\n\\begin{document}\n\\section{Results}\nThis paragraph introduces a full-width illustration.\n\n\\begin{figure*}[t]\n\\centering\n\\rule{0.9\\textwidth}{20mm}\n\\caption{A placeholder spanning the two-column text block.}\n\\end{figure*}\n\n\\begin{figure}[t]\n\\centering\n\\rule{0.9\\linewidth}{12mm}\n\\caption{A placeholder fitting one column.}\n\\end{figure}\n\\clearpage\n\\end{document}',
+  },
+  {
+    title: 'Wide equations and full-width introductions',
+    paragraphs: [
+      "An equation that fits a one-column document may overflow a two-column paper. Split it at meaningful mathematical boundaries using an amsmath environment rather than scaling it until the symbols become unreadable. A line break should preserve the derivation's logic, not merely satisfy the width limit.",
+      'For a full-width opening in the standard article class, \\twocolumn accepts an optional argument containing material above the columns. This is a page-opening mechanism, not a general full-width insertion anywhere in the document. Publisher classes often supply their own title and abstract interfaces, which should take precedence.',
+      'Avoid copying a title-and-abstract workaround without testing footnotes, author blocks, and the chosen class. Commands that work in normal page flow can behave differently inside the boxed opening material. If only a local summary needs columns, a single-column document with multicols may be simpler than rebuilding the first page of a journal template.',
+    ],
+    code: '\\documentclass{article}\n\\usepackage{amsmath}\n\\begin{document}\n\\twocolumn[\n\\begin{center}\n{\\Large A Two-Column Note}\\par\nA short full-width introduction to the following results.\n\\end{center}\n]\n\\section{Calculation}\n\\begin{align*}\n f(x) &= a_0+a_1x+a_2x^2\\\\\n      &\\quad+a_3x^3+a_4x^4.\n\\end{align*}\n\\end{document}',
+  },
+  {
+    title: 'Multicolumn in tables and common errors',
+    paragraphs: [
+      "\\multicolumn belongs to tabular and related alignments. Its three arguments are the number of cells to span, the replacement alignment specification, and the content. The span still counts toward the table's total columns. In a three-column table, a two-cell heading plus one ordinary cell fills the entire row.",
+      'The alignment argument replaces the underlying column specification for the spanned entry, including vertical rules. A missing or unexpected border may therefore come from that argument rather than from the surrounding table. Merging rows is a separate task, usually handled by multirow; it is not an option of \\multicolumn.',
+      'For a missing multicols environment, check that multicol is loaded and that the environment name ends in s. For Misplaced omit, check the placement of \\multicolumn and the row structure. For an overfull box, inspect local widths and unbreakable content. A successful compile does not guarantee that text, figures, and reading order fit the intended two-column design.',
+    ],
+    code: '\\documentclass{article}\n\\begin{document}\n\\begin{tabular}{lrr}\n\\multicolumn{2}{c}{Grouped heading} & Total \\\\\nItem & Value & Count \\\\\nA & 12 & 3\n\\end{tabular}\n\\end{document}',
   },
 ]
 
-export default async function LearnMultipleColumnsPage() {
+export default async function LearnGuidePage() {
   return (
     <div className="pt-24 pb-24">
       <script
@@ -72,435 +118,70 @@ export default async function LearnMultipleColumnsPage() {
         slug={page.slug}
         title={page.title}
         description={page.description}
+        datePublished="2026-11-09"
         dateModified={LAST_UPDATED}
         faq={faq}
       />
       <div className="container">
         <div className="mb-8 max-w-4xl mx-auto">
-          <Link
-            href="/learn"
-            className="text-sm text-muted-foreground hover:text-foreground transition-colors inline-flex items-center gap-1"
-          >
+          <Link href="/learn" className="text-sm text-muted-foreground hover:text-foreground">
             ← Back to Learn
           </Link>
         </div>
-
         <article className="prose prose-lg dark:prose-invert max-w-4xl mx-auto">
-          <h1>Two Columns in LaTeX: twocolumn, multicol and \multicolumn in Tables</h1>
-
-          <div className="not-prose my-6 p-6 rounded-lg border bg-muted/40 break-words">
-            <p className="text-sm font-semibold uppercase tracking-wide text-muted-foreground mb-3">Quick answer</p>
-            <ul className="space-y-2 text-base list-disc pl-5">
-              <li>
-                <strong>Whole document:</strong> <code>{`\\documentclass[twocolumn]{article}`}</code>.
-              </li>
-              <li>
-                <strong>Part of a page, any number of columns:</strong>{' '}
-                <code>{`\\usepackage{multicol}`}</code> and{' '}
-                <code>{`\\begin{multicols}{2} ... \\end{multicols}`}</code>; <code>\columnbreak</code>{' '}
-                starts the next column.
-              </li>
-              <li>
-                <strong>Gap and rule:</strong> <code>{`\\setlength{\\columnsep}{1cm}`}</code>,{' '}
-                <code>{`\\setlength{\\columnseprule}{0.4pt}`}</code>.
-              </li>
-              <li>
-                <strong>Figure across both columns:</strong>{' '}
-                <code>{`\\begin{figure*}[t] ... \\end{figure*}`}</code> (also <code>table*</code>).
-              </li>
-              <li>
-                <strong>Not the same thing:</strong> <code>{`\\multicolumn{2}{c}{text}`}</code> merges
-                two cells of a <em>table</em> row.
-              </li>
-            </ul>
-            <pre className="mt-4 overflow-x-auto rounded-md bg-background p-4 text-sm"><code>{`\\documentclass{article}
-\\usepackage{multicol}
-\\setlength{\\columnsep}{1cm}
-\\setlength{\\columnseprule}{0.4pt}
-
-\\begin{document}
-One-column introduction.
-\\begin{multicols}{2}
-Left column text. \\columnbreak
-Right column text.
-\\end{multicols}
-
-\\begin{tabular}{lcc}
-          & \\multicolumn{2}{c}{Score} \\\\
-  Name    & Test 1 & Test 2 \\\\
-  Ada     & 91     & 95
-\\end{tabular}
-\\end{document}`}</code></pre>
-          </div>
+          <h1>{page.title}</h1>
           <p className="lead">
-            &ldquo;Two columns&rdquo; means two different things in LaTeX. Page columns, where the
-            text flows down one column and continues in the next, come from the{' '}
-            <code>twocolumn</code> class option or the <code>multicol</code> package. Merged table
-            cells, where one cell spans several columns of a table, come from{' '}
-            <code>\multicolumn</code>. This guide covers both: when to use{' '}
-            <code>twocolumn</code> or <code>multicols</code>, how to set the column gap and force
-            a column break, how to make figures span both columns, and how{' '}
-            <code>\multicolumn</code> works in tables, with the errors each one produces.
+            {
+              'For a two-column LaTeX document, use \\documentclass[twocolumn]{article}. For only part of a page, load multicol and wrap the text in \\begin{multicols}{2} ... \\end{multicols}. Choose the document option for a conventional two-column paper with floats, and multicols for local column sections. The similarly named \\multicolumn command merges table cells; it does not create page columns.'
+            }
           </p>
-
-          {/* ── twocolumn ── */}
-          <h2>Two-Column Documents: the twocolumn Option</h2>
+          <p className="text-sm text-muted-foreground">Updated November 22, 2026</p>
+          {sections.map(({ title, paragraphs, code }) => (
+            <section key={title}>
+              <h2>{title}</h2>
+              {paragraphs.map((paragraph) => (
+                <p key={paragraph}>{paragraph}</p>
+              ))}
+              {code && (
+                <pre>
+                  <code>{code}</code>
+                </pre>
+              )}
+            </section>
+          ))}
+          <h2>Frequently asked questions</h2>
+          {faq.map(({ question, answer }) => (
+            <section key={question}>
+              <h3>{question}</h3>
+              <p>{answer}</p>
+            </section>
+          ))}
+          <h2>Documentation and related guides</h2>
           <p>
-            The <code>twocolumn</code> option of the standard classes (article, report, book) sets
-            every page in two columns. It is what most conference and journal templates use. To
-            keep the title and abstract across the full width, pass them to{' '}
-            <code>\twocolumn</code> as an optional argument:
+            See the <a href="https://ctan.org/pkg/multicol">multicol manual</a> for balancing and
+            float limitations, and the{' '}
+            <a href="https://www.latex-project.org/help/documentation/classes.pdf">
+              standard classes documentation
+            </a>{' '}
+            for two-column class behavior.
           </p>
-          <pre><code>{`\\documentclass[twocolumn]{article}
-\\usepackage{lipsum}
-\\setlength{\\columnsep}{0.8cm}
-
-\\title{A Two-Column Paper}
-\\author{Ada Lovelace}
-
-\\begin{document}
-\\twocolumn[
-  \\begin{@twocolumnfalse}
-    \\maketitle
-    \\begin{abstract}
-      This abstract runs across the full page width, above both columns.
-    \\end{abstract}
-    \\bigskip
-  \\end{@twocolumnfalse}
-]
-
-\\section{Introduction}
-\\lipsum[1-3]
-
-\\section{Method}
-\\lipsum[4-6]
-\\end{document}`}</code></pre>
-          <p>
-            The <code>{`@twocolumnfalse`}</code> wrapper lets <code>\maketitle</code> and the
-            abstract environment act as in one-column mode. Without the optional argument,{' '}
-            <code>\maketitle</code> alone already spans both columns in the standard classes; the
-            abstract does not. <code>\onecolumn</code> and <code>\twocolumn</code> in the body
-            switch modes but always start a new page.
-          </p>
-          <p>
-            Inside a column, <code>\columnwidth</code> is the width of one column and{' '}
-            <code>\textwidth</code> the width of both plus the gap. Size images in an ordinary{' '}
-            <code>figure</code> with <code>{`width=\\columnwidth`}</code>.
-          </p>
-
-          {/* ── figure* ── */}
-          <h2>Figures and Tables Spanning Both Columns: figure*</h2>
-          <p>
-            In a two-column document, <code>figure</code> and <code>table</code> are one column
-            wide. Their starred forms, <code>figure*</code> and <code>table*</code>, span both
-            columns:
-          </p>
-          <pre><code>{`\\documentclass[twocolumn]{article}
-\\usepackage{graphicx,lipsum}
-
-\\begin{document}
-\\section{Results}
-\\lipsum[1]
-
-\\begin{figure*}[t]
-  \\centering
-  \\rule{0.9\\textwidth}{4cm}   % stands in for \\includegraphics[width=0.9\\textwidth]{plot}
-  \\caption{A figure across both columns.}
-  \\label{fig:wide}
-\\end{figure*}
-
-\\begin{figure}[t]
-  \\centering
-  \\rule{\\columnwidth}{3cm}    % one column wide
-  \\caption{A figure in one column.}
-\\end{figure}
-
-Figure~\\ref{fig:wide} is placed at the top of the next page. \\lipsum[2-5]
-\\end{document}`}</code></pre>
-          <p>
-            A spanning float can only go at the top of a page (<code>[t]</code>) or on a page of
-            floats (<code>[p]</code>), and LaTeX places it on the page after the one where it
-            appears in the source at the earliest. <code>[h]</code> and <code>[b]</code> are not
-            supported; the <code>stfloats</code> package adds bottom placement. Move the{' '}
-            <code>figure*</code> earlier in the source if it lands too late. Float placement in
-            general is covered in <Link href="/learn/tables">tables</Link>.
-          </p>
-
-          {/* ── multicol ── */}
-          <h2>The multicol Package: \begin{`{multicols}`}</h2>
-          <p>
-            The <code>multicol</code> package puts any part of a page into columns and switches
-            back to one column on the same page. It supports two, three or more columns and
-            balances them so they end at the same height:
-          </p>
-          <pre><code>{`\\documentclass{article}
-\\usepackage{multicol,lipsum}
-\\setlength{\\columnsep}{1cm}
-\\setlength{\\columnseprule}{0.4pt}   % vertical line between columns
-
-\\begin{document}
-\\section{One column}
-\\lipsum[1]
-
-\\begin{multicols}{3}[\\section{Three columns}]
-\\lipsum[2]
-\\columnbreak            % start the next column here
-\\lipsum[3]
-\\end{multicols}
-
-\\begin{multicols*}{2}   % starred: fill columns, no balancing
-\\lipsum[4]
-\\end{multicols*}
-\\end{document}`}</code></pre>
-          <p>
-            The optional argument after the column count (here <code>{`[\\section{...}]`}</code>)
-            is set in one column above the columns and kept on the same page as them. Useful
-            settings:
-          </p>
-          <div className="overflow-x-auto">
-            <table>
-              <thead>
-                <tr>
-                  <th>Setting</th>
-                  <th>Effect</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr><td><code>{`\\begin{multicols}{3}`}</code></td><td>Three balanced columns</td></tr>
-                <tr><td><code>{`\\begin{multicols*}{2}`}</code></td><td>Columns filled one after the other, not balanced</td></tr>
-                <tr><td><code>\columnbreak</code></td><td>Starts the next column at this point</td></tr>
-                <tr><td><code>{`\\setlength{\\columnsep}{1cm}`}</code></td><td>Gap between columns (default 10pt)</td></tr>
-                <tr><td><code>{`\\setlength{\\columnseprule}{0.4pt}`}</code></td><td>Rule between columns (default 0pt, no rule)</td></tr>
-                <tr><td><code>\raggedcolumns</code></td><td>Columns may end at different heights instead of stretching space</td></tr>
-                <tr><td><code>{`\\setlength{\\multicolsep}{6pt}`}</code></td><td>Space above and below the environment</td></tr>
-              </tbody>
-            </table>
-          </div>
-          <h3>Figures inside multicols</h3>
-          <p>
-            Ordinary floats are not allowed inside <code>multicols</code>: multicol warns
-            &ldquo;Floats and marginpars not allowed inside `multicols&apos; environment!&rdquo; and the
-            figure is lost. Use <code>figure*</code> to span all columns, or place the image
-            directly with <code>\captionof</code> from the <code>caption</code> package:
-          </p>
-          <pre><code>{`\\documentclass{article}
-\\usepackage{multicol,caption,lipsum}
-
-\\begin{document}
-\\begin{multicols}{2}
-\\lipsum[1]
-
-\\begin{center}
-  \\rule{0.9\\linewidth}{2.5cm}    % \\includegraphics[width=0.9\\linewidth]{plot}
-  \\captionof{figure}{A figure in one column of a multicols block.}
-\\end{center}
-
-\\lipsum[2]
-\\end{multicols}
-\\end{document}`}</code></pre>
-
-          {/* ── comparison ── */}
-          <h2>twocolumn vs multicol</h2>
-          <div className="overflow-x-auto">
-            <table>
-              <thead>
-                <tr>
-                  <th></th>
-                  <th><code>[twocolumn]</code> option</th>
-                  <th><code>multicol</code> package</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr><td>Scope</td><td>Whole document</td><td>Any part of a page</td></tr>
-                <tr><td>Columns</td><td>Two</td><td>Two or more</td></tr>
-                <tr><td>Last page balanced</td><td>No (use <code>flushend</code> or <code>balance</code>)</td><td>Yes (unless <code>multicols*</code>)</td></tr>
-                <tr><td>Floats</td><td><code>figure</code> one column, <code>figure*</code> both</td><td>Only <code>figure*</code> / <code>table*</code></td></tr>
-                <tr><td>Column break</td><td><code>\newpage</code> ends the column</td><td><code>\columnbreak</code></td></tr>
-                <tr><td>Footnotes</td><td>At the foot of the column</td><td>Across the full page width</td></tr>
-                <tr><td>Typical use</td><td>Journal and conference papers</td><td>Newsletters, CVs, lists, a two-column section</td></tr>
-              </tbody>
-            </table>
-          </div>
-          <p>
-            If a journal template already uses <code>twocolumn</code>, do not add{' '}
-            <code>multicols</code> on top of it. For a three-column list inside a one-column
-            report, <code>multicols</code> is the right tool; see also{' '}
-            <Link href="/learn/lists">lists</Link>.
-          </p>
-
-          {/* ── multicolumn ── */}
-          <h2>\multicolumn in LaTeX Tables</h2>
-          <p>
-            <code>{`\\multicolumn{n}{alignment}{content}`}</code> is a table command, unrelated to
-            page columns. It replaces <code>n</code> cells of a row with one cell that spans
-            them, with its own alignment (<code>l</code>, <code>c</code>, <code>r</code> or{' '}
-            <code>{`p{width}`}</code>, plus <code>|</code> for vertical rules):
-          </p>
-          <pre><code>{`\\documentclass{article}
-\\usepackage{booktabs,multirow}
-
-\\begin{document}
-\\begin{tabular}{lccc}
-  \\toprule
-  \\multirow{2}{*}{Model} & \\multicolumn{3}{c}{Accuracy (\\%)} \\\\
-  \\cmidrule(lr){2-4}
-                         & Train & Validation & Test \\\\
-  \\midrule
-  Baseline               & 91.2  & 88.4       & 87.9 \\\\
-  Ours                   & 95.7  & 93.1       & 92.8 \\\\
-  \\midrule
-  \\multicolumn{4}{l}{\\footnotesize Mean of five runs.} \\\\
-  \\bottomrule
-\\end{tabular}
-
-\\bigskip
-\\begin{tabular}{|l|r|r|}
-  \\hline
-  \\multicolumn{3}{|c|}{Totals} \\\\
-  \\hline
-  Item & Q1 & Q2 \\\\
-  \\hline
-  \\multicolumn{1}{|c|}{centred} & 10 & 20 \\\\
-  \\hline
-\\end{tabular}
-\\end{document}`}</code></pre>
-          <p>
-            Three rules make <code>\multicolumn</code> work. It must be the first thing in its
-            cell. The spanned cells still count, so <code>{`\\multicolumn{3}{c}{...}`}</code> in
-            a four-column table leaves one more cell in that row. And the alignment argument
-            replaces the column&apos;s own, including its vertical rules, which is why the second
-            table writes <code>|c|</code>. <code>{`\\multicolumn{1}{c}{...}`}</code> is the
-            standard way to change the alignment of a single cell. To span rows instead, use{' '}
-            <code>\multirow</code> from the <code>multirow</code> package. More on table layout
-            in <Link href="/learn/tables">LaTeX tables</Link>.
-          </p>
-
-          {/* ── Errors ── */}
-          <h2>Common Errors and Fixes</h2>
-          <div className="overflow-x-auto">
-            <table>
-              <thead>
-                <tr>
-                  <th>Message or symptom</th>
-                  <th>Cause</th>
-                  <th>Fix</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td><em>Undefined control sequence</em> at <code>\columnbreak</code></td>
-                  <td><code>multicol</code> not loaded, or <code>\columnbreak</code> used with the twocolumn option</td>
-                  <td><code>{`\\usepackage{multicol}`}</code>; in twocolumn use <code>\newpage</code></td>
-                </tr>
-                <tr>
-                  <td><em>Package multicol Warning: Floats and marginpars not allowed inside `multicols&apos; environment!</em></td>
-                  <td>A <code>figure</code>, <code>table</code> or <code>\marginpar</code> inside <code>multicols</code>; it disappears</td>
-                  <td><code>figure*</code>, or a non-floating image with <code>\captionof</code></td>
-                </tr>
-                <tr>
-                  <td><code>figure*</code> appears a page late or at the end</td>
-                  <td>Spanning floats only go at the top of a later page</td>
-                  <td>Use <code>[t]</code> or <code>[tp]</code> and move it earlier in the source</td>
-                </tr>
-                <tr>
-                  <td>Last page columns uneven in a twocolumn paper</td>
-                  <td>twocolumn does not balance columns</td>
-                  <td><code>{`\\usepackage{flushend}`}</code> or the <code>balance</code> package</td>
-                </tr>
-                <tr>
-                  <td><em>Extra alignment tab has been changed to \cr</em></td>
-                  <td>A row has more cells than the table has columns, often because the cells spanned by <code>\multicolumn</code> were not counted</td>
-                  <td>Make each row add up: <code>{`\\multicolumn{2}{c}{...}`}</code> counts as two cells</td>
-                </tr>
-                <tr>
-                  <td><em>Misplaced \omit</em></td>
-                  <td><code>\multicolumn</code> is not the first thing in its cell, e.g. <code>{`x \\multicolumn{...}`}</code></td>
-                  <td>Start the cell with <code>\multicolumn</code>; put other content inside it</td>
-                </tr>
-                <tr>
-                  <td>Vertical rule missing next to a merged cell</td>
-                  <td>The alignment in <code>\multicolumn</code> replaces the column&apos;s rules</td>
-                  <td>Repeat them: <code>{`\\multicolumn{2}{|c|}{...}`}</code></td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-
-          {/* ── FAQ ── */}
-          <h2>Frequently Asked Questions</h2>
-          <h3>How do I make a two-column document in LaTeX?</h3>
-          <p>
-            Add the <code>twocolumn</code> option to the document class:{' '}
-            <code>{`\\documentclass[twocolumn]{article}`}</code>. Every page is then set in two
-            columns. To put only part of the document in columns, load the multicol package and
-            wrap that part in <code>{`\\begin{multicols}{2}`}</code> &hellip;{' '}
-            <code>{`\\end{multicols}`}</code> instead.
-          </p>
-          <h3>What is the difference between twocolumn and multicol?</h3>
-          <p>
-            The <code>twocolumn</code> class option makes the whole document two columns; columns
-            are not balanced on the last page and figure and table floats work normally. The
-            multicol package makes columns for a part of a page, supports 2 or more columns,
-            balances them at the end and lets you switch between one and several columns on the
-            same page, but ordinary floats are not allowed inside.
-          </p>
-          <h3>How do I make a figure span two columns in LaTeX?</h3>
-          <p>
-            Use the starred environment: <code>{`\\begin{figure*}`}</code> &hellip;{' '}
-            <code>{`\\end{figure*}`}</code>, with <code>{`\\includegraphics[width=\\textwidth]`}</code>.
-            The same works for tables with <code>table*</code>. A spanning float can only go at
-            the top of a page or on a float page, so it appears at the top of the next page at
-            the earliest; <code>[h]</code> is not supported.
-          </p>
-          <h3>How do I force a column break in LaTeX?</h3>
-          <p>
-            Inside a <code>multicols</code> environment, write <code>\columnbreak</code> where the
-            new column should start; it needs the multicol package. In a document with the{' '}
-            <code>twocolumn</code> option, <code>\newpage</code> ends the current column and{' '}
-            <code>\clearpage</code> ends the page.
-          </p>
-          <h3>How do I merge cells across columns in a LaTeX table?</h3>
-          <p>
-            Use <code>{`\\multicolumn{number}{alignment}{content}`}</code> in place of the cells to
-            merge, for example <code>{`\\multicolumn{2}{c}{Results}`}</code> spans two columns with
-            centred text. It must be the first thing in its cell, and the merged cells count
-            toward the total, so a row still adds up to the number of columns in the table.
-            Merging rows needs <code>\multirow</code> from the multirow package.
-          </p>
-          <h3>How do I change the space between columns?</h3>
-          <p>
-            Set <code>\columnsep</code> in the preamble:{' '}
-            <code>{`\\setlength{\\columnsep}{1cm}`}</code>. A vertical rule between the columns
-            comes from <code>{`\\setlength{\\columnseprule}{0.4pt}`}</code>. Both work for
-            twocolumn and multicol. In tables the gap between cells is a different length,{' '}
-            <code>\tabcolsep</code>.
-          </p>
-
-          {/* ── Next Steps ── */}
-          <h2>Next Steps</h2>
           <ul>
-            <li><Link href="/learn/tables">LaTeX Tables</Link> &ndash; tabular, booktabs, multirow and table floats</li>
-            <li><Link href="/learn/page-size-margins">Page Size &amp; Margins</Link> &ndash; Text width and margins for column layouts</li>
-            <li><Link href="/learn/spacing">Spacing in LaTeX</Link> &ndash; Horizontal and vertical space</li>
-            <li><Link href="/learn/lists">Lists</Link> &ndash; Itemize and enumerate, also in columns</li>
-            <li><Link href="/learn/appendix">Appendix in LaTeX</Link> &ndash; Lettered appendices after the main text</li>
-            <li><Link href="/learn/latex">Learn LaTeX: Tutorial for Beginners</Link> &ndash; The basics, from the first document up</li>
+            <li>
+              <Link href="/learn/document-classes">Document classes</Link>
+            </li>
+            <li>
+              <Link href="/learn/images">Images and floats</Link>
+            </li>
+            <li>
+              <Link href="/learn/tables">LaTeX tables</Link>
+            </li>
           </ul>
-
-          <h2>Free LaTeX Tools</h2>
-          <ul>
-            <li><Link href="https://tools.useoctree.com/tools/latex-preview" target="_blank" rel="noopener noreferrer">LaTeX Preview</Link> &ndash; See a column layout compile instantly</li>
-            <li><Link href="https://tools.useoctree.com/tools/ai-latex-generator" target="_blank" rel="noopener noreferrer">AI LaTeX Generator</Link> &ndash; Generate LaTeX from text descriptions</li>
-            <li><Link href="https://tools.useoctree.com/symbols" target="_blank" rel="noopener noreferrer">LaTeX Symbols Reference</Link> &ndash; Browse math operators and special characters</li>
-          </ul>
-
-          <RelatedPosts searchTerm="LaTeX" title="Related Articles" />
-
           <div className="not-prose mt-12 p-6 bg-primary/5 rounded-lg border border-primary/10">
-            <h3 className="text-lg font-semibold mb-2">Lay out two-column papers with AI</h3>
+            <h2 className="text-lg font-semibold mb-2">Compile a small example first</h2>
             <p className="text-muted-foreground mb-4">
-              Octree&apos;s AI editor sets up two-column templates, moves figures across columns,
-              fixes &ldquo;Misplaced \omit&rdquo; in tables and compiles your paper in seconds.
+              Paste a complete example into a project in Octree, compile it, and inspect the PDF
+              before applying the change to your main document. Keep the packages and document class
+              from your real template when checking compatibility.
             </p>
             <Link
               href="https://app.useoctree.com"
@@ -516,7 +197,6 @@ Figure~\\ref{fig:wide} is placed at the top of the next page. \\lipsum[2-5]
     </div>
   )
 }
-
 export function generateMetadata(): Metadata {
   return learnMetadata(page)
 }
