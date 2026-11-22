@@ -77,7 +77,7 @@ const sections: { title: string; paragraphs: string[]; code?: string }[] = [
       '\\verb is useful for showing a Windows path, a command name, or an identifier with several special characters. It is not suitable inside ordinary command arguments such as section headings or captions. In those locations, use escaped text with \\texttt for simple content, or a package interface explicitly designed for the context.',
       'For a multi-line literal block, the verbatim environment preserves source-like characters and spacing. Long lines do not automatically become well-formatted wrapped code. For larger listings with line breaking or syntax highlighting, choose a dedicated code package rather than forcing a paragraph of \\verb fragments into a narrow column.',
     ],
-    code: '\\documentclass{article}\n\\usepackage[T1]{fontenc}\n\\begin{document}\nPath: \\verb|C:\\data\\run_01|.\nCommand: \\verb|\\textbf{example}|.\nA pipe: \\verb+left|right+.\n\n\\begin{verbatim}\n# literal example\ncost = "$20"  # 15% discount\nfile_name = "run_01"\n\\end{verbatim}\n\\end{document}',
+    code: '\\documentclass{article}\n\\usepackage[T1]{fontenc}\n\\begin{document}\nPath: \\verb|C:\\data\\run_01|.\n\nCommand: \\verb|\\textbf{example}|.\n\nA pipe: \\verb+left|right+.\n\n\\begin{verbatim}\n# literal example\ncost = "$20"  # 15% discount\nfile_name = "run_01"\n\\end{verbatim}\n\\end{document}',
   },
   {
     title: 'URLs need URL handling, not ordinary text escaping',
@@ -118,7 +118,7 @@ export default async function LearnGuidePage() {
         slug={page.slug}
         title={page.title}
         description={page.description}
-        datePublished="2026-11-09"
+        datePublished="2026-10-18"
         dateModified={LAST_UPDATED}
         faq={faq}
       />

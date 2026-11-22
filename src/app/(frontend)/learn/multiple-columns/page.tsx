@@ -68,7 +68,7 @@ const sections: { title: string; paragraphs: string[]; code?: string }[] = [
       'Increasing the gap while keeping the page margins fixed makes each column narrower. That can increase hyphenation, overfull lines, and the height of paragraphs. Do not diagnose these effects as a font problem without checking the geometry. Paper size, margins, font size, column count, and gap jointly determine the usable line width.',
       'Use \\linewidth when sizing an object to its immediate container. In ordinary two-column text, \\columnwidth describes one column while \\textwidth describes the full text block. Inside nested lists or boxes, the local line width can be smaller still. A graphic sized to \\textwidth in a single-column float can extend into its neighbor.',
     ],
-    code: '\\documentclass{article}\n\\usepackage{multicol}\n\\setlength{\\columnsep}{24pt}\n\\setlength{\\columnseprule}{0.4pt}\n\\begin{document}\n\\begin{multicols}{2}\n\\noindent\\rule{\\linewidth}{0.4pt}\n\nA rule using the local line width fits this column.\n\\columnbreak\n\\noindent\\rule{\\linewidth}{0.4pt}\n\nThe same command fits the second column.\n\\end{multicols}\n\\end{document}',
+    code: '\\documentclass{article}\n\\usepackage{multicol}\n\\setlength{\\columnsep}{24pt}\n\\setlength{\\columnseprule}{0.4pt}\n\\begin{document}\n\\begin{multicols}{2}\n\\noindent\\rule{\\linewidth}{0.4pt}\n\nA rule using the local line width fits this column.\n\n\\columnbreak\n\\noindent\\rule{\\linewidth}{0.4pt}\n\nThe same command fits the second column.\n\\end{multicols}\n\\end{document}',
   },
   {
     title: 'Column breaks are not always page breaks',

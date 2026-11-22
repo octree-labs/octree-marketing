@@ -636,7 +636,7 @@ l.42 \\textbol
             <li><Link href="/learn/font-size">Font Size</Link> – \tiny to \Huge, class options and \fontsize</li>
             <li><Link href="/learn/fonts">Fonts</Link> – Serif, sans serif and monospace families and font packages</li>
             <li><Link href="/learn/lists">Lists and Bullet Points</Link> – itemize, enumerate, description and enumitem</li>
-            <li><Link href="/learn/special-characters">Special Characters</Link> – Escaping &amp;, %, $, # and typing accents and symbols</li>
+            <li><Link href="/learn/special-characters">Special Characters</Link> – Escaping reserved characters, URLs and literal code</li>
             <li><Link href="/learn/quotes">Quotation Marks and Quotes</Link> – Correct quotes and block quotations</li>
             <li><Link href="/learn/strikethrough">Strikethrough &amp; Cross Out</Link> – \sout, \cancel and track changes</li>
             <li><Link href="/learn/footnotes">Footnotes</Link> – \footnote in text, tables and captions</li>

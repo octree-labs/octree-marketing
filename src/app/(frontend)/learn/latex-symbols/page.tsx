@@ -627,7 +627,7 @@ $x \\notin \\emptyset$, therefore $\\therefore$ and because $\\because$.
             print the character. The last three need named commands, because <code>\~</code> and{' '}
             <code>\^</code> are accents and <code>\\</code> is a line break. The{' '}
             <Link href="/learn/special-characters">special characters guide</Link> covers
-            underscores in URLs, the pipe, quotes and currency signs.
+            reserved characters, underscores in URLs, and literal code.
           </p>
           <SymbolTable rows={textRows} />
           <pre><code>{`\\documentclass{article}
@@ -791,7 +791,7 @@ Math mode: an angle of $90^\\circ$ and $\\theta = 45^{\\circ}$.
           <h2>Next Steps</h2>
           <ul>
             <li><Link href="/learn/greek-letters-math-symbols">Greek Letters in LaTeX</Link> &ndash; Epsilon vs varepsilon, bold and upright Greek, dots and accents</li>
-            <li><Link href="/learn/special-characters">Special Characters in LaTeX</Link> &ndash; Every reserved character, the pipe, quotes and currency</li>
+            <li><Link href="/learn/special-characters">Special Characters in LaTeX</Link> &ndash; Reserved characters, URL handling and literal code</li>
             <li><Link href="/learn/approximately-equal">Approximately Equal (≈)</Link> &ndash; \approx vs \sim, \simeq and \cong</li>
             <li><Link href="/learn/integrals-sums-limits">Integrals, Sums and Limits</Link> &ndash; Limits, multiple integrals and spacing</li>
             <li><Link href="/learn/brackets">Brackets and Parentheses</Link> &ndash; \left, \right and manual sizes</li>
