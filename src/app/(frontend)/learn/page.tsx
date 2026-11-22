@@ -89,7 +89,7 @@ const learnTopics = [
   {
     slug: 'paragraphs-indentation',
     title: 'Indentation in LaTeX: \\indent, \\noindent, parindent and Tabs',
-    description: 'Indent in LaTeX: the default first-line indent, \\noindent, \\parindent and parskip, \\indent, hanging indents, indented blocks and tabs with \\hspace.',
+    description: "Use LaTeX noindent for one paragraph, set parindent globally, choose parskip spacing, and create hanging indents or indented blocks correctly.",
     color: 'from-stone-500/10 to-stone-600/5',
   },
   {
@@ -173,7 +173,7 @@ const learnTopics = [
   {
     slug: 'multiple-columns',
     title: 'Two Columns in LaTeX: twocolumn, multicol and \\multicolumn in Tables',
-    description: 'Two columns in LaTeX: the twocolumn option, the multicol package with \\columnbreak and \\columnsep, figure* across columns, and \\multicolumn in tables.',
+    description: "Create two-column LaTeX documents or local multicol sections, control breaks and widths, span figures, and distinguish table multicolumn commands.",
     color: 'from-sky-500/10 to-indigo-600/5',
   },
   {
@@ -227,7 +227,7 @@ const learnTopics = [
   {
     slug: 'strikethrough',
     title: 'Strikethrough & Cross Out',
-    description: 'Strike through text with ulem \\sout and soul \\st, cancel terms in math with the cancel package, cross out in tables and Beamer, and track changes.',
+    description: "Cross out LaTeX text with ulem or soul, cancel math terms, color strike lines, and mark revisions with complete examples and troubleshooting.",
     color: 'from-gray-500/10 to-gray-600/5',
   },
   {
@@ -245,7 +245,7 @@ const learnTopics = [
   {
     slug: 'special-characters',
     title: 'Special Characters in LaTeX',
-    description: 'Print the reserved characters # $ % & _ { } ~ ^ \\, the pipe, < and >, underscores in URLs and file names, inverted ?/!, degree, copyright and currency signs, and fix the errors they cause.',
+    description: "Escape LaTeX special characters, print underscores and backslashes, handle URLs and literal code, and distinguish text symbols from math notation.",
     color: 'from-rose-500/10 to-pink-600/5',
   },
   {
@@ -257,7 +257,7 @@ const learnTopics = [
   {
     slug: 'underbrace-overbrace',
     title: 'Underbrace and Overbrace in LaTeX: \\underbrace, \\overbrace and Annotations',
-    description: 'Underbrace in LaTeX: \\underbrace{a+b}_{\\text{sum}}, \\overbrace with labels, nested and overlapping braces, \\underset, \\overset, \\underbracket and errors.',
+    description: "Add LaTeX underbrace and overbrace annotations with text labels, nested braces, aligned equations, and practical fixes for spacing and math errors.",
     color: 'from-cyan-500/10 to-blue-600/5',
   },
   {

@@ -1,67 +1,113 @@
 import type { Metadata } from 'next/types'
-
 import { learnMetadata, type FaqItem } from '@/utilities/learnMetadata'
 import Link from 'next/link'
 import { buttonVariants } from '@/components/ui/button'
 import React from 'react'
-import {
-  generateBreadcrumbSchema,
-  getLearnBreadcrumbs,
-} from '@/utilities/generateBreadcrumbs'
-import { RelatedPosts } from '@/components/Learn/related-posts'
+import { generateBreadcrumbSchema, getLearnBreadcrumbs } from '@/utilities/generateBreadcrumbs'
 import { LearnSchema } from '@/components/Learn/schema'
 
 export const dynamic = 'force-static'
 export const revalidate = 3600
 
-const breadcrumbs = getLearnBreadcrumbs('Indentation in LaTeX', 'paragraphs-indentation')
-const breadcrumbSchema = generateBreadcrumbSchema(breadcrumbs)
-
 const page = {
   slug: 'paragraphs-indentation',
-  title: 'Indentation in LaTeX: \\indent, \\noindent, parindent and Tabs',
-  seoTitle: 'Indentation in LaTeX: \\noindent, parindent, Tabs',
-  description: 'Indent in LaTeX: the default first-line indent, \\noindent, \\parindent and parskip, \\indent, hanging indents, indented blocks and tabs with \\hspace.',
-  keywords: 'latex indent, indentation latex, indentation in latex, how to indent in latex, tab in latex, latex tab, latex noindent, latex parindent, latex no indent, latex remove indentation, latex indent paragraph, latex indent first paragraph, indentfirst, latex hanging indent, latex hangindent, latex indent block, latex adjustwidth, latex quote indent, latex tabbing, latex hspace indent, latex parskip, latex paragraph',
+  title: 'LaTeX noindent: Paragraphs, Indentation and Spacing',
+  seoTitle: 'LaTeX noindent: Remove or Set Paragraph Indentation',
+  description:
+    'Use LaTeX noindent for one paragraph, set parindent globally, choose parskip spacing, and create hanging indents or indented blocks correctly.',
+  keywords:
+    'latex noindent, latex indentation, latex parindent, latex parskip, latex hanging indent',
 }
-
-/** Last content update, used for dateModified in the article schema. */
-const LAST_UPDATED = '2026-11-09'
-
+const breadcrumbSchema = generateBreadcrumbSchema(getLearnBreadcrumbs(page.title, page.slug))
+const LAST_UPDATED = '2026-11-22'
 const faq: FaqItem[] = [
   {
-    question: 'How do I indent in LaTeX?',
+    question: 'How do I remove indentation from one paragraph?',
     answer:
-      'LaTeX indents the first line of every paragraph automatically; a blank line in the source starts a new paragraph. To indent a line by hand, use \\indent at the start of a paragraph or \\hspace*{2em} anywhere. To indent a whole block, use the quote environment or \\begin{adjustwidth}{2em}{0pt} from the changepage package.',
+      'Start a new paragraph with a blank line or \\par, then write \\noindent before its first word. The command changes that paragraph only; it does not remove list or quotation margins.',
   },
   {
-    question: 'How do I remove paragraph indentation in LaTeX?',
+    question: 'How do I remove all paragraph indents?',
     answer:
-      'For one paragraph, start it with \\noindent. For the whole document, put \\setlength{\\parindent}{0pt} in the preamble, or better \\usepackage{parskip}, which also adds space between paragraphs so they stay distinguishable. Remember the unit: \\setlength{\\parindent}{0} gives the error “Illegal unit of measure”.',
+      'Set \\setlength{\\parindent}{0pt} in the preamble. For a spaced-paragraph style, consider \\usepackage{parskip}, which also manages paragraph separation and related spacing.',
   },
   {
     question: 'Why is the first paragraph after a section not indented?',
     answer:
-      'That is the English typographic convention, and the standard classes follow it: the first paragraph after \\section, \\chapter or similar headings has no indent. \\indent does not override it. Load \\usepackage{indentfirst} to indent every first paragraph, as French and some other styles require.',
+      'Standard classes normally suppress that indent. If your required style calls for it, load indentfirst and keep \\parindent nonzero. Specialist classes or language settings may use different conventions.',
   },
   {
-    question: 'How do I make a tab in LaTeX?',
+    question: 'Why does noindent not work after a line break?',
     answer:
-      'The Tab key does nothing: LaTeX treats a tab character like a space, and runs of spaces collapse into one. Use \\hspace*{2em} for a fixed gap (the star keeps it at the start of a line), \\quad or \\qquad for 1em or 2em, and the tabbing environment with \\= and \\> for real tab stops. For aligned columns, a tabular is usually better.',
+      "A forced line break is not a new paragraph. End the paragraph with a blank source line or \\par, then put \\noindent at the next paragraph's start.",
+  },
+]
+const sections: { title: string; paragraphs: string[]; code?: string }[] = [
+  {
+    title: 'Use noindent at the start of a real paragraph',
+    paragraphs: [
+      'A paragraph begins after a blank source line or an explicit \\par. A single source newline normally becomes a space, so putting \\noindent on the next source line does not necessarily start a new paragraph. End the preceding paragraph first, then apply the command to the paragraph whose first-line indentation should disappear.',
+      "\\noindent affects that paragraph's opening, not every later paragraph. It is useful after a displayed object when the following prose deliberately continues an explanation, or for a standalone label that should start at the left edge. Do not place it at the start of every paragraph if a document-wide style is what you actually want.",
+      'The example includes an ordinary paragraph, an unindented one, and another ordinary paragraph. Comparing all three is more informative than testing the command immediately after a heading, where the class may already suppress indentation. The command takes no argument; braces around the entire paragraph are unnecessary.',
+    ],
+    code: '\\documentclass{article}\n\\begin{document}\nThis paragraph uses the normal first-line indentation.\n\n\\noindent This paragraph starts at the left margin.\n\nThis paragraph returns to the normal indentation.\n\\end{document}',
   },
   {
-    question: 'How do I create a hanging indent in LaTeX?',
-    answer:
-      'Start the paragraph with \\hangindent=2em \\hangafter=1 and then the text: every line after the first is indented by 2em. The settings apply to that paragraph only, so repeat them for each paragraph or define a macro. For a reference list, the bibliography styles and biblatex already produce hanging indents.',
+    title: 'Set parindent and preserve paragraph boundaries',
+    paragraphs: [
+      '\\parindent is a length controlling the first-line inset. Set it with \\setlength and include a unit such as pt, em, or mm. A value of 0pt removes the inset; a value of 2em makes it proportional to the font size in effect when the assignment is made. It does not continuously recalculate whenever the font changes.',
+      "Place a global setting in the preamble after packages that configure paragraph layout, and follow your document class's guidance if it supplies a dedicated interface. Class defaults vary, so do not rely on one hard-coded default as a rule for every template. Publisher classes may intentionally impose their own spacing.",
+      'Removing indentation without adding paragraph separation can make adjacent paragraphs visually merge. That may be acceptable for a special layout, but ordinary prose needs a clear boundary. Choose either traditional first-line indentation or a carefully designed space-between-paragraphs style rather than erasing both cues accidentally.',
+    ],
+    code: '\\documentclass{article}\n\\setlength{\\parindent}{2em}\n\\begin{document}\nThis paragraph begins with a two-em indent.\n\n{\\setlength{\\parindent}{0pt}\nThis locally unindented paragraph is ended inside the group.\\par}\n\nThis paragraph uses the document setting again.\n\\end{document}',
   },
   {
-    question: 'How do I change the size of the paragraph indent?',
-    answer:
-      'Set \\setlength{\\parindent}{2em} in the preamble (any length works, such as 1cm or 20pt). The default depends on the font size option: 15pt for 10pt documents, 17pt for 11pt and 1.5em for 12pt in the standard classes. Using em keeps the indent proportional to the font.',
+    title: 'Use parskip for a spaced-paragraph style',
+    paragraphs: [
+      "The parskip package is a convenient choice for prose with no first-line indents and visible inter-paragraph space. It does more than a bare assignment to \\parskip: it also addresses spacing interactions with structures such as lists and contents. Load it only if the document's required style permits that overall presentation.",
+      "A manual positive \\parskip affects places where LaTeX uses paragraph-based structures internally, so it can introduce surprising gaps in lists or around headings. Do not compensate with scattered negative vertical spaces before identifying the source. Either use a package designed for the style or use the class's paragraph-spacing controls.",
+      'The package does not remove the need for blank lines in the source. Those lines still identify paragraph boundaries; the style determines how the boundaries look. Avoid adding repeated blank lines in the hope of larger gaps, since they are not a precise vertical-spacing interface. Keep semantic paragraph breaks separate from layout adjustments.',
+    ],
+    code: '\\documentclass{article}\n\\usepackage{parskip}\n\\begin{document}\nThis first paragraph begins without a first-line inset.\n\nThis second paragraph is separated by vertical space.\nIt is still one paragraph despite this source newline.\n\\end{document}',
+  },
+  {
+    title: 'Understand the first paragraph after a heading',
+    paragraphs: [
+      'The standard article, report, and book classes normally suppress the indent after a heading. This is a typographic convention, not a failure of \\parindent. Later paragraphs in the same section can still be indented. Test a second paragraph before concluding that a global setting has been ignored.',
+      'When your style requires indentation after headings too, the indentfirst package changes that behavior in standard classes. It does not choose a new indent width; \\parindent still supplies the length. If that length is zero, loading indentfirst will not create a visible inset. Language packages and specialist classes may have their own conventions.',
+      "Do not use extra spaces or a tab character to repair a heading's first paragraph. LaTeX normally collapses such whitespace, and forced spaces encode an appearance without changing the underlying paragraph policy. Use the appropriate class option or package so later sections follow the same rule automatically.",
+    ],
+    code: '\\documentclass{article}\n\\usepackage{indentfirst}\n\\setlength{\\parindent}{2em}\n\\begin{document}\n\\section{Results}\nThis first paragraph is indented too.\n\nThe next paragraph uses the same first-line inset.\n\\end{document}',
+  },
+  {
+    title: 'Line breaks, tabs, and horizontal space are different',
+    paragraphs: [
+      'A double backslash requests a line break in contexts that support it; it does not create a new paragraph. Using it to separate ordinary paragraphs bypasses the paragraph-spacing and indentation rules, and can produce a no-line-to-end error. Use a blank line for a new paragraph and reserve explicit breaks for structures that actually require them.',
+      'The \\indent command inserts an indentation box using the current \\parindent. It is not a universal override for heading behavior, nor does it help when that length is zero. For a deliberate fixed gap, \\hspace adds horizontal space and \\hspace* preserves it where ordinary discardable space could disappear at a line boundary.',
+      'Neither \\hspace nor repeated spaces creates a reliable multi-column alignment. Use tabular for aligned fields or tabbing when you specifically need tab stops. The keyboard Tab character is source whitespace, not a request for a fixed visual stop in the PDF. Treat source indentation as an editing aid, separate from typeset indentation.',
+    ],
+  },
+  {
+    title: 'Hanging indents and indented blocks',
+    paragraphs: [
+      'A hanging indent leaves the first line at the ordinary left edge and moves subsequent lines inward. Set \\hangindent to the desired amount and \\hangafter to 1 for that pattern. These are paragraph-shape settings, so ensure the paragraph ends while the settings are still active, particularly when placing the construction inside a group.',
+      "The example uses a narrow minipage only to make the wrapping visible in a small document. A minipage is unbreakable across pages, so do not copy that wrapper around a long bibliography. For references, use the bibliography system's formatting rather than manually shaping every entry; it can handle labels and continued lines consistently.",
+      "To inset an entire passage at both margins, use quote or quotation rather than a first-line indent. For adjustable left and right offsets, changepage provides adjustwidth. These structures change the block's usable line width. Images and rules inside them should generally respect \\linewidth instead of assuming the full page text width.",
+    ],
+    code: '\\documentclass{article}\n\\usepackage{changepage}\n\\begin{document}\n\\begin{minipage}{7cm}\n\\noindent\\hangindent=2em\\hangafter=1\nThis example entry is long enough to wrap across several\nlines, showing that the first line starts at the left\nwhile the following lines begin farther inward.\\par\n\\end{minipage}\n\n\\begin{adjustwidth}{2em}{1em}\nThis whole block has an inset left margin and an inset\nright margin, independently of its first-line indentation.\n\\end{adjustwidth}\n\\end{document}',
+  },
+  {
+    title: 'Scope settings and diagnose unexpected indentation',
+    paragraphs: [
+      'TeX finishes paragraph layout when the paragraph ends. If you change paragraph parameters inside braces, end the paragraph with \\par before closing the group. Otherwise the restored outer settings can be active when line breaking occurs. This is especially important for hanging indents, alignment declarations, and local changes to the available width.',
+      "If \\noindent appears ineffective, first confirm that it is before the first word of a new paragraph. Then check whether the apparent inset is actually a list margin, quote margin, table padding, or a minipage's position. A first-line command cannot remove an environment's left margin, because those are different parts of the layout.",
+      'If spacing changes unexpectedly halfway through the document, inspect nearby declarations and grouping. A command outside braces can remain active beyond the paragraph you intended to alter. Reduce the case to two paragraphs and the surrounding environment, then add your class and packages back in order. Check the final PDF at a page break as well as in the middle of a page.',
+      "Keep formatting decisions consistent with the document's purpose. A thesis or journal template may prescribe indented paragraphs even if a web-style spaced layout looks more familiar. Prefer the template's supported settings over local overrides, and compare a representative heading, list, quotation, and ordinary paragraph before accepting a global change.",
+    ],
   },
 ]
 
-export default async function LearnParagraphsIndentationPage() {
+export default async function LearnGuidePage() {
   return (
     <div className="pt-24 pb-24">
       <script
@@ -72,429 +118,68 @@ export default async function LearnParagraphsIndentationPage() {
         slug={page.slug}
         title={page.title}
         description={page.description}
+        datePublished="2026-11-09"
         dateModified={LAST_UPDATED}
         faq={faq}
       />
       <div className="container">
         <div className="mb-8 max-w-4xl mx-auto">
-          <Link
-            href="/learn"
-            className="text-sm text-muted-foreground hover:text-foreground transition-colors inline-flex items-center gap-1"
-          >
+          <Link href="/learn" className="text-sm text-muted-foreground hover:text-foreground">
             ← Back to Learn
           </Link>
         </div>
-
         <article className="prose prose-lg dark:prose-invert max-w-4xl mx-auto">
-          <h1>Indentation in LaTeX: \indent, \noindent, parindent and Tabs</h1>
-
-          <div className="not-prose my-6 p-6 rounded-lg border bg-muted/40 break-words">
-            <p className="text-sm font-semibold uppercase tracking-wide text-muted-foreground mb-3">Quick answer</p>
-            <ul className="space-y-2 text-base list-disc pl-5">
-              <li>
-                <strong>Default:</strong> a blank line starts a new paragraph, and its first line
-                is indented by <code>\parindent</code> (except right after a heading).
-              </li>
-              <li>
-                <strong>No indent for one paragraph:</strong> start it with <code>\noindent</code>.
-              </li>
-              <li>
-                <strong>No indent anywhere:</strong> <code>{`\\setlength{\\parindent}{0pt}`}</code>, or{' '}
-                <code>{`\\usepackage{parskip}`}</code> for space between paragraphs instead.
-              </li>
-              <li>
-                <strong>Force an indent:</strong> <code>\indent</code> at the start of a paragraph;{' '}
-                <code>{`\\usepackage{indentfirst}`}</code> to indent first paragraphs too.
-              </li>
-              <li>
-                <strong>Hanging indent:</strong> <code>\hangindent=2em \hangafter=1</code> before the
-                text.
-              </li>
-              <li>
-                <strong>Indent a block:</strong> <code>quote</code>, or{' '}
-                <code>{`\\begin{adjustwidth}{2em}{0pt}`}</code> from <code>changepage</code>.
-              </li>
-              <li>
-                <strong>A &ldquo;tab&rdquo;:</strong> the Tab key does nothing; use{' '}
-                <code>{`\\hspace*{2em}`}</code>, <code>\quad</code>, or the <code>tabbing</code>{' '}
-                environment.
-              </li>
-            </ul>
-            <pre className="mt-4 overflow-x-auto rounded-md bg-background p-4 text-sm"><code>{`\\documentclass{article}
-\\setlength{\\parindent}{2em}   % size of the first-line indent
-
-\\begin{document}
-This first paragraph is indented by 2em.
-
-\\noindent This paragraph starts at the margin.
-
-\\noindent\\hspace*{4em}A manual gap of exactly 4em.
-
-\\noindent\\hangindent=2em \\hangafter=1
-A hanging indent: the first line is flush left and every following line
-is indented by 2em, as in a reference list or a glossary entry.
-\\end{document}`}</code></pre>
-          </div>
+          <h1>{page.title}</h1>
           <p className="lead">
-            LaTeX handles paragraph indentation on its own: every new paragraph gets a
-            first-line indent, sized to the font, and the paragraph right after a heading gets
-            none. Indentation in LaTeX therefore comes down to a few switches: turn the indent
-            off for one paragraph or the whole document, change its size, force it where LaTeX
-            leaves it out, and indent things that are not first lines, such as hanging indents,
-            quoted blocks and tab-like gaps. This guide covers each one and the errors they
-            cause.
+            {
+              'To remove indentation from one LaTeX paragraph, put \\noindent immediately before its first word, after a blank line or \\par. To remove it throughout the document, set \\setlength{\\parindent}{0pt} in the preamble. If you also want visible space between paragraphs, use the parskip package rather than inserting manual line breaks.'
+            }
           </p>
-
-          {/* ── Default ── */}
-          <h2>How Paragraph Indentation Works in LaTeX</h2>
+          <p className="text-sm text-muted-foreground">Updated November 22, 2026</p>
+          {sections.map(({ title, paragraphs, code }) => (
+            <section key={title}>
+              <h2>{title}</h2>
+              {paragraphs.map((paragraph) => (
+                <p key={paragraph}>{paragraph}</p>
+              ))}
+              {code && (
+                <pre>
+                  <code>{code}</code>
+                </pre>
+              )}
+            </section>
+          ))}
+          <h2>Frequently asked questions</h2>
+          {faq.map(({ question, answer }) => (
+            <section key={question}>
+              <h3>{question}</h3>
+              <p>{answer}</p>
+            </section>
+          ))}
+          <h2>Documentation and related guides</h2>
           <p>
-            A blank line (or <code>\par</code>) ends a paragraph. The next paragraph starts with
-            a horizontal gap of width <code>\parindent</code>. Pressing Enter once does not start
-            a paragraph, and neither does <code>{`\\\\`}</code>: it breaks the line inside the
-            same paragraph, so the next line is not indented.
-          </p>
-          <pre><code>{`\\documentclass{article}
-\\begin{document}
-\\section{Introduction}
-This first paragraph after the heading is not indented.
-Pressing Enter once keeps the text in the same paragraph.
-
-A blank line starts a new paragraph, which is indented.\\\\
-A line after \\textbackslash\\textbackslash{} is a new line,
-not a new paragraph, so it is not indented.
-\\end{document}`}</code></pre>
-          <p>
-            The default indent depends on the class and the size option. In the standard classes
-            (<code>article</code>, <code>report</code>, <code>book</code>):
-          </p>
-          <div className="overflow-x-auto">
-            <table>
-              <thead>
-                <tr>
-                  <th>Class option</th>
-                  <th>Default <code>\parindent</code></th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr><td><code>10pt</code> (default)</td><td>15pt</td></tr>
-                <tr><td><code>11pt</code></td><td>17pt</td></tr>
-                <tr><td><code>12pt</code></td><td>1.5em (18pt)</td></tr>
-                <tr><td><code>twocolumn</code></td><td>1em</td></tr>
-              </tbody>
-            </table>
-          </div>
-          <p>
-            Change it in the preamble with <code>{`\\setlength{\\parindent}{2em}`}</code>. Using{' '}
-            <code>em</code> keeps the indent in proportion to the font size; see{' '}
-            <Link href="/learn/font-size">font size</Link> for the size options.
-          </p>
-
-          {/* ── noindent ── */}
-          <h2>Removing Indentation: \noindent and parindent</h2>
-          <p>
-            <code>\noindent</code> at the very start of a paragraph suppresses its indent. To
-            remove indentation from the whole document, set <code>\parindent</code> to zero.
-            Without an indent, paragraphs only differ by the short last line, so add space
-            between them; the <code>parskip</code> package does both and keeps lists and the
-            table of contents tidy:
-          </p>
-          <pre><code>{`\\documentclass{article}
-\\usepackage{parskip}   % parindent = 0, about half a line between paragraphs
-% or by hand:
-% \\setlength{\\parindent}{0pt}
-% \\setlength{\\parskip}{0.5\\baselineskip}
-
-\\begin{document}
-First paragraph. Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-
-Second paragraph, set off by space instead of an indent.
-\\end{document}`}</code></pre>
-          <p>
-            The <Link href="/learn/spacing">spacing guide</Link> covers <code>\parskip</code>{' '}
-            and line spacing in more detail.
-          </p>
-
-          {/* ── indent ── */}
-          <h2>Forcing an Indent: \indent and indentfirst</h2>
-          <p>
-            <code>\indent</code> at the start of a paragraph adds the normal indent; in the middle
-            of a line it adds a gap of the same width. It does <em>not</em> work for the first
-            paragraph after a heading, because the heading code removes the indent box. To indent
-            those paragraphs too, load <code>indentfirst</code>, or use{' '}
-            <code>{`\\hspace*{\\parindent}`}</code> for a single one:
-          </p>
-          <pre><code>{`\\documentclass{article}
-\\usepackage{indentfirst}   % indent the first paragraph after headings
-
-\\begin{document}
-\\section{Method}
-With indentfirst, this first paragraph is indented like the others.
-
-\\noindent\\textbf{Note.} \\indent The \\textbackslash indent here,
-inside the line, adds a gap of width \\textbackslash parindent.
-\\end{document}`}</code></pre>
-
-          {/* ── Hanging ── */}
-          <h2>Hanging Indent in LaTeX</h2>
-          <p>
-            A hanging indent keeps the first line at the margin and indents the rest, as in
-            reference lists and glossaries. <code>\hangindent</code> sets the amount and{' '}
-            <code>\hangafter</code> the number of lines left unindented. Both apply to the
-            current paragraph only and are reset afterwards, so a small macro saves repetition:
-          </p>
-          <pre><code>{`\\documentclass{article}
-\\setlength{\\parindent}{0pt}
-\\newcommand{\\hangpara}{\\hangindent=2em \\hangafter=1 }
-
-\\begin{document}
-\\hangpara
-Knuth, D. E. (1984). \\textit{The TeXbook}. Addison-Wesley. A hanging indent
-keeps the author at the margin and indents the following lines.
-
-\\hangpara
-Lamport, L. (1994). \\textit{LaTeX: A Document Preparation System},
-second edition. Addison-Wesley, Reading, Massachusetts.
-
-\\hangindent=3em \\hangafter=2
-With \\textbackslash hangafter=2 the first two lines stay at the margin and the
-indent starts on the third line, which shows how the two settings combine in
-a longer paragraph like this one.
-\\end{document}`}</code></pre>
-          <p>
-            For a real bibliography, let the reference style do it: biblatex and BibTeX styles
-            such as APA already format entries with hanging indents (see{' '}
-            <Link href="/learn/bibliography-examples">bibliography examples</Link>).
-          </p>
-
-          {/* ── Block ── */}
-          <h2>Indenting a Whole Paragraph or Block</h2>
-          <p>
-            To indent every line of a passage, use an environment that changes the margins
-            instead of a first-line command:
-          </p>
-          <div className="overflow-x-auto">
-            <table>
-              <thead>
-                <tr>
-                  <th>Method</th>
-                  <th>Effect</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr><td><code>quote</code></td><td>Indents both margins; paragraphs inside are not indented</td></tr>
-                <tr><td><code>quotation</code></td><td>Indents both margins and keeps first-line indents</td></tr>
-                <tr><td><code>{`\\begin{adjustwidth}{2em}{0pt}`}</code></td><td>Exact left and right indents (<code>changepage</code> package)</td></tr>
-                <tr><td><code>{`{\\leftskip=2em ... \\par}`}</code></td><td>Plain TeX: left margin for the paragraphs in the group</td></tr>
-                <tr><td><code>itemize</code> / <code>enumerate</code></td><td>Indented items; see <Link href="/learn/lists">lists</Link></td></tr>
-              </tbody>
-            </table>
-          </div>
-          <pre><code>{`\\documentclass{article}
-\\usepackage{changepage}
-
-\\begin{document}
-Normal paragraph at the full text width.
-
-\\begin{quote}
-A quote environment indents both margins, the usual way to set off
-a long quotation.
-\\end{quote}
-
-\\begin{adjustwidth}{3em}{0pt}
-\\noindent adjustwidth indents only the left margin by 3em here, and the
-right margin stays where it is. Every line of the block is indented.
-\\end{adjustwidth}
-
-{\\leftskip=2em
-A group with \\textbackslash leftskip also indents every line by 2em.
-The \\textbackslash par before the closing brace is required.\\par}
-\\end{document}`}</code></pre>
-          <p>
-            For the formatting of quotations themselves, see{' '}
-            <Link href="/learn/quotes">quotes in LaTeX</Link>.
-          </p>
-
-          {/* ── Tabs ── */}
-          <h2>Tab in LaTeX: \hspace and the tabbing Environment</h2>
-          <p>
-            Pressing Tab in the editor does nothing in the output: LaTeX treats a tab character as
-            a space, collapses runs of spaces into one, and ignores spaces at the start of a line.
-            For a tab-like gap, insert explicit space:
+            Consult the <a href="https://ctan.org/pkg/parskip">parskip manual</a>,{' '}
+            <a href="https://ctan.org/pkg/indentfirst">indentfirst documentation</a>, and{' '}
+            <a href="https://ctan.org/pkg/changepage">changepage documentation</a> for their class
+            interactions and options.
           </p>
           <ul>
-            <li><code>{`\\hspace*{2em}`}</code> &ndash; a fixed gap; the star keeps it at the start of a line, where plain <code>\hspace</code> is dropped.</li>
-            <li><code>\quad</code> and <code>\qquad</code> &ndash; 1em and 2em gaps inside a line.</li>
-            <li><code>\hfill</code> &ndash; pushes what follows to the right margin.</li>
+            <li>
+              <Link href="/learn/spacing">LaTeX spacing</Link>
+            </li>
+            <li>
+              <Link href="/learn/quotes">Block quotations</Link>
+            </li>
+            <li>
+              <Link href="/learn/page-size-margins">Page size and margins</Link>
+            </li>
           </ul>
-          <p>
-            For text aligned at tab stops, like a typewriter, use <code>tabbing</code>:{' '}
-            <code>\=</code> sets a stop, <code>\&gt;</code> jumps to the next one, and{' '}
-            <code>{`\\\\`}</code> ends the line.
-          </p>
-          <pre><code>{`\\documentclass{article}
-\\begin{document}
-\\noindent\\hspace*{2em}Indented by 2em, like a tab at the start of a line.
-
-Name:\\quad Ada \\qquad Year:\\quad 1843 \\hfill right margin
-
-\\begin{tabbing}
-Mon \\hspace{2cm} \\= 9:00 \\hspace{1cm} \\= Lecture \\\\
-Tue \\> 11:00 \\> Seminar \\\\
-Wed \\> 14:00 \\> Lab \\\\
-\\> \\> indented to the second tab stop
-\\end{tabbing}
-\\end{document}`}</code></pre>
-          <p>
-            <code>tabbing</code> does not wrap long text inside a column and draws no rules; for
-            real columns, a <Link href="/learn/tables">table</Link> is usually the better choice.
-          </p>
-
-          {/* ── Errors ── */}
-          <h2>Common Errors and Fixes</h2>
-          <div className="overflow-x-auto">
-            <table>
-              <thead>
-                <tr>
-                  <th>Message or symptom</th>
-                  <th>Cause</th>
-                  <th>Fix</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td><em>Illegal unit of measure (pt inserted)</em></td>
-                  <td><code>{`\\setlength{\\parindent}{0}`}</code>: a length without a unit</td>
-                  <td><code>{`\\setlength{\\parindent}{0pt}`}</code></td>
-                </tr>
-                <tr>
-                  <td><code>\indent</code> after <code>\section</code> has no effect</td>
-                  <td>The heading code removes the indent of the first paragraph</td>
-                  <td><code>{`\\usepackage{indentfirst}`}</code>, or <code>{`\\hspace*{\\parindent}`}</code></td>
-                </tr>
-                <tr>
-                  <td><code>\noindent</code> has no effect</td>
-                  <td>It is not at the start of a paragraph (there is no blank line before it), or it is placed after the text has begun</td>
-                  <td>Put it first in the paragraph, right after a blank line</td>
-                </tr>
-                <tr>
-                  <td>Text after an equation, figure or list is indented</td>
-                  <td>A blank line after <code>{`\\end{equation}`}</code> starts a new paragraph</td>
-                  <td>Remove the blank line if the sentence continues, or use <code>\noindent</code></td>
-                </tr>
-                <tr>
-                  <td>New lines are not indented</td>
-                  <td><code>{`\\\\`}</code> breaks the line but does not start a paragraph</td>
-                  <td>Separate paragraphs with a blank line</td>
-                </tr>
-                <tr>
-                  <td>Spaces or tabs at the start of a line disappear</td>
-                  <td>LaTeX ignores leading whitespace; <code>\hspace</code> is dropped at a line start</td>
-                  <td><code>{`\\hspace*{2em}`}</code></td>
-                </tr>
-                <tr>
-                  <td>Paragraphs run together after <code>parindent</code> = 0</td>
-                  <td>No indent and no space between paragraphs</td>
-                  <td><code>{`\\usepackage{parskip}`}</code></td>
-                </tr>
-                <tr>
-                  <td><em>Undefined control sequence</em> on <code>adjustwidth</code></td>
-                  <td>The <code>changepage</code> package is not loaded</td>
-                  <td><code>{`\\usepackage{changepage}`}</code></td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-          <p>The blank-line case after display math is the most common surprise:</p>
-          <pre><code>{`\\documentclass{article}
-\\begin{document}
-The energy is
-\\begin{equation}
-  E = mc^2
-\\end{equation}
-where $m$ is the mass.     % no blank line above: same paragraph, no indent
-
-\\begin{equation}
-  F = ma
-\\end{equation}
-
-This starts a new, indented paragraph because of the blank line above.
-\\end{document}`}</code></pre>
-
-          {/* ── FAQ ── */}
-          <h2>Frequently Asked Questions</h2>
-          <h3>How do I indent in LaTeX?</h3>
-          <p>
-            LaTeX indents the first line of every paragraph automatically; a blank line in the
-            source starts a new paragraph. To indent a line by hand, use <code>\indent</code> at
-            the start of a paragraph or <code>{`\\hspace*{2em}`}</code> anywhere. To indent a whole
-            block, use the quote environment or <code>{`\\begin{adjustwidth}{2em}{0pt}`}</code>{' '}
-            from the changepage package.
-          </p>
-          <h3>How do I remove paragraph indentation in LaTeX?</h3>
-          <p>
-            For one paragraph, start it with <code>\noindent</code>. For the whole document, put{' '}
-            <code>{`\\setlength{\\parindent}{0pt}`}</code> in the preamble, or better{' '}
-            <code>{`\\usepackage{parskip}`}</code>, which also adds space between paragraphs so they
-            stay distinguishable. Remember the unit: <code>{`\\setlength{\\parindent}{0}`}</code>{' '}
-            gives the error &ldquo;Illegal unit of measure&rdquo;.
-          </p>
-          <h3>Why is the first paragraph after a section not indented?</h3>
-          <p>
-            That is the English typographic convention, and the standard classes follow it: the
-            first paragraph after <code>\section</code>, <code>\chapter</code> or similar
-            headings has no indent. <code>\indent</code> does not override it. Load{' '}
-            <code>{`\\usepackage{indentfirst}`}</code> to indent every first paragraph, as French and
-            some other styles require.
-          </p>
-          <h3>How do I make a tab in LaTeX?</h3>
-          <p>
-            The Tab key does nothing: LaTeX treats a tab character like a space, and runs of
-            spaces collapse into one. Use <code>{`\\hspace*{2em}`}</code> for a fixed gap (the star
-            keeps it at the start of a line), <code>\quad</code> or <code>\qquad</code> for 1em
-            or 2em, and the tabbing environment with <code>\=</code> and <code>\&gt;</code> for
-            real tab stops. For aligned columns, a tabular is usually better.
-          </p>
-          <h3>How do I create a hanging indent in LaTeX?</h3>
-          <p>
-            Start the paragraph with <code>\hangindent=2em \hangafter=1</code> and then the text:
-            every line after the first is indented by 2em. The settings apply to that paragraph
-            only, so repeat them for each paragraph or define a macro. For a reference list, the
-            bibliography styles and biblatex already produce hanging indents.
-          </p>
-          <h3>How do I change the size of the paragraph indent?</h3>
-          <p>
-            Set <code>{`\\setlength{\\parindent}{2em}`}</code> in the preamble (any length works,
-            such as 1cm or 20pt). The default depends on the font size option: 15pt for 10pt
-            documents, 17pt for 11pt and 1.5em for 12pt in the standard classes. Using em keeps
-            the indent proportional to the font.
-          </p>
-
-          {/* ── Next Steps ── */}
-          <h2>Next Steps</h2>
-          <ul>
-            <li><Link href="/learn/spacing">Spacing in LaTeX</Link> &ndash; \hspace, \vspace, paragraph and line spacing</li>
-            <li><Link href="/learn/lists">Lists</Link> &ndash; Indentation of itemize and enumerate with enumitem</li>
-            <li><Link href="/learn/page-size-margins">Page Size &amp; Margins</Link> &ndash; Margins for the whole page</li>
-            <li><Link href="/learn/quotes">Quotes</Link> &ndash; Quotation marks and block quotations</li>
-            <li><Link href="/learn/document-classes">Document Classes</Link> &ndash; Class options that change the default layout</li>
-            <li><Link href="/learn/latex">Learn LaTeX: Tutorial for Beginners</Link> &ndash; The basics, from the first document up</li>
-          </ul>
-
-          <h2>Free LaTeX Tools</h2>
-          <ul>
-            <li><Link href="https://tools.useoctree.com/tools/latex-preview" target="_blank" rel="noopener noreferrer">LaTeX Preview</Link> &ndash; Try indentation settings with a live PDF preview</li>
-            <li><Link href="https://tools.useoctree.com/tools/ai-latex-generator" target="_blank" rel="noopener noreferrer">AI LaTeX Generator</Link> &ndash; Generate LaTeX from text descriptions</li>
-            <li><Link href="https://tools.useoctree.com/symbols" target="_blank" rel="noopener noreferrer">LaTeX Symbols Reference</Link> &ndash; Browse math operators and special characters</li>
-          </ul>
-
-          <RelatedPosts searchTerm="LaTeX" title="Related Articles" />
-
           <div className="not-prose mt-12 p-6 bg-primary/5 rounded-lg border border-primary/10">
-            <h3 className="text-lg font-semibold mb-2">Fix paragraph formatting faster with AI</h3>
+            <h2 className="text-lg font-semibold mb-2">Compile a small example first</h2>
             <p className="text-muted-foreground mb-4">
-              Octree&apos;s AI editor removes or restores indentation across a document, sets up
-              parskip and hanging indents for you, and compiles your document in seconds.
+              Paste a complete example into a project in Octree, compile it, and inspect the PDF
+              before applying the change to your main document. Keep the packages and document class
+              from your real template when checking compatibility.
             </p>
             <Link
               href="https://app.useoctree.com"
@@ -510,7 +195,6 @@ This starts a new, indented paragraph because of the blank line above.
     </div>
   )
 }
-
 export function generateMetadata(): Metadata {
   return learnMetadata(page)
 }
