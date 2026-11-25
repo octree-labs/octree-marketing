@@ -23,6 +23,8 @@ export interface OpenInOctreeProps {
    * on /learn/errors.
    */
   raw?: boolean
+  /** The line of copy next to the buttons; defaults to the generic pitch. */
+  copy?: string
   className?: string
 }
 
@@ -40,6 +42,7 @@ export function OpenInOctree({
   source,
   label = 'Open in Octree',
   raw = false,
+  copy = COPY,
   className,
 }: OpenInOctreeProps) {
   const ref = useRef<HTMLDivElement>(null)
@@ -88,7 +91,7 @@ export function OpenInOctree({
         className,
       )}
     >
-      <p className="m-0 text-sm leading-snug text-muted-foreground">{COPY}</p>
+      <p className="m-0 text-sm leading-snug text-muted-foreground">{copy}</p>
       <div className="flex shrink-0 items-center gap-2">
         <Button type="button" size="sm" onClick={handleOpen}>
           {label}

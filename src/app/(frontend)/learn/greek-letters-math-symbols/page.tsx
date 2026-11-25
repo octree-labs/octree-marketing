@@ -10,6 +10,7 @@ import {
 } from '@/utilities/generateBreadcrumbs'
 import { RelatedPosts } from '@/components/Learn/related-posts'
 import { LearnSchema } from '@/components/Learn/schema'
+import { OpenSymbolsInOctree, GREEK_SYMBOLS_STARTER } from '@/components/Learn/open-symbols-in-octree'
 
 export const dynamic = 'force-static'
 export const revalidate = 3600
@@ -150,6 +151,11 @@ export default async function GreekLettersMathSymbolsPage() {
               </li>
             </ul>
           </div>
+          <OpenSymbolsInOctree
+            latex={GREEK_SYMBOLS_STARTER}
+            title="Greek Letters and Math Symbols"
+            source="www:learn:greek-letters-math-symbols:symbols-top"
+          />
           <p className="lead">
             Every Greek letter in LaTeX is a math-mode command made of a backslash and the
             letter&apos;s English name: <code>\alpha</code>, <code>\epsilon</code>,{' '}
@@ -685,6 +691,12 @@ $\\ddot{x} = \\frac{d^2x}{dt^2}$  % acceleration
 $\\widehat{ABC}$                  % wide hat over angle name
 
 $\\tilde{f}(\\xi) = \\int_{-\\infty}^{\\infty} f(x) e^{-2\\pi i \\xi x} \\, dx$  % Fourier transform`}</code></pre>
+
+          <OpenSymbolsInOctree
+            latex={GREEK_SYMBOLS_STARTER}
+            title="Greek Letters and Math Symbols"
+            source="www:learn:greek-letters-math-symbols:symbols-tables"
+          />
 
           {/* ───────────────────────────── Using Symbols in Practice ───────────────────────────── */}
           <h2>Using Symbols in Practice</h2>

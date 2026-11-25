@@ -10,6 +10,7 @@ import {
 } from '@/utilities/generateBreadcrumbs'
 import { RelatedPosts } from '@/components/Learn/related-posts'
 import { LearnSchema } from '@/components/Learn/schema'
+import { OpenSymbolsInOctree, LATEX_SYMBOLS_STARTER } from '@/components/Learn/open-symbols-in-octree'
 
 export const dynamic = 'force-static'
 export const revalidate = 3600
@@ -370,6 +371,11 @@ Displayed:
 Text mode: 50\\% off, R\\&D, item \\#3, a\\_b.
 \\end{document}`}</code></pre>
           </div>
+          <OpenSymbolsInOctree
+            latex={LATEX_SYMBOLS_STARTER}
+            title="LaTeX Symbols"
+            source="www:learn:latex-symbols:symbols-top"
+          />
           <p className="lead">
             LaTeX has a command for every symbol you are likely to need, from ± and ≈ to ∀, ⇒ and
             ∑. This page is the complete list of the common ones, grouped the way you look for
@@ -675,6 +681,12 @@ Display:
   \\bigcup_{i=1}^{\\infty} A_i
 \\]
 \\end{document}`}</code></pre>
+
+          <OpenSymbolsInOctree
+            latex={LATEX_SYMBOLS_STARTER}
+            title="LaTeX Symbols"
+            source="www:learn:latex-symbols:symbols-tables"
+          />
 
           {/* ── Errors ── */}
           <h2>Common Errors</h2>
