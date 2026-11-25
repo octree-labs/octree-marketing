@@ -75,6 +75,14 @@ const sections: { title: string; paragraphs: string[]; code?: string }[] = [
     code: '\\documentclass{article}\n\\usepackage[acronym]{glossaries}\n\\makeglossaries\n\\newglossaryentry{throughput}{\n  name={throughput},\n  description={the amount of work completed per unit time}}\n\\newacronym{cpu}{CPU}{central processing unit}\n\\begin{document}\nThe \\gls{cpu} influences system \\gls{throughput}.\n\\printglossaries\n\\end{document}',
   },
   {
+    title: 'Let latexmk rebuild both indexed lists',
+    paragraphs: [
+      'Save the following Perl configuration as .latexmkrc beside main.tex, not inside the LaTeX document. It registers dependencies for the main glossary and acronym list, then invokes makeglossaries in the document’s directory. Run latexmk -pdf main.tex from the project directory; latexmk repeats LaTeX as needed after the index files change. The recipe was tested on the indexed example above with both lists present.',
+      'The machine must have latexmk, Perl, makeglossaries and the selected indexing backend installed, and the build must permit the helper process. A hosted editor may supply equivalent rules, ignore project configuration or restrict external programs. Check its build log instead of assuming this recipe is accepted everywhere. If it is unavailable, use the manual sequence or the no-index method. This configuration does not require enabling unrestricted TeX shell escape.',
+    ],
+    code: "add_cus_dep('glo', 'gls', 0, 'makeglossaries');\nadd_cus_dep('acn', 'acr', 0, 'makeglossaries');\nsub makeglossaries {\n  my ($base_name, $path) = fileparse( $_[0] );\n  pushd $path;\n  my $return = system \"makeglossaries\", $base_name;\n  popd;\n  return $return;\n}",
+  },
+  {
     title: 'Control first use without surprising the reader',
     paragraphs: [
       'First use is state maintained by the package, not a guess based on where a word appears on a page. An acronym introduced in an abstract may already be marked as used before the main text starts. With glossaries, \\glsreset{label} resets one entry and \\glsresetall resets all entries; acronym offers its own reset commands. Reset at a deliberate structural boundary when readers need a fresh expansion.',

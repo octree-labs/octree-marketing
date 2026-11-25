@@ -14,7 +14,7 @@ const page = {
   title: 'LaTeX Bibliography Examples: Reference Lists, Styles and Annotations',
   seoTitle: 'LaTeX Bibliography Examples: References and Annotations',
   description:
-    'Compare complete LaTeX bibliography examples using manual references, BibTeX and biblatex. Choose headings, citation order, source fields and annotated entries.',
+    'Compare APA, MLA, Chicago and IEEE bibliography outputs from shared book, article and online-source data, with tested LaTeX and annotated-reference examples.',
   keywords:
     'latex bibliography, bibliography examples, latex references example, annotated bibliography latex, reference list example',
 }
@@ -59,33 +59,18 @@ const sections: { id?: string; title: string; paragraphs: string[]; code?: strin
     code: '\\documentclass{article}\n\\begin{document}\nKnuth describes the typesetting system in \\cite{knuth1984}.\n\\begin{thebibliography}{9}\n\\bibitem{knuth1984}\nDonald E. Knuth.\n\\textit{The TeXbook}.\nAddison-Wesley, 1984.\n\\end{thebibliography}\n\\end{document}',
   },
   {
-    title: 'Generate a classic BibTeX list from reusable data',
+    title: 'Reproduce the comparison with one shared database',
     paragraphs: [
-      'A .bib entry separates bibliographic facts from their presentation. In this complete example, filecontents* creates a small database alongside the document so you can test the whole workflow. In a real project, keep the database as a separate file and edit it directly. An existing file may not be overwritten by filecontents, so use a clean test directory when comparing examples.',
-      "The plain style produces a numbered list ordered by its sorting rules, rather than by first citation. To test a document saved as main.tex, run pdflatex main, bibtex main, then pdflatex main twice. The BibTeX command takes the document's base name, not the database filename. For journal submissions, use the supplied style and instructions instead of replacing them with plain merely because this small example compiles.",
+      'This complete document prints all three sources without requiring an in-text citation. Save it as main.tex in a clean directory, run pdflatex main, biber main, then pdflatex main twice. The APA package line produces the first comparison above; replace that line with the named configuration shown for MLA, Chicago or IEEE to reproduce the others. Do not load two bibliography styles simultaneously.',
+      'The filecontents block creates comparison.bib for this standalone demonstration. In an existing project, keep those entries in your normal database instead. The xurl package allows long URLs to wrap, while hyperref makes them clickable. This is an output comparison, not a migration recipe: keep the bibliography system and style files your publisher requires, and use the separate BibTeX guide for database setup and processor troubleshooting.',
     ],
-    code: '\\documentclass{article}\n\\begin{filecontents*}{example-references.bib}\n@book{knuth1984,\n  author = {Donald E. Knuth},\n  title = {The {TeXbook}},\n  publisher = {Addison-Wesley},\n  year = {1984}\n}\n\\end{filecontents*}\n\\begin{document}\nSee the discussion in \\cite{knuth1984}.\n\\bibliographystyle{plain}\n\\bibliography{example-references}\n\\end{document}',
-  },
-  {
-    title: 'Use biblatex when you need its list controls',
-    paragraphs: [
-      'Biblatex moves bibliography formatting into LaTeX and commonly uses Biber to process the data. The preamble loads the package and names the resource with its .bib extension; \\printbibliography creates the list in the body. Do not combine this setup with classic \\bibliographystyle and \\bibliography commands. Mixing the two workflows can produce confusing errors or an empty list.',
-      'The numeric example uses sorting=none to list entries in citation order. It is still a generic numeric style, not a promise of IEEE formatting. Save it as main.tex and run pdflatex main, biber main, then pdflatex main twice. When a template uses another backend or a specialized style package, follow that configuration. A migration from classic BibTeX can require reviewing entry types, fields and style-specific options, not just replacing one package line.',
-    ],
-    code: '\\documentclass{article}\n\\begin{filecontents*}{example-biblatex.bib}\n@book{knuth1984,\n  author = {Donald E. Knuth},\n  title = {The {TeXbook}},\n  publisher = {Addison-Wesley},\n  date = {1984}\n}\n\\end{filecontents*}\n\\usepackage[backend=biber,style=numeric,sorting=none]{biblatex}\n\\addbibresource{example-biblatex.bib}\n\\begin{document}\nThis reference is generated from structured data \\cite{knuth1984}.\n\\printbibliography[title={References}]\n\\end{document}',
+    code: '\\documentclass{article}\n\\usepackage[T1]{fontenc}\n\\usepackage{lmodern}\n\\usepackage[american]{babel}\n\\usepackage{csquotes}\n\\begin{filecontents*}{comparison.bib}\n@book{knuth1984,\n  author = {Donald E. Knuth},\n  title = {The {TeXbook}},\n  location = {Reading, MA},\n  publisher = {Addison-Wesley},\n  date = {1984}\n}\n@article{shannon1948,\n  author = {C. E. Shannon},\n  title = {A Mathematical Theory of Communication},\n  journaltitle = {Bell System Technical Journal},\n  volume = {27},\n  number = {3},\n  pages = {379--423},\n  date = {1948-07},\n  doi = {10.1002/j.1538-7305.1948.tb01338.x}\n}\n@online{wcag2023,\n  author = {{W3C}},\n  title = {Web Content Accessibility Guidelines ({WCAG}) 2.2 is a {W3C} Recommendation},\n  date = {2023-10-05},\n  url = {https://www.w3.org/news/2023/web-content-accessibility-guidelines-wcag-2-2-is-a-w3c-recommendation/},\n  urldate = {2026-11-25}\n}\n\\end{filecontents*}\n\\usepackage[backend=biber,style=apa]{biblatex}\n\\usepackage{xurl}\n\\usepackage[hidelinks]{hyperref}\n\\addbibresource{comparison.bib}\n\\begin{document}\n\\nocite{knuth1984,shannon1948,wcag2023}\n\\printbibliography\n\\end{document}',
   },
   {
     title: 'Check a book, article or website against its source',
     paragraphs: [
       'A book reference needs the correct author or editor, title, edition when relevant, publisher and publication date. A journal article needs its article title and journal identity, along with the applicable volume, issue, pages or article number and DOI. A website may have a corporate author, a changing title or no clear publication date. Use the fields supported by your chosen bibliography system rather than forcing every source into a book entry.',
       'Copy metadata from the work itself or a reliable publisher record, then verify it. A citation generator can suggest an entry, but it can also return the wrong edition, omit an author or mistake an access date for a publication date. Protect meaningful capitalization in titles where the style might change it, and separate multiple authors with the database syntax rather than typing a formatted author list into one field.',
-    ],
-  },
-  {
-    title: 'Compare style output without treating punctuation as universal',
-    paragraphs: [
-      "For the same book, an APA-style reference begins with the author's surname and initials followed by the year in parentheses; an MLA-style entry normally presents the author's name, title, publisher and year in a different sequence. A numbered engineering style puts a reference label beside the entry and uses its own name and title conventions. These differences come from the style rules, not from the underlying identity of the source.",
-      "For an exact required style, choose a maintained implementation such as the appropriate biblatex style package or the publisher's supplied .bst file, then compare representative output against the official examples. Check at least one book, article and online source if your paper uses all three. Do not hand-correct a generated .bbl file as your normal workflow: the next bibliography run can replace it, leaving the correction disconnected from the original data.",
     ],
   },
   {
@@ -137,10 +122,136 @@ export default async function LearnGuidePage() {
           <h1>{page.title}</h1>
           <p className="lead">
             {
-              'A LaTeX bibliography needs source entries, citations in the text, and a command that prints the list. For a small manual list, use thebibliography with \\bibitem. For reusable data, use a .bib file with BibTeX or biblatex. The examples below focus on the resulting reference list and its contents; the separate BibTeX guide explains the database workflow in more detail.'
+              'A LaTeX bibliography needs source entries and a command that prints the list. Sources are usually cited in the text, but manual lists and \\nocite can include uncited works when required. For a small manual list, use thebibliography with \\bibitem. For reusable data, use a .bib file with BibTeX or biblatex. The examples below focus on the resulting reference list and its contents; the separate BibTeX guide explains the database workflow in more detail.'
             }
           </p>
           <p className="text-sm text-muted-foreground">Updated November 25, 2026</p>
+          <section id="bibliography-styles">
+            <h2>APA, MLA, Chicago and IEEE: the same three sources</h2>
+            <p>
+              These are transcriptions of output compiled from the shared database below, using
+              biblatex-apa 9.17, biblatex-mla 2.1a, biblatex-chicago’s 2022/11/17 notes style and
+              biblatex-ieee 1.3f. Italics and punctuation are retained; PDF line wrapping is not.
+              They demonstrate these package versions, not a guarantee that every publisher accepts
+              the defaults. The Chicago example uses the notes-and-bibliography configuration
+              associated with the package’s seventeenth-edition support, not Chicago author-date or
+              a claim of eighteenth-edition compliance.
+            </p>
+            <p>
+              Each group contains a book, a journal article and an online announcement. The book
+              metadata comes from Knuth’s own publication list; Shannon’s original print date and
+              page range come from the DOI record, not its later online date. The W3C announcement
+              supplies its publication date; the access date records this example’s lookup. Protect
+              the corporate author with an extra pair of braces so it is not parsed as a person’s
+              first and last names.
+            </p>
+            <h3>APA: author and date first</h3>
+            <p>
+              Use <code>style=apa</code> with biblatex. Notice the initials, parenthesized dates and
+              sentence-case titles.
+            </p>
+            <p>
+              Knuth, D. E. (1984). <em>The TeXbook</em>. Addison-Wesley.
+            </p>
+            <p>
+              Shannon, C. E. (1948). A mathematical theory of communication.{' '}
+              <em>Bell System Technical Journal, 27</em>(3), 379–423.{' '}
+              <a href="https://doi.org/10.1002/j.1538-7305.1948.tb01338.x">
+                https://doi.org/10.1002/j.1538-7305.1948.tb01338.x
+              </a>
+            </p>
+            <p>
+              W3C. (2023, October 5).{' '}
+              <em>Web content accessibility guidelines (WCAG) 2.2 is a W3C recommendation</em>.
+              Retrieved November 25, 2026, from{' '}
+              <a href="https://www.w3.org/news/2023/web-content-accessibility-guidelines-wcag-2-2-is-a-w3c-recommendation/">
+                https://www.w3.org/news/2023/web-content-accessibility-guidelines-wcag-2-2-is-a-w3c-recommendation/
+              </a>
+            </p>
+            <h3>MLA: titles and publication containers</h3>
+            <p>
+              Replace the package line with{' '}
+              <code>{'\\usepackage[backend=biber,style=mla]{biblatex}'}</code>. This style prints a
+              Works Cited heading and retains the available full given name.
+            </p>
+            <p>
+              Knuth, Donald E. <em>The TeXbook</em>. Addison-Wesley, 1984.
+            </p>
+            <p>
+              Shannon, C. E. “A Mathematical Theory of Communication.”{' '}
+              <em>Bell System Technical Journal</em>, vol. 27, no. 3, July 1948, pp. 379–423.{' '}
+              <a href="https://doi.org/10.1002/j.1538-7305.1948.tb01338.x">
+                https://doi.org/10.1002/j.1538-7305.1948.tb01338.x
+              </a>
+              .
+            </p>
+            <p>
+              W3C. “Web Content Accessibility Guidelines (WCAG) 2.2 is a W3C Recommendation,” 5 Oct.
+              2023,{' '}
+              <a href="https://www.w3.org/news/2023/web-content-accessibility-guidelines-wcag-2-2-is-a-w3c-recommendation/">
+                www.w3.org/news/2023/web-content-accessibility-guidelines-wcag-2-2-is-a-w3c-recommendation/
+              </a>
+              . Accessed 25 Nov. 2026.
+            </p>
+            <h3>Chicago: notes-and-bibliography entries</h3>
+            <p>
+              Replace the biblatex package line with{' '}
+              <code>{'\\usepackage[notes,backend=biber]{biblatex-chicago}'}</code>. These are
+              bibliography entries, not first or shortened footnotes.
+            </p>
+            <p>
+              Knuth, Donald E. <em>The TeXbook</em>. Reading, MA: Addison-Wesley, 1984.
+            </p>
+            <p>
+              Shannon, C. E. “A Mathematical Theory of Communication.”{' '}
+              <em>Bell System Technical Journal</em> 27, no. 3 (July 1948): 379–423.{' '}
+              <a href="https://doi.org/10.1002/j.1538-7305.1948.tb01338.x">
+                https://doi.org/10.1002/j.1538-7305.1948.tb01338.x
+              </a>
+              .
+            </p>
+            <p>
+              W3C. “Web Content Accessibility Guidelines (WCAG) 2.2 is a W3C Recommendation,”
+              October 5, 2023. Accessed November 25, 2026.{' '}
+              <a href="https://www.w3.org/news/2023/web-content-accessibility-guidelines-wcag-2-2-is-a-w3c-recommendation/">
+                https://www.w3.org/news/2023/web-content-accessibility-guidelines-wcag-2-2-is-a-w3c-recommendation/
+              </a>
+              .
+            </p>
+            <h3>IEEE: numbered references in the requested order</h3>
+            <p>
+              Use <code>{'\\usepackage[backend=biber,style=ieee,sorting=none]{biblatex}'}</code>.
+              The explicit nocite keys in this demonstration set the order; ordinary cited
+              references follow citation order.
+            </p>
+            <p>
+              [1] D. E. Knuth, <em>The TeXbook</em>. Reading, MA: Addison-Wesley, 1984.
+            </p>
+            <p>
+              [2] C. E. Shannon, “A mathematical theory of communication,”{' '}
+              <em>Bell System Technical Journal</em>, vol. 27, no. 3, pp. 379–423, Jul. 1948. doi:{' '}
+              <a href="https://doi.org/10.1002/j.1538-7305.1948.tb01338.x">
+                10.1002/j.1538-7305.1948.tb01338.x
+              </a>
+              .
+            </p>
+            <p>
+              [3] W3C. “Web content accessibility guidelines (WCAG) 2.2 is a W3C recommendation.”
+              (Oct. 5, 2023), [Online]. Available:{' '}
+              <a href="https://www.w3.org/news/2023/web-content-accessibility-guidelines-wcag-2-2-is-a-w3c-recommendation/">
+                https://www.w3.org/news/2023/web-content-accessibility-guidelines-wcag-2-2-is-a-w3c-recommendation/
+              </a>{' '}
+              (visited on 11/25/2026).
+            </p>
+            <p>
+              Access-date treatment depends on the source and style. This database deliberately
+              includes urldate to expose how each tested package prints it; remove or retain it
+              according to your publication’s rules rather than copying every field mechanically.
+              Before switching styles, preserve the original data and compare the new output; a
+              changed name order or omitted field may be a style decision, not lost metadata.
+            </p>
+          </section>
+
           {sections.map(({ id, title, paragraphs, code }) => (
             <section key={title} id={id}>
               <h2>{title}</h2>
@@ -167,13 +278,26 @@ export default async function LearnGuidePage() {
           </p>
           <ul>
             <li>
-              <a href="https://ctan.org/pkg/bibtex">BibTeX documentation</a>
+              <a href="https://www-cs-faculty.stanford.edu/~knuth/abcde.html">
+                Knuth’s book metadata
+              </a>
             </li>
             <li>
               <a href="https://ctan.org/pkg/biblatex">biblatex manual</a>
             </li>
             <li>
               <a href="https://ctan.org/pkg/biblatex-apa">biblatex APA style documentation</a>
+            </li>
+            <li>
+              <a href="https://ctan.org/pkg/biblatex-mla">biblatex MLA style documentation</a>
+            </li>
+            <li>
+              <a href="https://ctan.org/pkg/biblatex-chicago">
+                biblatex Chicago style documentation
+              </a>
+            </li>
+            <li>
+              <a href="https://ctan.org/pkg/biblatex-ieee">biblatex IEEE style documentation</a>
             </li>
           </ul>
           <ul>

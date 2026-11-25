@@ -395,7 +395,7 @@ const learnTopics = [
   {
     slug: 'bibliography-examples',
     title: 'Bibliography Examples',
-    description: 'Compare complete LaTeX bibliography examples using manual references, BibTeX and biblatex. Choose headings, citation order, source fields and annotated entries.',
+    description: 'Compare APA, MLA, Chicago and IEEE bibliography outputs from shared book, article and online-source data, with tested LaTeX and annotated-reference examples.',
     color: 'from-rose-500/10 to-fuchsia-600/5',
   },
   {
