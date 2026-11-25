@@ -6,8 +6,9 @@ blog and code-based [LaTeX guides](https://www.useoctree.com/learn).
 
 - [Free LaTeX tools](https://tools.useoctree.com)
 - [Compiler API and MCP documentation](https://www.useoctree.com/developers)
-- Regenerate the learning inventory in `public/llms.txt` and `public/llms-full.txt`
-  with `node scripts/generate-llms.mjs` after updating the learn hub or error registry.
+- `/llms.txt` and `/llms-full.txt` are generated at build time (`src/app/llms*.txt/route.ts`)
+  from the learn hub registry, the error registry, `src/data/octree-facts.ts` and the blog.
+- `/api/cron/indexnow` (daily Vercel cron) submits sitemap URLs changed in the last 3 days to IndexNow.
 
 ## Upstream template setup reference
 

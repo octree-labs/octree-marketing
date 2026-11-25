@@ -1,9 +1,11 @@
 import type { Metadata } from 'next'
+import Link from 'next/link'
 
 import { mergeOpenGraph } from '@/utilities/mergeOpenGraph'
 
 import { GridSection, HatchGround, hatchStyle } from '@/components/grid'
 import { cn } from '@/utilities/ui'
+import { OCTREE_SUMMARY } from '@/data/octree-facts'
 
 export const metadata: Metadata = {
   // The root layout template appends " | Octree"; keep the brand out of the page title.
@@ -53,6 +55,22 @@ export default function AboutPage() {
                 <span className="font-medium text-foreground">
                   tools that keep up with their thinking.
                 </span>
+              </p>
+              <p className="text-muted-foreground">
+                <span className="font-medium text-foreground">What is Octree?</span>{' '}
+                {OCTREE_SUMMARY} There is a free plan, and Pro costs $9.99 a month. Read the{' '}
+                <Link href="/learn/what-is-octree" className="underline underline-offset-4">
+                  full answer
+                </Link>
+                , or compare{' '}
+                <Link href="/learn/octree-vs-overleaf" className="underline underline-offset-4">
+                  Octree with Overleaf
+                </Link>{' '}
+                and{' '}
+                <Link href="/learn/best-ai-latex-editors" className="underline underline-offset-4">
+                  other AI LaTeX editors
+                </Link>
+                .
               </p>
               <p className="text-muted-foreground">
                 Today, Octree pairs a powerful in-browser LaTeX engine with an AI collaborator that
