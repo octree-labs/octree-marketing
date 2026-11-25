@@ -413,7 +413,7 @@ GDP grew by 3\\%.\\blfootnote{Source: World Bank, 2024.}`}</code></pre>
           <ul>
             <li><Link href="/blog/beamer-presentations-latex-slides-tutorial">Beamer Tutorial</Link> – Frames, overlays, themes and handouts for a complete presentation</li>
             <li><Link href="/learn/footnotes">LaTeX Footnotes</Link> – \footnote, footmisc and footnotes in tables for articles, reports and theses</li>
-            <li><Link href="/learn/bibliography-examples">Bibliography Examples</Link> – APA, MLA, Chicago and IEEE with BibTeX and biblatex</li>
+            <li><Link href="/learn/bibliography-examples">Bibliography Examples</Link> – Reference lists with BibTeX and biblatex, plus annotations</li>
             <li><Link href="/learn/table-of-contents">Table of Contents in LaTeX</Link> – Including the Beamer outline frame</li>
             <li><Link href="/learn/tables">Tables in LaTeX</Link> – tabular, booktabs and the tables you put on slides</li>
           </ul>
