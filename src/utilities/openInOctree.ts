@@ -13,12 +13,25 @@ export interface OpenInOctreeOptions {
   source?: string
 }
 
+/**
+ * Drafts endpoint with utm params. PostHog campaign properties live in
+ * per-origin storage, so they must travel in the URL; the app copies utm_* from
+ * this action onto its redirect into the editor.
+ */
+export function draftsActionUrl(source?: string): string {
+  const url = new URL(OCTREE_DRAFTS_URL)
+  url.searchParams.set('utm_source', 'www')
+  url.searchParams.set('utm_medium', 'draft')
+  if (source) url.searchParams.set('utm_campaign', source)
+  return url.toString()
+}
+
 export function openInOctree({ latex, title, source }: OpenInOctreeOptions): void {
   if (typeof document === 'undefined') return
 
   const form = document.createElement('form')
   form.method = 'POST'
-  form.action = OCTREE_DRAFTS_URL
+  form.action = draftsActionUrl(source)
   form.style.display = 'none'
 
   const content = document.createElement('textarea')
