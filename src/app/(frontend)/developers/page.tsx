@@ -5,10 +5,12 @@ import React from 'react'
 
 import { buttonVariants } from '@/components/ui/button'
 import { CodeBlock, CodeTabs } from '@/components/Developers/code-block'
+import { ConnectAgent } from '@/components/Developers/connect-agent'
 import { generateBreadcrumbSchema } from '@/utilities/generateBreadcrumbs'
 import { getServerSideURL } from '@/utilities/getURL'
 import { learnOgImagePath, generateFaqSchema, type FaqItem } from '@/utilities/learnMetadata'
 import { mergeOpenGraph } from '@/utilities/mergeOpenGraph'
+import { MCP_REGISTRY_NAME, agentsMdSnippet } from '@/utilities/mcpInstall'
 
 import * as s from './samples'
 
@@ -16,12 +18,12 @@ export const dynamic = 'force-static'
 export const revalidate = 3600
 
 const PATH = '/developers'
-const TITLE = 'LaTeX Compile API & MCP Server for AI Agents'
+const TITLE = 'LaTeX MCP Server & Compile API for AI Agents'
 const DESCRIPTION =
-  'Compile LaTeX to PDF from any AI agent or script: one API key, a REST API and an MCP server for Claude Code and Cursor. Full TeX Live, PDF in seconds.'
+  'Connect Claude, Claude Code, Cursor, VS Code or Codex to a LaTeX compiler in one step: an MCP server and REST API that turn LaTeX into PDF with full TeX Live.'
 const KEYWORDS =
-  'latex compile api, latex to pdf api, latex mcp server, compile latex programmatically, latex api, latex rest api, mcp latex, claude code latex, latex compiler api, pdflatex api'
-const LAST_UPDATED = '2026-11-08'
+  'latex mcp server, claude code latex, cursor latex mcp, latex compile api, latex to pdf api, latex mcp server, compile latex programmatically, latex api, latex rest api, mcp latex, claude code latex, latex compiler api, pdflatex api'
+const LAST_UPDATED = '2026-11-25'
 
 const breadcrumbSchema = generateBreadcrumbSchema([
   { name: 'Home', url: '/' },
@@ -29,6 +31,20 @@ const breadcrumbSchema = generateBreadcrumbSchema([
 ])
 
 const faq: FaqItem[] = [
+  {
+    question: 'How do I compile LaTeX from Claude Code?',
+    answer:
+      'Create an API key in Octree under Settings → API keys, then run claude mcp add --transport http octree https://app.useoctree.com/api/mcp --header "Authorization: Bearer YOUR_OCTREE_API_KEY". Claude Code then has the compile_latex, check_latex and get_quota tools: ask it to write your document and compile it with Octree, and it checks the source, fixes the reported errors and returns the PDF.',
+  },
+  {
+    question: 'How do I add the Octree MCP server to Cursor or VS Code?',
+    answer:
+      'In Cursor, press Add to Cursor on this page and replace YOUR_OCTREE_API_KEY with your key (or paste the key on the page first and the link includes it). In VS Code, run the code --add-mcp command shown above, or add the .vscode/mcp.json snippet, which asks for the key the first time the server starts.',
+  },
+  {
+    question: 'Is Octree listed in the MCP Registry?',
+    answer: `Yes. Octree is in the official MCP Registry as ${MCP_REGISTRY_NAME}, a remote Streamable HTTP server at https://app.useoctree.com/api/mcp that takes your API key in the Authorization header.`,
+  },
   {
     question: 'Is the Octree LaTeX compile API free?',
     answer:
@@ -67,7 +83,9 @@ const faq: FaqItem[] = [
 ]
 
 const toc = [
-  { id: 'quickstart', label: 'Quickstart' },
+  { id: 'connect', label: 'Connect your agent' },
+  { id: 'agents-md', label: 'AGENTS.md / CLAUDE.md snippet' },
+  { id: 'quickstart', label: 'Call the REST API' },
   { id: 'rest-api', label: 'REST API reference' },
   { id: 'errors', label: 'Errors and status codes' },
   { id: 'limits', label: 'Limits and keys' },
@@ -150,8 +168,8 @@ export default function DevelopersPage() {
             >
               Get an API key
             </Link>
-            <Link href="#mcp" className={buttonVariants({ variant: 'outline' })}>
-              Open the MCP docs
+            <Link href="#connect" className={buttonVariants({ variant: 'outline' })}>
+              Connect your agent
             </Link>
           </div>
 
@@ -160,7 +178,8 @@ export default function DevelopersPage() {
               <strong>REST:</strong> <Code>POST {s.COMPILE_URL}</Code>
             </li>
             <li>
-              <strong>MCP:</strong> <Code>{s.MCP_URL}</Code> (Streamable HTTP)
+              <strong>MCP:</strong> <Code>{s.MCP_URL}</Code> (Streamable HTTP), in the MCP Registry
+              as <Code>{MCP_REGISTRY_NAME}</Code>
             </li>
             <li>
               <strong>Auth:</strong> <Code>Authorization: Bearer oct_live_…</Code>
@@ -186,51 +205,68 @@ export default function DevelopersPage() {
             </ol>
           </nav>
 
-          {/* ───────────────────────────── Quickstart ───────────────────────────── */}
-          <h2 id="quickstart" className="scroll-mt-24">
-            Quickstart
+          {/* ───────────────────────────── Connect ───────────────────────────── */}
+          <h2 id="connect" className="scroll-mt-24">
+            Connect Your Agent
           </h2>
           <p>
-            Create a key under <a href={s.API_KEYS_URL}>Settings → API keys</a> in the Octree app.
-            It starts with <Code>oct_live_</Code> and is shown once, so copy it somewhere safe. Then
-            pick your client:
+            Every client below talks to the same MCP server, <Code>{s.MCP_URL}</Code>, with your API
+            key in an <Code>Authorization: Bearer</Code> header. Once connected, the agent has three
+            tools: <Code>compile_latex</Code>, <Code>check_latex</Code> and <Code>get_quota</Code>.
+          </p>
+          <ConnectAgent />
+
+          <h2 id="agents-md" className="scroll-mt-24">
+            AGENTS.md / CLAUDE.md Snippet
+          </h2>
+          <p>
+            Paste this into <Code>AGENTS.md</Code>, <Code>CLAUDE.md</Code> or your Cursor rules so
+            coding agents in your repository compile LaTeX through Octree instead of looking for a
+            local TeX install.
+          </p>
+          <CodeBlock
+            title="AGENTS.md"
+            code={agentsMdSnippet}
+            trackLocation="developers:agents_md"
+          />
+
+          {/* ───────────────────────────── Quickstart ───────────────────────────── */}
+          <h2 id="quickstart" className="scroll-mt-24">
+            Call the REST API
+          </h2>
+          <p>
+            From scripts, CI jobs and backends, call the REST API with the same key. Put it in{' '}
+            <Code>OCTREE_API_KEY</Code>:
           </p>
           <CodeTabs
-            ariaLabel="Quickstart"
+            ariaLabel="REST quickstart"
             tabs={[
-              {
-                label: 'Claude Code',
-                note: 'Add Octree as a remote MCP server, then ask Claude to compile main.tex.',
-                code: `${s.claudeCode}\n\n# then, in Claude Code:\n# > ${s.claudeCodePrompt}`,
-              },
               {
                 label: 'curl',
                 note: 'Returns JSON with the PDF base64-encoded, or a list of errors.',
                 code: s.curlJson,
+                trackLocation: 'developers:curl',
               },
               {
                 label: 'curl (raw PDF)',
                 note: 'Set "response": "pdf" (or send Accept: application/pdf) to get the PDF bytes directly.',
                 code: s.curlPdf,
+                trackLocation: 'developers:curl_pdf',
               },
-              { label: 'Python', note: 'Compiles main.tex and saves out.pdf.', code: s.python },
-              { label: 'Node', note: 'Node 18+ (built-in fetch), as an ES module.', code: s.node },
+              {
+                label: 'Python',
+                note: 'Compiles main.tex and saves out.pdf.',
+                code: s.python,
+                trackLocation: 'developers:python',
+              },
+              {
+                label: 'JavaScript',
+                note: 'Node 18+ (built-in fetch), as an ES module.',
+                code: s.node,
+                trackLocation: 'developers:javascript',
+              },
             ]}
           />
-
-          <h3>Cursor, Windsurf and any other MCP client</h3>
-          <p>
-            Clients that read an <Code>mcpServers</Code> config take a remote server with a URL and
-            headers. In Cursor this goes in <Code>~/.cursor/mcp.json</Code> (or{' '}
-            <Code>.cursor/mcp.json</Code> in a project); Windsurf and other clients use the same
-            shape in their own MCP config file, some under the name <Code>serverUrl</Code> instead
-            of <Code>url</Code>.
-          </p>
-          <CodeBlock title="mcp.json" code={s.mcpConfig} />
-          <p>
-            Keep the key out of shared repositories: put it in your user-level config, or use your
-            client&rsquo;s environment-variable substitution if it has one.
-          </p>
 
           {/* ───────────────────────────── REST ───────────────────────────── */}
           <h2 id="rest-api" className="scroll-mt-24">
@@ -288,9 +324,9 @@ export default function DevelopersPage() {
                   <td>string</td>
                   <td>
                     Optional, with <Code>files</Code> only: the <Code>.tex</Code> file to compile.
-                    Defaults to <Code>main.tex</Code> if present, else the first{' '}
-                    <Code>.tex</Code> file containing <Code>\documentclass</Code>. The main file
-                    must contain <Code>\documentclass</Code>, or the request is rejected with 400.
+                    Defaults to <Code>main.tex</Code> if present, else the first <Code>.tex</Code>{' '}
+                    file containing <Code>\documentclass</Code>. The main file must contain{' '}
+                    <Code>\documentclass</Code>, or the request is rejected with 400.
                   </td>
                 </tr>
                 <tr>
@@ -303,8 +339,8 @@ export default function DevelopersPage() {
                   <td>
                     <Code>json</Code> (default) returns the object below; <Code>pdf</Code> returns
                     the raw PDF. <Code>Accept: application/pdf</Code> does the same as{' '}
-                    <Code>pdf</Code>; an explicit <Code>response</Code> field wins over the
-                    header. Failures are JSON either way.
+                    <Code>pdf</Code>; an explicit <Code>response</Code> field wins over the header.
+                    Failures are JSON either way.
                   </td>
                 </tr>
               </tbody>
@@ -609,13 +645,9 @@ export default function DevelopersPage() {
             <Code>compile_latex</Code> once to get the PDF. Every check counts toward the daily
             quota, so fix all reported errors before checking again. Each check returns only the
             errors, not a PDF, so the fix loop stays small, and the agent never has to read a raw
-            LaTeX log. If you write instructions for your agent (a <Code>CLAUDE.md</Code>, Cursor
-            rules or a system prompt), this one line is enough:
+            LaTeX log. To tell coding agents in a repository to work this way, use the{' '}
+            <a href="#agents-md">AGENTS.md / CLAUDE.md snippet</a>.
           </p>
-          <CodeBlock
-            title="agent instructions"
-            code="To build LaTeX, use the octree MCP tools: run check_latex until there are no errors, then compile_latex once to get the PDF."
-          />
 
           {/* ───────────────────────────── FAQ ───────────────────────────── */}
           <h2 id="faq" className="scroll-mt-24">
