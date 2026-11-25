@@ -29,6 +29,11 @@ const redirects = async () => {
     { source: '/blog/latex-brackets-parentheses-printing-guide', destination: '/learn/brackets', permanent: true },
     { source: '/blog/latex-subscripts-superscripts-complete-guide', destination: '/learn/subscripts-superscripts', permanent: true },
     { source: '/blog/latex-table-generator', destination: '/learn/tables', permanent: true },
+    // Comparison posts with out-of-date prices and unsourced benchmarks, replaced
+    // by the sourced answer guides (2026-11).
+    { source: '/blog/octree-vs-overleaf', destination: '/learn/octree-vs-overleaf', permanent: true },
+    { source: '/blog/overleaf-vs-octree-latex-editor-speed-comparison-2025', destination: '/learn/octree-vs-overleaf', permanent: true },
+    { source: '/blog/top-ai-latex-tools-compared-pricing-speed-accuracy', destination: '/learn/best-ai-latex-editors', permanent: true },
   ]
 
   // The old Compile API page documented a raw compile host and an API key that
