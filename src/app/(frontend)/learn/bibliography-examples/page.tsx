@@ -1,69 +1,103 @@
 import type { Metadata } from 'next/types'
-
 import { learnMetadata, type FaqItem } from '@/utilities/learnMetadata'
 import Link from 'next/link'
 import { buttonVariants } from '@/components/ui/button'
 import React from 'react'
-import {
-  generateBreadcrumbSchema,
-  getLearnBreadcrumbs,
-} from '@/utilities/generateBreadcrumbs'
-import { RelatedPosts } from '@/components/Learn/related-posts'
+import { generateBreadcrumbSchema, getLearnBreadcrumbs } from '@/utilities/generateBreadcrumbs'
 import { LearnSchema } from '@/components/Learn/schema'
 
 export const dynamic = 'force-static'
 export const revalidate = 3600
 
-const breadcrumbs = getLearnBreadcrumbs('Bibliography Examples', 'bibliography-examples')
-const breadcrumbSchema = generateBreadcrumbSchema(breadcrumbs)
-
 const page = {
   slug: 'bibliography-examples',
-  title: 'BibTeX and References in LaTeX: Bibliography Examples',
-  seoTitle: 'BibTeX & LaTeX References: Bibliography Examples',
+  title: 'LaTeX Bibliography Examples: Reference Lists, Styles and Annotations',
+  seoTitle: 'LaTeX Bibliography Examples: References and Annotations',
   description:
-    'BibTeX and references in LaTeX: .bib entry types, \\cite, \\bibliographystyle, the bibtex compile cycle, biblatex, and APA, MLA, Chicago and IEEE examples.',
+    'Compare APA, MLA, Chicago and IEEE bibliography outputs from shared book, article and online-source data, with tested LaTeX and annotated-reference examples.',
   keywords:
-    'bibtex, referencing in latex, references in latex, latex references, latex bibtex, bibtex latex, bibliography example, bibliography examples, latex bibliography example, bibtex example, thebibliography example, biblatex example, annotated bibliography example, apa bibliography example, mla bibliography example, chicago bibliography example, ieee bibliography example, reference list example, works cited example, bib file example, bibtex entry types, bibliographystyle, printbibliography, addbibresource, bibtex book entry, bibtex article entry, bibtex inproceedings, bibtex misc, latex references',
+    'latex bibliography, bibliography examples, latex references example, annotated bibliography latex, reference list example',
 }
-
-/** Last content update, used for dateModified in the article schema. */
-const LAST_UPDATED = '2026-11-09'
-
+const breadcrumbSchema = generateBreadcrumbSchema(getLearnBreadcrumbs(page.title, page.slug))
+const LAST_UPDATED = '2026-11-25'
 const faq: FaqItem[] = [
   {
-    question: 'What does a bibliography look like?',
+    question: 'What is the simplest LaTeX bibliography example?',
     answer:
-      'An alphabetical list of sources at the end of a document, one entry per source, giving author, title, publisher or journal and year in the order the style prescribes. In APA 7 a book is "Knuth, D. E. (1984). The TeXbook. Addison-Wesley." and in MLA 9 "Knuth, Donald E. The TeXbook. Addison-Wesley, 1984." Entries hang indented, except in numbered styles such as IEEE, which label them [1], [2] in citation order.',
+      'Use thebibliography with one \\bibitem per source and cite each key with \\cite. It needs no BibTeX or Biber step, but you format and order the entries yourself.',
   },
   {
-    question: 'What is the difference between a bibliography and a reference list?',
+    question: 'How do I print sources I did not cite?',
     answer:
-      'A reference list (APA, IEEE) contains only the sources you cited; a bibliography (Chicago) may also include sources you read but did not cite. MLA calls its cited-only list Works Cited. In LaTeX the difference is a heading and a \\nocite: \\printbibliography[title={Bibliography}] with \\nocite{*} lists everything in the .bib file.',
+      'With a generated bibliography, use \\nocite{key} for selected sources or \\nocite{*} for every entry in the database. Check that the assignment permits uncited works in the list.',
   },
   {
-    question: 'How do I add references in LaTeX?',
+    question: 'Is numeric bibliography output automatically IEEE style?',
     answer:
-      'For a handful of sources, type them in a thebibliography environment with one \\bibitem per source and cite them with \\cite{key}. For more, put them in a .bib file and run BibTeX (\\bibliographystyle{plain} and \\bibliography{refs} in the body) or biblatex (\\usepackage[style=apa]{biblatex} and \\addbibresource{refs.bib} in the preamble, \\printbibliography in the body, compiled with biber). latexmk runs the extra passes for you.',
+      'No. Numbered references are used by many styles. Use the required publisher style or a suitable maintained implementation and compare its output with the publication instructions.',
   },
   {
-    question: 'What is a BibTeX example?',
+    question: 'Why is my annotation field not printed?',
     answer:
-      'A .bib file holds entries such as @book{knuth1984, author = {Donald E. Knuth}, title = {The {\\TeX}book}, publisher = {Addison-Wesley}, year = {1984}}. The word after @ is the entry type, the first word inside the braces is the citation key for \\cite, and the rest are field = {value} pairs separated by commas. A complete document, with the .bib file written by a filecontents block, is in the BibTeX section of this page.',
+      'The active bibliography style may ignore that field. Choose a documented annotated-bibliography style or customize its driver; adding data alone does not change what the style renders.',
+  },
+]
+const sections: { id?: string; title: string; paragraphs: string[]; code?: string }[] = [
+  {
+    title: 'Decide what the bibliography is meant to contain',
+    paragraphs: [
+      'A reference list usually contains works actually cited in the document. A broader bibliography may include relevant works consulted but not cited, depending on the assignment or publication rules. Works Cited is the usual MLA heading for cited sources. Do not infer the required contents from a LaTeX environment name: the software does not know which sources your instructor expects you to include.',
+      'Choose the required style before formatting individual entries. Numbered styles, author-date styles and note-based systems organize information differently. A generic numeric bibliography is not automatically IEEE, and a generic author-year bibliography is not automatically APA. Match the required handbook edition and publisher instructions, then check the generated output. A recognizable visual pattern is not evidence that every punctuation, capitalization and source-type rule has been followed.',
+    ],
   },
   {
-    question: 'Why does my bibliography show [?] or a question mark instead of a citation?',
-    answer:
-      'The key in \\cite matches no entry, or the bibliography has not been built yet. The log says LaTeX Warning: Citation `key\' undefined and, for BibTeX, the .blg says Warning--I didn\'t find a database entry for "key". Fix the key, then run pdflatex, bibtex (or biber), pdflatex, pdflatex; latexmk does the sequence for you.',
+    title: 'Start with a complete manual reference list',
+    paragraphs: [
+      "The thebibliography environment works without a separate bibliography processor. Each \\bibitem creates an entry identified by a key, and \\cite uses that key in the text. The environment's argument is a sample label wide enough for the list, not the number of sources: 9 is suitable for a short one-digit list, while 99 reserves space for two-digit labels.",
+      'This method is useful for a short handout or a carefully controlled example, but you are responsible for the entry formatting and order. Adding a new source does not automatically alphabetize manually typed entries. The example is a simple numeric reference, not a claim of compliance with a particular publication style. Compile twice so the citation label resolves, and verify that the cited edition is the one you actually consulted.',
+    ],
+    code: '\\documentclass{article}\n\\begin{document}\nKnuth describes the typesetting system in \\cite{knuth1984}.\n\\begin{thebibliography}{9}\n\\bibitem{knuth1984}\nDonald E. Knuth.\n\\textit{The TeXbook}.\nAddison-Wesley, 1984.\n\\end{thebibliography}\n\\end{document}',
   },
   {
-    question: 'Should I use BibTeX or biblatex?',
-    answer:
-      'Use biblatex with biber when the document must follow a named style exactly: biblatex-apa, biblatex-mla, biblatex-chicago and biblatex-ieee follow the handbooks (APA 7, MLA 9, Chicago 17) and give you \\textcite, \\parencite and \\footcite. Use classic BibTeX when a journal or thesis template hands you a .bst file. The .bib file is the same for both, so switching later costs almost nothing.',
+    title: 'Reproduce the comparison with one shared database',
+    paragraphs: [
+      'This complete document prints all three sources without requiring an in-text citation. Save it as main.tex in a clean directory, run pdflatex main, biber main, then pdflatex main twice. The APA package line produces the first comparison above; replace that line with the named configuration shown for MLA, Chicago or IEEE to reproduce the others. Do not load two bibliography styles simultaneously.',
+      'The filecontents block creates comparison.bib for this standalone demonstration. In an existing project, keep those entries in your normal database instead. The xurl package allows long URLs to wrap, while hyperref makes them clickable. This is an output comparison, not a migration recipe: keep the bibliography system and style files your publisher requires, and use the separate BibTeX guide for database setup and processor troubleshooting.',
+    ],
+    code: '\\documentclass{article}\n\\usepackage[T1]{fontenc}\n\\usepackage{lmodern}\n\\usepackage[american]{babel}\n\\usepackage{csquotes}\n\\begin{filecontents*}{comparison.bib}\n@book{knuth1984,\n  author = {Donald E. Knuth},\n  title = {The {TeXbook}},\n  location = {Reading, MA},\n  publisher = {Addison-Wesley},\n  date = {1984}\n}\n@article{shannon1948,\n  author = {C. E. Shannon},\n  title = {A Mathematical Theory of Communication},\n  journaltitle = {Bell System Technical Journal},\n  volume = {27},\n  number = {3},\n  pages = {379--423},\n  date = {1948-07},\n  doi = {10.1002/j.1538-7305.1948.tb01338.x}\n}\n@online{wcag2023,\n  author = {{W3C}},\n  title = {Web Content Accessibility Guidelines ({WCAG}) 2.2 is a {W3C} Recommendation},\n  date = {2023-10-05},\n  url = {https://www.w3.org/news/2023/web-content-accessibility-guidelines-wcag-2-2-is-a-w3c-recommendation/},\n  urldate = {2026-11-25}\n}\n\\end{filecontents*}\n\\usepackage[backend=biber,style=apa]{biblatex}\n\\usepackage{xurl}\n\\usepackage[hidelinks]{hyperref}\n\\addbibresource{comparison.bib}\n\\begin{document}\n\\nocite{knuth1984,shannon1948,wcag2023}\n\\printbibliography\n\\end{document}',
+  },
+  {
+    title: 'Check a book, article or website against its source',
+    paragraphs: [
+      'A book reference needs the correct author or editor, title, edition when relevant, publisher and publication date. A journal article needs its article title and journal identity, along with the applicable volume, issue, pages or article number and DOI. A website may have a corporate author, a changing title or no clear publication date. Use the fields supported by your chosen bibliography system rather than forcing every source into a book entry.',
+      'Copy metadata from the work itself or a reliable publisher record, then verify it. A citation generator can suggest an entry, but it can also return the wrong edition, omit an author or mistake an access date for a publication date. Protect meaningful capitalization in titles where the style might change it, and separate multiple authors with the database syntax rather than typing a formatted author list into one field.',
+    ],
+  },
+  {
+    title: 'Add useful annotations rather than repeating abstracts',
+    paragraphs: [
+      "An annotated bibliography adds an explanation beneath each source. The annotation may summarize the argument, evaluate its methods or explain its relevance to your project. Follow the assignment's purpose and length rather than assuming every annotation should have the same structure. Distinguish what the source claims from your own assessment, and avoid presenting an unread work as if you had evaluated its evidence.",
+      'The manual example below demonstrates an annotation paragraph, not a complete APA or MLA template. For a long generated list, use a documented style or driver that prints your chosen annotation field. Simply adding an annotation field to a .bib entry does not guarantee that the active style will display it. Check indentation and paragraph spacing in the PDF, and keep commentary visually distinct from the bibliographic identification.',
+    ],
+    code: "\\documentclass{article}\n\\begin{document}\n\\section*{Annotated bibliography}\n\\noindent Donald E. Knuth. \\textit{The TeXbook}.\nAddison-Wesley, 1984.\n\\begin{quote}\nThis technical reference explains TeX's typesetting model.\nFor a project about LaTeX document preparation, it provides\nbackground on the underlying engine rather than a replacement\nfor documentation of current LaTeX packages.\n\\end{quote}\n\\end{document}",
+  },
+  {
+    title: 'Preserve enough information to reproduce the references',
+    paragraphs: [
+      'Keep the database, bibliography configuration and document source together when handing the project to a collaborator. A PDF alone does not preserve the citation keys or processing choices. Record which backend and style the project expects, especially when a publication template supplies custom files. Before sharing a minimal example, remove unrelated private entries from the database rather than assuming unused entries cannot be inspected in the source.',
+    ],
+  },
+  {
+    id: 'common-errors',
+    title: 'Resolve missing entries and finish with an output audit',
+    paragraphs: [
+      "An undefined citation can mean a misspelled key, a missing database file or an incomplete processing sequence. Read the bibliography processor's log as well as the LaTeX log. With a generated bibliography, only cited entries normally appear; \\nocite{key} includes a selected uncited work, while \\nocite{*} requests every entry in the active database. Use that broad command only when the intended bibliography really includes the whole database.",
+      'Before submission, compare the printed list with the citations in the text. Check duplicate entries, missing identifiers, incorrect years and names that were parsed as one author. Confirm the heading and ordering, then inspect long URLs and line breaks. Keep the source database with the project so the bibliography can be rebuilt. A clean compilation confirms that the files can be processed, not that the references are genuine, complete or correctly attributed.',
+    ],
   },
 ]
 
-export default async function BibliographyExamplesPage() {
+export default async function LearnGuidePage() {
   return (
     <div className="pt-24 pb-24">
       <script
@@ -74,966 +108,221 @@ export default async function BibliographyExamplesPage() {
         slug={page.slug}
         title={page.title}
         description={page.description}
+        datePublished="2026-10-20"
         dateModified={LAST_UPDATED}
         faq={faq}
       />
       <div className="container">
         <div className="mb-8 max-w-4xl mx-auto">
-          <Link
-            href="/learn"
-            className="text-sm text-muted-foreground hover:text-foreground transition-colors inline-flex items-center gap-1"
-          >
+          <Link href="/learn" className="text-sm text-muted-foreground hover:text-foreground">
             ← Back to Learn
           </Link>
         </div>
-
         <article className="prose prose-lg dark:prose-invert max-w-4xl mx-auto">
-          <h1>BibTeX and References in LaTeX: Bibliography Examples</h1>
-          <div className="not-prose my-6 p-6 rounded-lg border bg-muted/40 break-words">
-            <p className="text-sm font-semibold uppercase tracking-wide text-muted-foreground mb-3">Quick answer</p>
-            <ul className="space-y-2 text-base list-disc pl-5">
-              <li>
-                <strong>Store sources:</strong> put entries such as <code>{`@article{key, author={...}, title={...}, journal={...}, year={2024}}`}</code> in refs.bib.
-              </li>
-              <li>
-                <strong>Cite:</strong> <code>{`\\cite{key}`}</code> in the text.
-              </li>
-              <li>
-                <strong>Print the list:</strong> <code>{`\\bibliographystyle{plain}`}</code> and <code>{`\\bibliography{refs}`}</code> where the references go.
-              </li>
-              <li>
-                <strong>Compile:</strong> pdflatex, bibtex, pdflatex, pdflatex (or latexmk, which runs the cycle for you).
-              </li>
-              <li>
-                <strong>biblatex instead:</strong> <code>{`\\usepackage[style=apa]{biblatex}`}</code> and <code>{`\\addbibresource{refs.bib}`}</code> in the preamble, <code>{`\\printbibliography`}</code> in the body, compiled with biber.
-              </li>
-              <li>
-                <strong>[?] in the PDF:</strong> the key is wrong or bibtex has not run; see the errors table below.
-              </li>
-            </ul>
-          </div>
+          <h1>{page.title}</h1>
           <p className="lead">
-            A <strong>bibliography example</strong> is only useful if you can see both sides of it:
-            the entry as it appears on the page and the source that generates it. This guide shows
-            the same three sources (Knuth&apos;s <em>TeXbook</em>, his article on literate
-            programming and a website) in APA 7, MLA 9, Chicago and IEEE, each with the BibTeX
-            entry that produces it, then three complete LaTeX documents (<code>thebibliography</code>, BibTeX,
-            biblatex), an annotated bibliography example and the errors you will meet.
+            {
+              'A LaTeX bibliography needs source entries and a command that prints the list. Sources are usually cited in the text, but manual lists and \\nocite can include uncited works when required. For a small manual list, use thebibliography with \\bibitem. For reusable data, use a .bib file with BibTeX or biblatex. The examples below focus on the resulting reference list and its contents; the separate BibTeX guide explains the database workflow in more detail.'
+            }
           </p>
-          <p>
-            Every document on this page was compiled with pdfTeX 1.40.28, BibTeX 0.99d and biber
-            2.21 on TeX Live 2025 (biblatex 3.21, biblatex-apa 9.20, biblatex-mla 2.1a,
-            biblatex-chicago 3.18), and the rendered entries were read back from the PDFs. Where a document
-            needs a <code>.bib</code> file, a <code>filecontents</code> block writes it for you, so
-            each example is a single file that compiles in one run.
-          </p>
-
-          {/* ───────────────────────────── BibTeX basics ───────────────────────────── */}
-          <h2>Referencing in LaTeX with BibTeX: How It Works</h2>
-          <p>
-            References in LaTeX come from three pieces: a <code>.bib</code> database of sources, a{' '}
-            <code>\cite</code> command for every citation in the text, and a style that turns the
-            database entries into a formatted reference list. BibTeX is the program that connects
-            them. A minimal document:
-          </p>
-          <pre><code>{`\\documentclass{article}
-\\begin{filecontents}[overwrite]{refs.bib}
-@article{knuth1984lp,
-  author  = {Donald E. Knuth},
-  title   = {Literate Programming},
-  journal = {The Computer Journal},
-  volume  = {27},
-  number  = {2},
-  pages   = {97--111},
-  year    = {1984}
-}
-\\end{filecontents}
-\\begin{document}
-Literate programming was introduced by Knuth \\cite{knuth1984lp}.
-
-\\bibliographystyle{plain}
-\\bibliography{refs}   % refs.bib, without the extension
-\\end{document}`}</code></pre>
-          <h3>The pdflatex, bibtex, pdflatex, pdflatex cycle</h3>
-          <p>
-            A bibliography needs four runs, because each tool reads what the previous one wrote:
-          </p>
-          <ol>
-            <li><strong>pdflatex main</strong> writes every <code>\cite</code> key, the style and the database name to <code>main.aux</code>. Citations print as [?].</li>
-            <li><strong>bibtex main</strong> reads <code>main.aux</code>, looks the keys up in <code>refs.bib</code>, and writes the formatted list to <code>main.bbl</code>.</li>
-            <li><strong>pdflatex main</strong> typesets the list from <code>main.bbl</code> and records the labels.</li>
-            <li><strong>pdflatex main</strong> again, so the citations in the text pick up those labels.</li>
-          </ol>
-          <p>
-            <code>latexmk -pdf main</code> runs exactly as many passes as needed, and editors that
-            compile with latexmk, Octree included, do it on every build. With biblatex the cycle is
-            the same with <code>biber</code> in place of <code>bibtex</code>. Rather than typing
-            entries by hand, export them from a reference manager; the{' '}
-            <Link href="/blog/zotero-citation-guide-reference-management">Zotero citation guide</Link>{' '}
-            shows how to keep a <code>.bib</code> file in sync, and the{' '}
-            <Link href="https://tools.useoctree.com/templates/bibliography" target="_blank" rel="noopener noreferrer">bibliography template</Link>{' '}
-            is a ready-made starting point.
-          </p>
-
-          {/* ───────────────────────────── Definitions ───────────────────────────── */}
-          <h2>Bibliography, Reference List or Works Cited?</h2>
-          <p>
-            A <strong>bibliography</strong> is a list of the sources behind a piece of writing,
-            alphabetized by author, and it may include works you consulted but never cited. Chicago
-            uses the term and the broader rule.
-          </p>
-          <p>
-            A <strong>reference list</strong> contains only the sources you actually cited; every
-            entry matches at least one citation in the text and vice versa. APA and IEEE use this
-            term, and IEEE numbers the entries in the order they are first cited.
-          </p>
-          <p>
-            <strong>Works Cited</strong> is the MLA name for the same cited-only list. The three
-            differ in what goes in and in formatting, not in purpose: each entry must let a reader
-            find the exact source.
-          </p>
-
-          {/* ───────────────────────────── By style ───────────────────────────── */}
-          <h2>Bibliography Examples by Style</h2>
-          <p>
-            The entries below are real, public works plus one clearly fictional workshop paper for
-            the IEEE conference example. Each style section shows the rendered entries first, then
-            the <code>.bib</code> source. The source is almost the same across styles; that is the
-            point of keeping sources in a <code>.bib</code> file and letting the style do the
-            formatting.
-          </p>
-
-          <h3>APA 7 bibliography example</h3>
-          <p>
-            Author surname and initials, year in parentheses, sentence-case title, italics for the
-            book or journal name. The DOI is printed as a link. The website entry carries a
-            retrieval date because <code>urldate</code> is set; APA 7 asks for one only when a page
-            is designed to change and is not archived, so leave <code>urldate</code> out for a
-            stable page. APA 7 also does not list a whole website at all (a mention in the text
-            with the URL is enough), so read the CTAN entry as the shape of an undated web page.
-          </p>
-          <blockquote>
+          <p className="text-sm text-muted-foreground">Updated November 25, 2026</p>
+          <section id="bibliography-styles">
+            <h2>APA, MLA, Chicago and IEEE: the same three sources</h2>
             <p>
-              CTAN. (n.d.). <em>Comprehensive TeX archive network</em>. Retrieved October 20,
-              2026, from https://ctan.org/
+              These are transcriptions of output compiled from the shared database below, using
+              biblatex-apa 9.17, biblatex-mla 2.1a, biblatex-chicago’s 2022/11/17 notes style and
+              biblatex-ieee 1.3f. Italics and punctuation are retained; PDF line wrapping is not.
+              They demonstrate these package versions, not a guarantee that every publisher accepts
+              the defaults. The Chicago example uses the notes-and-bibliography configuration
+              associated with the package’s seventeenth-edition support, not Chicago author-date or
+              a claim of eighteenth-edition compliance.
             </p>
             <p>
-              Knuth, D. E. (1984a). Literate programming. <em>The Computer Journal, 27</em>(2),
-              97–111. https://doi.org/10.1093/comjnl/27.2.97
+              Each group contains a book, a journal article and an online announcement. The book
+              metadata comes from Knuth’s own publication list; Shannon’s original print date and
+              page range come from the DOI record, not its later online date. The W3C announcement
+              supplies its publication date; the access date records this example’s lookup. Protect
+              the corporate author with an extra pair of braces so it is not parsed as a person’s
+              first and last names.
             </p>
-            <p>Knuth, D. E. (1984b). <em>The TeXbook</em>. Addison-Wesley.</p>
+            <h3>APA: author and date first</h3>
             <p>
-              In-text: (Knuth, 1984b) for the book, (Knuth, 1984a) or Knuth (1984a) for the
-              article, (CTAN, n.d.)
-            </p>
-          </blockquote>
-          <p>
-            The <em>a</em> and <em>b</em> are added by the style because one author has two works
-            in the same year, in title order as APA 7 requires; a single Knuth entry would print as
-            (Knuth, 1984). The BibTeX source:
-          </p>
-          <pre><code>{`@book{knuth1984,
-  author    = {Knuth, Donald E.},
-  title     = {The {\\TeX}book},
-  sorttitle = {TeXbook},
-  publisher = {Addison-Wesley},
-  address   = {Reading, MA},
-  year      = {1984}
-}
-
-@article{knuth1984lp,
-  author  = {Knuth, Donald E.},
-  title   = {Literate Programming},
-  journal = {The Computer Journal},
-  volume  = {27},
-  number  = {2},
-  pages   = {97--111},
-  year    = {1984},
-  doi     = {10.1093/comjnl/27.2.97}
-}
-
-@online{ctan,
-  author  = {{CTAN}},
-  title   = {Comprehensive {\\TeX} Archive Network},
-  url     = {https://ctan.org/},
-  urldate = {2026-10-20}
-}`}</code></pre>
-          <p>
-            <code>{'{\\TeX}'}</code> is braced so the APA style, which lowercases titles to
-            sentence case, leaves it alone; the corporate author is double-braced so it is not split
-            into a first and last name. <code>sorttitle</code> is there because biber drops the{' '}
-            <code>\TeX</code> macro when it builds the sort key, leaving &quot;book&quot;, which
-            would put <em>The TeXbook</em> ahead of &quot;Literate programming&quot; and swap the
-            letters. <code>@online</code> with <code>urldate</code> is a biblatex
-            entry type; classic BibTeX styles want <code>@misc</code> with{' '}
-            <code>howpublished = {'{\\url{...}}'}</code> and the access date in <code>note</code>.
-          </p>
-
-          <h3>MLA 9 bibliography example (Works Cited)</h3>
-          <p>
-            Full first names, title-case titles, the journal&apos;s volume and issue spelled out
-            as <em>vol.</em> and <em>no.</em>, the year after the issue, pages with <em>pp.</em>,
-            and a DOI or URL at the end. A second work by the same author replaces the name with
-            three em dashes.
-          </p>
-          <blockquote>
-            <p>
-              CTAN. &quot;Comprehensive TeX Archive Network,&quot; ctan.org/. Accessed 20 Oct.
-              2026.
+              Use <code>style=apa</code> with biblatex. Notice the initials, parenthesized dates and
+              sentence-case titles.
             </p>
             <p>
-              Knuth, Donald E. &quot;Literate Programming.&quot; <em>The Computer Journal</em>, vol.
-              27, no. 2, 1984, pp. 97–111. https://doi.org/10.1093/comjnl/27.2.97.
-            </p>
-            <p>———. <em>The TeXbook</em>. Addison-Wesley, 1984.</p>
-            <p>In-text: (Knuth, <em>The TeXbook</em> 3), (&quot;Literate Programming&quot; 98), (CTAN)</p>
-          </blockquote>
-          <p>
-            Three details above are <code>biblatex-mla</code>&apos;s rather than the handbook&apos;s.
-            It closes the page range with a period before the DOI, where MLA 9 uses a comma. It
-            puts the title of a whole website in quotation marks, where MLA 9 italicizes it;
-            entering the site as <code>@book</code> gives the italic form. And it drops the author
-            from the second in-text citation because the previous citation was the same author;
-            the full form is (Knuth, &quot;Literate Programming&quot; 98).
-          </p>
-          <p>
-            The source is the same three entries as APA, untouched. The only change in the LaTeX is
-            the style line, <code>\usepackage[style=mla]&#123;biblatex&#125;</code>, which also adds the
-            short title to in-text citations when an author has several works. Author names are
-            typed <code>Last, First</code>:
-          </p>
-          <pre><code>{`@book{knuth1984,
-  author    = {Knuth, Donald E.},
-  title     = {The {\\TeX}book},
-  sorttitle = {TeXbook},
-  publisher = {Addison-Wesley},
-  address   = {Reading, MA},
-  year      = {1984}
-}
-
-@article{knuth1984lp,
-  author  = {Knuth, Donald E.},
-  title   = {Literate Programming},
-  journal = {The Computer Journal},
-  volume  = {27},
-  number  = {2},
-  pages   = {97--111},
-  year    = {1984},
-  doi     = {10.1093/comjnl/27.2.97}
-}
-
-@online{ctan,
-  author  = {{CTAN}},
-  title   = {Comprehensive {\\TeX} Archive Network},
-  url     = {https://ctan.org/},
-  urldate = {2026-10-20}
-}`}</code></pre>
-          <p>
-            MLA book citations in every variation (editors, translators, editions, e-books) are in{' '}
-            <Link href="/learn/mla-book-citation">MLA Book Citation</Link>, and the parenthetical
-            rules in <Link href="/learn/mla-in-text-citation">MLA In-Text Citation</Link>.
-          </p>
-
-          <h3>Chicago notes-bibliography example</h3>
-          <p>
-            Chicago&apos;s humanities style has two parts: a footnote at the point of citation and
-            a bibliography entry at the end. The note gives the first name first and wraps the
-            publication details in parentheses; the bibliography entry inverts the name and uses
-            periods. Place of publication is kept. The three-em dash for a repeated author is a
-            17th-edition rule, which is what <code>biblatex-chicago</code> implements; the 18th
-            edition (2024) repeats the name instead.
-          </p>
-          <blockquote>
-            <p>
-              Knuth, Donald E. &quot;Literate Programming.&quot; <em>The Computer Journal</em> 27, no.
-              2 (1984): 97–111. https://doi.org/10.1093/comjnl/27.2.97.
-            </p>
-            <p>———. <em>The TeXbook</em>. Reading, MA: Addison-Wesley, 1984.</p>
-            <p>
-              Lamport, Leslie. <em>LaTeX: A Document Preparation System</em>. 2nd ed. Reading, MA:
-              Addison-Wesley, 1994.
-            </p>
-            <p>Footnote 1: Donald E. Knuth, <em>The TeXbook</em> (Reading, MA: Addison-Wesley, 1984), 42.</p>
-            <p>
-              Footnote 3: Donald E. Knuth, &quot;Literate Programming,&quot; <em>The Computer Journal</em>{' '}
-              27, no. 2 (1984): 98, https://doi.org/10.1093/comjnl/27.2.97.
-            </p>
-          </blockquote>
-          <p>
-            The source keeps <code>address</code> (biblatex&apos;s own name is <code>location</code>),
-            which Chicago prints and APA 7 drops, and adds a numeric <code>edition</code>, which
-            the style prints as &quot;2nd ed.&quot;:
-          </p>
-          <pre><code>{`@book{knuth1984,
-  author    = {Knuth, Donald E.},
-  title     = {The {\\TeX}book},
-  publisher = {Addison-Wesley},
-  address   = {Reading, MA},
-  year      = {1984}
-}
-
-@book{lamport1994,
-  author    = {Lamport, Leslie},
-  title     = {{\\LaTeX}: A Document Preparation System},
-  publisher = {Addison-Wesley},
-  address   = {Reading, MA},
-  edition   = {2},
-  year      = {1994}
-}
-
-@article{knuth1984lp,
-  author  = {Knuth, Donald E.},
-  title   = {Literate Programming},
-  journal = {The Computer Journal},
-  volume  = {27},
-  number  = {2},
-  pages   = {97--111},
-  year    = {1984},
-  doi     = {10.1093/comjnl/27.2.97}
-}`}</code></pre>
-
-          <h3>IEEE bibliography example</h3>
-          <p>
-            Numbered in order of first citation, initials before the surname, article titles in
-            sentence case inside quotation marks, the journal in italics,{' '}
-            <em>vol.</em>, <em>no.</em>, <em>pp.</em>, then the year. Conference papers start
-            with &quot;in&quot; and the proceedings title.
-          </p>
-          <blockquote>
-            <p>[1] D. E. Knuth, <em>The TeXbook</em>. Reading, MA: Addison-Wesley, 1984.</p>
-            <p>
-              [2] D. E. Knuth, &quot;Literate programming,&quot; <em>The Computer Journal</em>, vol. 27,
-              no. 2, pp. 97–111, 1984. doi: 10.1093/comjnl/27.2.97
+              Knuth, D. E. (1984). <em>The TeXbook</em>. Addison-Wesley.
             </p>
             <p>
-              [3] A. Okafor and M. Vance, &quot;Streaming compilation of large documents,&quot; in{' '}
-              <em>Proceedings of the 12th Workshop on Document Tools</em>, DocTools Press, 2023, pp.
-              45–52.
+              Shannon, C. E. (1948). A mathematical theory of communication.{' '}
+              <em>Bell System Technical Journal, 27</em>(3), 379–423.{' '}
+              <a href="https://doi.org/10.1002/j.1538-7305.1948.tb01338.x">
+                https://doi.org/10.1002/j.1538-7305.1948.tb01338.x
+              </a>
             </p>
-            <p>In-text: [1], [2], [1], [3]</p>
-          </blockquote>
-          <p>
-            The conference paper is an <code>@inproceedings</code> entry; <code>booktitle</code> is
-            the proceedings title and <code>publisher</code> is optional:
-          </p>
-          <pre><code>{`@book{knuth1984,
-  author    = {Knuth, Donald E.},
-  title     = {The {\\TeX}book},
-  publisher = {Addison-Wesley},
-  address   = {Reading, MA},
-  year      = {1984}
-}
-
-@article{knuth1984lp,
-  author  = {Knuth, Donald E.},
-  title   = {Literate Programming},
-  journal = {The Computer Journal},
-  volume  = {27},
-  number  = {2},
-  pages   = {97--111},
-  year    = {1984},
-  doi     = {10.1093/comjnl/27.2.97}
-}
-
-@inproceedings{okafor2023,
-  author    = {Okafor, Adaeze and Vance, Miriam},
-  title     = {Streaming Compilation of Large Documents},
-  booktitle = {Proceedings of the 12th Workshop on Document Tools},
-  publisher = {DocTools Press},
-  year      = {2023},
-  pages     = {45--52}
-}`}</code></pre>
-          <p>
-            IEEE&apos;s own templates ship <code>IEEEtran.bst</code> for classic BibTeX; it prints
-            the book exactly as above, drops the DOI, and replaces a repeated author with a dash
-            (it is in the BibTeX table below). For the medical numbered style, which looks similar
-            but uses superscripts and no brackets, see{' '}
-            <Link href="/learn/ama-citation-format">AMA Citation Format</Link>.
-          </p>
-
-          {/* ───────────────────────────── LaTeX ───────────────────────────── */}
-          <h2>References in LaTeX, Three Ways: thebibliography, BibTeX and biblatex</h2>
-          <p>
-            The three methods differ in where the formatting lives. With <code>thebibliography</code>{' '}
-            you type the formatted entries yourself. With BibTeX a <code>.bst</code> style file
-            formats entries from a <code>.bib</code> database. With biblatex a LaTeX package does
-            the formatting and biber does the sorting. The maintained APA 7, MLA 9 and Chicago
-            styles are biblatex packages; IEEE ships <code>IEEEtran.bst</code> for BibTeX and has
-            a biblatex counterpart.
-          </p>
-
-          <h3>thebibliography: no external file</h3>
-          <p>
-            The argument is the widest label you expect (<code>9</code> for up to nine entries,{' '}
-            <code>99</code> for up to 99); each <code>\bibitem&#123;key&#125;</code> becomes a
-            numbered entry that <code>\cite&#123;key&#125;</code> refers to. <code>\newblock</code>{' '}
-            is an optional separator that the <code>openbib</code> class option turns into a line
-            break:
-          </p>
-          <pre><code>{`\\documentclass{article}
-\\begin{document}
-
-Knuth designed \\TeX{} for typesetting mathematics \\cite{knuth1984} and
-Lamport built \\LaTeX{} on top of it \\cite{lamport1994}; literate
-programming is introduced in \\cite{knuth1984lp}.
-
-\\begin{thebibliography}{9}
-
-\\bibitem{knuth1984}
-Donald E. Knuth.
-\\newblock \\emph{The \\TeX book}.
-\\newblock Addison-Wesley, Reading, MA, 1984.
-
-\\bibitem{lamport1994}
-Leslie Lamport.
-\\newblock \\emph{\\LaTeX: A Document Preparation System}.
-\\newblock Addison-Wesley, Reading, MA, 2nd edition, 1994.
-
-\\bibitem{knuth1984lp}
-Donald E. Knuth.
-\\newblock Literate programming.
-\\newblock \\emph{The Computer Journal}, 27(2):97--111, 1984.
-
-\\end{thebibliography}
-
-\\end{document}`}</code></pre>
-          <p>
-            Two pdflatex runs are needed: the first writes the labels to the <code>.aux</code>{' '}
-            file, the second reads them, so citations show as [?] after a single run. Entries print
-            in the order you typed them, so alphabetize by hand. The heading is
-            &quot;References&quot; in <code>article</code> and &quot;Bibliography&quot; in{' '}
-            <code>book</code> and <code>report</code>; change it with{' '}
-            <code>\renewcommand&#123;\refname&#125;&#123;Works Cited&#125;</code> (<code>\bibname</code>{' '}
-            in the book classes).
-          </p>
-
-          <h3>BibTeX: a .bib file plus a .bst style</h3>
-          <p>
-            Put the sources in <code>refs.bib</code>, pick a style with{' '}
-            <code>\bibliographystyle</code> and print the list with <code>\bibliography</code>. The
-            compile sequence is pdflatex, bibtex, pdflatex, pdflatex; latexmk runs it for you. The{' '}
-            <code>filecontents</code> block writes <code>refs.bib</code> for you, so the example is
-            one file; in a real project delete the block and keep <code>refs.bib</code> next to the
-            document.
-          </p>
-          <pre><code>{`\\documentclass{article}
-\\begin{filecontents}[overwrite]{refs.bib}
-@book{knuth1984,
-  author    = {Donald E. Knuth},
-  title     = {The {\\TeX}book},
-  publisher = {Addison-Wesley},
-  address   = {Reading, MA},
-  year      = {1984}
-}
-
-@book{lamport1994,
-  author    = {Leslie Lamport},
-  title     = {{\\LaTeX}: A Document Preparation System},
-  publisher = {Addison-Wesley},
-  address   = {Reading, MA},
-  edition   = {2nd},
-  year      = {1994}
-}
-
-@article{knuth1984lp,
-  author  = {Donald E. Knuth},
-  title   = {Literate Programming},
-  journal = {The Computer Journal},
-  volume  = {27},
-  number  = {2},
-  pages   = {97--111},
-  year    = {1984},
-  doi     = {10.1093/comjnl/27.2.97}
-}
-\\end{filecontents}
-
-\\begin{document}
-
-Knuth designed \\TeX{} for typesetting mathematics \\cite{knuth1984} and
-Lamport built \\LaTeX{} on top of it \\cite{lamport1994}. Literate programming
-came out of the same project \\cite{knuth1984lp}.
-
-\\bibliographystyle{apalike}
-\\bibliography{refs}
-
-\\end{document}`}</code></pre>
-          <p>
-            <code>edition = &#123;2nd&#125;</code> is spelled out because the <code>.bst</code> styles
-            print the field as typed (&quot;2nd edition&quot;), where biblatex wants the number.
-            Only entries you cite are printed; add <code>\nocite&#123;*&#125;</code> before{' '}
-            <code>\bibliography</code> to print the whole file. Swapping the style line changes
-            every entry at once. The Knuth book under each of the standard styles, as compiled:
-          </p>
-          <div className="overflow-x-auto">
-          <table>
-            <thead>
-              <tr>
-                <th scope="col">Style line</th>
-                <th scope="col">Citation</th>
-                <th scope="col">Entry as printed</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td><code>\bibliographystyle&#123;plain&#125;</code></td>
-                <td>[1], alphabetical</td>
-                <td>[1] Donald E. Knuth. <em>The TeXbook</em>. Addison-Wesley, Reading, MA, 1984.</td>
-              </tr>
-              <tr>
-                <td><code>\bibliographystyle&#123;unsrt&#125;</code></td>
-                <td>[1], in citation order</td>
-                <td>Same entry as plain, numbered in the order first cited</td>
-              </tr>
-              <tr>
-                <td><code>\bibliographystyle&#123;ieeetr&#125;</code></td>
-                <td>[1], in citation order</td>
-                <td>[1] D. E. Knuth, <em>The TeXbook</em>. Reading, MA: Addison-Wesley, 1984.</td>
-              </tr>
-              <tr>
-                <td><code>\bibliographystyle&#123;IEEEtran&#125;</code></td>
-                <td>[1], in citation order</td>
-                <td>Same as ieeetr for this entry; IEEE&apos;s own style, which prints a repeated author as a dash and omits the DOI</td>
-              </tr>
-              <tr>
-                <td><code>\bibliographystyle&#123;apalike&#125;</code></td>
-                <td>[Knuth, 1984a]</td>
-                <td>[Knuth, 1984a] Knuth, D. E. (1984a). <em>The TeXbook</em>. Addison-Wesley, Reading, MA.</td>
-              </tr>
-              <tr>
-                <td><code>\bibliographystyle&#123;plainnat&#125;</code> + natbib</td>
-                <td>(Knuth, 1984a) or Knuth (1984a)</td>
-                <td>Donald E. Knuth. <em>The TeXbook</em>. Addison-Wesley, Reading, MA, 1984a.</td>
-              </tr>
-            </tbody>
-          </table>
-          </div>
-          <p>
-            <code>apalike</code> is APA-like, not APA 7: it keeps the place of publication, brackets
-            the citation and, since it ignores <code>sorttitle</code>, still labels <em>The
-            TeXbook</em> 1984a. For author-year citations in parentheses load natbib, which
-            adds <code>\citep</code> and <code>\citet</code>:
-          </p>
-          <pre><code>{`\\usepackage[round]{natbib}   % preamble
-...
-\\citet{knuth1984} designed \\TeX{}, and Lamport built \\LaTeX{} on top of it \\citep{lamport1994}.
-...
-\\bibliographystyle{plainnat}
-\\bibliography{refs}`}</code></pre>
-
-          <h3>biblatex: style=apa with biber</h3>
-          <p>
-            biblatex moves the setup into the preamble: the style is a package option, the{' '}
-            <code>.bib</code> file is registered with <code>\addbibresource</code>, and{' '}
-            <code>\printbibliography</code> prints the list. <code>biblatex-apa</code> needs the{' '}
-            <strong>biber</strong> backend, not bibtex, so compile with <code>latexmk -pdf</code>{' '}
-            or an editor that runs biber; it also wants <code>babel</code> and <code>csquotes</code>{' '}
-            for language-specific punctuation.
-          </p>
-          <pre><code>{`\\documentclass{article}
-\\usepackage[american]{babel}
-\\usepackage{csquotes}
-\\usepackage[style=apa]{biblatex}   % APA 7; needs biber
-\\begin{filecontents}[overwrite]{refs.bib}
-@book{knuth1984,
-  author    = {Knuth, Donald E.},
-  title     = {The {\\TeX}book},
-  sorttitle = {TeXbook},
-  publisher = {Addison-Wesley},
-  address   = {Reading, MA},
-  year      = {1984}
-}
-
-@book{lamport1994,
-  author    = {Lamport, Leslie},
-  title     = {{\\LaTeX}: A Document Preparation System},
-  publisher = {Addison-Wesley},
-  address   = {Reading, MA},
-  edition   = {2},
-  year      = {1994}
-}
-
-@article{knuth1984lp,
-  author  = {Knuth, Donald E.},
-  title   = {Literate Programming},
-  journal = {The Computer Journal},
-  volume  = {27},
-  number  = {2},
-  pages   = {97--111},
-  year    = {1984},
-  doi     = {10.1093/comjnl/27.2.97}
-}
-
-@online{ctan,
-  author  = {{CTAN}},
-  title   = {Comprehensive {\\TeX} Archive Network},
-  url     = {https://ctan.org/},
-  urldate = {2026-10-20}
-}
-\\end{filecontents}
-\\addbibresource{refs.bib}
-
-\\begin{document}
-
-Knuth designed \\TeX{} for typesetting mathematics \\parencite{knuth1984}, and
-\\textcite{lamport1994} built \\LaTeX{} on top of it. Literate programming came
-out of the same project \\parencite{knuth1984lp}; every package is archived online
-\\parencite{ctan}.
-
-\\printbibliography
-
-\\end{document}`}</code></pre>
-          <p>
-            This document produced the APA entries shown at the top of the page, plus a fourth for
-            Lamport that shows how the style handles an edition: Lamport, L. (1994).{' '}
-            <em>LaTeX: A document preparation system</em> (2nd ed.). Addison-Wesley. The same{' '}
-            <code>.bib</code> file gives the other styles by changing one line; each of these was
-            compiled with the same body:
-          </p>
-          <div className="overflow-x-auto">
-          <table>
-            <thead>
-              <tr>
-                <th scope="col">Style</th>
-                <th scope="col">Preamble line</th>
-                <th scope="col">Cite with</th>
-                <th scope="col">Package</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>APA 7</td>
-                <td><code>\usepackage[style=apa]&#123;biblatex&#125;</code></td>
-                <td><code>\parencite</code>, <code>\textcite</code></td>
-                <td>biblatex-apa</td>
-              </tr>
-              <tr>
-                <td>MLA 9</td>
-                <td><code>\usepackage[style=mla]&#123;biblatex&#125;</code></td>
-                <td><code>\autocite[page]&#123;key&#125;</code></td>
-                <td>biblatex-mla</td>
-              </tr>
-              <tr>
-                <td>Chicago notes</td>
-                <td><code>\usepackage[notes]&#123;biblatex-chicago&#125;</code></td>
-                <td><code>\autocite[page]&#123;key&#125;</code> (becomes a footnote)</td>
-                <td>biblatex-chicago</td>
-              </tr>
-              <tr>
-                <td>IEEE</td>
-                <td><code>\usepackage[style=ieee]&#123;biblatex&#125;</code></td>
-                <td><code>\cite</code></td>
-                <td>biblatex-ieee</td>
-              </tr>
-            </tbody>
-          </table>
-          </div>
-          <p>
-            All four packages are in a full TeX Live; on a minimal installation,{' '}
-            <code>tlmgr install biblatex-apa biblatex-mla biblatex-chicago biblatex-ieee</code>{' '}
-            adds them.
-          </p>
-
-          <h2>BibTeX Entry Types and Required Fields</h2>
-          <p>
-            The entry type decides which fields a style expects. The required fields are the ones
-            the classic BibTeX styles warn about when missing. biblatex&apos;s own names are{' '}
-            <code>journaltitle</code>, <code>location</code> and <code>date</code>; it reads{' '}
-            <code>journal</code>, <code>address</code> and <code>year</code> as aliases for them.
-          </p>
-          <div className="overflow-x-auto">
-          <table>
-            <thead>
-              <tr>
-                <th scope="col">Entry type</th>
-                <th scope="col">Use for</th>
-                <th scope="col">Required fields</th>
-                <th scope="col">Common optional fields</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td><code>@article</code></td>
-                <td>Journal or magazine article</td>
-                <td><code>author</code>, <code>title</code>, <code>journal</code>, <code>year</code></td>
-                <td><code>volume</code>, <code>number</code>, <code>pages</code>, <code>doi</code></td>
-              </tr>
-              <tr>
-                <td><code>@book</code></td>
-                <td>Book with a publisher</td>
-                <td><code>author</code> or <code>editor</code>, <code>title</code>, <code>publisher</code>, <code>year</code></td>
-                <td><code>address</code>, <code>edition</code>, <code>volume</code>, <code>isbn</code></td>
-              </tr>
-              <tr>
-                <td><code>@inproceedings</code></td>
-                <td>Paper in conference proceedings</td>
-                <td><code>author</code>, <code>title</code>, <code>booktitle</code>, <code>year</code></td>
-                <td><code>pages</code>, <code>publisher</code>, <code>address</code>, <code>doi</code></td>
-              </tr>
-              <tr>
-                <td><code>@incollection</code></td>
-                <td>Chapter in an edited book</td>
-                <td><code>author</code>, <code>title</code>, <code>booktitle</code>, <code>publisher</code>, <code>year</code></td>
-                <td><code>editor</code>, <code>pages</code>, <code>chapter</code></td>
-              </tr>
-              <tr>
-                <td><code>@phdthesis</code></td>
-                <td>Doctoral thesis (<code>@mastersthesis</code> for a master&apos;s)</td>
-                <td><code>author</code>, <code>title</code>, <code>school</code>, <code>year</code></td>
-                <td><code>address</code>, <code>month</code>, <code>url</code></td>
-              </tr>
-              <tr>
-                <td><code>@misc</code></td>
-                <td>Anything else: web pages, datasets, software</td>
-                <td>none</td>
-                <td><code>author</code>, <code>title</code>, <code>howpublished</code>, <code>year</code>, <code>note</code></td>
-              </tr>
-            </tbody>
-          </table>
-          </div>
-          <p>
-            Separate authors with <code>and</code>, never commas; write page ranges with a double
-            hyphen, <code>97--111</code>; and brace anything whose capitalization must survive,{' '}
-            <code>{'{DNA}'}</code>, <code>{'{\\LaTeX}'}</code>. The classic styles (<code>plain</code>,{' '}
-            <code>unsrt</code>, <code>ieeetr</code>, <code>apalike</code>) ignore <code>doi</code>,{' '}
-            <code>url</code> and <code>isbn</code>; <code>plainnat</code> and biblatex print them. A
-            deeper treatment of the file, with the
-            warnings each mistake produces, is in{' '}
-            <Link href="/blog/bibtex-errors-automatic-fix-guide">BibTeX Errors and How to Fix Them</Link>;
-            exporting a <code>.bib</code> from a reference manager is in the{' '}
-            <Link href="/blog/zotero-citation-guide-reference-management">Zotero citation guide</Link>.
-          </p>
-
-          {/* ───────────────────────────── Annotated ───────────────────────────── */}
-          <h2>Annotated Bibliography Example</h2>
-          <p>
-            An annotated bibliography adds a short paragraph under each entry: a summary of the
-            source, an assessment, and how it serves your project. The entry follows whatever style
-            the course uses; the annotation is plain prose, usually 100 to 150 words. One APA entry
-            with a three-sentence annotation:
-          </p>
-          <blockquote>
-            <p>Knuth, D. E. (1984). <em>The TeXbook</em>. Addison-Wesley.</p>
             <p>
-              Knuth&apos;s manual is the primary source for every rule TeX follows when it breaks
-              lines and pages. It is written for two audiences at once: the first chapters teach
-              plain TeX to a new user, and the &quot;dangerous bend&quot; sections give the
-              algorithms a package author needs. This paper draws on chapters 14 and 15 for the
-              line-breaking parameters discussed in Section 3.
+              W3C. (2023, October 5).{' '}
+              <em>Web content accessibility guidelines (WCAG) 2.2 is a W3C recommendation</em>.
+              Retrieved November 25, 2026, from{' '}
+              <a href="https://www.w3.org/news/2023/web-content-accessibility-guidelines-wcag-2-2-is-a-w3c-recommendation/">
+                https://www.w3.org/news/2023/web-content-accessibility-guidelines-wcag-2-2-is-a-w3c-recommendation/
+              </a>
             </p>
-          </blockquote>
-          <p>
-            With <code>thebibliography</code>, the annotation is a paragraph after the entry; the
-            blank line starts it and the <code>\itemsep</code> keeps entries apart:
-          </p>
-          <pre><code>{`\\documentclass{article}
-\\begin{document}
+            <h3>MLA: titles and publication containers</h3>
+            <p>
+              Replace the package line with{' '}
+              <code>{'\\usepackage[backend=biber,style=mla]{biblatex}'}</code>. This style prints a
+              Works Cited heading and retains the available full given name.
+            </p>
+            <p>
+              Knuth, Donald E. <em>The TeXbook</em>. Addison-Wesley, 1984.
+            </p>
+            <p>
+              Shannon, C. E. “A Mathematical Theory of Communication.”{' '}
+              <em>Bell System Technical Journal</em>, vol. 27, no. 3, July 1948, pp. 379–423.{' '}
+              <a href="https://doi.org/10.1002/j.1538-7305.1948.tb01338.x">
+                https://doi.org/10.1002/j.1538-7305.1948.tb01338.x
+              </a>
+              .
+            </p>
+            <p>
+              W3C. “Web Content Accessibility Guidelines (WCAG) 2.2 is a W3C Recommendation,” 5 Oct.
+              2023,{' '}
+              <a href="https://www.w3.org/news/2023/web-content-accessibility-guidelines-wcag-2-2-is-a-w3c-recommendation/">
+                www.w3.org/news/2023/web-content-accessibility-guidelines-wcag-2-2-is-a-w3c-recommendation/
+              </a>
+              . Accessed 25 Nov. 2026.
+            </p>
+            <h3>Chicago: notes-and-bibliography entries</h3>
+            <p>
+              Replace the biblatex package line with{' '}
+              <code>{'\\usepackage[notes,backend=biber]{biblatex-chicago}'}</code>. These are
+              bibliography entries, not first or shortened footnotes.
+            </p>
+            <p>
+              Knuth, Donald E. <em>The TeXbook</em>. Reading, MA: Addison-Wesley, 1984.
+            </p>
+            <p>
+              Shannon, C. E. “A Mathematical Theory of Communication.”{' '}
+              <em>Bell System Technical Journal</em> 27, no. 3 (July 1948): 379–423.{' '}
+              <a href="https://doi.org/10.1002/j.1538-7305.1948.tb01338.x">
+                https://doi.org/10.1002/j.1538-7305.1948.tb01338.x
+              </a>
+              .
+            </p>
+            <p>
+              W3C. “Web Content Accessibility Guidelines (WCAG) 2.2 is a W3C Recommendation,”
+              October 5, 2023. Accessed November 25, 2026.{' '}
+              <a href="https://www.w3.org/news/2023/web-content-accessibility-guidelines-wcag-2-2-is-a-w3c-recommendation/">
+                https://www.w3.org/news/2023/web-content-accessibility-guidelines-wcag-2-2-is-a-w3c-recommendation/
+              </a>
+              .
+            </p>
+            <h3>IEEE: numbered references in the requested order</h3>
+            <p>
+              Use <code>{'\\usepackage[backend=biber,style=ieee,sorting=none]{biblatex}'}</code>.
+              The explicit nocite keys in this demonstration set the order; ordinary cited
+              references follow citation order.
+            </p>
+            <p>
+              [1] D. E. Knuth, <em>The TeXbook</em>. Reading, MA: Addison-Wesley, 1984.
+            </p>
+            <p>
+              [2] C. E. Shannon, “A mathematical theory of communication,”{' '}
+              <em>Bell System Technical Journal</em>, vol. 27, no. 3, pp. 379–423, Jul. 1948. doi:{' '}
+              <a href="https://doi.org/10.1002/j.1538-7305.1948.tb01338.x">
+                10.1002/j.1538-7305.1948.tb01338.x
+              </a>
+              .
+            </p>
+            <p>
+              [3] W3C. “Web content accessibility guidelines (WCAG) 2.2 is a W3C recommendation.”
+              (Oct. 5, 2023), [Online]. Available:{' '}
+              <a href="https://www.w3.org/news/2023/web-content-accessibility-guidelines-wcag-2-2-is-a-w3c-recommendation/">
+                https://www.w3.org/news/2023/web-content-accessibility-guidelines-wcag-2-2-is-a-w3c-recommendation/
+              </a>{' '}
+              (visited on 11/25/2026).
+            </p>
+            <p>
+              Access-date treatment depends on the source and style. This database deliberately
+              includes urldate to expose how each tested package prints it; remove or retain it
+              according to your publication’s rules rather than copying every field mechanically.
+              Before switching styles, preserve the original data and compare the new output; a
+              changed name order or omitted field may be a style decision, not lost metadata.
+            </p>
+          </section>
 
-\\begin{thebibliography}{9}
-\\setlength{\\itemsep}{1em}
-
-\\bibitem{knuth1984}
-Knuth, D. E. (1984). \\emph{The \\TeX book}. Addison-Wesley.
-
-Knuth's manual is the primary source for every rule \\TeX{} follows when it
-breaks lines and pages. It is written for two audiences at once: the first
-chapters teach plain \\TeX{} to a new user, and the \`\`dangerous bend''
-sections give the algorithms a package author needs. This paper draws on
-chapters 14 and 15 for the line-breaking parameters discussed in Section 3.
-
-\\end{thebibliography}
-
-\\end{document}`}</code></pre>
+          {sections.map(({ id, title, paragraphs, code }) => (
+            <section key={title} id={id}>
+              <h2>{title}</h2>
+              {paragraphs.map((paragraph) => (
+                <p key={paragraph}>{paragraph}</p>
+              ))}
+              {code && (
+                <pre>
+                  <code>{code}</code>
+                </pre>
+              )}
+            </section>
+          ))}
+          <h2>Frequently asked questions</h2>
+          {faq.map(({ question, answer }) => (
+            <section key={question}>
+              <h3>{question}</h3>
+              <p>{answer}</p>
+            </section>
+          ))}
+          <h2>Documentation and related guides</h2>
           <p>
-            With biblatex, put the text in the <code>annotation</code> field of the entry.{' '}
-            <code>biblatex-apa</code> prints that field by itself, directly under the entry, so
-            this document needs nothing beyond the field:
+            Consult the package documentation for supported options and version-specific behavior:
           </p>
-          <pre><code>{`\\documentclass{article}
-\\usepackage[american]{babel}
-\\usepackage{csquotes}
-\\usepackage[style=apa]{biblatex}
-\\begin{filecontents}[overwrite]{refs.bib}
-@book{knuth1984,
-  author     = {Knuth, Donald E.},
-  title      = {The {\\TeX}book},
-  publisher  = {Addison-Wesley},
-  year       = {1984},
-  annotation = {Knuth's manual is the primary source for every rule \\TeX{}
-    follows when it breaks lines and pages. It is written for two audiences
-    at once: the first chapters teach plain \\TeX{} to a new user, and the
-    \`\`dangerous bend'' sections give the algorithms a package author needs.
-    This paper draws on chapters 14 and 15 for the line-breaking parameters
-    discussed in Section 3.}
-}
-\\end{filecontents}
-\\addbibresource{refs.bib}
-
-\\begin{document}
-
-\\nocite{*}
-\\printbibliography[title={Annotated Bibliography}]
-
-\\end{document}`}</code></pre>
-          <p>
-            The standard biblatex styles (<code>authoryear</code>, <code>numeric</code>, and the
-            MLA and IEEE packages) ignore <code>annotation</code>; <code>biblatex-chicago</code> prints
-            it with the <code>annotation=true</code> option. For the others, two preamble lines
-            print it as an indented paragraph after each entry; compiled with{' '}
-            <code>style=authoryear</code>:
-          </p>
-          <pre><code>{`\\DeclareFieldFormat{annotation}{\\par\\vspace{0.5\\baselineskip}\\noindent #1}
-\\renewbibmacro*{finentry}{\\finentry\\printfield{annotation}}`}</code></pre>
-          <p>
-            A full document with the APA heading, double spacing and hanging indents already set
-            up is the{' '}
-            <Link href="https://tools.useoctree.com/templates/annotated-bibliography" target="_blank" rel="noopener noreferrer">
-              annotated bibliography template
-            </Link>
-            ; a plain reference list is the{' '}
-            <Link href="https://tools.useoctree.com/templates/bibliography" target="_blank" rel="noopener noreferrer">
-              bibliography template
-            </Link>
-            .
-          </p>
-
-          {/* ───────────────────────────── Errors ───────────────────────────── */}
-          <h2 id="common-errors">Common Errors: Citation Undefined and Empty Bibliography</h2>
-          <p>
-            Each message was reproduced on TeX Live 2025. BibTeX and biber write to the{' '}
-            <code>.blg</code> file; LaTeX&apos;s own warnings are in the <code>.log</code>.
-          </p>
-          <div className="overflow-x-auto">
-          <table>
-            <thead>
-              <tr>
-                <th scope="col">What you see</th>
-                <th scope="col">Cause</th>
-                <th scope="col">Fix</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td><code>I found no \citation commands---while reading file main.aux</code> (BibTeX) and <code>LaTeX Warning: Empty `thebibliography&apos; environment</code></td>
-                <td>The document has <code>\bibliography</code> but no <code>\cite</code>, so nothing was requested, or pdflatex has not run yet and the <code>.aux</code> is empty.</td>
-                <td>Cite something, or add <code>\nocite&#123;*&#125;</code> to print every entry; run pdflatex before bibtex.</td>
-              </tr>
-              <tr>
-                <td><code>Warning--empty journal in knuth1984lp</code> (BibTeX), entry printed without the journal</td>
-                <td>A required field is missing from an <code>@article</code> entry. The same message names <code>publisher</code>, <code>year</code> or <code>booktitle</code> for the other types.</td>
-                <td>Add the field from the entry-type table above. BibTeX still produces output, so the warning is easy to miss.</td>
-              </tr>
-              <tr>
-                <td><code>LaTeX Warning: Citation `knuth84&apos; on page 1 undefined</code>, printed as [?], with <code>Warning--I didn&apos;t find a database entry for &quot;knuth84&quot;</code> in the .blg</td>
-                <td>The key in <code>\cite</code> matches no entry in the <code>.bib</code> file, or the bibliography pass has not run yet.</td>
-                <td>Fix the key (keys are case-sensitive), then run pdflatex, bibtex or biber, pdflatex, pdflatex.</td>
-              </tr>
-              <tr>
-                <td><code>! Package biblatex Error: &apos;\bibliographystyle&apos; invalid for &apos;biblatex&apos;.</code></td>
-                <td>BibTeX commands in a biblatex document.</td>
-                <td>Delete <code>\bibliographystyle</code> and use the package option: <code>\usepackage[style=apa]&#123;biblatex&#125;</code>.</td>
-              </tr>
-              <tr>
-                <td><code>! LaTeX Error: Can be used only in preamble.</code> at <code>\bibliography&#123;refs&#125;</code></td>
-                <td>With biblatex loaded, <code>\bibliography</code> is a preamble-only alias of <code>\addbibresource</code>.</td>
-                <td>Put <code>\addbibresource&#123;refs.bib&#125;</code> in the preamble and <code>\printbibliography</code> where the list goes.</td>
-              </tr>
-              <tr>
-                <td><code>Package biblatex Warning: Please (re)run Biber on file: main</code>, empty bibliography</td>
-                <td>bibtex was run instead of biber, or no backend ran at all.</td>
-                <td>Run <code>biber main</code> (no extension) and pdflatex twice, or use <code>latexmk -pdf</code>, which picks the backend from the document.</td>
-              </tr>
-            </tbody>
-          </table>
-          </div>
-
-          {/* ───────────────────────────── FAQ ───────────────────────────── */}
-          <h2>Frequently Asked Questions</h2>
-          <h3>What does a bibliography look like?</h3>
-          <p>
-            An alphabetical list of sources at the end of a document, one entry per source, giving
-            author, title, publisher or journal and year in the order the style prescribes. In APA 7
-            a book is &quot;Knuth, D. E. (1984). <em>The TeXbook</em>. Addison-Wesley.&quot; and in
-            MLA 9 &quot;Knuth, Donald E. <em>The TeXbook</em>. Addison-Wesley, 1984.&quot; Entries
-            hang indented,
-            except in numbered styles such as IEEE, which label them [1], [2] in citation order.
-          </p>
-          <h3>What is the difference between a bibliography and a reference list?</h3>
-          <p>
-            A reference list (APA, IEEE) contains only the sources you cited; a bibliography
-            (Chicago) may also include sources you read but did not cite. MLA calls its cited-only
-            list Works Cited. In LaTeX the difference is a heading and a <code>\nocite</code>:{' '}
-            <code>\printbibliography[title=&#123;Bibliography&#125;]</code> with{' '}
-            <code>\nocite&#123;*&#125;</code> lists everything in the <code>.bib</code> file.
-          </p>
-          <h3>How do I add references in LaTeX?</h3>
-          <p>
-            For a handful of sources, type them in a <code>thebibliography</code> environment with
-            one <code>\bibitem</code> per source and cite them with <code>\cite&#123;key&#125;</code>.
-            For more, put them in a <code>.bib</code> file and run BibTeX
-            (<code>\bibliographystyle&#123;plain&#125;</code> and <code>\bibliography&#123;refs&#125;</code>{' '}
-            in the body) or biblatex (<code>\usepackage[style=apa]&#123;biblatex&#125;</code> and{' '}
-            <code>\addbibresource&#123;refs.bib&#125;</code> in the preamble,{' '}
-            <code>\printbibliography</code> in the body, compiled with biber). latexmk runs the
-            extra passes for you.
-          </p>
-          <h3>What is a BibTeX example?</h3>
-          <p>
-            A <code>.bib</code> file holds entries such as{' '}
-            <code>@book&#123;knuth1984, author = &#123;Donald E. Knuth&#125;, title = &#123;The &#123;\TeX&#125;book&#125;, publisher = &#123;Addison-Wesley&#125;, year = &#123;1984&#125;&#125;</code>.
-            The word after <code>@</code> is the entry type, the first word inside the braces is the
-            citation key for <code>\cite</code>, and the rest are <code>field = &#123;value&#125;</code>{' '}
-            pairs separated by commas. A complete document, with the <code>.bib</code> file written
-            by a <code>filecontents</code> block, is in the BibTeX section of this page.
-          </p>
-          <h3>Why does my bibliography show [?] or a question mark instead of a citation?</h3>
-          <p>
-            The key in <code>\cite</code> matches no entry, or the bibliography has not been built
-            yet. The log says <code>LaTeX Warning: Citation `key&apos; undefined</code> and, for
-            BibTeX, the <code>.blg</code> says{' '}
-            <code>Warning--I didn&apos;t find a database entry for &quot;key&quot;</code>. Fix the
-            key, then run pdflatex, bibtex (or biber), pdflatex, pdflatex; latexmk does the sequence
-            for you.
-          </p>
-          <h3>Should I use BibTeX or biblatex?</h3>
-          <p>
-            Use biblatex with biber when the document must follow a named style exactly:
-            biblatex-apa, biblatex-mla, biblatex-chicago and biblatex-ieee follow the handbooks
-            (APA 7, MLA 9, Chicago 17) and give you <code>\textcite</code>, <code>\parencite</code> and{' '}
-            <code>\footcite</code>. Use classic BibTeX when a journal or thesis template hands you
-            a <code>.bst</code> file. The <code>.bib</code> file is the same for both, so switching
-            later costs almost nothing.
-          </p>
-
-          {/* ───────────────────────────── Next Steps ───────────────────────────── */}
-          <h2>Next Steps</h2>
-          <p>The bibliography is one half of citing; these guides cover the rest:</p>
           <ul>
-            <li><Link href="/learn/mla-book-citation">MLA Book Citation</Link> – Editors, translators, editions and e-books in MLA 9</li>
-            <li><Link href="/learn/mla-in-text-citation">MLA In-Text Citation</Link> – Every parenthetical case, from et al. to block quotes</li>
-            <li><Link href="/learn/ama-citation-format">AMA Citation Format</Link> – The numbered medical style and its reference list</li>
-            <li><Link href="/blog/bibtex-errors-automatic-fix-guide">BibTeX Errors and How to Fix Them</Link> – Every warning a .bib file can produce</li>
-            <li><Link href="/blog/zotero-citation-guide-reference-management">Zotero Citation Guide</Link> – Exporting a .bib file that stays in sync</li>
-            <li><Link href="/learn/footnotes">LaTeX Footnotes</Link> – The mechanism Chicago notes are built on</li>
+            <li>
+              <a href="https://www-cs-faculty.stanford.edu/~knuth/abcde.html">
+                Knuth’s book metadata
+              </a>
+            </li>
+            <li>
+              <a href="https://ctan.org/pkg/biblatex">biblatex manual</a>
+            </li>
+            <li>
+              <a href="https://ctan.org/pkg/biblatex-apa">biblatex APA style documentation</a>
+            </li>
+            <li>
+              <a href="https://ctan.org/pkg/biblatex-mla">biblatex MLA style documentation</a>
+            </li>
+            <li>
+              <a href="https://ctan.org/pkg/biblatex-chicago">
+                biblatex Chicago style documentation
+              </a>
+            </li>
+            <li>
+              <a href="https://ctan.org/pkg/biblatex-ieee">biblatex IEEE style documentation</a>
+            </li>
           </ul>
-
-          {/* ───────────────────────────── Free LaTeX Tools ───────────────────────────── */}
-          <h2>Free LaTeX Tools</h2>
           <ul>
-            <li><Link href="https://tools.useoctree.com/templates/bibliography" target="_blank" rel="noopener noreferrer">Bibliography Template</Link> – A document with a .bib file, biblatex and a printed reference list ready to edit</li>
-            <li><Link href="https://tools.useoctree.com/templates/annotated-bibliography" target="_blank" rel="noopener noreferrer">Annotated Bibliography Template</Link> – APA heading, double spacing and annotation paragraphs already set up</li>
-            <li><Link href="https://tools.useoctree.com/tools/latex-preview" target="_blank" rel="noopener noreferrer">LaTeX Preview</Link> – Paste any example above and see the PDF without installing TeX</li>
+            <li>
+              <Link href="/learn/bibtex">BibTeX database setup and compilation</Link>
+            </li>
+            <li>
+              <Link href="/learn/mla-book-citation">MLA book citation examples</Link>
+            </li>
+            <li>
+              <Link href="/learn/mla-in-text-citation">MLA in-text citation rules</Link>
+            </li>
           </ul>
-
-          {/* ───────────────────────────── Related Posts ───────────────────────────── */}
-          <RelatedPosts searchTerm="Citation" title="Related Articles" />
-
-          {/* ───────────────────────────── CTA Box ───────────────────────────── */}
+          <p>
+            <a href="https://tools.useoctree.com/tools/citation-generator">Citation generator</a>{' '}
+            can provide a starting entry. Verify the author, title, year and identifier against the
+            original source before including it.
+          </p>
           <div className="not-prose mt-12 p-6 bg-primary/5 rounded-lg border border-primary/10">
-            <h3 className="text-lg font-semibold mb-2">Generate the bibliography instead of typing it</h3>
+            <h2 className="text-lg font-semibold mb-2">Test the example in your document</h2>
             <p className="text-muted-foreground mb-4">
-              Octree is an AI-powered LaTeX editor with bibtex, biber and latexmk already set up:
-              paste any example above, add your own sources to the .bib file, and the formatted
-              list updates on every compile.
+              Open a project in Octree to edit LaTeX and compile a PDF. Start with a complete
+              example, then check the result with your real document class and packages. External
+              bibliography or indexing steps depend on the build workflow; check the log rather than
+              assuming a missing list will appear automatically.
             </p>
             <Link
               href="https://app.useoctree.com"
@@ -1041,7 +330,7 @@ chapters 14 and 15 for the line-breaking parameters discussed in Section 3.
               rel="noopener noreferrer"
               className={buttonVariants()}
             >
-              Try Octree Free →
+              Open Octree
             </Link>
           </div>
         </article>

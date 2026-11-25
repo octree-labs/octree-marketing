@@ -1,67 +1,119 @@
 import type { Metadata } from 'next/types'
-
 import { learnMetadata, type FaqItem } from '@/utilities/learnMetadata'
 import Link from 'next/link'
 import { buttonVariants } from '@/components/ui/button'
 import React from 'react'
-import {
-  generateBreadcrumbSchema,
-  getLearnBreadcrumbs,
-} from '@/utilities/generateBreadcrumbs'
-import { RelatedPosts } from '@/components/Learn/related-posts'
+import { generateBreadcrumbSchema, getLearnBreadcrumbs } from '@/utilities/generateBreadcrumbs'
 import { LearnSchema } from '@/components/Learn/schema'
 
 export const dynamic = 'force-static'
 export const revalidate = 3600
 
-const breadcrumbs = getLearnBreadcrumbs('Multiline Equations in LaTeX', 'multiline-equations')
-const breadcrumbSchema = generateBreadcrumbSchema(breadcrumbs)
-
 const page = {
   slug: 'multiline-equations',
-  title: 'Multiline Equations in LaTeX: align, split, multline and New Lines',
-  seoTitle: 'New Line in Equation LaTeX: align, split, multline',
-  description: 'Start a new line in a LaTeX equation and align math with align, align*, split, multline and gather; \\notag, cases, and fixes for Misplaced & errors.',
-  keywords: 'latex new line in equation, new line in equation latex, align math, align in math, latex align, align latex, latex align*, latex align math, latex multiline equation, latex align equations, latex break long equation, latex equation array, latex split equation, latex gather, latex align environment, latex multline, latex aligned, latex alignat, latex intertext, latex equation line break, latex eqnarray, latex allowdisplaybreaks, latex nonumber, latex cases, latex system of equations',
+  title: 'Multiline Equations in LaTeX: align, split, multline and aligned',
+  seoTitle: 'LaTeX Multiline Equation: align, split and Line Breaks',
+  description:
+    'Break LaTeX equations across lines with amsmath. Choose align, split, multline, gather or aligned, control numbering, and fix alignment and delimiter errors.',
+  keywords:
+    'latex multiline equation, latex align, latex split equation, latex new line in equation, latex multline',
 }
-
-/** Last content update, used for dateModified in the article schema. */
-const LAST_UPDATED = '2026-11-09'
-
+const breadcrumbSchema = generateBreadcrumbSchema(getLearnBreadcrumbs(page.title, page.slug))
+const LAST_UPDATED = '2026-11-25'
 const faq: FaqItem[] = [
   {
-    question: 'How do I start a new line in an equation in LaTeX?',
+    question: 'How do I start a new line in a LaTeX equation?',
     answer:
-      'The equation environment holds one line, and \\\\ inside it is silently ignored. Load amsmath and use an environment that accepts \\\\: align or align* for several equations aligned with &, split inside equation for one long equation with a single number, multline for a long expression with no alignment point, or gather for centred lines.',
+      'Use an amsmath environment that supports rows, such as align, split or multline, and insert \\\\ between rows. A source newline alone only changes the source formatting.',
   },
   {
-    question: 'What is the difference between align and split?',
+    question: 'How do I give a multiline equation just one number?',
     answer:
-      'align is a complete display that numbers every line (suppress a number with \\notag). split is used inside equation, align or gather and treats its lines as one equation with a single number centred on the group. Use align for a sequence of equations and split for one derivation that happens to be long.',
+      'Put split inside equation, or use multline when no alignment point is needed. Use a single label for the whole numbered expression.',
   },
   {
-    question: 'How do I break a long equation that has no equals sign to align on?',
+    question: 'Can I put align inside equation?',
     answer:
-      'Use multline. Its first line is set flush left, its last line flush right, and any lines between are centred, with one equation number on the last line. Break before an operator (+, -, =) so the next line starts with it.',
+      'No. Align creates its own display. Use aligned or split inside equation when you need an inner multiline block.',
   },
   {
-    question: 'Why does align give me “Misplaced alignment tab character &”?',
+    question: 'Why does a bracket fail across an align line break?',
     answer:
-      'That message means an & was found where no alignment is active, usually in a plain equation or \\[ ... \\] environment. Switch to align, or wrap the lines in split. Inside gather, which has no alignment points, the same mistake reports “Extra alignment tab has been changed to \\cr”.',
+      'A \\left and \\right pair must be balanced within the row. Use manual delimiter sizes across rows, or balanced pairs with invisible delimiters where appropriate.',
+  },
+]
+const sections: { title: string; paragraphs: string[]; code?: string }[] = [
+  {
+    title: 'Choose the display structure before adding line breaks',
+    paragraphs: [
+      'A multiline display can represent several independent equations, a sequence of equivalent steps, or one expression that is too wide. Those are different structures. Align supports several rows and normally numbers each row; split groups rows inside a surrounding display; multline gives a single expression room to continue without aligning every relation. Choose the structure that matches the mathematics rather than whichever command happens to remove an error.',
+      'The starred variants of top-level amsmath displays suppress automatic numbering. Do not put align inside dollar signs, display brackets or another equation environment: it already creates display math. By contrast, aligned and split are building blocks that need a surrounding math context. Confusing those two categories produces nested-display errors and often leads to unnecessary packages or extra delimiters that make the source harder to maintain.',
+    ],
   },
   {
-    question: 'Should I use eqnarray?',
-    answer:
-      'No. eqnarray is a pre-amsmath environment with wrong spacing around the = column, no way to stop long lines from overprinting the equation number, and inconsistent handling of \\nonumber. amsmath\'s align does the same job correctly and every modern document should use it.',
+    title: 'Align related equations at the relation sign',
+    paragraphs: [
+      'Put the alignment marker immediately before the equals sign, not on both sides of it. The relation then keeps normal mathematical spacing. Continue a derivation with an empty left-hand side if repeating it would add clutter, but make sure the omitted expression is genuinely the same. End intermediate rows with a double backslash and usually omit a trailing break after the final row.',
+      "The optional spacing after a row break can add a small vertical gap, but it should not replace good grouping. If each row states a distinct result, give the rows distinct labels. If the rows only unpack one result, consider split instead. A numbering choice is part of the document's explanation: readers should know whether a reference points to one claim or an entire derivation.",
+    ],
+    code: '\\documentclass{article}\n\\usepackage{amsmath}\n\\begin{document}\n\\begin{align}\nf(x) &= (x+1)^2 \\label{eq:definition}\\\\\n     &= x^2+2x+1. \\notag\n\\end{align}\nEquation~\\eqref{eq:definition} defines the function.\n\\end{document}',
   },
   {
-    question: 'How do I align math on the equals sign in LaTeX?',
-    answer:
-      'Use align (numbered) or align* (unnumbered) from amsmath. Put & just before each = and end every line except the last with \\\\, as in a &= b + c \\\\ &= d. The equals signs line up in one column, and \\notag on a line removes its number.',
+    title: 'Use split for one equation and one number',
+    paragraphs: [
+      'Place split inside equation when several rows form a single numbered unit. The outer environment owns the number, so attach one label to that unit rather than trying to reference every internal line. The alignment point is still marked with an ampersand. This is useful for a polynomial expansion, a long definition, or a calculation that will be cited as a whole.',
+      'When a continuation starts with a plus or minus sign, preserve the intended operator spacing. An empty group before the operator can prevent it from being treated as a unary sign in a context where you intend a binary operation. Do not indent continuation lines with repeated spaces: ordinary source spaces are ignored in math mode. Use the alignment structure and a deliberate spacing command when the notation genuinely calls for one.',
+    ],
+    code: '\\documentclass{article}\n\\usepackage{amsmath}\n\\begin{document}\n\\begin{equation}\\label{eq:polynomial}\n\\begin{split}\nP(x) &= a_0+a_1x+a_2x^2\\\\\n     &\\quad {}+a_3x^3+a_4x^4.\n\\end{split}\n\\end{equation}\nThe coefficients in \\eqref{eq:polynomial} are fixed.\n\\end{document}',
+  },
+  {
+    title: 'Choose multline or gather when alignment is unnecessary',
+    paragraphs: [
+      'Multline is spelled without a second i. It puts the first line toward the left and the last toward the right, with intervening lines centered in the normal layout. It supplies one equation number rather than a number for each continuation. There is no shared ampersand alignment column: use it when the expression needs room but aligning relations would misrepresent its structure.',
+      'Gather centers separate equations independently. It is useful for a short collection of formulas with no meaningful common alignment point. Gather does not become align simply because you insert ampersands. Choose gather* for an unnumbered collection. In either environment, break at a mathematically sensible boundary and keep punctuation consistent with the surrounding sentence; a displayed equation is still part of the prose when the sentence continues through it.',
+    ],
+    code: '\\documentclass{article}\n\\usepackage{amsmath}\n\\begin{document}\n\\begin{multline}\nS=a_1+a_2+a_3+a_4+a_5\\\\\n{}+a_6+a_7+a_8+a_9+a_{10}.\n\\end{multline}\n\\begin{gather*}\nx^2+y^2=1\\\\\nz=0\n\\end{gather*}\n\\end{document}',
+  },
+  {
+    title: 'Put an aligned block inside delimiters',
+    paragraphs: [
+      'Aligned creates a compact mathematical block inside an existing math environment. That makes it useful for a system of equations enclosed by a brace. A matching invisible delimiter can close the pair when only the left brace should be visible. The outer display controls numbering; aligned does not create a separate display or automatic number for each row.',
+      'A left and right delimiter pair cannot simply start on one align row and finish on another. Each row is processed separately. For a long parenthesized expression, use appropriately sized manual delimiters on each continuation, or end and restart delimiter pairs with invisible partners where that is visually justified. Inspect both heights and spacing: eliminating a missing-delimiter error does not guarantee that the reader can identify the intended grouping.',
+    ],
+    code: '\\documentclass{article}\n\\usepackage{amsmath}\n\\begin{document}\n\\[\n\\left\\{\n\\begin{aligned}\nx+y &= 3,\\\\\nx-y &= 1.\n\\end{aligned}\n\\right.\n\\]\n\\end{document}',
+  },
+  {
+    title: 'Add text and several alignment pairs carefully',
+    paragraphs: [
+      'Use \\text for a short phrase inside mathematics, such as a condition or explanatory label. For a sentence between rows of an alignment, \\intertext preserves the surrounding alignment while inserting prose. Put it between completed rows, not inside an unfinished cell. Mathtools provides \\shortintertext when the standard spacing is too generous for a short connecting phrase.',
+      'Align can contain several alignment pairs, but the spacing between groups may be larger than you expect. Alignat gives explicit control over the number of pairs and leaves intergroup spacing to you. Its argument counts pairs, not individual cells. Start with a simple two-column derivation before adding several groups; a miscounted ampersand is much easier to find in a small display than in a dense system with many simultaneous relations.',
+    ],
+    code: '\\documentclass{article}\n\\usepackage{amsmath}\n\\begin{document}\n\\begin{align*}\nu &= x+y\\\\\n\\intertext{Subtracting the second component gives}\nu-y &= x.\n\\end{align*}\n\\begin{alignat*}{2}\nx &= 1, &\\qquad y &= 2,\\\\\nu &= 3, & v &= 4.\n\\end{alignat*}\n\\end{document}',
+  },
+  {
+    title: 'Manage numbering and page breaks without layout hacks',
+    paragraphs: [
+      'Use \\notag on an align row when that row should not receive an automatic number. Put each label on the row it describes, and use \\eqref for a parenthesized equation reference. Compile again after adding or moving labels. A custom tag can be appropriate for a named relation, but manually typing equation numbers into the source makes them drift as the document changes.',
+      'Long top-level align or gather displays can allow page breaks with \\allowdisplaybreaks, or a targeted \\displaybreak at an appropriate row boundary. Boxed substructures such as aligned and split cannot break internally across pages in the same way. Avoid forcing a break in the middle of a mathematical argument solely to fill a page. First consider whether the derivation should be divided into two displays connected by a short explanatory sentence.',
+    ],
+  },
+  {
+    title: 'Keep each continuation mathematically unambiguous',
+    paragraphs: [
+      'A line break should not make an expression look like a new independent equation when it is only a continuation. Retain the necessary operator, delimiters and punctuation, and check that a minus sign still applies to the intended group. When a fraction or nested sum remains too wide, introduce a named quantity and explain it rather than breaking the notation at an arbitrary character.',
+      'For piecewise definitions, use cases rather than imitating a left brace with unrelated aligned rows. The condition column should explain the domain of each branch, and the branches should cover the intended cases without accidental overlap. Layout choices should expose the mathematical structure, not conceal an ambiguity in it.',
+    ],
+  },
+  {
+    title: 'Fix alignment errors and inspect the final width',
+    paragraphs: [
+      'A misplaced ampersand usually means you are outside an alignment environment. An extra alignment tab can mean a row has more cells than its environment supports. An undefined environment can indicate a missing amsmath declaration or a misspelled multline. Start with the first log error and verify the opening and closing environments before changing the mathematical content.',
+      "A successful compile can still leave an overfull display or a formula crowding its number. Test at the actual column width, not only in a wide standalone document. Prefer meaningful line breaks and named intermediate expressions over scaling the whole equation. For new work, amsmath's environments are a better default than eqnarray because they provide suitable relation spacing and more deliberate numbering and alignment controls.",
+    ],
   },
 ]
 
-export default async function LaTeXMultilineEquationsPage() {
+export default async function LearnGuidePage() {
   return (
     <div className="pt-24 pb-24">
       <script
@@ -72,704 +124,79 @@ export default async function LaTeXMultilineEquationsPage() {
         slug={page.slug}
         title={page.title}
         description={page.description}
+        datePublished="2026-10-18"
         dateModified={LAST_UPDATED}
         faq={faq}
       />
       <div className="container">
         <div className="mb-8 max-w-4xl mx-auto">
-          <Link
-            href="/learn"
-            className="text-sm text-muted-foreground hover:text-foreground transition-colors inline-flex items-center gap-1"
-          >
+          <Link href="/learn" className="text-sm text-muted-foreground hover:text-foreground">
             ← Back to Learn
           </Link>
         </div>
-
         <article className="prose prose-lg dark:prose-invert max-w-4xl mx-auto">
-          <h1>Multiline Equations in LaTeX: align, split, multline and New Lines</h1>
-
-          <div className="not-prose my-6 p-6 rounded-lg border bg-muted/40 break-words">
-            <p className="text-sm font-semibold uppercase tracking-wide text-muted-foreground mb-3">Quick answer</p>
-            <ul className="space-y-2 text-base list-disc pl-5">
-              <li>
-                <strong>New line in an equation:</strong> <code>\\</code> does nothing inside{' '}
-                <code>equation</code>. Load <code>{`\\usepackage{amsmath}`}</code> and use one of
-                the environments below.
-              </li>
-              <li>
-                <strong>Align math on =:</strong>{' '}
-                <code>{`\\begin{align} a &= b \\\\ &= c \\end{align}`}</code>. Put{' '}
-                <code>&amp;</code> before each <code>=</code>; <code>align*</code> drops the numbers.
-              </li>
-              <li>
-                <strong>One long equation, one number:</strong> <code>split</code> inside{' '}
-                <code>equation</code>.
-              </li>
-              <li>
-                <strong>Long expression, nothing to align:</strong> <code>multline</code>; centred
-                lines: <code>gather</code>.
-              </li>
-              <li>
-                <strong>Hide one line&apos;s number:</strong> <code>\notag</code> or{' '}
-                <code>\nonumber</code> before the <code>\\</code>.
-              </li>
-              <li>
-                <strong>Piecewise function:</strong> <code>{`\\begin{cases} ... \\end{cases}`}</code>.
-              </li>
-            </ul>
-          </div>
-
+          <h1>{page.title}</h1>
           <p className="lead">
-            The <code>equation</code> environment holds exactly one line. The moment a
-            derivation needs a second line, or a formula runs past the margin, you need one of
-            the amsmath display environments. This guide shows which one to pick:{' '}
-            <code>align</code> for a stack of equations lined up on their equals signs,{' '}
-            <code>split</code> for one long equation with one number, <code>multline</code> for a
-            long expression with no alignment point, <code>gather</code> for centred lines, and
-            the <code>aligned</code> and <code>gathered</code> building blocks that nest inside
-            other environments. It also covers numbering, text between lines, brackets that span
-            a break, page breaks, <code>cases</code>, the automatic <code>breqn</code> package,
-            and why <code>eqnarray</code> should be retired.
+            {
+              'Load amsmath and use align for several equations aligned at an equals sign: place & before the relation and end each nonfinal row with \\\\. For one long equation with one number, use split inside equation. Use multline when you need line breaks without a shared alignment point. A source newline alone does not create a new mathematical row.'
+            }
           </p>
+          <p className="text-sm text-muted-foreground">Updated November 25, 2026</p>
+          {sections.map(({ title, paragraphs, code }) => (
+            <section key={title}>
+              <h2>{title}</h2>
+              {paragraphs.map((paragraph) => (
+                <p key={paragraph}>{paragraph}</p>
+              ))}
+              {code && (
+                <pre>
+                  <code>{code}</code>
+                </pre>
+              )}
+            </section>
+          ))}
+          <h2>Frequently asked questions</h2>
+          {faq.map(({ question, answer }) => (
+            <section key={question}>
+              <h3>{question}</h3>
+              <p>{answer}</p>
+            </section>
+          ))}
+          <h2>Documentation and related guides</h2>
           <p>
-            Every environment below needs <code>{`\\usepackage{amsmath}`}</code>. Basic math
-            syntax is covered in the{' '}
-            <Link href="/learn/mathematical-expressions">mathematical expressions guide</Link>;
-            labels, <code>\eqref</code> and numbering styles have their own{' '}
-            <Link href="/learn/equation-numbering">equation numbering guide</Link>.
+            Consult the package documentation for supported options and version-specific behavior:
           </p>
-
-          {/* ── New line ── */}
-          <h2>New Line in an Equation</h2>
-          <p>
-            A new line in a LaTeX equation is written with <code>\\</code>, but only inside an
-            environment that is built for several lines. In <code>equation</code>,{' '}
-            <code>\[ ... \]</code> and <code>$$ ... $$</code> the <code>\\</code> is silently
-            ignored: the document compiles and both parts stay on one line. Switch to an
-            amsmath environment instead:
-          </p>
-          <pre><code>{`\\documentclass{article}
-\\usepackage{amsmath}
-\\begin{document}
-
-% Wrong: \\\\ is ignored, everything stays on one line
-\\begin{equation}
-  a = b + c \\\\
-  d = e
-\\end{equation}
-
-% Right: two lines, aligned on =, one number each
-\\begin{align}
-  a &= b + c \\\\
-  d &= e
-\\end{align}
-
-% Right: two lines, one number for the whole equation
-\\begin{equation}
-  \\begin{split}
-    a &= b + c \\\\
-      &= e
-  \\end{split}
-\\end{equation}
-
-\\end{document}`}</code></pre>
-          <p>
-            Inside a single line you can still add space with <code>\quad</code> or{' '}
-            <code>\qquad</code>, but you cannot break it. Inline math (<code>$...$</code>)
-            breaks only after a relation or operator at TeX&apos;s choice; see the{' '}
-            <Link href="/learn/mathematical-expressions">inline and display math guide</Link>.
-          </p>
-
-          {/* ── Which one ── */}
-          <h2>Which Environment Do I Need?</h2>
-          <div className="overflow-x-auto">
-          <table>
-            <thead>
-              <tr>
-                <th>Situation</th>
-                <th>Environment</th>
-                <th>Numbers</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr><td>Several equations, aligned on <code>=</code></td><td><code>align</code></td><td>One per line</td></tr>
-              <tr><td>One equation too long for a line, aligned continuation</td><td><code>split</code> inside <code>equation</code></td><td>One for the group</td></tr>
-              <tr><td>One long equation, no alignment point</td><td><code>multline</code></td><td>One, on the last line</td></tr>
-              <tr><td>Several equations, each centred</td><td><code>gather</code></td><td>One per line</td></tr>
-              <tr><td>Aligned block inside a larger formula or beside another</td><td><code>aligned</code>, <code>gathered</code></td><td>From the outer environment</td></tr>
-              <tr><td>Several alignment columns with controlled spacing</td><td><code>alignat</code></td><td>One per line</td></tr>
-              <tr><td>Piecewise definition</td><td><code>cases</code> inside <code>equation</code></td><td>One</td></tr>
-            </tbody>
-          </table>
-          </div>
-          <p>
-            The display environments have starred forms (<code>align*</code>,{' '}
-            <code>gather*</code>, <code>multline*</code>, <code>alignat*</code>,{' '}
-            <code>equation*</code>) that print no numbers at all; <code>split</code>,{' '}
-            <code>aligned</code> and <code>gathered</code> have none, because their numbering
-            comes from the environment around them.
-          </p>
-
-          {/* ── align ── */}
-          <h2>Align Math with align and align*</h2>
-          <p>
-            To align math in LaTeX, use <code>align</code>. <code>&amp;</code> marks the alignment
-            point on each line, usually just before the relation symbol, and <code>\\</code>{' '}
-            ends a line. <code>align</code> numbers every line; <code>align*</code> is identical
-            but prints no numbers:
-          </p>
-          <pre><code>{`\\begin{align}
-  f(x) &= (x + 1)^2 \\\\
-       &= x^2 + 2x + 1 \\label{eq:expanded}
-\\end{align}
-
-\\begin{align*}
-  f(x) &= (x + 1)^2 \\\\
-       &= x^2 + 2x + 1
-\\end{align*}`}</code></pre>
-          <p>
-            Put <code>&amp;</code> <em>before</em> the <code>=</code>, not after it. The
-            material to the left of <code>&amp;</code> is set flush right and the material to
-            the right flush left, so <code>&amp;=</code> keeps the equals signs in a column
-            with correct spacing. Do not end the last line with <code>\\</code>: it creates an
-            empty extra line that still receives an equation number.
-          </p>
-
-          <h3>\nonumber and \notag: Removing the Number From Some Lines</h3>
-          <p>
-            <code>\notag</code> (amsmath) or <code>\nonumber</code> (the original LaTeX name)
-            before the <code>\\</code> suppresses the number on that line only. In amsmath they
-            do the same thing. The usual pattern numbers just the final result:
-          </p>
-          <pre><code>{`\\begin{align}
-  a &= b + c \\notag \\\\
-    &= d + e \\notag \\\\
-    &= f \\label{eq:result}
-\\end{align}`}</code></pre>
-
-          <h3>Align in Math With Several Columns</h3>
-          <p>
-            Each extra pair of <code>&amp;</code> adds a column. Odd-numbered ampersands align;
-            even-numbered ones separate the columns, and amsmath spreads the columns evenly
-            across the line:
-          </p>
-          <pre><code>{`\\begin{align}
-  x  &= 1,  & y  &= 2,  & z  &= 3 \\\\
-  x' &= 10, & y' &= 20, & z' &= 30
-\\end{align}`}</code></pre>
-
-          {/* ── split ── */}
-          <h2>split: One Equation, One Number</h2>
-          <p>
-            When a single equation is too long, <code>split</code> inside <code>equation</code>{' '}
-            gives aligned continuation lines and a single number centred vertically on the
-            group. <code>split</code> cannot stand alone; it must be wrapped in{' '}
-            <code>equation</code>, <code>align</code> or <code>gather</code>, and the{' '}
-            <code>\label</code> belongs to the outer environment:
-          </p>
-          <pre><code>{`\\begin{equation}
-  \\begin{split}
-    (a + b)^2 &= (a + b)(a + b) \\\\
-              &= a^2 + ab + ba + b^2 \\\\
-              &= a^2 + 2ab + b^2
-  \\end{split}
-  \\label{eq:square}
-\\end{equation}`}</code></pre>
-          <p>
-            For an unnumbered version use <code>equation*</code> (or <code>\[ ... \]</code>,
-            which amsmath makes equivalent) around the <code>split</code>.
-          </p>
-
-          {/* ── multline ── */}
-          <h2>multline: A Long Expression With No Alignment Point</h2>
-          <p>
-            Some expressions are just long: a sum of many terms, a polynomial, a product. There
-            is nothing to align on, so <code>multline</code> sets the first line flush left, the
-            last line flush right and anything in between centred, with one number on the last
-            line. Break before an operator so each continuation line starts with it:
-          </p>
-          <pre><code>{`\\begin{multline}
-  a + b + c + d + e + f + g + h \\\\
-  + i + j + k + l + m + n \\\\
-  = p + q + r + s + t + u \\label{eq:long}
-\\end{multline}`}</code></pre>
-          <p>
-            <code>\shoveleft{'{...}'}</code> and <code>\shoveright{'{...}'}</code> push a middle
-            line to one side, and the length <code>\multlinegap</code> (default 10pt) controls
-            the indentation of the first and last lines from the margins.
-          </p>
-
-          {/* ── gather ── */}
-          <h2>gather: Centred Lines</h2>
-          <p>
-            <code>gather</code> stacks equations without aligning them; each line is centred and
-            numbered. It is the right choice for a list of unrelated results or a system of
-            equations of very different shapes:
-          </p>
-          <pre><code>{`\\begin{gather}
-  a_1 = b_1 + c_1 \\\\
-  a_2 = b_2 + c_2 - d_2 + e_2 \\label{eq:second}
-\\end{gather}`}</code></pre>
-          <p>
-            There are no <code>&amp;</code> in <code>gather</code>; using one gives{' '}
-            <em>Extra alignment tab has been changed to \cr</em>.
-          </p>
-
-          {/* ── aligned / gathered ── */}
-          <h2>aligned and gathered: Blocks Inside Other Math</h2>
-          <p>
-            <code>aligned</code> and <code>gathered</code> produce the same layouts as{' '}
-            <code>align</code> and <code>gather</code> but as a box that can be placed inside any
-            math, including beside a brace or next to another block. They take an optional
-            position argument (<code>[t]</code>, <code>[b]</code>) and leave numbering to the
-            surrounding environment:
-          </p>
-          <pre><code>{`\\begin{equation}
-  \\left.
-  \\begin{aligned}
-    a &= b + c \\\\
-    d &= e
-  \\end{aligned}
-  \\right\\} \\quad \\text{(both hold)}
-\\end{equation}
-
-\\[
-  \\begin{aligned}
-    x &= r \\cos\\theta \\\\
-    y &= r \\sin\\theta
-  \\end{aligned}
-  \\qquad
-  \\begin{gathered}
-    u = 1 \\\\ v = 2
-  \\end{gathered}
-\\]`}</code></pre>
-          <p>
-            Nesting a full <code>align</code> inside <code>equation</code> is an error
-            (<em>Erroneous nesting of equation structures</em>); <code>aligned</code> is the
-            environment designed for that position.
-          </p>
-
-          {/* ── alignat ── */}
-          <h2>alignat: Alignment Columns With Fixed Spacing</h2>
-          <p>
-            <code>align</code> decides the space between columns itself. <code>alignat{'{n}'}</code>{' '}
-            takes the number of alignment columns and adds no space of its own, so you control
-            the gaps. It is ideal for annotating steps and for lining up a system of linear
-            equations term by term:
-          </p>
-          <pre><code>{`\\begin{alignat}{2}
-  x &= 2y + 1  &\\qquad& \\text{(by definition)} \\\\
-  y &= 3       &      & \\text{(given)}
-\\end{alignat}
-
-\\begin{alignat*}{3}
-  10x &+ 3y &{}={}& 2 \\\\
-   3x &- 6y &{}={}& -1
-\\end{alignat*}`}</code></pre>
-          <p>
-            The <code>{'{}={}'}</code> idiom keeps the spacing around a symbol that sits in a
-            cell by itself. TeX only puts space beside a relation or operator when something
-            else is next to it in the same cell; an <code>=</code> written as{' '}
-            <code>&amp;=&amp;</code> has nothing after it in its cell, so the gap between the{' '}
-            <code>=</code> and the next column disappears. The empty groups act as invisible
-            neighbours on both sides. <code>alignat{'{n}'}</code>{' '}
-            allows at most <code>2n &minus; 1</code> ampersands per line; one more gives{' '}
-            <em>Extra &amp; on this line</em>.
-          </p>
-
-          {/* ── intertext ── */}
-          <h2>Text Between Lines: \intertext and \shortintertext</h2>
-          <p>
-            To insert a sentence between the lines of an <code>align</code> without losing the
-            alignment, use <code>\intertext</code>. The alignment columns continue across the
-            text. mathtools&apos; <code>\shortintertext</code> is the same with less vertical
-            space around the text:
-          </p>
-          <pre><code>{`\\usepackage{mathtools}   % loads amsmath; needed for \\shortintertext
-
-\\begin{align}
-  a &= b + c \\\\
-  \\intertext{and, substituting into the second equation,}
-  d &= e \\\\
-  \\shortintertext{so}
-  f &= g
-\\end{align}`}</code></pre>
-
-          {/* ── brackets across lines ── */}
-          <h2>Brackets That Span a Line Break</h2>
-          <p>
-            A <code>\left ... \right</code> pair cannot cross <code>\\</code>; inside{' '}
-            <code>align</code> the error is <em>Extra {'}'}, or forgotten \right</em>. The
-            cleanest fix is the manual sizes <code>\bigl</code>, <code>\Bigl</code> and so on,
-            which need no partner. The alternative is to close the first line with the invisible
-            delimiter <code>\right.</code> and reopen with <code>\left.</code>; this works but the
-            two halves are sized independently. Sizing is covered in depth in the{' '}
-            <Link href="/learn/brackets">brackets guide</Link>.
-          </p>
-          <pre><code>{`\\begin{align}
-  f(x) &= \\Bigl( a + b + c \\\\
-       &\\qquad + d + e \\Bigr) \\\\[6pt]
-  g(x) &= \\left( \\frac{a}{b} \\right. \\\\
-       &\\qquad \\left. + c \\right)
-\\end{align}`}</code></pre>
-          <p>
-            The <code>\\[6pt]</code> on the second line adds 6pt of extra vertical space before
-            the next line, a convenient way to separate groups of lines inside one environment.
-          </p>
-
-          {/* ── cases ── */}
-          <h2>Piecewise Functions: cases</h2>
-          <p>
-            A definition by cases is a multi-line formula with one number. <code>cases</code>{' '}
-            draws the brace and aligns the conditions in a second column; <code>dcases</code>{' '}
-            from mathtools is the same in display style, so fractions in the cases are full
-            size:
-          </p>
-          <pre><code>{`\\begin{equation}
-  |x| = \\begin{cases}
-    x  & \\text{if } x \\ge 0 \\\\
-    -x & \\text{if } x < 0
-  \\end{cases}
-\\end{equation}
-
-\\begin{equation}
-  f(n) = \\begin{dcases}
-    \\frac{n}{2}    & n \\text{ even} \\\\
-    \\frac{3n+1}{2} & n \\text{ odd}
-  \\end{dcases}
-\\end{equation}`}</code></pre>
-
-          {/* ── page breaks ── */}
-          <h2>Page Breaks Inside Displays</h2>
-          <p>
-            amsmath never breaks a page inside a display by default, so a long{' '}
-            <code>align</code> near the bottom of a page is pushed whole onto the next one,
-            leaving a gap. <code>\allowdisplaybreaks</code> in the preamble lifts the ban for{' '}
-            <code>align</code>, <code>gather</code>, <code>alignat</code> and <code>multline</code>.
-            An optional argument from 1 to 4 sets how willing TeX should be. Inside such a
-            display, <code>\\*</code> forbids a break after that line and{' '}
-            <code>\displaybreak</code> before a <code>\\</code> encourages one. <code>split</code>,{' '}
-            <code>aligned</code> and <code>gathered</code> are single boxes and never break:
-          </p>
-          <pre><code>{`\\allowdisplaybreaks        % preamble
-
-\\begin{align}
-  a &= b \\\\*                % no page break after this line
-  c &= d \\\\
-  e &= f \\displaybreak[0] \\\\  % a break is acceptable here
-  g &= h
-\\end{align}`}</code></pre>
-
-          {/* ── Numbering and labels ── */}
-          <h2>Labels and Custom Tags per Line</h2>
-          <p>
-            In <code>align</code> and <code>gather</code>, every numbered line can carry its own{' '}
-            <code>\label</code>, placed anywhere on the line before the <code>\\</code>. A
-            second <code>\label</code> on the same line gives <em>Multiple \label&apos;s: label
-            will be lost</em>, and a <code>\label</code> on a <code>\notag</code> line has no
-            number to refer to. <code>\tag{'{...}'}</code> replaces the automatic number on one
-            line; <code>\tag*</code> drops the parentheses:
-          </p>
-          <pre><code>{`\\begin{align}
-  x &= y \\tag{A} \\label{eq:a} \\\\
-  z &= w \\tag*{(star)}
-\\end{align}
-
-See \\eqref{eq:a}.`}</code></pre>
-          <p>
-            For numbering by section, <code>\numberwithin</code>, <code>cleveref</code> and
-            subequations, see the <Link href="/learn/equation-numbering">equation numbering guide</Link>.
-          </p>
-
-          {/* ── breqn ── */}
-          <h2>Automatic Line Breaking: breqn</h2>
-          <p>
-            The <code>breqn</code> package breaks long equations by itself. Its{' '}
-            <code>dmath</code> environment replaces <code>equation</code> and needs no{' '}
-            <code>\\</code> at all:
-          </p>
-          <pre><code>{`\\usepackage{amsmath}
-\\usepackage{breqn}       % load after amsmath and other math packages
-
-\\begin{dmath}
-  f(x) = a_0 + a_1 x + a_2 x^2 + a_3 x^3 + a_4 x^4 + a_5 x^5
-       + a_6 x^6 + a_7 x^7 + a_8 x^8 + a_9 x^9 + a_{10} x^{10}
-\\end{dmath}`}</code></pre>
-          <p>
-            It is convenient for drafts and for generated formulas, with caveats. breqn
-            re-implements a large part of math typesetting, so it must be loaded last and it
-            conflicts with some packages; its line breaks are chosen mechanically and rarely
-            match what an author would pick; and most journals do not accept it. For a final
-            document, break lines by hand with the environments above.
-          </p>
-
-          {/* ── eqnarray ── */}
-          <h2>Why Not eqnarray</h2>
-          <p>
-            Older tutorials use <code>eqnarray</code>, which predates amsmath. It compiles, but
-            it has three real defects: the space around the middle column is wider than the
-            standard spacing around <code>=</code>, so its equations look different from every
-            other formula in the document; a long line overprints the equation number instead
-            of moving it; and <code>\nonumber</code> and labels behave inconsistently.{' '}
-            <code>align</code> is a drop-in replacement with <code>&amp;=</code> instead of{' '}
-            <code>&amp;=&amp;</code>:
-          </p>
-          <pre><code>{`% old
-\\begin{eqnarray}
-  a & = & b + c \\\\
-  d & = & e
-\\end{eqnarray}
-
-% replacement
-\\begin{align}
-  a &= b + c \\\\
-  d &= e
-\\end{align}`}</code></pre>
-
-          {/* ── Errors ── */}
-          <h2>Common Errors</h2>
-          <div className="overflow-x-auto">
-          <table>
-            <thead>
-              <tr>
-                <th>Message or symptom</th>
-                <th>Cause</th>
-                <th>Fix</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td><em>Misplaced alignment tab character &amp;</em></td>
-                <td><code>&amp;</code> inside <code>equation</code> or <code>\[ ... \]</code>, which have no alignment</td>
-                <td>Use <code>align</code>, or wrap the lines in <code>split</code></td>
-              </tr>
-              <tr>
-                <td><code>\\</code> in <code>equation</code> does nothing; still one line</td>
-                <td><code>equation</code>, <code>\[ ... \]</code> and <code>$$</code> are single-line</td>
-                <td>Use <code>align</code>, <code>split</code>, <code>multline</code> or <code>gather</code></td>
-              </tr>
-              <tr>
-                <td><em>Extra alignment tab has been changed to \cr</em></td>
-                <td><code>&amp;</code> inside <code>gather</code>, or more columns than a table/array declares</td>
-                <td>Remove the <code>&amp;</code>, or switch to <code>align</code></td>
-              </tr>
-              <tr>
-                <td><em>Package amsmath Error: Extra &amp; on this line</em></td>
-                <td>More than 2n&minus;1 ampersands in <code>alignat{'{n}'}</code></td>
-                <td>Increase n or remove the extra <code>&amp;</code></td>
-              </tr>
-              <tr>
-                <td><em>Package amsmath Error: \begin{'{split}'} won&apos;t work here</em></td>
-                <td><code>split</code> used outside a display environment</td>
-                <td>Wrap it in <code>equation</code>, <code>align</code> or <code>gather</code></td>
-              </tr>
-              <tr>
-                <td><em>Package amsmath Error: Erroneous nesting of equation structures</em></td>
-                <td><code>align</code> or <code>gather</code> inside <code>equation</code></td>
-                <td>Use <code>aligned</code>, <code>gathered</code> or <code>split</code> inside</td>
-              </tr>
-              <tr>
-                <td><em>LaTeX Error: Environment align undefined</em></td>
-                <td>amsmath not loaded</td>
-                <td><code>{`\\usepackage{amsmath}`}</code></td>
-              </tr>
-              <tr>
-                <td><em>Extra {'}'}, or forgotten \right</em> / <em>Missing \right. inserted</em></td>
-                <td><code>\left</code> and <code>\right</code> on different lines or across an <code>&amp;</code></td>
-                <td>Use <code>\bigl</code>/<code>\bigr</code>, or <code>\right.</code> and <code>\left.</code></td>
-              </tr>
-              <tr>
-                <td>An empty numbered line at the end of the display</td>
-                <td><code>\\</code> after the last line</td>
-                <td>Delete the trailing <code>\\</code></td>
-              </tr>
-              <tr>
-                <td><em>Package amsmath Error: Multiple \label&apos;s: label will be lost</em></td>
-                <td>Two <code>\label</code> commands on one line, or a <code>\label</code> inside <code>split</code> plus one outside</td>
-                <td>Keep one label per numbered line</td>
-              </tr>
-              <tr>
-                <td>Equation number printed on a line by itself</td>
-                <td>The line is too wide for the number to fit beside it (amsmath moves it rather than overprint)</td>
-                <td>Break the line earlier, or accept it</td>
-              </tr>
-              <tr>
-                <td>Lines refuse to break across pages, leaving a gap</td>
-                <td>amsmath&apos;s default no-break rule</td>
-                <td><code>\allowdisplaybreaks</code> in the preamble</td>
-              </tr>
-              <tr>
-                <td>Missing space on one side of a symbol written alone between two <code>&amp;</code>, as in <code>&amp;=&amp;</code></td>
-                <td>Nothing follows the symbol in its cell, so TeX inserts no space there (amsmath already handles the usual <code>&amp;=</code> case)</td>
-                <td>Write <code>{'&{}={}&'}</code></td>
-              </tr>
-              <tr>
-                <td>Too much space around <code>=</code> compared with other equations</td>
-                <td><code>eqnarray</code> puts column space around the middle column</td>
-                <td>Replace with <code>align</code> and <code>&amp;=</code></td>
-              </tr>
-            </tbody>
-          </table>
-          </div>
-
-          {/* ── Complete example ── */}
-          <h2>Complete Example</h2>
-          <pre><code>{`\\documentclass{article}
-\\usepackage{amsmath, mathtools}
-\\allowdisplaybreaks
-
-\\begin{document}
-
-\\section{A derivation}
-\\begin{align}
-  (a + b)^2 &= (a + b)(a + b) \\notag \\\\
-            &= a^2 + ab + ba + b^2 \\notag \\\\
-            &= a^2 + 2ab + b^2 \\label{eq:binomial}
-\\end{align}
-
-\\section{One long equation}
-\\begin{equation}
-  \\begin{split}
-    I &= \\int_0^1 \\Bigl( x^3 + 3x^2 \\\\
-      &\\qquad + 3x + 1 \\Bigr) \\, dx = \\frac{15}{4}
-  \\end{split}
-  \\label{eq:integral}
-\\end{equation}
-
-\\begin{multline}
-  (x + y + z)^3 = x^3 + y^3 + z^3 + 3x^2 y + 3x^2 z \\\\
-  + 3y^2 x + 3y^2 z + 3z^2 x + 3z^2 y + 6xyz
-\\end{multline}
-
-\\section{A system and a piecewise function}
-\\begin{alignat*}{3}
-  2x &+ 3y &{}={}& 7 \\\\
-   x &- 4y &{}={}& -2
-\\end{alignat*}
-\\begin{equation}
-  H(x) = \\begin{cases}
-    1 & \\text{if } x \\ge 0 \\\\
-    0 & \\text{otherwise}
-  \\end{cases}
-\\end{equation}
-
-\\section{With commentary}
-\\begin{align}
-  y' &= 2x \\\\
-  \\intertext{Integrating both sides gives}
-  y  &= x^2 + C.
-\\end{align}
-
-Equations \\eqref{eq:binomial} and \\eqref{eq:integral} are referenced here.
-
-\\end{document}`}</code></pre>
-
-          {/* ── Quick reference ── */}
-          <h2>Quick Reference</h2>
-          <div className="overflow-x-auto">
-          <table>
-            <thead>
-              <tr>
-                <th>Task</th>
-                <th>Code</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr><td>New line in an equation</td><td><code>\\</code> inside <code>align</code>, <code>split</code>, <code>multline</code> or <code>gather</code></td></tr>
-              <tr><td>Align on =</td><td><code>&amp;=</code> on each line of <code>align</code></td></tr>
-              <tr><td>No numbers</td><td><code>align*</code>, <code>gather*</code>, <code>multline*</code></td></tr>
-              <tr><td>No number on one line</td><td><code>\notag</code> before <code>\\</code></td></tr>
-              <tr><td>One number for several lines</td><td><code>{`\\begin{equation}\\begin{split} ... \\end{split}\\end{equation}`}</code></td></tr>
-              <tr><td>Long equation, no alignment</td><td><code>multline</code>; <code>\shoveleft</code>, <code>\shoveright</code></td></tr>
-              <tr><td>Centred lines</td><td><code>gather</code></td></tr>
-              <tr><td>Aligned block inside math</td><td><code>aligned</code>, <code>gathered</code></td></tr>
-              <tr><td>Side-by-side columns</td><td><code>align</code> with extra <code>&amp;</code> pairs, or <code>alignat{'{n}'}</code></td></tr>
-              <tr><td>Text between lines</td><td><code>\intertext{'{...}'}</code>, <code>\shortintertext{'{...}'}</code> (mathtools)</td></tr>
-              <tr><td>Bracket across lines</td><td><code>\Bigl( ... \\ ... \Bigr)</code></td></tr>
-              <tr><td>Extra space between lines</td><td><code>\\[6pt]</code></td></tr>
-              <tr><td>Allow page breaks</td><td><code>\allowdisplaybreaks</code>; <code>\\*</code> to forbid one</td></tr>
-              <tr><td>Piecewise</td><td><code>cases</code>, <code>dcases</code> (mathtools)</td></tr>
-              <tr><td>Automatic breaking</td><td><code>dmath</code> from <code>breqn</code></td></tr>
-            </tbody>
-          </table>
-          </div>
-
-          {/* ── FAQ ── */}
-          <h2>Frequently Asked Questions</h2>
-          <h3>How do I start a new line in an equation in LaTeX?</h3>
-          <p>
-            The <code>equation</code> environment holds one line, and <code>\\</code> inside it is
-            silently ignored. Load amsmath and use an environment that accepts <code>\\</code>:{' '}
-            <code>align</code> or <code>align*</code> for several equations aligned with{' '}
-            <code>&amp;</code>, <code>split</code> inside <code>equation</code> for one long
-            equation with a single number, <code>multline</code> for a long expression with no
-            alignment point, or <code>gather</code> for centred lines.
-          </p>
-          <h3>What is the difference between align and split?</h3>
-          <p>
-            <code>align</code> is a complete display that numbers every line (suppress a number
-            with <code>\notag</code>). <code>split</code> is used inside <code>equation</code>,{' '}
-            <code>align</code> or <code>gather</code> and treats its lines as one equation with a
-            single number centred on the group. Use <code>align</code> for a sequence of
-            equations and <code>split</code> for one derivation that happens to be long.
-          </p>
-          <h3>How do I break a long equation that has no equals sign to align on?</h3>
-          <p>
-            Use <code>multline</code>. Its first line is set flush left, its last line flush
-            right, and any lines between are centred, with one equation number on the last line.
-            Break before an operator (+, &minus;, =) so the next line starts with it.
-          </p>
-          <h3>Why does align give me &ldquo;Misplaced alignment tab character &amp;&rdquo;?</h3>
-          <p>
-            That message means an <code>&amp;</code> was found where no alignment is active,
-            usually in a plain <code>equation</code> or <code>\[ ... \]</code> environment.
-            Switch to <code>align</code>, or wrap the lines in <code>split</code>. Inside{' '}
-            <code>gather</code>, which has no alignment points, the same mistake reports
-            &ldquo;Extra alignment tab has been changed to \cr&rdquo;.
-          </p>
-          <h3>Should I use eqnarray?</h3>
-          <p>
-            No. <code>eqnarray</code> is a pre-amsmath environment with wrong spacing around the{' '}
-            <code>=</code> column, no way to stop long lines from overprinting the equation
-            number, and inconsistent handling of <code>\nonumber</code>. amsmath&apos;s{' '}
-            <code>align</code> does the same job correctly and every modern document should use
-            it.
-          </p>
-          <h3>How do I align math on the equals sign in LaTeX?</h3>
-          <p>
-            Use <code>align</code> (numbered) or <code>align*</code> (unnumbered) from amsmath.
-            Put <code>&amp;</code> just before each <code>=</code> and end every line except the
-            last with <code>\\</code>, as in <code>{`a &= b + c \\\\ &= d`}</code>. The equals
-            signs line up in one column, and <code>\notag</code> on a line removes its number.
-          </p>
-
-          {/* ── Next Steps ── */}
-          <h2>Next Steps</h2>
-          <p>Lines breaking where you want them? These guides cover the rest of display math:</p>
           <ul>
-            <li><Link href="/learn/equation-numbering">Equation Numbering and Referencing</Link> &ndash; <code>\label</code>, <code>\eqref</code>, numbering by section, subequations and cleveref</li>
-            <li><Link href="/learn/mathematical-expressions">Mathematical Expressions</Link> &ndash; Fractions, roots, operators and the amsmath basics</li>
-            <li><Link href="/learn/brackets">Brackets and Parentheses</Link> &ndash; Sizing with \left \right and the manual sizes used across line breaks</li>
-            <li><Link href="/learn/matrices">Matrices in LaTeX</Link> &ndash; pmatrix, bmatrix and arrays inside your equations</li>
-            <li><Link href="/learn/integrals-sums-limits">Integrals, Sums and Limits</Link> &ndash; The operators that make equations long in the first place</li>
-            <li><Link href="/learn/latex">Learn LaTeX</Link> &ndash; Complete beginner tutorial covering all the basics</li>
+            <li>
+              <a href="https://ctan.org/pkg/amsmath">amsmath user guide</a>
+            </li>
+            <li>
+              <a href="https://ctan.org/pkg/mathtools">mathtools documentation</a>
+            </li>
           </ul>
-
-          {/* ── Free LaTeX Tools ── */}
-          <h2>Free LaTeX Tools</h2>
           <ul>
-            <li><Link href="https://tools.useoctree.com/tools/latex-preview" target="_blank" rel="noopener noreferrer">LaTeX Preview</Link> &ndash; Try align, split and multline with a live PDF preview</li>
-            <li><Link href="https://tools.useoctree.com/tools/math-to-latex" target="_blank" rel="noopener noreferrer">Math to LaTeX</Link> &ndash; Convert handwritten equations to LaTeX</li>
-            <li><Link href="https://tools.useoctree.com/symbols/operators" target="_blank" rel="noopener noreferrer">Math Operators Reference</Link> &ndash; Sums, products, integrals and other large operators</li>
+            <li>
+              <Link href="/learn/equation-numbering">Equation labels, tags and numbering</Link>
+            </li>
+            <li>
+              <Link href="/learn/brackets">Brackets and delimiter sizes</Link>
+            </li>
+            <li>
+              <Link href="/learn/mathematical-expressions">Inline and display math</Link>
+            </li>
           </ul>
-
-          <RelatedPosts searchTerm="LaTeX equations" title="Related Articles" />
-
+          <p>
+            <a href="https://tools.useoctree.com/tools/latex-preview">LaTeX preview</a> lets you
+            check a complete equation example; also compile in the final paper to catch
+            narrower-column overflows.
+          </p>
           <div className="not-prose mt-12 p-6 bg-primary/5 rounded-lg border border-primary/10">
-            <h3 className="text-lg font-semibold mb-2">Break long equations faster with AI</h3>
+            <h2 className="text-lg font-semibold mb-2">Test the example in your document</h2>
             <p className="text-muted-foreground mb-4">
-              Octree&apos;s AI editor converts a runaway equation into a clean align or split,
-              explains amsmath errors in plain language, and compiles your document in seconds.
+              Open a project in Octree to edit LaTeX and compile a PDF. Start with a complete
+              example, then check the result with your real document class and packages. External
+              bibliography or indexing steps depend on the build workflow; check the log rather than
+              assuming a missing list will appear automatically.
             </p>
             <Link
               href="https://app.useoctree.com"
@@ -777,7 +204,7 @@ Equations \\eqref{eq:binomial} and \\eqref{eq:integral} are referenced here.
               rel="noopener noreferrer"
               className={buttonVariants()}
             >
-              Try Octree Free →
+              Open Octree
             </Link>
           </div>
         </article>

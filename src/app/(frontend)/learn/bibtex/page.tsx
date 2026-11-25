@@ -118,7 +118,7 @@ Knuth designed \\TeX{} for high-quality typesetting \\cite{knuth1984}.
             by a short key, and switch citation styles by changing one line.
             This guide covers the <code>.bib</code> file and its entry types, citing, choosing a
             style, the compile order, natbib and biblatex, and the errors that leave you with{' '}
-            <code>[?]</code> in the text. Ready-made entries for APA, MLA, Chicago and IEEE are in
+            <code>[?]</code> in the text. Complete reference-list examples and annotation guidance are in
             the <Link href="/learn/bibliography-examples">bibliography examples</Link>.
           </p>
 
@@ -416,7 +416,7 @@ markup on top of it \\cite{lamport1987}. Several sources at once
           {/* ── Next Steps ── */}
           <h2>Next Steps</h2>
           <ul>
-            <li><Link href="/learn/bibliography-examples">Bibliography Examples</Link> &ndash; APA, MLA, Chicago and IEEE entries with their BibTeX source</li>
+            <li><Link href="/learn/bibliography-examples">Bibliography Examples</Link> &ndash; Manual and generated reference lists, style choices and annotations</li>
             <li><Link href="/learn/mla-in-text-citation">MLA In-Text Citation</Link> &ndash; Author-page citations and biblatex-mla</li>
             <li><Link href="/learn/ama-citation-format">AMA Citation Format</Link> &ndash; Superscript numbered citations in LaTeX</li>
             <li><Link href="/learn/cross-referencing">Cross-Referencing</Link> &ndash; \label, \ref and the same two-pass rule</li>

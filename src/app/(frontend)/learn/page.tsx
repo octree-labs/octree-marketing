@@ -185,7 +185,7 @@ const learnTopics = [
   {
     slug: 'tables',
     title: 'LaTeX Tables',
-    description: 'Make tables in LaTeX and Overleaf with booktabs, multicolumn, multirow, longtable, row and column spacing, colored tables and a table generator.',
+    description: 'Build LaTeX tables with multicolumn and multirow cells, booktabs rules, wrapping columns, captions, longtable and practical alignment fixes.',
     color: 'from-sky-500/10 to-sky-600/5',
   },
   {
@@ -293,7 +293,7 @@ const learnTopics = [
   {
     slug: 'multiline-equations',
     title: 'Multiline Equations in LaTeX',
-    description: 'New lines in equations, align math with align and align*, split, multline, gather and cases, nest aligned blocks, add text between lines, allow page breaks, and retire eqnarray.',
+    description: 'Break LaTeX equations across lines with amsmath. Choose align, split, multline, gather or aligned, control numbering, and fix alignment and delimiter errors.',
     color: 'from-violet-500/10 to-purple-600/5',
   },
   {
@@ -323,7 +323,7 @@ const learnTopics = [
   {
     slug: 'algorithms',
     title: 'Algorithms in LaTeX: algorithm2e, algorithmic and algpseudocode',
-    description: 'Write pseudocode in LaTeX: algorithm with algpseudocode (\\State, \\If, \\For), algorithm2e, the old algorithmic, line numbers, captions and errors.',
+    description: 'Write LaTeX algorithms with compatible packages, numbered pseudocode, loops, captions and references. Compare algpseudocode, algorithmic and algorithm2e.',
     color: 'from-purple-500/10 to-violet-600/5',
   },
   {
@@ -335,7 +335,7 @@ const learnTopics = [
   {
     slug: 'glossaries-acronyms',
     title: 'Glossaries, Acronyms & Abbreviations',
-    description: 'The glossaries package (\\newacronym, \\gls, \\printglossaries, makeglossaries and latexmk), the simpler acronym package, nomencl for symbol lists, sorting and common errors.',
+    description: 'Define LaTeX acronyms, expand first use, print abbreviation lists and build glossaries with or without makeglossaries. Diagnose missing entries and reset behavior.',
     color: 'from-violet-500/10 to-purple-600/5',
   },
   {
@@ -395,7 +395,7 @@ const learnTopics = [
   {
     slug: 'bibliography-examples',
     title: 'Bibliography Examples',
-    description: 'APA 7, MLA 9, Chicago and IEEE bibliography entries with the BibTeX source for each, complete thebibliography, BibTeX and biblatex documents, an annotated bibliography example and the common errors.',
+    description: 'Compare APA, MLA, Chicago and IEEE bibliography outputs from shared book, article and online-source data, with tested LaTeX and annotated-reference examples.',
     color: 'from-rose-500/10 to-fuchsia-600/5',
   },
   {

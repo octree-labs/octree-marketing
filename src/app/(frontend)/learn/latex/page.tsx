@@ -665,7 +665,7 @@ l.42 \\textbol
           <h3>Citations and academic formats</h3>
           <ul>
             <li><Link href="/learn/bibtex">Bibliography Management with BibTeX</Link> – .bib files, \cite, styles and the compile order</li>
-            <li><Link href="/learn/bibliography-examples">Bibliography Examples</Link> – APA, MLA, Chicago and IEEE with the LaTeX that produces them</li>
+            <li><Link href="/learn/bibliography-examples">Bibliography Examples</Link> – Manual references, generated lists, style choices and annotations</li>
             <li><Link href="/learn/apa-title-page">APA Title Page</Link> – APA 7 title pages and the apa7 class</li>
             <li><Link href="/learn/apa-headings">APA Headings</Link> – The five APA 7 heading levels</li>
             <li><Link href="/learn/mla-in-text-citation">MLA In-Text Citation</Link> – Examples for every case</li>
