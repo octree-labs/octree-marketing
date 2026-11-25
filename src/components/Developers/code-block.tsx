@@ -3,6 +3,7 @@
 import React, { useState } from 'react'
 import { Check, Copy } from 'lucide-react'
 
+import { EVENTS, track } from '@/lib/analytics'
 import { cn } from '@/utilities/ui'
 
 const useCopy = () => {
@@ -21,13 +22,20 @@ const useCopy = () => {
   return { copied, copy }
 }
 
-const CopyButton: React.FC<{ text: string; className?: string }> = ({ text, className }) => {
+const CopyButton: React.FC<{ text: string; className?: string; trackLocation?: string }> = ({
+  text,
+  className,
+  trackLocation,
+}) => {
   const { copied, copy } = useCopy()
 
   return (
     <button
       type="button"
-      onClick={() => copy(text)}
+      onClick={() => {
+        if (trackLocation) track(EVENTS.CTA_CLICKED, { location: trackLocation, action: 'copy' })
+        void copy(text)
+      }}
       className={cn(
         'flex h-7 w-7 shrink-0 items-center justify-center rounded-md border border-border bg-background text-muted-foreground transition-colors hover:bg-muted hover:text-foreground',
         className,
@@ -49,14 +57,16 @@ interface CodeBlockProps {
   code: string
   /** Small label in the header bar, e.g. "bash" or "Response". */
   title?: string
+  /** Analytics location for copy clicks, e.g. "developers:cursor". */
+  trackLocation?: string
 }
 
 /** A code sample with a copy button. Render outside `prose` (it sets not-prose itself). */
-export const CodeBlock: React.FC<CodeBlockProps> = ({ code, title }) => (
+export const CodeBlock: React.FC<CodeBlockProps> = ({ code, title, trackLocation }) => (
   <div className="not-prose my-6 overflow-hidden rounded-lg border border-border bg-muted/30">
     <div className="flex items-center justify-between border-b border-border px-3 py-1.5">
       <span className="font-mono text-xs text-muted-foreground">{title ?? ''}</span>
-      <CopyButton text={code} />
+      <CopyButton text={code} trackLocation={trackLocation} />
     </div>
     <CodeBody code={code} />
   </div>
@@ -67,6 +77,8 @@ export interface CodeTab {
   code: string
   /** Optional sentence shown above the code for this tab. */
   note?: React.ReactNode
+  /** Analytics location for copy clicks on this tab. */
+  trackLocation?: string
 }
 
 /** Several code samples behind tabs, one copy button for the visible one. */
@@ -100,7 +112,7 @@ export const CodeTabs: React.FC<{ tabs: CodeTab[]; ariaLabel?: string }> = ({
             </button>
           ))}
         </div>
-        <CopyButton text={tab.code} />
+        <CopyButton text={tab.code} trackLocation={tab.trackLocation} />
       </div>
       {tab.note && (
         <p className="border-b border-border px-4 py-2 text-sm text-muted-foreground">{tab.note}</p>

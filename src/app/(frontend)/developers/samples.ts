@@ -3,27 +3,11 @@
  * backslashes appear exactly as a reader should type them.
  */
 
+import { API_KEYS_URL, MCP_URL } from '@/utilities/mcpInstall'
+
+export { API_KEYS_URL, MCP_URL }
 export const API_BASE = 'https://app.useoctree.com'
-export const MCP_URL = `${API_BASE}/api/mcp`
 export const COMPILE_URL = `${API_BASE}/api/v1/compile`
-export const API_KEYS_URL = `${API_BASE}/settings#api-keys`
-
-export const claudeCode = String.raw`claude mcp add --transport http octree https://app.useoctree.com/api/mcp \
-  --header "Authorization: Bearer oct_live_…"`
-
-export const claudeCodePrompt =
-  'Write main.tex for a two-page lab report and compile it with Octree.'
-
-export const mcpConfig = String.raw`{
-  "mcpServers": {
-    "octree": {
-      "url": "https://app.useoctree.com/api/mcp",
-      "headers": {
-        "Authorization": "Bearer oct_live_…"
-      }
-    }
-  }
-}`
 
 export const curlJson = String.raw`export OCTREE_API_KEY=oct_live_…
 

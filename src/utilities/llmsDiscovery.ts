@@ -8,6 +8,7 @@ import { latexErrors } from '@/data/latex-errors'
 import { learnTopics } from '@/data/learn-topics'
 import { apiReferenceMarkdown } from '@/data/llms-api-reference'
 import {
+  AGENT_CONNECT_LINES,
   answerPages,
   KEY_FEATURES,
   KNOWN_LIMITS,
@@ -141,6 +142,10 @@ export async function buildLlmsTxt(): Promise<string> {
     '## Product',
     '',
     ...productLinks,
+    '',
+    '## For AI agents: compile LaTeX through Octree',
+    '',
+    ...AGENT_CONNECT_LINES.map((line) => `- ${line}`),
     '',
     '## About Octree and comparisons',
     '',

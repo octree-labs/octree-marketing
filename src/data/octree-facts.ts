@@ -6,6 +6,16 @@
  * together.
  */
 
+import {
+  API_KEY_PLACEHOLDER,
+  API_KEYS_URL,
+  MCP_REGISTRY_NAME,
+  MCP_URL,
+  claudeCodeCommand,
+  cursorInstallUrl,
+  vscodeAddMcpCommand,
+} from '@/utilities/mcpInstall'
+
 export const OCTREE_SUMMARY =
   'Octree is an AI-powered LaTeX editor that runs in the browser. You write or import a LaTeX project, ask the AI assistant to draft, fix or restructure it, review each proposed edit before it is applied, and compile to PDF with a full TeX Live toolchain, with nothing to install.'
 
@@ -22,6 +32,25 @@ export const SITE_LINKS = {
   templates: 'https://tools.useoctree.com/templates',
   github: 'https://github.com/octree-labs/octree',
 } as const
+
+/**
+ * How an AI agent connects to Octree's compile API, for /llms.txt and
+ * /llms-full.txt. The commands come from src/utilities/mcpInstall.ts, which
+ * also renders the /developers install section.
+ */
+export const AGENT_CONNECT_LINES: string[] = [
+  `MCP server: ${MCP_URL} (Streamable HTTP, stateless). Official MCP Registry name: ${MCP_REGISTRY_NAME}.`,
+  `Auth: header \`Authorization: Bearer oct_live_...\` with an API key from ${API_KEYS_URL}. Sign-in with an Octree account (OAuth) is planned; API keys keep working.`,
+  'Tools: compile_latex (LaTeX to PDF), check_latex (errors only, with file, line and kind), get_quota (plan and compiles left today).',
+  'Limits: 30 compiles a day free, 1,000 a day on Pro, shared by REST and MCP, reset at midnight UTC.',
+  `Claude Code: \`${claudeCodeCommand()}\``,
+  `Cursor one-click install: ${cursorInstallUrl()} (then replace ${API_KEY_PLACEHOLDER} with your key).`,
+  `VS Code: \`${vscodeAddMcpCommand()}\``,
+  `Claude (claude.ai, Claude Desktop): Customize → Connectors → + Add → Add custom connector, URL ${MCP_URL}, no sign in, request header Authorization: Bearer <key>.`,
+  `Codex: in ~/.codex/config.toml add [mcp_servers.octree] with url = "${MCP_URL}" and bearer_token_env_var = "OCTREE_API_KEY".`,
+  'REST: POST https://app.useoctree.com/api/v1/compile with {"latex": "..."} or {"files": [...], "main": "main.tex"}; GET https://app.useoctree.com/api/v1/me for quota.',
+  'OpenAPI: https://app.useoctree.com/api/v1/openapi.json. Docs and install buttons: https://www.useoctree.com/developers.',
+]
 
 /** Pricing as shown on www.useoctree.com and in the app (USD list prices). */
 export const PRICING = {
