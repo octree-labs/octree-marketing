@@ -4,6 +4,7 @@ import config from '@payload-config'
 import { unstable_cache } from 'next/cache'
 import { getServerSideURL } from '@/utilities/getURL'
 import { latexErrors } from '@/data/latex-errors'
+import { answerPages } from '@/data/octree-facts'
 
 const getPagesSitemap = unstable_cache(
   async () => {
@@ -301,6 +302,10 @@ const getPagesSitemap = unstable_cache(
       },
       ...latexErrors.map(({ slug }) => ({
         loc: `${SITE_URL}/learn/errors/${slug}`,
+        lastmod: dateFallback,
+      })),
+      ...answerPages.map(({ slug }) => ({
+        loc: `${SITE_URL}/learn/${slug}`,
         lastmod: dateFallback,
       })),
       {
