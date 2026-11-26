@@ -113,6 +113,10 @@ const config = {
             {
               '--tw-prose-body': 'var(--text)',
               '--tw-prose-headings': 'var(--text)',
+              // Typography wraps inline <code> in literal backticks via ::before/::after;
+              // they read as stray characters in rendered copy, so drop them everywhere.
+              'code::before': { content: 'none' },
+              'code::after': { content: 'none' },
               h1: {
                 fontWeight: 'normal',
                 marginBottom: '0.25em',
