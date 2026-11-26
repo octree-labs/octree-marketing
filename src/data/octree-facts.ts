@@ -9,8 +9,14 @@
 import {
   API_KEY_PLACEHOLDER,
   API_KEYS_URL,
+  CONNECTED_APPS_URL,
+  DEVICE_CODE_URL,
+  DEVICE_GRANT_TYPE,
+  DEVICE_TOKEN_URL,
   MCP_REGISTRY_NAME,
   MCP_URL,
+  OAUTH_AUTHORIZATION_SERVER_URL,
+  OAUTH_PROTECTED_RESOURCE_URL,
   claudeCodeCommand,
   cursorInstallUrl,
   vscodeAddMcpCommand,
@@ -40,13 +46,15 @@ export const SITE_LINKS = {
  */
 export const AGENT_CONNECT_LINES: string[] = [
   `MCP server: ${MCP_URL} (Streamable HTTP, stateless). Official MCP Registry name: ${MCP_REGISTRY_NAME}.`,
-  `Auth: header \`Authorization: Bearer oct_live_...\` with an API key from ${API_KEYS_URL}. Sign-in with an Octree account (OAuth) is planned; API keys keep working.`,
+  `Auth, option 1 (no API key): OAuth 2.1 sign-in per the MCP authorization spec. Add the URL with no headers; the client discovers ${OAUTH_PROTECTED_RESOURCE_URL} and ${OAUTH_AUTHORIZATION_SERVER_URL}, registers itself (dynamic client registration or a client ID metadata document), and signs in with PKCE. Scope: compile. Users disconnect apps at ${CONNECTED_APPS_URL}.`,
+  `Auth, option 2 (headless agents, CLIs, scripts): device flow (RFC 8628). POST ${DEVICE_CODE_URL} with {"client_name":"my-cli"}, show the user verification_uri_complete, poll POST ${DEVICE_TOKEN_URL} (form grant_type=${DEVICE_GRANT_TYPE}&device_code=...) every 5 s until it returns {"api_key":"oct_live_..."} (once). Unauthenticated 401 responses include device_authorization_endpoint and token_endpoint.`,
+  `Auth, option 3: header \`Authorization: Bearer oct_live_...\` with an API key from ${API_KEYS_URL}.`,
   'Tools: compile_latex (LaTeX to PDF), check_latex (errors only, with file, line and kind), get_quota (plan and compiles left today).',
   'Limits: 30 compiles a day free, 1,000 a day on Pro, shared by REST and MCP, reset at midnight UTC.',
-  `Claude Code: \`${claudeCodeCommand()}\``,
-  `Cursor one-click install: ${cursorInstallUrl()} (then replace ${API_KEY_PLACEHOLDER} with your key).`,
-  `VS Code: \`${vscodeAddMcpCommand()}\``,
-  `Claude (claude.ai, Claude Desktop): Customize → Connectors → + Add → Add custom connector, URL ${MCP_URL}, no sign in, request header Authorization: Bearer <key>.`,
+  `Claude Code: \`${claudeCodeCommand()}\`, then /mcp → octree → Authenticate (or add --header "Authorization: Bearer ${API_KEY_PLACEHOLDER}").`,
+  `Cursor one-click install (OAuth sign-in): ${cursorInstallUrl()}`,
+  `VS Code: \`${vscodeAddMcpCommand()}\` (VS Code asks to sign in when the server starts).`,
+  `Claude (claude.ai, Claude Desktop): Customize → Connectors → + Add → Add custom connector, URL ${MCP_URL}, leave OAuth client ID and secret empty, Add, then Connect and click Allow on the Octree screen.`,
   `Codex: in ~/.codex/config.toml add [mcp_servers.octree] with url = "${MCP_URL}" and bearer_token_env_var = "OCTREE_API_KEY".`,
   'REST: POST https://app.useoctree.com/api/v1/compile with {"latex": "..."} or {"files": [...], "main": "main.tex"}; GET https://app.useoctree.com/api/v1/me for quota.',
   'OpenAPI: https://app.useoctree.com/api/v1/openapi.json. Docs and install buttons: https://www.useoctree.com/developers.',
@@ -55,7 +63,8 @@ export const AGENT_CONNECT_LINES: string[] = [
 /** Pricing as shown on www.useoctree.com and in the app (USD list prices). */
 export const PRICING = {
   free: 'Free: $0. 5 AI edits per day, unlimited projects and files, PDF compile and preview.',
-  proMonthly: 'Pro: $9.99 per month. 500 AI edits per month, AI document generation, PDF and ZIP export, priority support.',
+  proMonthly:
+    'Pro: $9.99 per month. 500 AI edits per month, AI document generation, PDF and ZIP export, priority support.',
   proAnnual: 'Pro annual: $79 per year (about $6.58 a month, roughly 34% less than monthly).',
   semester: 'Semester pass: $29 for 4 months of Pro, billed once per term.',
   credits: 'Extra AI edits: a one-off pack of 100 edits for $5.',

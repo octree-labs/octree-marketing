@@ -10,7 +10,17 @@ import { generateBreadcrumbSchema } from '@/utilities/generateBreadcrumbs'
 import { getServerSideURL } from '@/utilities/getURL'
 import { learnOgImagePath, generateFaqSchema, type FaqItem } from '@/utilities/learnMetadata'
 import { mergeOpenGraph } from '@/utilities/mergeOpenGraph'
-import { MCP_REGISTRY_NAME, agentsMdSnippet } from '@/utilities/mcpInstall'
+import {
+  CONNECTED_APPS_URL,
+  DEVICE_CODE_URL,
+  DEVICE_TOKEN_URL,
+  MCP_REGISTRY_NAME,
+  OAUTH_AUTHORIZATION_SERVER_URL,
+  OAUTH_PROTECTED_RESOURCE_URL,
+  agentsMdSnippet,
+  deviceFlowCurl,
+  deviceFlowPython,
+} from '@/utilities/mcpInstall'
 
 import * as s from './samples'
 
@@ -34,21 +44,26 @@ const faq: FaqItem[] = [
   {
     question: 'How do I compile LaTeX from Claude Code?',
     answer:
-      'Create an API key in Octree under Settings → API keys, then run claude mcp add --transport http octree https://app.useoctree.com/api/mcp --header "Authorization: Bearer YOUR_OCTREE_API_KEY". Claude Code then has the compile_latex, check_latex and get_quota tools: ask it to write your document and compile it with Octree, and it checks the source, fixes the reported errors and returns the PDF.',
+      'Run claude mcp add --transport http octree https://app.useoctree.com/api/mcp, then type /mcp in Claude Code, pick octree and choose Authenticate to sign in to Octree in the browser. No API key is needed; if you prefer one, add --header "Authorization: Bearer YOUR_OCTREE_API_KEY" to the command instead. Claude Code then has the compile_latex, check_latex and get_quota tools: ask it to write your document and compile it with Octree, and it checks the source, fixes the reported errors and returns the PDF.',
   },
   {
     question: 'How do I add the Octree MCP server to Cursor or VS Code?',
     answer:
-      'In Cursor, press Add to Cursor on this page and replace YOUR_OCTREE_API_KEY with your key (or paste the key on the page first and the link includes it). In VS Code, run the code --add-mcp command shown above, or add the .vscode/mcp.json snippet, which asks for the key the first time the server starts.',
+      "In Cursor, press Add to Cursor on this page, then click Needs login next to Octree in Cursor's MCP settings to sign in in the browser. In VS Code, run the code --add-mcp command shown above or add the .vscode/mcp.json snippet; VS Code asks you to sign in the first time the server starts. Both also accept an API key in an Authorization header if you prefer.",
+  },
+  {
+    question: 'Do I need an API key?',
+    answer:
+      'No. MCP clients that support sign-in (Claude, Claude Code, Cursor, VS Code) connect with OAuth: add https://app.useoctree.com/api/mcp with no headers, sign in to Octree in the browser and click Allow. Headless agents, CLIs and scripts can get a key without opening Settings through the device flow: POST https://app.useoctree.com/api/v1/device/code, show the user the activation link, and poll /api/v1/device/token until it returns a key. You can still create API keys yourself under Settings → API keys and send them as Authorization: Bearer oct_live_….',
   },
   {
     question: 'Is Octree listed in the MCP Registry?',
-    answer: `Yes. Octree is in the official MCP Registry as ${MCP_REGISTRY_NAME}, a remote Streamable HTTP server at https://app.useoctree.com/api/mcp that takes your API key in the Authorization header.`,
+    answer: `Yes. Octree is in the official MCP Registry as ${MCP_REGISTRY_NAME}, a remote Streamable HTTP server at https://app.useoctree.com/api/mcp that accepts OAuth sign-in or an API key in the Authorization header.`,
   },
   {
     question: 'Is the Octree LaTeX compile API free?',
     answer:
-      'Yes. Every Octree account can create API keys, and the free plan includes 30 compiles per day through the REST API and the MCP server. Octree Pro raises the limit to 1,000 compiles per day.',
+      'Yes. Every Octree account can connect agents with OAuth or create API keys, and the free plan includes 30 compiles per day through the REST API and the MCP server. Octree Pro raises the limit to 1,000 compiles per day.',
   },
   {
     question: 'Which LaTeX packages are installed?',
@@ -71,24 +86,26 @@ const faq: FaqItem[] = [
       'No. On the API and MCP path the LaTeX source and the PDF are not stored after the response is sent. Projects you create in the Octree editor are saved to your account as usual; that is separate from the API.',
   },
   {
-    question: 'How are API keys secured?',
+    question: 'How are API keys and connected apps secured?',
     answer:
-      'Keys start with oct_live_ and are shown once, when you create them. Octree keeps only a hash of each key, so a key cannot be read back, only revoked. You can have up to 5 keys per account and revoke any of them in Settings.',
+      'Keys start with oct_live_ and are shown once, when you create them (or once to the agent, in the device flow). Octree keeps only a hash of each key, so a key cannot be read back, only revoked. You can have up to 5 keys per account and revoke any of them in Settings. Apps connected with OAuth get short-lived tokens that can only compile and check LaTeX (scope compile), never read your projects, and you can disconnect them under Settings → Connected apps.',
   },
   {
     question: 'Should my agent use the REST API or the MCP server?',
     answer:
-      'Use the MCP server when the agent is an MCP client (Claude Code, Cursor, Windsurf and others): it gets compile_latex, check_latex and get_quota as tools with no glue code. Use the REST API from scripts, CI jobs, backends and agent frameworks that call HTTP directly. Both use the same API key and the same daily limit.',
+      'Use the MCP server when the agent is an MCP client (Claude Code, Cursor, Windsurf and others): it gets compile_latex, check_latex and get_quota as tools with no glue code. Use the REST API from scripts, CI jobs, backends and agent frameworks that call HTTP directly. Both accept the same credentials and share the same daily limit.',
   },
 ]
 
 const toc = [
   { id: 'connect', label: 'Connect your agent' },
+  { id: 'device-flow', label: 'Headless agents: device flow' },
   { id: 'agents-md', label: 'AGENTS.md / CLAUDE.md snippet' },
   { id: 'quickstart', label: 'Call the REST API' },
   { id: 'rest-api', label: 'REST API reference' },
   { id: 'errors', label: 'Errors and status codes' },
   { id: 'limits', label: 'Limits and keys' },
+  { id: 'auth', label: 'Authentication' },
   { id: 'mcp', label: 'MCP server reference' },
   { id: 'agents', label: 'How an agent should use it' },
   { id: 'faq', label: 'FAQ' },
@@ -153,23 +170,19 @@ export default function DevelopersPage() {
             </span>
           </h1>
           <p className="lead">
-            One API key, two ways in: a REST endpoint that turns LaTeX into a PDF, and an MCP server
-            that gives Claude Code, Cursor and other agents a <Code>compile_latex</Code> tool. Send
-            the source, get the PDF back in seconds, or a list of errors with file and line when it
-            does not compile. It is the same compiler (TeX Live, latexmk) that runs the{' '}
-            <a href="https://app.useoctree.com">Octree editor</a>, so there is nothing to install
-            and every package is already there.
+            Two ways in: an MCP server that gives Claude, Claude Code, Cursor and other agents a{' '}
+            <Code>compile_latex</Code> tool (sign in with your Octree account, no key needed), and a
+            REST endpoint that turns LaTeX into a PDF. Send the source, get the PDF back in seconds,
+            or a list of errors with file and line when it does not compile. It is the same compiler
+            (TeX Live, latexmk) that runs the <a href="https://app.useoctree.com">Octree editor</a>,
+            so there is nothing to install and every package is already there.
           </p>
           <div className="not-prose flex flex-wrap gap-3">
-            <Link
-              href={s.API_KEYS_URL}
-              className={buttonVariants()}
-              data-cta-location="developers_hero"
-            >
-              Get an API key
-            </Link>
-            <Link href="#connect" className={buttonVariants({ variant: 'outline' })}>
+            <Link href="#connect" className={buttonVariants()} data-cta-location="developers_hero">
               Connect your agent
+            </Link>
+            <Link href={s.API_KEYS_URL} className={buttonVariants({ variant: 'outline' })}>
+              Get an API key
             </Link>
           </div>
 
@@ -182,7 +195,9 @@ export default function DevelopersPage() {
               as <Code>{MCP_REGISTRY_NAME}</Code>
             </li>
             <li>
-              <strong>Auth:</strong> <Code>Authorization: Bearer oct_live_…</Code>
+              <strong>Auth:</strong> OAuth sign-in for MCP clients, the{' '}
+              <a href="#device-flow">device flow</a> for headless agents, or{' '}
+              <Code>Authorization: Bearer oct_live_…</Code>
             </li>
             <li>
               <strong>Free:</strong> 30 compiles a day; Pro: 1,000 a day
@@ -210,11 +225,71 @@ export default function DevelopersPage() {
             Connect Your Agent
           </h2>
           <p>
-            Every client below talks to the same MCP server, <Code>{s.MCP_URL}</Code>, with your API
-            key in an <Code>Authorization: Bearer</Code> header. Once connected, the agent has three
-            tools: <Code>compile_latex</Code>, <Code>check_latex</Code> and <Code>get_quota</Code>.
+            Every client below talks to the same MCP server, <Code>{s.MCP_URL}</Code>. The simplest
+            way in is to sign in with your Octree account (OAuth), with no key to copy; an API key
+            in an <Code>Authorization: Bearer</Code> header works everywhere too. Once connected,
+            the agent has three tools: <Code>compile_latex</Code>, <Code>check_latex</Code> and{' '}
+            <Code>get_quota</Code>.
           </p>
           <ConnectAgent />
+
+          <h2 id="device-flow" className="scroll-mt-24">
+            Headless Agents: Device Flow
+          </h2>
+          <p>
+            An agent, CLI or script with no browser of its own can still get a key without anyone
+            opening Settings, using the OAuth device authorization grant (RFC 8628). It asks Octree
+            for a code, shows the user a link such as{' '}
+            <Code>https://app.useoctree.com/activate?code=WDJB-MJHT</Code>, and polls until the user
+            signs in and clicks <strong>Allow</strong>. It then receives an API key, once.
+          </p>
+          <ol>
+            <li>
+              <Code>POST {DEVICE_CODE_URL}</Code> with JSON{' '}
+              <Code>{'{"client_name":"my-cli"}'}</Code>. The answer has <Code>device_code</Code>,{' '}
+              <Code>user_code</Code>, <Code>verification_uri_complete</Code>,{' '}
+              <Code>expires_in</Code> (900 seconds) and <Code>interval</Code> (5 seconds).
+            </li>
+            <li>
+              Show the user <Code>verification_uri_complete</Code>.
+            </li>
+            <li>
+              Every <Code>interval</Code> seconds, <Code>POST {DEVICE_TOKEN_URL}</Code> with the
+              form fields <Code>grant_type=urn:ietf:params:oauth:grant-type:device_code</Code> and{' '}
+              <Code>device_code</Code>. Until the user decides it answers 400{' '}
+              <Code>authorization_pending</Code>; <Code>slow_down</Code> means poll less often (use
+              the returned <Code>interval</Code>); <Code>access_denied</Code> and{' '}
+              <Code>expired_token</Code> are final.
+            </li>
+            <li>
+              On success it returns <Code>api_key</Code> (<Code>oct_live_…</Code>),{' '}
+              <Code>token_type</Code>, <Code>mcp_url</Code> and <Code>rest_base</Code>. The key is
+              returned only once: store it, for example as <Code>OCTREE_API_KEY</Code>. It is an
+              ordinary API key, listed and revocable under Settings → API keys.
+            </li>
+          </ol>
+          <CodeTabs
+            ariaLabel="Device flow"
+            tabs={[
+              {
+                label: 'curl',
+                note: 'Each step, with the responses shown as comments.',
+                code: deviceFlowCurl,
+                trackLocation: 'developers:device_curl',
+              },
+              {
+                label: 'Python',
+                note: 'Prints the link, polls, and ends with api_key.',
+                code: deviceFlowPython,
+                trackLocation: 'developers:device_python',
+              },
+            ]}
+          />
+          <p>
+            Agents can find this on their own: a request to the API or the MCP server without
+            credentials gets HTTP 401 with <Code>device_authorization_endpoint</Code> and{' '}
+            <Code>token_endpoint</Code> in the JSON body, next to a message saying what to do.
+          </p>
 
           <h2 id="agents-md" className="scroll-mt-24">
             AGENTS.md / CLAUDE.md Snippet
@@ -222,7 +297,8 @@ export default function DevelopersPage() {
           <p>
             Paste this into <Code>AGENTS.md</Code>, <Code>CLAUDE.md</Code> or your Cursor rules so
             coding agents in your repository compile LaTeX through Octree instead of looking for a
-            local TeX install.
+            local TeX install. When no key is configured, it tells the agent to start the device
+            flow and ask you to open the activation link.
           </p>
           <CodeBlock
             title="AGENTS.md"
@@ -235,8 +311,8 @@ export default function DevelopersPage() {
             Call the REST API
           </h2>
           <p>
-            From scripts, CI jobs and backends, call the REST API with the same key. Put it in{' '}
-            <Code>OCTREE_API_KEY</Code>:
+            From scripts, CI jobs and backends, call the REST API with an API key from Settings or
+            the <a href="#device-flow">device flow</a>. Put it in <Code>OCTREE_API_KEY</Code>:
           </p>
           <CodeTabs
             ariaLabel="REST quickstart"
@@ -274,7 +350,8 @@ export default function DevelopersPage() {
           </h2>
           <p>
             Base URL <Code>{s.API_BASE}</Code>. Every request needs{' '}
-            <Code>Authorization: Bearer oct_live_…</Code>. Request bodies are JSON.
+            <Code>Authorization: Bearer oct_live_…</Code> (an API key, or an OAuth access token).
+            Request bodies are JSON.
           </p>
 
           <h3 id="compile">POST /api/v1/compile</h3>
@@ -499,7 +576,11 @@ export default function DevelopersPage() {
                   <td>
                     <Code>unauthorized</Code>
                   </td>
-                  <td>Missing, invalid or revoked API key.</td>
+                  <td>
+                    Missing, invalid, expired or revoked credentials. The body includes{' '}
+                    <Code>device_authorization_endpoint</Code> and <Code>token_endpoint</Code> so an
+                    agent can start the device flow.
+                  </td>
                 </tr>
                 <tr>
                   <td>413</td>
@@ -575,9 +656,59 @@ export default function DevelopersPage() {
             </li>
             <li>
               <strong>Keys:</strong> <Code>oct_live_…</Code>, up to 5 per account, shown once,
-              stored hashed, revocable at any time in <a href={s.API_KEYS_URL}>Settings</a>.
+              stored hashed, revocable at any time in <a href={s.API_KEYS_URL}>Settings</a>. Keys
+              from the device flow count toward the 5.
+            </li>
+            <li>
+              <strong>Connected apps:</strong> apps signed in with OAuth use short-lived tokens
+              limited to compiling, do not count toward the key limit, and can be disconnected under{' '}
+              <a href={CONNECTED_APPS_URL}>Settings → Connected apps</a>.
             </li>
           </ul>
+
+          <h3 id="auth" className="scroll-mt-24">
+            Authentication
+          </h3>
+          <div className="overflow-x-auto">
+            <table>
+              <thead>
+                <tr>
+                  <th>Method</th>
+                  <th>Best for</th>
+                  <th>How</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>OAuth 2.1 sign-in</td>
+                  <td>Claude, Claude Code, Cursor, VS Code and other MCP clients with sign-in</td>
+                  <td>
+                    Add the MCP URL with no headers; the client follows the 401 to{' '}
+                    <Code>{OAUTH_PROTECTED_RESOURCE_URL}</Code> and{' '}
+                    <Code>{OAUTH_AUTHORIZATION_SERVER_URL}</Code>, registers itself (dynamic client
+                    registration or a client ID metadata document), and signs in with PKCE. Scope{' '}
+                    <Code>compile</Code>.
+                  </td>
+                </tr>
+                <tr>
+                  <td>Device flow (RFC 8628)</td>
+                  <td>Headless agents, CLIs, scripts</td>
+                  <td>
+                    <a href="#device-flow">Request a code, show the link, poll</a>; ends with an API
+                    key.
+                  </td>
+                </tr>
+                <tr>
+                  <td>API key</td>
+                  <td>CI, backends, clients without OAuth</td>
+                  <td>
+                    Create one under <a href={s.API_KEYS_URL}>Settings → API keys</a>, send{' '}
+                    <Code>Authorization: Bearer oct_live_…</Code>.
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
 
           {/* ───────────────────────────── MCP ───────────────────────────── */}
           <h2 id="mcp" className="scroll-mt-24">
@@ -586,8 +717,9 @@ export default function DevelopersPage() {
           <p>
             The Octree LaTeX MCP server lives at <Code>{s.MCP_URL}</Code>. It speaks the Streamable
             HTTP transport and is stateless, so there is no session to set up or keep alive.
-            Authenticate with the same API key in an <Code>Authorization: Bearer oct_live_…</Code>{' '}
-            header.
+            Authenticate by signing in with OAuth (the MCP authorization spec), or with an API key
+            in an <Code>Authorization: Bearer oct_live_…</Code> header. See{' '}
+            <a href="#auth">Authentication</a>.
           </p>
           <div className="overflow-x-auto">
             <table>
@@ -685,15 +817,15 @@ export default function DevelopersPage() {
           <div className="not-prose mt-12 p-6 bg-primary/5 rounded-lg border border-primary/10">
             <h3 className="text-lg font-semibold mb-2">Give your agent a LaTeX compiler</h3>
             <p className="text-muted-foreground mb-4">
-              Create a free API key, add one line to Claude Code or Cursor, and your agent can turn
-              LaTeX into a PDF: 30 compiles a day free, 1,000 on Pro.
+              Add one URL to Claude, Claude Code or Cursor, sign in with your free Octree account,
+              and your agent can turn LaTeX into a PDF: 30 compiles a day free, 1,000 on Pro.
             </p>
             <Link
-              href={s.API_KEYS_URL}
+              href="#connect"
               className={buttonVariants()}
               data-cta-location="developers_footer"
             >
-              Get an API key →
+              Connect your agent →
             </Link>
           </div>
         </article>
