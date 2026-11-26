@@ -52,7 +52,7 @@ const faq: FaqItem[] = [
   {
     question: 'Can AI agents use Octree?',
     answer:
-      'Yes. Octree has a LaTeX compile REST API and a remote MCP server, so tools such as Claude Code or Cursor can compile LaTeX to PDF and check it for errors with an Octree API key. The free plan allows 30 API compiles a day.',
+      'Yes. Octree has a LaTeX compile REST API and a remote MCP server, so tools such as Claude Code or Cursor can compile LaTeX to PDF and check it for errors. MCP clients connect by signing in to Octree (OAuth), with no API key needed; scripts can use an API key. The free plan allows 30 API compiles a day.',
   },
 ]
 
