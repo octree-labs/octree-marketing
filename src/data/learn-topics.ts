@@ -125,7 +125,7 @@ export const learnTopics: LearnTopic[] = [
   {
     slug: 'greek-letters-math-symbols',
     title: 'Greek Letters in LaTeX',
-    description: 'All 24 Greek letters in LaTeX with uppercase, variants and Unicode, \\epsilon vs \\varepsilon, lambda, bold and upright Greek, plus every common math symbol.',
+    description: 'Greek letters in mathematical LaTeX: variants, uppercase commands, bold vectors, upright symbols, package choices and font-dependent behavior.',
     color: 'from-indigo-500/10 to-indigo-600/5',
   },
   {
@@ -161,13 +161,13 @@ export const learnTopics: LearnTopic[] = [
   {
     slug: 'piecewise-functions',
     title: 'Piecewise Functions in LaTeX: the cases Environment',
-    description: 'Write piecewise functions in LaTeX with \\begin{cases} (amsmath): \\text{if} conditions, dcases for full-size fractions, right braces, numbering and fixes.',
+    description: 'Write LaTeX cases with amsmath: conditions, display-style fractions, right braces, equation and branch numbering, complete examples and common fixes.',
     color: 'from-orange-500/10 to-red-600/5',
   },
   {
     slug: 'integrals-sums-limits',
-    title: 'Integrals, Sums & Limits',
-    description: 'Typeset integrals, sums (\\sum), products and limits in LaTeX. From basic sigma notation to series, big operators and partial derivatives.',
+    title: 'Sums, Integrals & Limits in LaTeX',
+    description: 'Write LaTeX sums, integrals and limits with correct bounds, display styles, stacked conditions, differentials and complete amsmath examples.',
     color: 'from-orange-500/10 to-orange-600/5',
   },
   {
@@ -191,7 +191,7 @@ export const learnTopics: LearnTopic[] = [
   {
     slug: 'subfigures',
     title: 'Subfigures in LaTeX: Side-by-Side Figures with subcaption',
-    description: 'LaTeX subfigures with the subcaption package: two figures side by side, a 2×2 grid, panel captions and labels, \\ref and \\subref, legacy subfig and fixes.',
+    description: 'LaTeX subfigures with subcaption: side-by-side panels, grids, widths, captions, references, template compatibility and float versus panel placement.',
     color: 'from-green-500/10 to-emerald-600/5',
   },
   {
@@ -275,7 +275,7 @@ export const learnTopics: LearnTopic[] = [
   {
     slug: 'brackets',
     title: 'Brackets & Parentheses',
-    description: 'Every delimiter from ( ) to \\langle \\rangle, curly braces (accolades) in text, automatic sizing with \\left \\right, manual \\big to \\Bigg, matrix brackets, cases and \\underbrace.',
+    description: 'LaTeX brackets and curly braces: delimiter spacing, automatic and manual sizes, multiline pairs, matrices, cases and reusable absolute values.',
     color: 'from-cyan-500/10 to-sky-600/5',
   },
   {

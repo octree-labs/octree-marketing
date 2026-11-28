@@ -8,7 +8,6 @@ import {
   generateBreadcrumbSchema,
   getLearnBreadcrumbs,
 } from '@/utilities/generateBreadcrumbs'
-import { RelatedPosts } from '@/components/Learn/related-posts'
 import { LearnSchema } from '@/components/Learn/schema'
 
 export const dynamic = 'force-static'
@@ -26,7 +25,7 @@ const page = {
 }
 
 /** Last content update, used for dateModified in the article schema. */
-const LAST_UPDATED = '2026-11-09'
+const LAST_UPDATED = '2026-11-28'
 
 const faq: FaqItem[] = [
   {
@@ -72,6 +71,7 @@ export default async function LearnPiecewiseFunctionsPage() {
         slug={page.slug}
         title={page.title}
         description={page.description}
+        datePublished="2026-11-09"
         dateModified={LAST_UPDATED}
         faq={faq}
       />
@@ -87,6 +87,7 @@ export default async function LearnPiecewiseFunctionsPage() {
 
         <article className="prose prose-lg dark:prose-invert max-w-4xl mx-auto">
           <h1>Piecewise Functions in LaTeX: the cases Environment</h1>
+          <p className="text-sm text-muted-foreground">Published November 9, 2026 · Updated November 28, 2026</p>
 
           <div className="not-prose my-6 p-6 rounded-lg border bg-muted/40 break-words">
             <p className="text-sm font-semibold uppercase tracking-wide text-muted-foreground mb-3">Quick answer</p>
@@ -126,7 +127,7 @@ export default async function LearnPiecewiseFunctionsPage() {
             conditions in two columns, and works inline or in display math. This guide covers
             the basic syntax, text in the conditions, display-size rows with{' '}
             <code>dcases</code>, braces on the right, numbering, ready-made examples and the
-            errors that come up most. Every snippet compiles as shown.
+            errors that come up most. Complete documents below can be compiled independently; table entries are math-mode fragments.
           </p>
 
           {/* ── cases ── */}
@@ -163,8 +164,7 @@ With three pieces:
             Both columns are left-aligned, and the brace grows with the number of rows. The
             same code works inline, <code>{`$f(x) = \\begin{cases} ... \\end{cases}$`}</code>,
             but a tall brace in running text pushes the lines apart; display math reads better.
-            How display math works is covered in{' '}
-            <Link href="/learn/mathematical-expressions">inline and display math</Link>.
+            Use a displayed equation when the definition needs several rows or substantial fractions.
           </p>
 
           {/* ── text ── */}
@@ -287,22 +287,6 @@ With three pieces:
             in <Link href="/learn/brackets">brackets in LaTeX</Link>.
           </p>
 
-          <div className="not-prose my-8 p-6 bg-primary/5 rounded-lg border border-primary/10">
-            <h3 className="text-lg font-semibold mb-2">Turn a photo of a formula into LaTeX</h3>
-            <p className="text-muted-foreground mb-4">
-              Have a piecewise function on paper or in a PDF? The free Math to LaTeX tool
-              converts an image or a typed description into a <code>cases</code> environment
-              you can paste straight into your document.
-            </p>
-            <Link
-              href="https://tools.useoctree.com/tools/math-to-latex"
-              target="_blank"
-              rel="noopener noreferrer"
-              className={buttonVariants()}
-            >
-              Open Math to LaTeX &rarr;
-            </Link>
-          </div>
 
           {/* ── alignment ── */}
           <h2>Aligning Conditions and Several Piecewise Functions</h2>
@@ -371,6 +355,40 @@ Equation \\eqref{eq:f}, and the cases \\eqref{eq:g-pos} and \\eqref{eq:g-neg}.
             <Link href="/learn/equation-numbering">equation numbering</Link>.
           </p>
 
+          <h2>Check the domain before adjusting the layout</h2>
+          <p>
+            Each condition should identify exactly where its branch applies. Check endpoints first:
+            writing one branch for a strict inequality and the next for another strict inequality
+            can accidentally leave the boundary undefined. Conversely, two inclusive inequalities
+            may assign different values at the same point. A neat brace cannot resolve that
+            mathematical ambiguity. Test the boundary values against the definition you intend,
+            especially when copying a step function whose value at zero may follow a different convention.
+          </p>
+          <p>
+            An otherwise branch means every remaining input in the stated domain, not every real
+            number automatically. State whether the argument is real, integer or restricted to a
+            set. For probabilities, check that each branch is nonnegative where it applies and that
+            the distribution has the required normalization. For a recursive definition, show a
+            base case and the range where the recursive branch is valid. Those checks matter more
+            than whether the condition column includes the word “if”.
+          </p>
+          <h2>Keep long conditions readable</h2>
+          <p>
+            Cases is an aligned mathematical block, not a paragraph layout. A long sentence in
+            the second column can run into the margin even though the source compiles. Move
+            background assumptions into the preceding sentence and leave a short inequality or
+            set membership test in each row. If the first column is too wide, introduce a named
+            expression and define it nearby rather than shrinking the whole display.
+          </p>
+          <p>
+            A piecewise block does not split naturally across pages. When a definition has many
+            branches, consider grouping related cases or presenting a table with a clear heading.
+            Test the final journal column width, because an example that fits an article page
+            may overflow in a two-column template. Read the first compiler error before changing
+            spacing; a missing delimiter can produce several later errors that disappear once
+            the original unmatched command is fixed.
+          </p>
+
           {/* ── examples ── */}
           <h2>Piecewise Function Examples</h2>
           <div className="overflow-x-auto">
@@ -416,7 +434,7 @@ Equation \\eqref{eq:f}, and the cases \\eqref{eq:g-pos} and \\eqref{eq:g-neg}.
                 </tr>
                 <tr>
                   <td><em>Misplaced alignment tab character &amp;</em></td>
-                  <td><code>amsmath</code> not loaded, so <code>{`\\begin{cases}`}</code> falls back to an old plain TeX macro</td>
+                  <td>The row is outside a valid alignment, or the intended <code>amsmath</code> environment is unavailable</td>
                   <td><code>{`\\usepackage{amsmath}`}</code></td>
                 </tr>
                 <tr>
@@ -443,91 +461,45 @@ Equation \\eqref{eq:f}, and the cases \\eqref{eq:g-pos} and \\eqref{eq:g-neg}.
             </table>
           </div>
 
-          {/* ── FAQ ── */}
           <h2>Frequently Asked Questions</h2>
-          <h3>How do I write a piecewise function in LaTeX?</h3>
-          <p>
-            Load <code>amsmath</code> and use the <code>cases</code> environment inside math
-            mode:{' '}
-            <code>{`f(x) = \\begin{cases} x^2 & \\text{if } x \\ge 0 \\\\ -x & \\text{if } x < 0 \\end{cases}`}</code>.
-            Each row is one case, <code>&amp;</code> separates the value from the condition,
-            and <code>\\</code> starts the next row. The large left brace is added
-            automatically.
-          </p>
-          <h3>Which package do I need for cases in LaTeX?</h3>
-          <p>
-            <code>amsmath</code>, loaded with <code>{`\\usepackage{amsmath}`}</code>. It defines
-            the <code>cases</code> environment. The <code>mathtools</code> package, which loads{' '}
-            <code>amsmath</code> for you, adds <code>dcases</code> (display-style rows),{' '}
-            <code>dcases*</code> (text conditions) and <code>rcases</code> (a brace on the
-            right).
-          </p>
-          <h3>How do I write &ldquo;if&rdquo; and &ldquo;otherwise&rdquo; in a piecewise function?</h3>
-          <p>
-            Wrap the words in <code>{`\\text{...}`}</code>, which typesets them as upright text
-            with normal spaces: <code>{`\\text{if } x > 0`}</code> and{' '}
-            <code>{`\\text{otherwise}`}</code>. Without <code>\text</code>, LaTeX treats the
-            letters as variables, sets them in italic and drops the spaces, so &ldquo;if
-            x&rdquo; turns into &ldquo;ifx&rdquo;.
-          </p>
-          <h3>Why are the fractions in my cases environment so small?</h3>
-          <p>
-            <code>cases</code> sets its rows in text style, the size used for inline math, so{' '}
-            <code>\frac</code> and <code>\sum</code> come out small. Use <code>dcases</code>{' '}
-            from the <code>mathtools</code> package to get full display-size rows, or write{' '}
-            <code>\dfrac</code> for a single fraction.
-          </p>
-          <h3>How do I put the brace on the right side?</h3>
-          <p>
-            With <code>mathtools</code>, use the <code>rcases</code> environment, which works
-            like <code>cases</code> with the brace on the right. Without{' '}
-            <code>mathtools</code>, build it with an array and an invisible left delimiter:{' '}
-            <code>{`\\left. \\begin{array}{ll} ... \\end{array} \\right\\}`}</code>.
-          </p>
-          <h3>How do I number each case of a piecewise function?</h3>
-          <p>
-            Load the <code>cases</code> package and use <code>numcases</code>:{' '}
-            <code>{`\\begin{numcases}{f(x)=} x^2, & $x \\ge 0$ \\\\ -x, & $x < 0$ \\end{numcases}`}</code>.
-            Every row gets its own equation number and can carry a <code>\label</code>. The
-            second column of <code>numcases</code> is in text mode, so math there needs dollar
-            signs.
-          </p>
+          {faq.map(({ question, answer }) => (
+            <section key={question}>
+              <h3>{question}</h3>
+              <p>{answer}</p>
+            </section>
+          ))}
 
           {/* ── Next Steps ── */}
           <h2>Next Steps</h2>
           <ul>
             <li><Link href="/learn/multiline-equations">Multiline Equations</Link> &ndash; <code>align</code>, <code>gather</code> and <code>split</code></li>
             <li><Link href="/learn/brackets">Brackets in LaTeX</Link> &ndash; Braces, <code>\left</code> and <code>\right</code> and sizing</li>
-            <li><Link href="/learn/matrices">Matrices in LaTeX</Link> &ndash; The other two-dimensional math layout</li>
             <li><Link href="/learn/equation-numbering">Equation Numbering</Link> &ndash; Labels, references and custom numbers</li>
             <li><Link href="/learn/math-functions">Math Functions</Link> &ndash; <code>\sin</code>, <code>\log</code> and <code>\operatorname</code></li>
-            <li><Link href="/learn/latex">Learn LaTeX: Tutorial for Beginners</Link> &ndash; The basics every document builds on</li>
           </ul>
 
-          <h2>Free LaTeX Math Tools</h2>
-          <ul>
-            <li><Link href="https://tools.useoctree.com/tools/math-to-latex" target="_blank" rel="noopener noreferrer">Math to LaTeX</Link> &ndash; Convert a formula image into LaTeX code</li>
-            <li><Link href="https://tools.useoctree.com/tools/equation-to-latex" target="_blank" rel="noopener noreferrer">Equation to LaTeX</Link> &ndash; Describe an equation and get the code</li>
-            <li><Link href="https://tools.useoctree.com/tools/latex-preview" target="_blank" rel="noopener noreferrer">LaTeX Preview</Link> &ndash; Check a <code>cases</code> environment instantly</li>
-            <li><Link href="https://tools.useoctree.com/symbols" target="_blank" rel="noopener noreferrer">LaTeX Symbols Reference</Link> &ndash; Relations, arrows and operators for the conditions</li>
-          </ul>
+          <h2>Package documentation and a preview tool</h2>
+          <p>
+            The <a href="https://ctan.org/pkg/amsmath">amsmath user guide</a> documents
+            cases and mathematical displays. The <a href="https://ctan.org/pkg/mathtools">mathtools manual</a>
+            {' '}defines the display-style and right-brace variants; the{' '}
+            <a href="https://ctan.org/pkg/cases">cases manual</a> explains numcases and subnumcases.
+            Consult those manuals when a publisher template changes the surrounding equation layout.
+          </p>
+          <p>
+            Use <a href="https://tools.useoctree.com/tools/latex-preview">LaTeX Preview</a>
+            {' '}to check a complete example, then compile it again in the final document.
+          </p>
 
-          <RelatedPosts searchTerm="Function" title="Related Articles" />
 
           <div className="not-prose mt-12 p-6 bg-primary/5 rounded-lg border border-primary/10">
-            <h3 className="text-lg font-semibold mb-2">Write math faster with AI</h3>
+            <h2 className="text-lg font-semibold mb-2">Check the example in your document</h2>
             <p className="text-muted-foreground mb-4">
-              Describe the function in words and Octree&apos;s AI writes the{' '}
-              <code>cases</code> environment, loads the right packages and fixes the errors,
-              with the PDF compiled next to your code.
+              Open a project in Octree to edit LaTeX and compile a PDF. Check the result with
+              your actual document class, packages and column width before using it in a paper.
             </p>
-            <Link
-              href="https://app.useoctree.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className={buttonVariants()}
-            >
-              Try Octree Free →
+            <Link href="https://app.useoctree.com" target="_blank" rel="noopener noreferrer" className={buttonVariants()}>
+              Open Octree
             </Link>
           </div>
         </article>

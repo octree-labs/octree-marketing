@@ -28,7 +28,7 @@ export interface OpenInOctreeProps {
   className?: string
 }
 
-const COPY = 'Try this in Octree \u2014 free LaTeX editor with AI, compiles in your browser'
+const COPY = 'Try this in Octree \u2014 LaTeX editor with AI, compiles in your browser'
 
 /**
  * Compact in-content call to action: one line of copy, "Open in Octree" and a
