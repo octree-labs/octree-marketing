@@ -8,7 +8,6 @@ import {
   generateBreadcrumbSchema,
   getLearnBreadcrumbs,
 } from '@/utilities/generateBreadcrumbs'
-import { RelatedPosts } from '@/components/Learn/related-posts'
 import { LearnSchema } from '@/components/Learn/schema'
 
 export const dynamic = 'force-static'
@@ -26,7 +25,7 @@ const page = {
 }
 
 /** Last content update, used for dateModified in the article schema. */
-const LAST_UPDATED = '2026-11-10'
+const LAST_UPDATED = '2026-11-28'
 
 const faq: FaqItem[] = [
   {
@@ -72,6 +71,7 @@ export default async function LearnSubfiguresPage() {
         slug={page.slug}
         title={page.title}
         description={page.description}
+        datePublished="2026-11-09"
         dateModified={LAST_UPDATED}
         faq={faq}
       />
@@ -87,6 +87,7 @@ export default async function LearnSubfiguresPage() {
 
         <article className="prose prose-lg dark:prose-invert max-w-4xl mx-auto">
           <h1>Subfigures in LaTeX: Side-by-Side Figures with subcaption</h1>
+          <p className="text-sm text-muted-foreground">Published November 9, 2026 · Updated November 28, 2026</p>
 
           <div className="not-prose my-6 p-6 rounded-lg border bg-muted/40 break-words">
             <p className="text-sm font-semibold uppercase tracking-wide text-muted-foreground mb-3">Quick answer</p>
@@ -188,9 +189,9 @@ Panel letters alone: \\subref{fig:a} and \\subref{fig:b}.
               </thead>
               <tbody>
                 <tr><td><code>{`{0.45\\linewidth}`}</code></td><td>Width of the panel; the image inside should use <code>width=\linewidth</code> to fill it</td></tr>
-                <tr><td><code>[b]</code></td><td>Align panels at their bottoms, so captions line up when images have different heights</td></tr>
-                <tr><td><code>[t]</code></td><td>Align at the top line; with images, this aligns their bottom edges too, because an image sits on the baseline</td></tr>
-                <tr><td><code>[c]</code></td><td>Align at the vertical centers (the default)</td></tr>
+                <tr><td><code>[b]</code></td><td>Align the bottom reference lines of the panel boxes; differing caption lengths can still shift image edges</td></tr>
+                <tr><td><code>[t]</code></td><td>Align the first reference lines; an image baseline is normally at its bottom, so this is not necessarily image-top alignment</td></tr>
+                <tr><td><code>[c]</code></td><td>Align at the vertical centers when explicitly selected</td></tr>
                 <tr><td><code>\caption</code> inside</td><td>Subcaption labelled (a), (b), &hellip;</td></tr>
                 <tr><td><code>\caption</code> outside</td><td>The main caption with the figure number</td></tr>
               </tbody>
@@ -199,6 +200,19 @@ Panel letters alone: \\subref{fig:a} and \\subref{fig:b}.
 
           {/* ── side by side ── */}
           <h2>Side-by-Side Figures: Widths and Spacing</h2>
+          <p>
+            Since subcaption 1.5, omitting the alignment option selects <code>[b]</code> before
+            the main caption and <code>[t]</code> after it. The examples here put the main
+            caption last. Use an explicit option for reproducibility. Uppercase <code>[T]</code>
+            {' '}and <code>[B]</code> align the actual box edges rather than their reference lines.
+          </p>
+          <p>
+            The outer figure controls float placement on the page: its optional h, t, b and p letters
+            request allowed locations, not exact coordinates. The optional b, t or c on a
+            subfigure controls that panel box&apos;s vertical alignment beside its neighbors.
+            Changing a panel to top alignment does not move the whole figure to the top of a
+            page. Keep those two decisions separate when diagnosing an unexpected layout.
+          </p>
           <p>
             Panels go next to each other as long as their widths, plus any space between them,
             fit in <code>\linewidth</code>. Three ways to control the gap:
@@ -293,28 +307,12 @@ Panels \\subref{fig:tl} and \\subref{fig:br} of Figure~\\ref{fig:grid}.
 \\end{document}`}</code></pre>
           <p>
             A grid of four large images may be taller than the page allows, in which case the
-            figure moves to the end of the document. Reduce the widths or use{' '}
+            figure moves to the end of the document. Reduce image dimensions if the float is taller than the text area; for a float that fits but needs more placement room, use{' '}
             <code>{`\\begin{figure}[p]`}</code> for a page of its own. Placement options are
             explained in the <Link href="/learn/tables">tables guide</Link>, which uses the same
             float rules.
           </p>
 
-          <div className="not-prose my-8 p-6 bg-primary/5 rounded-lg border border-primary/10">
-            <h3 className="text-lg font-semibold mb-2">Lay out figures without trial and error</h3>
-            <p className="text-muted-foreground mb-4">
-              Upload your images to Octree and ask the AI for a 2&times;2 grid or two panels
-              side by side. It writes the <code>subcaption</code> code, sizes the panels and
-              shows the PDF next to it. Sign up free.
-            </p>
-            <Link
-              href="https://app.useoctree.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className={buttonVariants()}
-            >
-              Open Octree &rarr;
-            </Link>
-          </div>
 
           {/* ── referencing ── */}
           <h2>Referencing Subfigures with \ref and \subref</h2>
@@ -486,6 +484,30 @@ See Figure~\\ref{fig:left} and Figure~\\ref{fig:right}.
             <code>{`\\subcaptionbox{Left panel\\label{fig:a}}{\\includegraphics[width=0.45\\linewidth]{img}}`}</code>.
           </p>
 
+          <h2>Replace placeholders without changing the layout contract</h2>
+          <p>
+            The rule rectangles in the first example and grid deliberately avoid external files.
+            Once the layout works, replace each rule with an includegraphics command whose width
+            is the local line width. Inside a panel, that width refers to the panel, not the full
+            page. Keep the outer subfigure width unchanged while testing images so that an image
+            replacement does not silently change the row geometry.
+          </p>
+          <p>
+            Two images with equal widths may have different heights because their aspect ratios
+            differ. If the comparison requires equal heights, set an image height deliberately and
+            check that neither resulting width exceeds its panel. Do not specify both dimensions
+            without preserving the aspect ratio unless distortion is intentional. White margins
+            embedded in an image also affect apparent alignment; crop the source or use graphicx
+            trimming options rather than compensating with unexplained negative spacing.
+          </p>
+          <p>
+            Read the captions at the final printed size. A panel should explain what differs
+            from its neighbor, while the main caption should state the shared context. Refer to
+            panels by their labels in the prose instead of hard-coding letters that will become
+            wrong when panels are reordered. After moving a panel, compile twice and inspect
+            both the printed reference and its hyperlink destination.
+          </p>
+
           {/* ── Errors ── */}
           <h2>Common Errors and Fixes</h2>
           <div className="overflow-x-auto">
@@ -515,7 +537,7 @@ See Figure~\\ref{fig:left} and Figure~\\ref{fig:right}.
                 </tr>
                 <tr>
                   <td><em>Overfull \hbox</em>, image sticks out of its panel</td>
-                  <td>Image wider than the subfigure, e.g. <code>width=\textwidth</code> inside a <code>0.45\linewidth</code> panel</td>
+                  <td>Image wider than the subfigure, e.g. <code>width=1.2\linewidth</code> inside the panel</td>
                   <td>Use <code>width=\linewidth</code> inside the subfigure; it refers to the panel width</td>
                 </tr>
                 <tr>
@@ -524,9 +546,9 @@ See Figure~\\ref{fig:left} and Figure~\\ref{fig:right}.
                   <td>Put <code>\label</code> after <code>\caption</code> inside the subfigure</td>
                 </tr>
                 <tr>
-                  <td>Captions not aligned when images differ in height</td>
-                  <td>Default center alignment</td>
-                  <td><code>{`\\begin{subfigure}[b]{...}`}</code> on every panel</td>
+                  <td>First caption lines do not align</td>
+                  <td>Different caption heights or panel reference lines</td>
+                  <td>Use matching caption geometry or <code>\subcaptionbox</code>; <code>[b]</code> alone does not align first lines of unequal captions</td>
                 </tr>
                 <tr>
                   <td><em>File `image.png&apos; not found</em></td>
@@ -537,89 +559,45 @@ See Figure~\\ref{fig:left} and Figure~\\ref{fig:right}.
             </table>
           </div>
 
-          {/* ── FAQ ── */}
           <h2>Frequently Asked Questions</h2>
-          <h3>How do I make subfigures in LaTeX?</h3>
-          <p>
-            Load <code>{`\\usepackage{subcaption}`}</code> (and <code>graphicx</code>), then put
-            one <code>subfigure</code> environment per panel inside a <code>figure</code>:{' '}
-            <code>{`\\begin{subfigure}[b]{0.45\\linewidth} ... \\end{subfigure}`}</code>. Each
-            subfigure gets its own <code>\caption</code> and <code>\label</code>, and the figure
-            gets a main <code>\caption</code>. Panels are labelled (a), (b) and so on
-            automatically.
-          </p>
-          <h3>How do I put two figures side by side in LaTeX?</h3>
-          <p>
-            Place two <code>subfigure</code> environments in the same figure with widths that
-            add up to less than the line width, for example <code>0.48\linewidth</code> each,
-            separated by <code>\hfill</code>. If both images should keep their own figure
-            numbers instead of (a) and (b), use two <code>minipage</code> environments with a{' '}
-            <code>\caption</code> in each.
-          </p>
-          <h3>How do I reference a subfigure?</h3>
-          <p>
-            Put <code>\label</code> after the subfigure&rsquo;s <code>\caption</code>, then use{' '}
-            <code>{`\\ref{fig:a}`}</code>, which prints 1a, or <code>{`\\subref{fig:a}`}</code>,
-            which prints only a by default. To get 1(a) from <code>\ref</code>, add{' '}
-            <code>{`\\renewcommand\\thesubfigure{(\\alph{subfigure})}`}</code> and{' '}
-            <code>{`\\captionsetup[sub]{labelformat=simple}`}</code> to the preamble.
-          </p>
-          <h3>Should I use subfigure, subfig or subcaption?</h3>
-          <p>
-            Use <code>subcaption</code> for new documents whose class supports{' '}
-            <code>caption</code>. The <code>subfigure</code> package is obsolete. Keep{' '}
-            <code>subfig</code> when a publisher template requires it; some classes, including
-            IEEEtran, prescribe their own caption setup. The packages cannot be combined: loading{' '}
-            <code>subcaption</code> together with <code>subfig</code> or{' '}
-            <code>subfigure</code> stops with an error.
-          </p>
-          <h3>Why are my subfigures stacked instead of side by side?</h3>
-          <p>
-            The widths plus the space between them are more than <code>\linewidth</code>, or
-            there is a blank line between the subfigures, which starts a new paragraph. Reduce
-            the widths (<code>0.48\linewidth</code> for two, <code>0.31\linewidth</code> for
-            three), remove blank lines, and end lines with <code>%</code> or separate the
-            panels with <code>\hfill</code>.
-          </p>
-          <h3>How do I make a 2×2 grid of subfigures?</h3>
-          <p>
-            Put four <code>subfigure</code> environments of <code>0.48\linewidth</code> in one
-            figure, with <code>\hfill</code> between the two panels of each row and a blank line
-            or <code>\par\medskip</code> between the rows. The blank line ends the first row, so
-            the third and fourth panels start a new one.
-          </p>
+          {faq.map(({ question, answer }) => (
+            <section key={question}>
+              <h3>{question}</h3>
+              <p>{answer}</p>
+            </section>
+          ))}
 
           {/* ── Next Steps ── */}
           <h2>Next Steps</h2>
           <ul>
             <li><Link href="/learn/tables">Tables in LaTeX</Link> &ndash; Floats, captions and placement for tables</li>
             <li><Link href="/learn/tikz">TikZ in LaTeX</Link> &ndash; Draw the diagrams that go into your panels</li>
-            <li><Link href="/learn/pgfplots">pgfplots</Link> &ndash; Plots that can sit inside subfigures</li>
+            <li><Link href="/learn/images">Images in LaTeX</Link> &ndash; Image dimensions, graphics and figure placement</li>
             <li><Link href="/learn/hyperlinks">Hyperlinks in LaTeX</Link> &ndash; Clickable references with hyperref</li>
           </ul>
 
-          <h2>Free LaTeX Tools</h2>
-          <ul>
-            <li><Link href="https://tools.useoctree.com/tools/latex-preview" target="_blank" rel="noopener noreferrer">LaTeX Preview</Link> &ndash; Compile and check a subfigure layout</li>
-            <li><Link href="https://tools.useoctree.com/tools/image-to-tikz" target="_blank" rel="noopener noreferrer">Image to TikZ</Link> &ndash; Turn a sketch into a TikZ figure</li>
-            <li><Link href="https://tools.useoctree.com/tools/pgfplots-generator" target="_blank" rel="noopener noreferrer">pgfplots Generator</Link> &ndash; Generate plots for your panels</li>
-          </ul>
+          <h2>Package documentation and a preview tool</h2>
+          <p>
+            The <a href="https://ctan.org/pkg/subcaption">subcaption manual on CTAN</a>
+            {' '}is the primary reference for panel environments, subcaptionbox, reference formats
+            and hyperlink anchors. Its companion <a href="https://ctan.org/pkg/caption">caption manual</a>
+            {' '}covers caption options and class compatibility. Follow the publisher template when
+            it prescribes a different caption package or configuration.
+          </p>
+          <p>
+            Use <a href="https://tools.useoctree.com/tools/latex-preview">LaTeX Preview</a>
+            {' '}to check a complete layout, then test your actual images in the final document.
+          </p>
 
-          <RelatedPosts searchTerm="Figure" title="Related Articles" />
 
           <div className="not-prose mt-12 p-6 bg-primary/5 rounded-lg border border-primary/10">
-            <h3 className="text-lg font-semibold mb-2">Arrange figures with AI</h3>
+            <h2 className="text-lg font-semibold mb-2">Check the example in your document</h2>
             <p className="text-muted-foreground mb-4">
-              Ask Octree&apos;s AI chat for help arranging the panels, then compile the suggested{' '}
-              <code>subcaption</code> code. Check panel widths, captions and references in the PDF.
+              Open a project in Octree to edit LaTeX and compile a PDF. Check the result with
+              your actual document class, packages and column width before using it in a paper.
             </p>
-            <Link
-              href="https://app.useoctree.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className={buttonVariants()}
-            >
-              Try Octree Free →
+            <Link href="https://app.useoctree.com" target="_blank" rel="noopener noreferrer" className={buttonVariants()}>
+              Open Octree
             </Link>
           </div>
         </article>

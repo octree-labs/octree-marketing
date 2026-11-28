@@ -261,7 +261,7 @@ phi     chi     psi     omega`}</code></pre>
             The letters below are the ones people search for most, each with its meaning, its
             Unicode code points and the HTML entity that types it on a web page. For every
             LaTeX command, see the{' '}
-            <Link href="/learn/greek-letters-math-symbols">Greek letters and math symbols in LaTeX</Link> page.
+            <Link href="/learn/latex-symbols">LaTeX symbol reference and Greek command table</Link>.
           </p>
           <h3>Beta Symbol (Β β)</h3>
           <p>
@@ -490,7 +490,7 @@ $\\mathit{\\Gamma}$  or  $\\varGamma, \\varDelta, \\varOmega$   % amsmath
           <p>
             For a full list of math operators, arrows, and relation symbols to go with these
             letters, see our{' '}
-            <Link href="/learn/greek-letters-math-symbols">Greek letters and math symbols reference</Link>.
+            <Link href="/learn/latex-symbols">LaTeX symbol reference</Link>.
           </p>
 
           {/* ───────────────────────────── FAQ ───────────────────────────── */}
@@ -535,7 +535,7 @@ $\\mathit{\\Gamma}$  or  $\\varGamma, \\varDelta, \\varOmega$   % amsmath
           <h2>Next Steps</h2>
           <p>Now that you know the alphabet, put the letters to work:</p>
           <ul>
-            <li><Link href="/learn/greek-letters-math-symbols">Greek Letters and Math Symbols in LaTeX</Link> – Every operator, relation, arrow, and symbol with copy-paste commands</li>
+            <li><Link href="/learn/greek-letters-math-symbols">Greek Letters in LaTeX</Link> – Choose variants, capitals, bold and upright math fonts</li>
             <li><Link href="/learn/mathematical-expressions">Mathematical Expressions in LaTeX</Link> – Fractions, roots, aligned equations, and the amsmath package</li>
             <li><Link href="/learn/subscripts-superscripts">Subscripts and Superscripts</Link> – Index your Greek variables correctly</li>
             <li><Link href="/learn/integrals-sums-limits">Integrals, Sums, and Limits</Link> – Where &Sigma; and &Pi; become operators</li>

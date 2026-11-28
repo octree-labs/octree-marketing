@@ -76,7 +76,7 @@ $a \\pm b$, $x \\leq y$, $A \\subseteq B$, $p \\Rightarrow q$, $\\nabla f$, $\\p
 \\end{document}
 `
 
-const COPY = 'Try these symbols in a real document: opens a compilable starter file in Octree, the free LaTeX editor with AI.'
+const COPY = 'Try these symbols in an Octree starter document. Sign-in and account access may be required.'
 
 /**
  * "Open these symbols in Octree" box for the symbol guides. `source` is the
