@@ -191,7 +191,7 @@ Panel letters alone: \\subref{fig:a} and \\subref{fig:b}.
                 <tr><td><code>{`{0.45\\linewidth}`}</code></td><td>Width of the panel; the image inside should use <code>width=\linewidth</code> to fill it</td></tr>
                 <tr><td><code>[b]</code></td><td>Align the bottom reference lines of the panel boxes; differing caption lengths can still shift image edges</td></tr>
                 <tr><td><code>[t]</code></td><td>Align the first reference lines; an image baseline is normally at its bottom, so this is not necessarily image-top alignment</td></tr>
-                <tr><td><code>[c]</code></td><td>Align at the vertical centers (the default)</td></tr>
+                <tr><td><code>[c]</code></td><td>Align at the vertical centers when explicitly selected</td></tr>
                 <tr><td><code>\caption</code> inside</td><td>Subcaption labelled (a), (b), &hellip;</td></tr>
                 <tr><td><code>\caption</code> outside</td><td>The main caption with the figure number</td></tr>
               </tbody>
@@ -200,6 +200,12 @@ Panel letters alone: \\subref{fig:a} and \\subref{fig:b}.
 
           {/* ── side by side ── */}
           <h2>Side-by-Side Figures: Widths and Spacing</h2>
+          <p>
+            Since subcaption 1.5, omitting the alignment option selects <code>[b]</code> before
+            the main caption and <code>[t]</code> after it. The examples here put the main
+            caption last. Use an explicit option for reproducibility. Uppercase <code>[T]</code>
+            {' '}and <code>[B]</code> align the actual box edges rather than their reference lines.
+          </p>
           <p>
             The outer figure controls float placement on the page: its optional h, t, b and p letters
             request allowed locations, not exact coordinates. The optional b, t or c on a
@@ -531,7 +537,7 @@ See Figure~\\ref{fig:left} and Figure~\\ref{fig:right}.
                 </tr>
                 <tr>
                   <td><em>Overfull \hbox</em>, image sticks out of its panel</td>
-                  <td>Image wider than the subfigure, e.g. <code>width=\textwidth</code> inside a <code>0.45\linewidth</code> panel</td>
+                  <td>Image wider than the subfigure, e.g. <code>width=1.2\linewidth</code> inside the panel</td>
                   <td>Use <code>width=\linewidth</code> inside the subfigure; it refers to the panel width</td>
                 </tr>
                 <tr>
@@ -540,9 +546,9 @@ See Figure~\\ref{fig:left} and Figure~\\ref{fig:right}.
                   <td>Put <code>\label</code> after <code>\caption</code> inside the subfigure</td>
                 </tr>
                 <tr>
-                  <td>Captions not aligned when images differ in height</td>
-                  <td>Default center alignment</td>
-                  <td><code>{`\\begin{subfigure}[b]{...}`}</code> on every panel</td>
+                  <td>First caption lines do not align</td>
+                  <td>Different caption heights or panel reference lines</td>
+                  <td>Use matching caption geometry or <code>\subcaptionbox</code>; <code>[b]</code> alone does not align first lines of unequal captions</td>
                 </tr>
                 <tr>
                   <td><em>File `image.png&apos; not found</em></td>

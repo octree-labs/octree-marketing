@@ -138,6 +138,10 @@ export default async function LearnGuidePage() {
             }
           </p>
           <p className="text-sm text-muted-foreground">Updated November 28, 2026</p>
+          <p>
+            Need a copyable command rather than a sizing tutorial? Use the{' '}
+            <a href="https://tools.useoctree.com/symbols/brackets">bracket symbol lookup</a>.
+          </p>
 
           {sections.map(({ title, paragraphs, code }) => (
             <section key={title}>
@@ -166,12 +170,12 @@ export default async function LearnGuidePage() {
           </p>
           <ul>
             <li>
-              <a href="https://mirrors.ctan.org/macros/latex/required/amsmath/amsldoc.pdf">
+              <a href="https://ctan.org/pkg/amsmath">
                 amsmath user guide: matrices and delimiters
               </a>
             </li>
             <li>
-              <a href="https://mirrors.ctan.org/macros/latex/contrib/mathtools/mathtools.pdf">
+              <a href="https://ctan.org/pkg/mathtools">
                 mathtools manual: paired delimiters
               </a>
             </li>

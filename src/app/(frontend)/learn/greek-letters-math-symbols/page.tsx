@@ -141,6 +141,11 @@ export default async function LearnGuidePage() {
             }
           </p>
           <p className="text-sm text-muted-foreground">Updated November 28, 2026</p>
+          <p>
+            For all 24 letters and their LaTeX commands, use the{' '}
+            <Link href="/learn/latex-symbols">Greek command table in the symbol reference</Link>.
+            This guide explains which variant and math font to choose.
+          </p>
           <OpenInOctree
             latex={GREEK_SYMBOLS_STARTER}
             title="Greek Letters and Math Symbols"
@@ -163,6 +168,14 @@ export default async function LearnGuidePage() {
               )}
             </section>
           ))}
+          <OpenInOctree
+            latex={GREEK_SYMBOLS_STARTER}
+            title="Greek Letters and Math Symbols"
+            source="www:learn:greek-letters-math-symbols:symbols-tables"
+            raw
+            label="Open these symbols in Octree"
+            copy="Try the Greek starter document in Octree. Sign-in and account access may be required."
+          />
           <h2>Frequently asked questions</h2>
           {faq.map(({ question, answer }) => (
             <section key={question}>
@@ -177,7 +190,7 @@ export default async function LearnGuidePage() {
           </p>
           <ul>
             <li>
-              <a href="https://mirrors.ctan.org/macros/latex/required/amsmath/amsldoc.pdf">
+              <a href="https://ctan.org/pkg/amsmath">
                 amsmath user guide
               </a>
             </li>
@@ -187,7 +200,7 @@ export default async function LearnGuidePage() {
               </a>
             </li>
             <li>
-              <a href="https://mirrors.ctan.org/macros/latex/contrib/was/upgreek.pdf">
+              <a href="https://ctan.org/pkg/upgreek">
                 upgreek package manual
               </a>
             </li>

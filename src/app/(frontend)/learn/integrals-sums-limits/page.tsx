@@ -74,7 +74,7 @@ const sections: { title: string; paragraphs: string[]; code?: string }[] = [
       "A definite integral uses both bounds; an indefinite integral omits them. Put a thin space before the differential so it does not run into the integrand. The example uses an upright d through \\mathrm{d}. An italic dx is also a common mathematical convention; follow the journal's style and use one convention consistently rather than changing it from equation to equation.",
       "If you introduce a differential macro, check whether the template or another package already defines its name. A locally defined \\dd can conflict with the physics package's command of the same name. The plain amsmath example needs no physics-specific commands. Package shortcuts can be convenient, but they are not necessary to write an ordinary integral or derivative.",
     ],
-    code: "\\documentclass{article}\n\\usepackage{amsmath}\n\\newcommand{\\diff}{\\mathop{}\\!\\mathrm{d}}\n\\begin{document}\n\\[\n\\int x^2\\,\\diff x=\\frac{x^3}{3}+C,\n\\qquad\n\\int_0^1 x^2\\,\\diff x=\\frac13.\n\\]\n\\[\n\\int_a^b f'(x)\\,\\diff x=f(b)-f(a).\n\\]\n\\end{document}",
+    code: "\\documentclass{article}\n\\usepackage{amsmath}\n\\newcommand{\\diff}{\\mathop{}\\!\\mathrm{d}}\n\\begin{document}\n\\[\n\\int x^2\\diff x=\\frac{x^3}{3}+C,\n\\qquad\n\\int_0^1 x^2\\diff x=\\frac13.\n\\]\n\\[\n\\int_a^b f'(x)\\diff x=f(b)-f(a).\n\\]\n\\end{document}",
   },
   {
     title: 'Choose multiple and contour integral commands',
@@ -139,6 +139,10 @@ export default async function LearnGuidePage() {
             }
           </p>
           <p className="text-sm text-muted-foreground">Updated November 28, 2026</p>
+          <p>
+            For the symbol&apos;s meaning rather than LaTeX syntax, see the{' '}
+            <Link href="/blog/sigma-symbol-meaning-uses-how-to-type">Sigma symbol guide</Link>.
+          </p>
 
           {sections.map(({ title, paragraphs, code }) => (
             <section key={title}>
@@ -167,7 +171,7 @@ export default async function LearnGuidePage() {
           </p>
           <ul>
             <li>
-              <a href="https://mirrors.ctan.org/macros/latex/required/amsmath/amsldoc.pdf">
+              <a href="https://ctan.org/pkg/amsmath">
                 amsmath user guide: operators, multiple integrals and limits
               </a>
             </li>
